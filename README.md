@@ -7,3 +7,18 @@ web application development.
 * [yadm](https://yadm.io/)
 * [transcrypt](https://github.com/elasticdog/transcrypt) required to read /
   modify encrypted files
+
+## Cloning
+```
+yadm clone git@github.com:r-bar/dotfiles.git
+yadm transcrypt -F -c aes-256-cbc -p <PASSWORD>
+yadm checkout -f # force decryption filters to run
+```
+
+Bootstrap without an authorized ssh key:
+```
+yadm clone git@github.com:r-bar/dotfiles.git
+yadm transcrypt -F -c aes-256-cbc -p <PASSWORD>
+yadm checkout -f # force decryption filters to run
+git remote set-url origin git@github.com:r-bar/dotfiles.git
+```

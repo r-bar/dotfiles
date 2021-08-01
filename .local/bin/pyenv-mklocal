@@ -1,0 +1,6 @@
+#!/bin/bash
+
+NAME="$(basename $(pwd))"
+
+pyenv virtualenv $NAME
+pyenv local $NAME

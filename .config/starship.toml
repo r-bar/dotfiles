@@ -1,0 +1,24 @@
+[cmd_duration]
+min_time = 2
+
+[directory]
+truncate_to_repo = false
+truncation_length = 0
+style = "bold blue"
+suffix = ""
+
+[git_branch]
+style = "green"
+prefix = ""
+
+[git_state]
+style = "bold red"
+
+[git_status]
+style = "bold yellow"
+
+[time]
+disabled = false
+#format = "%T"
+prefix = ""
+style = "dim white"

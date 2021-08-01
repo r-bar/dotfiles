@@ -1,0 +1,26 @@
+#!/bin/bash -
+
+
+POSITIONAL=()
+DELETE=0
+while [[ $# -gt 0 ]]; do
+  key="$1"
+
+  case $key in
+    -d|--delete-original)
+      DELETE=1
+      shift
+      ;;
+    *)
+      POSITIONAL+=($key)
+      shift
+      ;;
+  esac
+done
+
+for link in $POSITIONAL; do
+  orig=`readlink $link`
+  [[ $? -eq 0 ]] || continue
+  cp --remove-destination $orig $link
+  [[ $DELETE -gt 0 ]] && rm $orig
+done

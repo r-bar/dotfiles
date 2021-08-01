@@ -1,0 +1,64 @@
+[user]
+  name = Ryan Barth
+  email = ryan@barth.tech
+[push]
+  default = simple
+[pull]
+  rebase = false
+[diff]
+  tool = nvimfugitive
+  prompt = true
+[merge]
+  tool = nvimfugitive
+[branch]
+  sort = authordate
+[color "branch"]
+  current = yellow bold
+  local = green bold
+  remote = cyan bold
+[color "diff"]
+  meta = yellow bold
+  frag = magenta bold
+  old = red bold
+  new = green bold
+  whitespace = red reverse
+[color "status"]
+  added = green bold
+  changed = yellow bold
+  untracked = red bold
+[alias]
+  aliases = !git config --get-regexp 'alias.*' | colrm 1 6 | sed 's/[ ]/ = /' | sort
+  a = add --all
+  d = diff
+  c = commit
+  ca = commit -a
+  cm = commit -m
+  co = checkout
+  cem = commit --allow-empty -m
+  cam = commit -am
+  l = "!git log --date='format:%Y-%m-%d %H:%M' --pretty=format:'%ad|%h|%an|%s' -10 $* | while IFS='|' read date hash author message; do printf '%s  %s  %-20s %s\n' \"$date\" \"$hash\" \"$author\" \"$message\"; done"
+  lg = log --oneline --graph --decorate
+  f = fetch
+  s = status
+  sb = status -s -b
+  whois = "!sh -c 'git log -i -1 --pretty=\"format:%an <%ae>\n\" --author=\"$1\"' -"
+  whatis = show -s --pretty='tformat:%h (%s, %ad)' --date=short
+  flat = clone --depth 1
+  human = name-rev --name-only --refs=refs/heads/*
+  exec = "!exec "
+  root = !pwd
+  release = "!export TAG=$1; git tag $TAG && git push origin $TAG"
+  # show the differences made since $2 was forked from $1
+  changed = "!bash -c \"git diff $(git merge-base $1 $2) $2\""
+  #po = "git push --set-upstream origin $(git branch | awk '/^\* / { print $2 }')"
+[core]
+  #pager = delta
+  excludesfile = ~/.gitignore
+[mergetool "nvimfugitive"]
+  cmd = nvim -f -c \"Gdiff\" \"$MERGED\"
+#[delta]
+#  line-numbers = true
+#  side-by-side = true
+#  syntax-theme = Nord
+[init]
+	defaultBranch = master

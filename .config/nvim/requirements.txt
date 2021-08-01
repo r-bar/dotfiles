@@ -1,0 +1,16 @@
+python-language-server
+# pyls-mypy
+# pyls-black
+pyls-isort
+neovim
+mypy
+# typeshed
+vint
+jedi
+flake8
+pynvim
+autopep8
+pydocstyle
+pylint
+rope
+yapf

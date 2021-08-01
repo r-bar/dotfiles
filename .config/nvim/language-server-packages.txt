@@ -1,0 +1,11 @@
+aur/yaml-language-server-bin
+aur/vim-language-server
+community/python-pyls-black
+community/python-pygls
+community/python-language-server
+community/jedi-language-server
+aur/dotnet-sdk-2.2
+aur/dotnet-runtime-2.2
+aur/microsoft-python-language-server
+aur/efm-langserver
+community/flake8

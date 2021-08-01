@@ -1,0 +1,859 @@
+"
+"                  .vimrc  -  VIM Configuration
+"
+
+" Use Vim settings, rather than Vi settings (much better!).
+" This must be first, because it changes other options as a side effect.
+set nocompatible
+
+"let g:python3_host_prog='~/.pyenv/versions/neovim/bin/python3'
+let g:python3_host_prog='/usr/bin/python3'
+
+" vim-plug package manager
+call plug#begin('~/.local/share/nvim/bundle')
+
+"""""""""""""""""""
+" GENERAL PLUGINS "
+"""""""""""""""""""
+
+Plug 'https://github.com/vim-scripts/LargeFile.git'
+" Makes GVim-only colorschemes 'Just Work' in terminal Vim
+" caused visual bugs for me with meta5 theme
+"Plug 'vim-scripts/CSApprox'
+"Plug 'https://github.com/godlygeek/csapprox'
+" repo pulled
+"Plug 'https://github.com/evanmiller/nginx-vim-syntax.git'
+Plug 'https://github.com/vim-scripts/IndentAnything.git'
+Plug 'https://github.com/MarcWeber/vim-addon-local-vimrc.git'
+Plug 'https://github.com/bling/vim-airline'
+Plug 'https://github.com/vim-airline/vim-airline-themes.git'
+Plug 'https://github.com/michaeljsmith/vim-indent-object.git'
+Plug 'https://github.com/tpope/vim-repeat.git'
+Plug 'https://github.com/xolox/vim-session.git'
+" dependency of vim-session
+Plug 'https://github.com/xolox/vim-misc.git'
+Plug 'https://github.com/tpope/vim-surround.git'
+" more control about where a buffer is sent from quickfix
+Plug 'https://github.com/yssl/QFEnter.git'
+" additional quickfix window keybindings and more
+Plug 'https://github.com/romainl/vim-qf.git'
+" key bindings interfere with <Leader>b for buffer switching (a la command-t and
+"Plug 'https://github.com/qpkorr/vim-bufkill.git'
+Plug 'https://github.com/wellle/targets.vim'
+Plug 'https://github.com/easymotion/vim-easymotion.git'
+" nix package manager syntax
+Plug 'LnL7/vim-nix'
+Plug 'https://github.com/kana/vim-fakeclip.git'
+Plug 'danro/rename.vim'
+
+
+"""""""""""""""
+" IDE PLUGINS "
+"""""""""""""""
+
+Plug 'https://github.com/tpope/vim-tbone.git'  " tmux integration
+Plug 'https://github.com/scrooloose/nerdcommenter.git'
+Plug 'https://github.com/mhinz/vim-grepper.git'
+Plug 'https://github.com/tpope/vim-fugitive.git'
+Plug 'https://github.com/jpalardy/vim-slime.git'
+"Plug 'https://github.com/vimwiki/vimwiki.git'
+Plug 'https://github.com/tmhedberg/matchit.git'
+Plug 'https://github.com/Valloric/MatchTagAlways.git'
+"Plug 'https://github.com/Raimondi/delimitMate.git'
+Plug 'https://github.com/jiangmiao/auto-pairs.git'
+Plug 'https://github.com/coddingtonbear/confluencewiki.vim'
+Plug 'https://github.com/kana/vim-textobj-user.git'
+Plug 'glts/vim-textobj-comment'
+Plug 'https://github.com/towolf/vim-helm.git'
+if $VIM_ENV == "development"
+  Plug 'https://github.com/AndrewRadev/splitjoin.vim.git'
+  Plug 'ervandew/supertab'
+  Plug 'SirVer/ultisnips'
+  Plug 'honza/vim-snippets'
+  " pinned commit due to python snippets syntax bug https://github.com/honza/vim-snippets/issues/1096
+  " probably caused by https://github.com/honza/vim-snippets/commit/cfc7e5246a7a761211eb0aeea60bbfc85ea083a5
+  Plug 'honza/vim-snippets', {'commit': '9ff16f86ebacb6455058db8aac6b2f3d33d68a7c'}
+  "Plug 'Shougo/deoplete.nvim' , { 'do': 'make install' }
+  function CocSetup()
+    "call coc#util#install()
+    call coc#add_extension(
+          \ 'coc-html',
+          \ 'coc-ultisnips',
+          \ 'coc-tag',
+          \ 'coc-tsserver',
+          \ 'coc-css',
+          \ 'coc-json',
+          \ 'coc-prettier',
+          \ 'coc-reason',
+          \ 'coc-rust-analyzer',
+          \ 'coc-yaml',
+          \)
+
+          " disabling pyls because this extension appears to add lints from
+          " pyflakes, which is very non-configurable
+          "\ 'coc-pyls',
+
+          " coc-python appears to use the local python interpreter / virtualenv.
+          " This would require us to install jedi, pyflakes, isort, etc in each
+          " virtualenv to use this extension
+          "\ 'coc-python',
+
+          " This is the official and oricinal rust language server plugin.
+          " Currently switching to using the rust-analyzer project
+          "\ 'coc-rls',
+  endfunction
+  Plug 'neoclide/coc.nvim', {'branch': 'release', 'do': { -> CocSetup()}}
+  Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+  Plug 'junegunn/fzf.vim'
+  if executable('ctags')
+    Plug 'https://github.com/ludovicchabant/vim-gutentags.git'
+    Plug 'https://github.com/majutsushi/tagbar.git'
+  endif
+endif
+
+"""""""""""""""
+" WEB PLUGINS "
+"""""""""""""""
+
+" emmet html markup generator
+Plug 'mattn/emmet-vim', {'for': ['html', 'liquid', 'eruby', 'typescript', 'javascript', 'reason', 'jinja.html']}
+Plug 'mustache/vim-mustache-handlebars'
+Plug 'https://github.com/pangloss/vim-javascript.git',
+  \ {'for': ['javascript', 'html']}
+Plug 'https://github.com/isRuslan/vim-es6.git',
+  \ {'for': ['javascript', 'html']}
+Plug 'https://github.com/chr4/nginx.vim.git'
+if $VIM_ENV == 'development'
+  Plug 'https://github.com/iamcco/markdown-preview.nvim.git',
+    \ {'for': 'markdown', 'do': { -> mkdp#utils#install() } }
+  Plug 'https://github.com/digitaltoad/vim-pug.git',
+    \ {'for': 'pug'}
+  Plug 'https://github.com/leafgarland/typescript-vim.git',
+    \ {'for': 'typescript'}
+  Plug 'reasonml-editor/vim-reason-plus'
+  Plug 'https://github.com/mxw/vim-jsx.git'
+endif
+
+""""""""""""""""
+" RUBY PLUGINS "
+""""""""""""""""
+
+if $VIM_ENV == 'development'
+  Plug 'https://github.com/slim-template/vim-slim.git'
+endif
+
+""""""""""""""""""
+" PYTHON PLUGINS "
+""""""""""""""""""
+
+Plug 'https://github.com/vim-python/python-syntax.git', {'for': 'python'}
+let g:python_highlight_all = 1
+Plug 'https://github.com/Vimjas/vim-python-pep8-indent.git', {'for': 'python'}
+Plug 'https://github.com/jeetsukumaran/vim-pythonsense.git', {'for': 'python'}
+Plug 'https://github.com/tmhedberg/SimpylFold.git', {'for': 'python'}
+Plug 'Glench/Vim-Jinja2-Syntax'
+if $VIM_ENV == "development"
+  "Plug 'zchee/deoplete-jedi',
+    "\ {'for': 'python'}
+  "Plug 'davidhalter/jedi-vim',
+    "\ { 'for': 'python' }
+  Plug 'bps/vim-textobj-python', {'for': 'python'}
+endif
+
+"""""""""""""""""""
+" HASKELL PLUGINS "
+"""""""""""""""""""
+
+if $VIM_ENV == "development"
+  Plug 'https://github.com/Twinside/vim-syntax-haskell-cabal.git',
+    \ {'for': ['cabal', 'haskell']}
+  Plug 'https://github.com/pbrisbin/vim-syntax-shakespeare.git',
+    \ {'for': ['haskell', 'hamlet', 'cassius', 'lucius']}
+  Plug 'https://github.com/alx741/vim-yesod.git',
+    \ {'for': ['cabal', 'haskell', 'hamlet', 'cassius', 'lucius']}
+  Plug 'https://github.com/alx741/vim-hindent.git',
+    \ {'for': 'haskell'}
+endif
+
+""""""""""""""""
+" RUST PLUGINS "
+""""""""""""""""
+Plug 'https://github.com/rust-lang/rust.vim.git', {'for': 'rust'}
+Plug 'https://github.com/cespare/vim-toml.git', {'for': 'toml'}
+
+if $VIM_ENV == "development"
+  "Plug 'racer-rust/vim-racer', {'for': 'rust'}
+endif
+
+"""""""""""""""
+" ELM PLUGINS "
+"""""""""""""""
+
+Plug 'https://github.com/ElmCast/elm-vim.git', { 'for': 'elm' }
+
+"""""""""""""""""""""""
+" COLORSCHEME PLUGINS "
+"""""""""""""""""""""""
+
+"Plug 'https://github.com/jacoborus/tender.vim.git'
+"Plug 'https://github.com/dfxyz/CandyPaper.vim.git'
+"Plug 'trevordmiller/nova-vim'
+Plug 'https://github.com/cocopon/iceberg.vim'
+"Plug 'https://github.com/rakr/vim-one'
+"Plug 'https://github.com/joshdick/onedark.vim.git'
+"Plug 'https://github.com/christophermca/meta5'
+"Plug 'https://github.com/danilo-augusto/vim-afterglow.git'
+"Plug 'https://github.com/w0ng/vim-hybrid'
+"Plug 'https://github.com/mhumeSF/one-dark.vim.git'
+"Plug 'https://github.com/NLKNguyen/papercolor-theme.git'
+"Plug 'https://github.com/atweiden/vim-colors-behelit.git'
+"Plug 'https://github.com/flazz/vim-colorschemes.git'
+"Plug 'https://github.com/zanloy/vim-colors-sunburst.git'
+"Plug 'https://github.com/tyrannicaltoucan/vim-quantum.git'
+"Plug 'https://github.com/chriskempson/base16-vim.git'
+"Plug 'https://github.com/google/vim-colorscheme-primary.git'
+"Plug 'https://github.com/altercation/vim-colors-solarized'
+"Plug 'challenger-deep-theme/vim'
+Plug 'https://github.com/mhartington/oceanic-next.git'
+"Plug 'https://github.com/tyrannicaltoucan/vim-deep-space.git'
+"Plug 'https://github.com/jonathanfilip/vim-lucius.git'
+"Plug 'https://github.com/rakr/vim-colors-rakr.git'
+"Plug 'https://github.com/rakr/vim-two-firewatch.git'
+Plug 'chuling/equinusocio-material.vim'
+
+
+call plug#end()
+
+" make bash source bashrc when run in non interactive mode
+let $BASH_ENV = "~/.bashrc"
+
+" some draw speed tweaks
+set lazyredraw
+set synmaxcol=300  " default: 3000
+
+
+" elimitnate escape sequence lag in vim (delay after leaving insert mode)
+set notimeout
+set ttimeout
+set timeoutlen=300
+set ttimeoutlen=10
+
+" sets shorter timeout for CursorHold event
+set updatetime=100
+
+" make the backspace work like we're used to
+set backspace=indent,eol,start
+
+" set vim register size
+set viminfo='100,h
+
+" set terminal title
+"set titlestring=%t%(\ %M%)%(\ (%{expand(\"%:p:h\")})%)%(\ %a%)\ -\ %{v:servername}
+set titlestring=%t\ -\ VIM
+"let &titlestring = hostname() . ": " . expand("%:t") . " - VIM"
+"set title
+
+set guioptions=aegirLt
+if has('nvim') || has('termguicolors')
+  set termguicolors
+endif
+
+set signcolumn=yes
+
+
+set mouse=a
+
+" Set a high value to have all folds opened by default
+" https://vim.fandom.com/wiki/All_folds_open_when_opening_a_file
+set foldlevelstart=20
+
+
+" set the cursor to stay in block mode. Cursor get stuck in odd states when
+" switching panes in tmux. There is also a bug in Konsole that forces a profile
+" reload when the cursor is changed. Issue exists up to konsole --version
+" 18.07.70
+"
+" see: https://github.com/neovim/neovim/issues/6798
+let $NVIM_TUI_ENABLE_CURSOR_SHAPE=1
+set guicursor=a:blinkon0
+
+" set default indent options
+set filetype=on
+set shiftwidth=2
+set softtabstop=2
+set tabstop=2
+set expandtab   " converts tabs to spaces
+
+" text wrapping options
+set textwidth=80
+set formatoptions-=t
+set formatoptions+=l
+set formatoptions+=c
+set formatoptions+=q
+
+" http://vim.wikia.com/wiki/Toggle_auto-wrap
+function! AutoWrapToggle()
+  if &formatoptions =~ 't'
+    set fo-=t
+    echo "Auto wrap disabled"
+  else
+    set fo+=t
+    echo "Auto wrap enabled"
+  endif
+endfunction
+"imap <C-B> :call AutoWrapToggle()<CR>
+command -nargs=0 ToggleAutoWrap :call AutoWrapToggle()
+
+command -nargs=0 Config :e $HOME/.config/nvim/init.vim
+
+" put current buffer to the background without writing to disk
+set hidden
+
+" search settngs
+set ignorecase
+set smartcase
+set hlsearch
+set incsearch
+
+" keep a couple lines between the cursor and screen edge when scrolling
+set scrolloff=3
+
+" set a directory so .swp and backup files are not spread around the system
+if isdirectory($HOME . '/.cache/nvim/swpbak') == 0
+  :silent !mkdir -p ~/.cache/nvim/swpbak > /dev/null 2>&1
+endif
+set backupdir=~/.cache/nvim/swpbak//,/tmp//
+set directory=~/.cache/nvim/swpbak//,/tmp//
+
+" turn off the audible bell and make the screen flash instead
+"set visualbell
+" force rendering in 256 color mode
+set t_Co=256
+
+if &term =~ '256color'
+  " disable Background Color Erase (BCE) so that color schemes
+  " render properly when inside 256-color tmux and GNU screen.
+  " see also http://snk.tuxfamily.org/log/vim-256color-bce.html
+  set t_ut=
+endif
+
+" If you have vim >=8.0 or Neovim >= 0.1.5
+if (has('termguicolors'))
+  set termguicolors
+endif
+
+
+" turn syntax highlighting on
+filetype indent plugin on
+syntax enable
+
+" setting the colorscheme, favorites listed here
+colorscheme iceberg
+set background=dark
+" prevent the colorscheme from overriding the default background color
+"hi Normal ctermbg=none
+" force default text color
+"hi Normal ctermfg=white
+" other overrides
+"hi MatchParen ctermbg=none ctermfg=yellow
+
+"let g:equinusocio_material_style = 'pure'
+"colorscheme equinusocio_material
+set fillchars+=vert:│
+
+" use <F10> to show syntax highlighting under the cursor
+" http://vim.wikia.com/wiki/Identify_the_syntax_highlighting_group_used_at_the_cursor
+map <F10> :echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '> trans<'
+\ . synIDattr(synID(line("."),col("."),0),"name") . "> lo<"
+\ . synIDattr(synIDtrans(synID(line("."),col("."),1)),"name") . ">"<CR>
+
+" Uncomment the following to have Vim jump to the last position when
+" reopening a file
+if has('autocmd')
+  au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
+endif
+
+
+function! s:ShowMaps()
+  let old_reg = getreg("a")          " save the current content of register a
+  let old_reg_type = getregtype("a") " save the type of the register as well
+try
+  redir @a                           " redirect output to register a
+  " Get the list of all key mappings silently, satisfy "Press ENTER to continue"
+  silent map | call feedkeys("\<CR>")
+  redir END                          " end output redirection
+  vnew                               " new buffer in vertical window
+  put a                              " put content of register
+  " Sort on 4th character column which is the key(s)
+  %!sort -k1.4,1.4
+finally                              " Execute even if exception is raised
+  call setreg("a", old_reg, old_reg_type) " restore register a
+endtry
+endfunction
+com! ShowMaps call s:ShowMaps()      " Enable :ShowMaps to call the function
+
+
+" highlight trailing whitespace
+" http://vim.wikia.com/wiki/Highlight_unwanted_spaces
+highlight ExtraWhitespace ctermbg=red guibg=red
+autocmd Syntax * syn match ExtraWhitespace /\s\+$\| \+\ze\t/ containedin=ALL
+
+" resize splits automatically when vim is resized
+autocmd VimResized * wincmd =
+
+" Set F7 to toggle the spellchecker
+nn <F7> :setlocal spell! spell?<CR>
+
+" Shortcuts for navigating between windows
+nnoremap <C-h> <C-w>h
+nnoremap <C-j> <C-w>j
+nnoremap <C-k> <C-w>k
+nnoremap <C-l> <C-w>l
+nnoremap + <C-w>+
+nnoremap - <C-w>-
+
+" shortcut to jump to last buffer
+"nnoremap <Backspace> :b#<Enter>:silent! g`<Enter>
+nnoremap <Backspace> :b#<Enter>
+" map insert blank line below and above to enter and shift-enter
+map <Enter> i<Enter><ESC>
+"map <Shift-Enter> O<ESC>j
+
+" allow easier copying and pasting to the X clipboard
+vnoremap <C-c> "+y
+nnoremap <leader>y :w ! xclip -selection clipboard<CR>
+
+" reload the file if no keys have been pressed in <updatetime> or when
+" entering the buffer
+"au CursorHold,CursorHoldI,BufEnter * :silent! !
+au BufEnter * :silent! !
+
+au BufNewFile,BufRead Jenkinsfile setf groovy
+au BufNewFile,BufRead .envrc setf sh
+
+" go to last position when entering a buffer
+"autocmd BufEnter * silent! normal! g`"
+
+" vim-qf use ack.vim style quickfix mappings
+let g:qf_mapping_ack_style = 1
+
+" show relative line numbers by default
+set relativenumber
+set number
+
+" quick switch line number style
+function! NumberToggle()
+  if(&relativenumber == 1 && &number == 1)
+    set norelativenumber
+    set nonumber
+  else
+    set relativenumber
+    set number
+  endif
+endfunc
+
+nnoremap <leader>n :call NumberToggle()<cr>
+
+command SudoW w ! sudo tee % > /dev/null
+
+" elm.vim settings
+let g:elm_setup_keybindings=0
+let g:elm_format_autosave=1
+let g:elm_format_fail_silently=1
+
+" set js indent plugin options
+let g:SimpleJsIntenter_BreifMode=1
+
+" remap emmet trigger key to not interfere with ycm / deoplete
+let g:user_emmet_install_global = 1
+let g:user_emmet_leader_key='<C-e>'
+"imap   <C-e><C-e>   <C-o>:<plug>(emmet-expand-abbr)<CR>
+"imap   <C-e>;   <C-o>:<plug>(emmet-expand-word)<CR>
+"imap   <C-e>u   <C-o>:<plug>(emmet-update-tag)<CR>
+"imap   <C-e>d   <C-o>:<plug>(emmet-balance-tag-inward)<CR>
+"imap   <C-e>D   <C-o>:<plug>(emmet-balance-tag-outward)<CR>
+"imap   <C-e>n   <C-o>:<plug>(emmet-move-next)<CR>
+"imap   <C-e>N   <C-o>:<plug>(emmet-move-prev)<CR>
+"imap   <C-e>i   <C-o>:<plug>(emmet-image-size)<CR>
+"imap   <C-e>/   <C-o>:<plug>(emmet-toggle-comment)<CR>
+"imap   <C-e>j   <C-o>:<plug>(emmet-split-join-tag)<CR>
+"imap   <C-e>k   <C-o>:<plug>(emmet-remove-tag)<CR>
+"imap   <C-e>a   <C-o>:<plug>(emmet-anchorize-url)<CR>
+"imap   <C-e>A   <C-o>:<plug>(emmet-anchorize-summary)<CR>
+"imap   <C-e>m   <C-o>:<plug>(emmet-merge-lines)<CR>
+"imap   <C-e>c   <C-o>:<plug>(emmet-code-pretty)<CR>
+
+
+"""""""
+" FZF "
+"""""""
+let g:fzf_action = {
+  \ 'ctrl-t': 'tab split',
+  \ 'ctrl-x': 'split',
+  \ 'ctrl-v': 'vsplit' }
+
+command! -bang -nargs=* Rg
+      \ call fzf#vim#grep(
+      \   'rg --column --line-number --no-heading --color=always '.shellescape(<q-args>), 1,
+      \   <bang>0 ? fzf#vim#with_preview('up:60%')
+      \           : fzf#vim#with_preview('right:50%:hidden', '?'),
+      \   <bang>0)
+
+command! -bang -nargs=0 RgFiles
+  \ call fzf#vim#files('', {'source': 'rg --files --color never'})
+
+nnoremap <silent> <Leader>t :RgFiles<Enter>
+nnoremap <silent> <Leader>b :Buffers<Enter>
+nnoremap <silent> <Leader>h :History:<Enter>
+
+" options for vim-session
+let g:session_autoload='no'
+let g:session_autosave='yes'
+let g:session_autosave_to='autosave'
+let g:session_autosave_silent='yes'
+
+" set python highlighting options
+let python_highlight_all = 1
+
+
+""""""""""""""""""""""
+" airline
+"""""""""""""""""""""
+set laststatus=2
+if !exists('g:airline_symbols')
+    let g:airline_symbols = {}
+endif
+"let g:airline_theme = 'equinusocio_material'
+let g:airline_theme = 'oceanicnext'
+"let g:airline_theme = 'deus'
+let g:airline_symbols.space = "\ua0"
+" let g:airline_branch_prefix = '<'
+" let g:airline_readonly_symbol = '<'
+" let g:airline_linecolumn_prefix = '<'
+let g:airline_left_sep = '▶'
+let g:airline_left_alt_sep = '>'
+let g:airline_right_sep = '◀'
+let g:airline_right_alt_sep = '<'
+"let g:airline_symbols.linenr = '␊'
+"let g:airline_symbols.linenr = '␤'
+let g:airline_symbols.linenr = '¶'
+let g:airline_symbols.branch = '⎇ '
+"let g:airline_symbols.paste = 'ρ'
+"let g:airline_symbols.paste = 'Þ'
+"let g:airline_symbols.paste = '∥'
+"let g:airline_symbols.whitespace = 'Ξ'
+let g:airline#extensions#branch#enabled = 1
+let g:airline#extensions#tagbar#enabled = 0
+let g:airline#extensions#languageclient#enabled = 1
+"let g:airline#extensions#syntastic#enabled = 1
+let g:airline_powerline_fonts = 1
+let g:airline_detect_whitespace = 1
+let g:airline#extensions#default#section_truncate_width = {
+    \ 'b': 130,
+    \ 'x': 100,
+    \ 'y': 100,
+    \ 'z': 45,
+    \ 'warning': 60,
+    \ 'error': 60,
+    \ }
+
+if $VIM_ENV == 'development'
+  let g:airline#extensions#coc#enabled = 1
+  let g:airline_section_error = '%{airline#util#wrap(airline#extensions#coc#get_error(),0)}'
+  let g:airline_section_warning = '%{airline#util#wrap(airline#extensions#coc#get_warning(),0)}'
+endif
+
+""""""""""""""""""""
+" Neomake Settings "
+""""""""""""""""""""
+
+function OnBattery()
+  silent! let f = readfile('/sys/class/power_supply/AC/online')
+  return f == ['0']
+endfunction
+
+"if OnBattery()
+  "call neomake#configure#automake('w')
+"else
+  "call neomake#configure#automake('nrw', 1000)
+"endif
+
+
+""""""""""""""""""""
+" Grepper Settings "
+""""""""""""""""""""
+
+runtime plugin/grepper.vim
+" use silver searcher if available
+if executable('ag')
+  "let g:ackprg = 'ag --vimgrep'
+  set grepprg='ag\ --vimgrep'
+endif
+
+" use ripgrep if available
+if executable('rg')
+  set grepprg='rg\ --no-heading\ -H\ --vimgrep'
+  "let g:ackprg = 'rg --vimgrep'
+endif
+
+let g:grepper.tools = ['rg', 'ag', 'ack', 'grep', 'git']
+
+nnoremap <leader>a :Grepper<cr>
+nnoremap <leader>f :Grepper-buffer<cr>
+
+"""""""""""""
+" AutoPairs "
+"""""""""""""
+
+
+
+""""""""""""""""""
+" Nerd Commenter "
+""""""""""""""""""
+
+let g:NERDAltDelims_haskell = 1
+"let g:NERDAltDelims_purescript = 1
+
+let g:NERDCustomDelimiters = {
+  \ 'purescript': {'left': '--', 'leftAlt': '{--', 'rightAlt': '--}'},
+  \ 'reason': {'left': '//', 'leftAlt': '/*', 'rightAlt': '*/'},
+  \ 'json': {'left': '//'},
+\}
+
+" haskell hindent
+let g:hindent_on_save = 1
+let g:hindent_indent_size = 4
+let g:hindent_line_length = 100
+
+"""""""""""""""""""""""""""""
+" Markdown Preview Settings "
+"""""""""""""""""""""""""""""
+
+" set to 1, nvim will open the preview window after entering the markdown buffer
+" default: 0
+let g:mkdp_auto_start = 0
+
+" set to 1, the nvim will auto close current preview window when change
+" from markdown buffer to another buffer
+" default: 1
+let g:mkdp_auto_close = 1
+
+" set to 1, the vim will refresh markdown when save the buffer or
+" leave from insert mode, default 0 is auto refresh markdown as you edit or
+" move the cursor
+" default: 0
+let g:mkdp_refresh_slow = 0
+
+" set to 1, the MarkdownPreview command can be use for all files,
+" by default it can be use in markdown file
+" default: 0
+let g:mkdp_command_for_global = 0
+
+" set to 1, preview server available to others in your network
+" by default, the server listens on localhost (127.0.0.1)
+" default: 0
+let g:mkdp_open_to_the_world = 0
+
+" use custom IP to open preview page
+" useful when you work in remote vim and preview on local browser
+" more detail see: https://github.com/iamcco/markdown-preview.nvim/pull/9
+" default empty
+let g:mkdp_open_ip = ''
+
+" specify browser to open preview page
+" default: ''
+let g:mkdp_browser = ''
+
+" set to 1, echo preview page url in command line when open preview page
+" default is 0
+let g:mkdp_echo_preview_url = 0
+
+" a custom vim function name to open preview page
+" this function will receive url as param
+" default is empty
+let g:mkdp_browserfunc = ''
+
+" options for markdown render
+" mkit: markdown-it options for render
+" katex: katex options for math
+" uml: markdown-it-plantuml options
+" maid: mermaid options
+" disable_sync_scroll: if disable sync scroll, default 0
+" sync_scroll_type: 'middle', 'top' or 'relative', default value is 'middle'
+"   middle: mean the cursor position alway show at the middle of the preview page
+"   top: mean the vim top viewport alway show at the top of the preview page
+"   relative: mean the cursor position alway show at the relative positon of the preview page
+" hide_yaml_meta: if hide yaml metadata, default is 1
+" sequence_diagrams: js-sequence-diagrams options
+let g:mkdp_preview_options = {
+    \ 'mkit': {},
+    \ 'katex': {},
+    \ 'uml': {},
+    \ 'maid': {},
+    \ 'disable_sync_scroll': 0,
+    \ 'sync_scroll_type': 'middle',
+    \ 'hide_yaml_meta': 1,
+    \ 'sequence_diagrams': {}
+    \ }
+
+" use a custom markdown style must be absolute path
+let g:mkdp_markdown_css = ''
+
+" use a custom highlight style must absolute path
+let g:mkdp_highlight_css = ''
+
+" use a custom port to start server or random for empty
+let g:mkdp_port = ''
+
+" preview page title
+" ${name} will be replace with the file name
+let g:mkdp_page_title = '「${name}」'
+
+" mappings
+"nmap <C-s> <Plug>MarkdownPreview
+"nmap <M-s> <Plug>MarkdownPreviewStop
+"nmap <C-p> <Plug>MarkdownPreviewToggle
+
+""""""""""""
+" Snippets "
+""""""""""""
+let g:UltiSnipsExpandTrigger="<leader>u"
+let g:UltiSnipsSnippetDirectories=['UltiSnips', $HOME.'/.vim/bundle/vim-snippets/UltiSnips']
+
+"function g:UltiSnips_Complete()
+  "if pumvisible()
+    "call UltiSnips#ExpandSnippet()
+    "return "\<C-y>"
+  "else
+    "return "\<CR>"
+  "endif
+"endfunction
+
+""""""""""""""""""""
+" Rust Development "
+""""""""""""""""""""
+if $VIM_ENV == 'development'
+  let g:tagbar_type_rust = {
+      \ 'ctagstype' : 'rust',
+      \ 'kinds' : [
+          \'T:types,type definitions',
+          \'f:functions,function definitions',
+          \'g:enum,enumeration names',
+          \'s:structure names',
+          \'m:modules,module names',
+          \'c:consts,static constants',
+          \'t:traits,traits',
+          \'i:impls,trait implementations',
+      \]
+  \}
+endif
+
+let g:rustfmt_autosave = 1
+
+
+"""""""""""""""""""""""""""""""""""""
+" Auto Complete and Language Server "
+"""""""""""""""""""""""""""""""""""""
+" Required for operations modifying multiple buffers like rename.
+set hidden
+
+if $VIM_ENV == 'development'
+  let g:SuperTabDefaultCompletionType = '<C-n>'
+  set completeopt+=preview
+
+  command! -nargs=0 Format :call CocAction('format')
+  command! -nargs=? Fold :call CocAction('fold', <f-args>)
+  " use <c-space> to trigger completion
+  inoremap <silent><expr> <c-space> coc#refresh()
+  " Use K for show documentation in preview window
+  "nnoremap K <Plug>(coc-show-documentation)
+  nnoremap <silent> K :call CocActionAsync('doHover')<CR>
+  nnoremap <silent> <leader>f :call CocActionAsync('format')<CR>
+  vnoremap <silent> <leader>f :call CocActionAsync('formatSelected')<CR>
+  nnoremap <silent> <F2> :call CocAction('rename')<CR>
+  nmap <silent> <leader>d :call CocAction('jumpDefinition')<CR>
+  nnoremap <silent> <leader>o :call CocAction('openLink')<CR>
+  nnoremap <silent> <leader>g :CocList --interactive outline<CR>
+  nmap <silent> <leader>r <Plug>(coc-references)
+  " Highlight symbol under cursor on CursorHold
+  autocmd CursorHold,CursorHoldI * silent call CocActionAsync('highlight')
+  "highlight CocHighlightText ctermfg=168 guifg=#e07175 gui=undercurl cterm=undercurl
+  "highlight CocHighlightRead ctermfg=168 guifg=#e07175 gui=undercurl cterm=undercurl
+  "highlight CocHighlightWrite ctermfg=168 guifg=#e07175 gui=undercurl cterm=undercurl
+  highlight CocHighlightText gui=bold cterm=bold
+  highlight link CocErrorHighlight Error
+  highlight CocErrorHighlight gui=underline cterm=underline
+  highlight link CocWarningHighlight WarningMsg
+  highlight link CocInfoHighlight WarningMsg
+  highlight link CocHintHighlight WarningMsg
+  "highlight Error ctermbg=52 guibg=#5f0000
+  "highlight WarningMsg ctermbg=130 guibg=#af5f00
+  autocmd CursorHoldI,InsertChange * silent call CocActionAsync('showSignatureHelp')
+  "autocmd CursorHold * silent call CocActionAsync('diagnosticInfo')
+  "autocmd CursorHold * silent call CocActionAsync('doHover')
+  " Remap for format selected region
+  "vmap <leader>f <Plug>(coc-format-selected)
+endif
+
+"function! coc_full_restart()
+"  CocStop
+"  nvim_buf_clear_namespace(bufnr('%'), -1, 0, -1)
+"  CocStart
+"endfunction
+"command -nargs=0 CocFullRestart :call coc_full_restart()
+
+command -nargs=0 ClearHighlighting :call nvim_buf_clear_namespace(bufnr('%'), -1, 0, -1)
+
+function CocReset()
+  CocDisable
+  ClearHighlighting
+  CocEnable
+endfunction
+command -nargs=0 CocReset :call CocReset()
+
+"""""""""
+" Slime "
+"""""""""
+" Send text to tmux, Great for REPL's.
+
+let g:slime_target = 'tmux'
+let g:slime_no_mappings = 1
+
+vmap <leader>s <Plug>SlimeRegionSend
+nmap <leader>s <Plug>SlimeParagraphSend
+
+""""""""""""""
+" EasyMotion "
+""""""""""""""
+let g:EasyMotion_smartcase = 1
+let g:EasyMotion_do_mapping = 1
+
+"""""""""""""""""""
+" Tags and TagBar "
+"""""""""""""""""""
+let g:tagbar_ctags_bin = 'ctags'
+if executable('rg')
+  let g:gutentags_file_list_command = 'rg --files'
+else
+  let g:gutentags_file_list_command = 'git ls-tree --full-tree -r --name-only HEAD'
+endif
+" tagbar toggle
+nmap <leader>j :TagbarOpen fjc<CR>
+nmap <leader>l :TagbarToggle<CR>
+
+"""""""""""""""""
+" VIM Debugging "
+"""""""""""""""""
+function! SynStack()
+  if !exists("*synstack")
+    return
+  endif
+  echo map(synstack(line('.'), col('.')), 'synIDattr(v:val, "name")')
+endfunc
+
+function! SynGroup()
+    let l:s = synID(line('.'), col('.'), 1)
+    echo synIDattr(l:s, 'name') . ' -> ' . synIDattr(synIDtrans(l:s), 'name')
+endfun
+
+set cmdheight=2

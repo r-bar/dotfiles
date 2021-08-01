@@ -1,0 +1,10 @@
+tags
+tags.*
+shrinkwrap.yaml
+.envrc
+.kube-config.yaml
+.python-version
+*.env
+__pycache__
+node_modules
+.direnv

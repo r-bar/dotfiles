@@ -1,0 +1,25 @@
+#!/bin/bash
+
+FILE="/tmp/$(openssl rand -hex 5)-$(basename $1)"
+
+function finish {
+  rm $FILE
+}
+trap finish EXIT
+
+gsutil cp $1 $FILE
+
+if [[ $? -ne 0 ]]; then
+  echo File does not exist. Creating.
+  touch $FILE
+fi
+
+HASH="$(sha256sum $FILE)"
+
+$EDITOR $FILE
+
+if [[ "$(sha256sum $FILE)" == $HASH ]]; then
+  echo No changes were made.
+else
+  gsutil cp $FILE $1
+fi

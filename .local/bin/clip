@@ -1,0 +1,55 @@
+#!/usr/bin/env python3
+import os
+import sys
+import shutil
+from subprocess import run
+
+
+OSTYPE = os.environ.get('OSTYPE')
+USAGE = """
+Usage: clip [OPTIONS]
+
+Inserts into the system clipboard from stdin or prints the clipboard contents
+to stdout.
+
+Options:
+    -h, --help  This help message.
+    -o          Force printing to stdout
+"""
+
+
+def clipboard_commands() -> tuple[list[str], list[str]]:
+    """Returns a tuple of the in and out commands"""
+    if shutil.which('xclip'):
+        return (
+            ['xclip', '-selection', 'clipboard', '-in'],
+            ['xclip', '-selection', 'clipboard', '-out'],
+        )
+    if shutil.which('xsel'):
+        return ['xsel', '-b'], ['xsel', '-b']
+    if OSTYPE.startswith('darwin'):
+        return ['pbcopy'], ['pbpaste']
+    if OSTYPE.startswith('cygwin') or OSTYPE == 'msys':
+        return ['tee', '/dev/clipboard'], ['cat', '/dev/clipboard']
+    # WSL
+    if OSTYPE.startswith('linux'):
+        return ['clip.exe'], ['powershell.exe', '-Command', 'Get-Clipboard']
+    raise RuntimeError('No clipboard program for the current platform')
+
+
+def main():
+    if '-h' in sys.argv or '--help' in sys.argv:
+        print(USAGE)
+        exit(0)
+
+    in_cmd, out_cmd = clipboard_commands()
+
+    if sys.stdin.isatty() or '-o' in sys.argv:
+        # output not captured, passes through to stdout
+        run(out_cmd, check=True)
+    else:
+        run(in_cmd, stdin=sys.stdin, check=True)
+
+
+if __name__ == '__main__':
+    main()

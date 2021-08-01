@@ -1,0 +1,1311 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_OUTPUT_MODE	u-ctags	/u-ctags or e-ctags/
+!_TAG_PROGRAM_AUTHOR	Universal Ctags Team	//
+!_TAG_PROGRAM_NAME	Universal Ctags	/Derived from Exuberant Ctags/
+!_TAG_PROGRAM_URL	https://ctags.io/	/official site/
+!_TAG_PROGRAM_VERSION	0.0.0	/157918c6/
+$BASH_ENV	config/nvim/init.vim	/^let $BASH_ENV = "~\/.bashrc"$/;"	v
+$BASH_ENV	vimrc	/^let $BASH_ENV = "~\/.bashrc"$/;"	v
+%General	config/sqlitebrowser/sqlitebrowser.conf	/^[%General]$/;"	s
++	config/nvim/init.vim	/^nnoremap + <C-w>+$/;"	m
++	vimrc	/^nnoremap + <C-w>+$/;"	m
+-	config/nvim/init.vim	/^nnoremap - <C-w>-$/;"	m
+-	vimrc	/^nnoremap - <C-w>-$/;"	m
+--plugin-git	local/share/antigen.zsh	/^  --plugin-git () {$/;"	f
+-antigen-bundle-install	local/share/antigen.zsh	/^-antigen-bundle-install () {$/;"	f
+-antigen-bundle-rev	local/share/antigen.zsh	/^-antigen-bundle-rev () {$/;"	f
+-antigen-bundle-short-name	local/share/antigen.zsh	/^-antigen-bundle-short-name () {$/;"	f
+-antigen-cache-execute	local/share/antigen.zsh	/^-antigen-cache-execute () {$/;"	f
+-antigen-cache-generate	local/share/antigen.zsh	/^-antigen-cache-generate () {$/;"	f
+-antigen-cache-init	local/share/antigen.zsh	/^-antigen-cache-init () {$/;"	f
+-antigen-defer-execute	local/share/antigen.zsh	/^-antigen-defer-execute () {$/;"	f
+-antigen-defer-init	local/share/antigen.zsh	/^-antigen-defer-init () {$/;"	f
+-antigen-echo-record	local/share/antigen.zsh	/^-antigen-echo-record () {$/;"	f
+-antigen-ensure-repo	local/share/antigen.zsh	/^-antigen-ensure-repo () {$/;"	f
+-antigen-env-setup	local/share/antigen.zsh	/^-antigen-env-setup () {$/;"	f
+-antigen-find-bundle	local/share/antigen.zsh	/^-antigen-find-bundle () {$/;"	f
+-antigen-find-record	local/share/antigen.zsh	/^-antigen-find-record () {$/;"	f
+-antigen-get-bundles	local/share/antigen.zsh	/^-antigen-get-bundles () {$/;"	f
+-antigen-get-clone-dir	local/share/antigen.zsh	/^-antigen-get-clone-dir () {$/;"	f
+-antigen-get-cloned-bundles	local/share/antigen.zsh	/^-antigen-get-cloned-bundles() {$/;"	f
+-antigen-get-themes	local/share/antigen.zsh	/^-antigen-get-themes () {$/;"	f
+-antigen-hook-handler	local/share/antigen.zsh	/^-antigen-hook-handler () {$/;"	f
+-antigen-interactive-mode	local/share/antigen.zsh	/^-antigen-interactive-mode () {$/;"	f
+-antigen-load	local/share/antigen.zsh	/^-antigen-load () {$/;"	f
+-antigen-load-env	local/share/antigen.zsh	/^-antigen-load-env () {$/;"	f
+-antigen-load-env-cached	local/share/antigen.zsh	/^  -antigen-load-env-cached () {$/;"	f
+-antigen-load-source	local/share/antigen.zsh	/^-antigen-load-source () {$/;"	f
+-antigen-load-source-cached	local/share/antigen.zsh	/^  -antigen-load-source-cached () {$/;"	f
+-antigen-lock-execute	local/share/antigen.zsh	/^-antigen-lock-execute () {$/;"	f
+-antigen-lock-init	local/share/antigen.zsh	/^-antigen-lock-init () {$/;"	f
+-antigen-parallel-execute	local/share/antigen.zsh	/^-antigen-parallel-execute() {$/;"	f
+-antigen-parallel-init	local/share/antigen.zsh	/^-antigen-parallel-init () {$/;"	f
+-antigen-parse-args	local/share/antigen.zsh	/^-antigen-parse-args () {$/;"	f
+-antigen-parse-branch	local/share/antigen.zsh	/^-antigen-parse-branch () {$/;"	f
+-antigen-purge-bundle	local/share/antigen.zsh	/^-antigen-purge-bundle () {$/;"	f
+-antigen-reset-hooks	local/share/antigen.zsh	/^-antigen-reset-hooks () {$/;"	f
+-antigen-revert-info	local/share/antigen.zsh	/^-antigen-revert-info() {$/;"	f
+-antigen-set-default	local/share/antigen.zsh	/^-antigen-set-default () {$/;"	f
+-antigen-theme-reset-hooks	local/share/antigen.zsh	/^-antigen-theme-reset-hooks () {$/;"	f
+-antigen-update-bundle	local/share/antigen.zsh	/^-antigen-update-bundle () {$/;"	f
+-antigen-update-repos	local/share/antigen.zsh	/^-antigen-update-repos () {$/;"	f
+-antigen-use-oh-my-zsh	local/share/antigen.zsh	/^-antigen-use-oh-my-zsh () {$/;"	f
+-antigen-use-prezto	local/share/antigen.zsh	/^-antigen-use-prezto () {$/;"	f
+0	config/nvim/coc-settings.json	/^      "filetypes": ["python"],$/;"	s	array:languageserver.python.filetypes
+0	config/nvim/coc-settings.json	/^      "filetypes": ["typescript"]$/;"	s	array:languageserver.typescript.filetypes
+0	config/xonsh/config.json	/^  {$/;"	o	array:foreign_shells
+0	eslintrc.json	/^        "standard",$/;"	s	array:plugins
+0	eslintrc.json	/^      "comma-dangle": ["error", "always-multiline"]$/;"	s	array:rules.comma-dangle
+0	eslintrc.json	/^      "spaced-comment": ["off", "always"],$/;"	s	array:rules.spaced-comment
+1	eslintrc.json	/^        "promise"$/;"	s	array:plugins
+1	eslintrc.json	/^      "comma-dangle": ["error", "always-multiline"]$/;"	s	array:rules.comma-dangle
+1	eslintrc.json	/^      "spaced-comment": ["off", "always"],$/;"	s	array:rules.spaced-comment
+<Backspace>	config/nvim/init.vim	/^nnoremap <Backspace> :b#<Enter>$/;"	m
+<Backspace>	vimrc	/^nnoremap <Backspace> :b#<Enter>$/;"	m
+<C-c>	config/nvim/init.vim	/^vnoremap <C-c> "+y$/;"	m
+<C-c>	vimrc	/^vnoremap <C-c> "+y$/;"	m
+<C-h>	config/nvim/init.vim	/^nnoremap <C-h> <C-w>h$/;"	m
+<C-h>	vimrc	/^nnoremap <C-h> <C-w>h$/;"	m
+<C-j>	config/nvim/init.vim	/^imap <C-j> <Plug>delimitMateS-Tab$/;"	m
+<C-j>	config/nvim/init.vim	/^nnoremap <C-j> <C-w>j$/;"	m
+<C-j>	vimrc	/^imap <C-j> <Plug>delimitMateS-Tab$/;"	m
+<C-j>	vimrc	/^nnoremap <C-j> <C-w>j$/;"	m
+<C-k>	config/nvim/init.vim	/^nnoremap <C-k> <C-w>k$/;"	m
+<C-k>	vimrc	/^nnoremap <C-k> <C-w>k$/;"	m
+<C-l>	config/nvim/init.vim	/^nnoremap <C-l> <C-w>l$/;"	m
+<C-l>	vimrc	/^nnoremap <C-l> <C-w>l$/;"	m
+<Enter>	config/nvim/init.vim	/^map <Enter> i<Enter><ESC>$/;"	m
+<Enter>	vimrc	/^map <Enter> i<Enter><ESC>$/;"	m
+<F10>	config/nvim/init.vim	/^map <F10> :echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '> trans<'$/;"	m
+<F2>	config/nvim/init.vim	/^  nnoremap <silent> <F2> :call CocAction('rename')<CR>$/;"	m
+<F7>	config/nvim/init.vim	/^nn <F7> :setlocal spell! spell?<CR>$/;"	m
+<F7>	vimrc	/^nn <F7> :setlocal spell! spell?<CR>$/;"	m
+<Leader>;	vimrc	/^nmap <Leader>; :call AppendSemi()<CR>$/;"	m
+<Leader>b	config/nvim/init.vim	/^nnoremap <silent> <Leader>b :Buffers<Enter>$/;"	m
+<Leader>b	vimrc	/^nnoremap <silent> <Leader>b :Buffers<Enter>$/;"	m
+<Leader>h	config/nvim/init.vim	/^nnoremap <silent> <Leader>h :History:<Enter>$/;"	m
+<Leader>h	vimrc	/^nnoremap <silent> <Leader>h :History:<Enter>$/;"	m
+<Leader>t	config/nvim/init.vim	/^nnoremap <silent> <Leader>t :RgFiles<Enter>$/;"	m
+<Leader>t	vimrc	/^nnoremap <silent> <Leader>t :RgFiles<Enter>$/;"	m
+<c-space>	config/nvim/init.vim	/^  inoremap <silent><expr> <c-space> coc#refresh()$/;"	m
+<cr>	local/share/nvim/site/autoload/plug.vim	/^      nmap <buffer> <cr> <plug>(plug-preview)$/;"	m
+<cr>	vim/autoload/plug.vim	/^      nmap <buffer> <cr> <plug>(plug-preview)$/;"	m
+<leader>a	config/nvim/init.vim	/^nnoremap <leader>a :Grepper<cr>$/;"	m
+<leader>a	vimrc	/^nnoremap <leader>a :Grepper<cr>$/;"	m
+<leader>d	config/nvim/init.vim	/^  nmap <silent> <leader>d :call CocAction('jumpDefinition')<CR>$/;"	m
+<leader>f	config/nvim/init.vim	/^  nnoremap <silent> <leader>f :call CocActionAsync('format')<CR>$/;"	m
+<leader>f	config/nvim/init.vim	/^  vnoremap <silent> <leader>f :call CocActionAsync('formatSelected')<CR>$/;"	m
+<leader>f	config/nvim/init.vim	/^nnoremap <leader>f :Grepper-buffer<cr>$/;"	m
+<leader>f	vimrc	/^nnoremap <leader>f :Grepper-buffer<cr>$/;"	m
+<leader>g	config/nvim/init.vim	/^  nnoremap <silent> <leader>g :CocList --interactive outline<CR>$/;"	m
+<leader>j	config/nvim/init.vim	/^nmap <leader>j :TagbarOpen fjc<CR>$/;"	m
+<leader>j	vimrc	/^nmap <leader>j :TagbarOpen fjc<CR>$/;"	m
+<leader>l	config/nvim/init.vim	/^nmap <leader>l :TagbarToggle<CR>$/;"	m
+<leader>l	vimrc	/^nmap <leader>l :TagbarToggle<CR>$/;"	m
+<leader>n	config/nvim/init.vim	/^nnoremap <leader>n :call NumberToggle()<cr>$/;"	m
+<leader>n	vimrc	/^nnoremap <leader>n :call NumberToggle()<cr>$/;"	m
+<leader>o	config/nvim/init.vim	/^  nnoremap <silent> <leader>o :call CocAction('openLink')<CR>$/;"	m
+<leader>r	config/nvim/init.vim	/^  nmap <silent> <leader>r <Plug>(coc-references)$/;"	m
+<leader>s	config/nvim/init.vim	/^nmap <leader>s <Plug>SlimeParagraphSend$/;"	m
+<leader>s	config/nvim/init.vim	/^vmap <leader>s <Plug>SlimeRegionSend$/;"	m
+<leader>s	vimrc	/^nmap <leader>s <Plug>SlimeParagraphSend$/;"	m
+<leader>s	vimrc	/^vmap <leader>s <Plug>SlimeRegionSend$/;"	m
+<leader>y	config/nvim/init.vim	/^nnoremap <leader>y :w ! xclip -selection clipboard<CR>$/;"	m
+<leader>y	vimrc	/^nnoremap <leader>y :w ! xclip -selection clipboard<CR>$/;"	m
+<plug>(plug-preview)	local/share/nvim/site/autoload/plug.vim	/^    nnoremap <silent> <buffer> <plug>(plug-preview) :silent! call <SID>preview_commit()<cr>$/;"	m
+<plug>(plug-preview)	vim/autoload/plug.vim	/^    nnoremap <silent> <buffer> <plug>(plug-preview) :silent! call <SID>preview_commit()<cr>$/;"	m
+AppendSemi	vimrc	/^function AppendSemi()$/;"	f
+AutoWrapToggle	config/nvim/init.vim	/^function! AutoWrapToggle()$/;"	f
+CocSetup	config/nvim/init.vim	/^  function CocSetup()$/;"	f
+Config	config/nvim/init.vim	/^command -nargs=0 Config :e $HOME\/.config\/nvim\/init.vim$/;"	c
+D	local/share/nvim/site/autoload/plug.vim	/^  nnoremap <silent> <buffer> D  :PlugDiff<cr>$/;"	m
+D	vim/autoload/plug.vim	/^  nnoremap <silent> <buffer> D  :PlugDiff<cr>$/;"	m
+EOC	local/share/antigen.zsh	/^cat > $ANTIGEN_CACHE <<EOC$/;"	h
+EOF	local/share/antigen.zsh	/^  cat <<EOF$/;"	h
+ERR	local/share/antigen.zsh	/^ERR () {$/;"	f
+Fold	config/nvim/init.vim	/^  command! -nargs=? Fold :call CocAction('fold', <f-args>)$/;"	c
+Format	config/nvim/init.vim	/^  command! -nargs=0 Format :call CocAction('format')$/;"	c
+GetJsIndent	vim/indent/javascript.vim	/^function! GetJsIndent(lnum)$/;"	f
+GetPhpIndent	vim/indent/css.vim	/^function GetPhpIndent()$/;"	f
+GetPhpIndent	vim/indent/php.vim	/^function GetPhpIndent()$/;"	f
+GetPythonIndent	vim/indent/python.vim	/^function! GetPythonIndent(lnum)$/;"	f
+HtmlIndentClose	vim/indent/css.vim	/^fun! <SID>HtmlIndentClose(lnum)$/;"	f
+HtmlIndentClose	vim/indent/html.vim	/^fun! <SID>HtmlIndentClose(lnum, pattern)$/;"	f
+HtmlIndentClose	vim/indent/php.vim	/^fun! <SID>HtmlIndentClose(lnum)$/;"	f
+HtmlIndentCloseAlt	vim/indent/css.vim	/^fun! <SID>HtmlIndentCloseAlt(lnum)$/;"	f
+HtmlIndentCloseAlt	vim/indent/html.vim	/^fun! <SID>HtmlIndentCloseAlt(lnum)$/;"	f
+HtmlIndentCloseAlt	vim/indent/php.vim	/^fun! <SID>HtmlIndentCloseAlt(lnum)$/;"	f
+HtmlIndentGetter	vim/indent/html.vim	/^fun! HtmlIndentGetter(lnum)$/;"	f
+HtmlIndentOpen	vim/indent/css.vim	/^fun! <SID>HtmlIndentOpen(lnum)$/;"	f
+HtmlIndentOpen	vim/indent/html.vim	/^fun! <SID>HtmlIndentOpen(lnum, pattern)$/;"	f
+HtmlIndentOpen	vim/indent/php.vim	/^fun! <SID>HtmlIndentOpen(lnum)$/;"	f
+HtmlIndentOpenAlt	vim/indent/css.vim	/^fun! <SID>HtmlIndentOpenAlt(lnum)$/;"	f
+HtmlIndentOpenAlt	vim/indent/html.vim	/^fun! <SID>HtmlIndentOpenAlt(lnum)$/;"	f
+HtmlIndentOpenAlt	vim/indent/php.vim	/^fun! <SID>HtmlIndentOpenAlt(lnum)$/;"	f
+HtmlIndentPush	vim/indent/css.vim	/^fun! <SID>HtmlIndentPush(tag)$/;"	f
+HtmlIndentPush	vim/indent/html.vim	/^fun! <SID>HtmlIndentPush(tag)$/;"	f
+HtmlIndentPush	vim/indent/php.vim	/^fun! <SID>HtmlIndentPush(tag)$/;"	f
+HtmlIndentSum	vim/indent/css.vim	/^fun! <SID>HtmlIndentSum(lnum, style)$/;"	f
+HtmlIndentSum	vim/indent/html.vim	/^fun! <SID>HtmlIndentSum(lnum, style)$/;"	f
+HtmlIndentSum	vim/indent/php.vim	/^fun! <SID>HtmlIndentSum(lnum, style)$/;"	f
+HttpHeaders	docker/config.json	/^	"HttpHeaders": {$/;"	o
+K	config/nvim/init.vim	/^  nnoremap <silent> K :call CocActionAsync('doHover')<CR>$/;"	m
+L	local/share/nvim/site/autoload/plug.vim	/^    nnoremap <silent> <buffer> L :call <SID>status_load(line('.'))<cr>$/;"	m
+L	local/share/nvim/site/autoload/plug.vim	/^    xnoremap <silent> <buffer> L :call <SID>status_load(line('.'))<cr>$/;"	m
+L	vim/autoload/plug.vim	/^    nnoremap <silent> <buffer> L :call <SID>status_load(line('.'))<cr>$/;"	m
+L	vim/autoload/plug.vim	/^    xnoremap <silent> <buffer> L :call <SID>status_load(line('.'))<cr>$/;"	m
+LOG	local/share/antigen.zsh	/^LOG () {$/;"	f
+Log	config/sqlitebrowser/sqlitebrowser.conf	/^Log=Application$/;"	k	section:SQLLogDock
+MainWindow	config/sqlitebrowser/sqlitebrowser.conf	/^[MainWindow]$/;"	s
+NumberToggle	config/nvim/init.vim	/^function! NumberToggle()$/;"	f
+NumberToggle	vimrc	/^function! NumberToggle()$/;"	f
+OnBattery	config/nvim/init.vim	/^function OnBattery()$/;"	f
+POSITIONAL=	local/bin/unsymlink	/^POSITIONAL=()$/;"	f
+POWERLEVEL9K_DIR_CLASSES=	p10k.zsh	/^  typeset -g POWERLEVEL9K_DIR_CLASSES=()$/;"	f
+PlotDock	config/sqlitebrowser/sqlitebrowser.conf	/^[PlotDock]$/;"	s
+Plug	local/share/nvim/site/autoload/plug.vim	/^  command! -nargs=+ -bar Plug call plug#(<args>)$/;"	c
+Plug	vim/autoload/plug.vim	/^  command! -nargs=+ -bar Plug call plug#(<args>)$/;"	c
+PlugClean	local/share/nvim/site/autoload/plug.vim	/^  command! -nargs=0 -bar -bang PlugClean call s:clean(<bang>0)$/;"	c
+PlugClean	vim/autoload/plug.vim	/^  command! -nargs=0 -bar -bang PlugClean call s:clean(<bang>0)$/;"	c
+PlugDiff	local/share/nvim/site/autoload/plug.vim	/^  command! -nargs=0 -bar PlugDiff    call s:diff()$/;"	c
+PlugDiff	vim/autoload/plug.vim	/^  command! -nargs=0 -bar PlugDiff    call s:diff()$/;"	c
+PlugInstall	local/share/nvim/site/autoload/plug.vim	/^  command! -nargs=* -bar -bang -complete=customlist,s:names PlugInstall call s:install(<bang>0, /;"	c
+PlugInstall	vim/autoload/plug.vim	/^  command! -nargs=* -bar -bang -complete=customlist,s:names PlugInstall call s:install(<bang>0, /;"	c
+PlugLOD	local/share/nvim/site/autoload/plug.vim	/^    augroup PlugLOD$/;"	a
+PlugLOD	vim/autoload/plug.vim	/^    augroup PlugLOD$/;"	a
+PlugSnapshot	local/share/nvim/site/autoload/plug.vim	/^  command! -nargs=? -bar -bang -complete=file PlugSnapshot call s:snapshot(<bang>0, <f-args>)$/;"	c
+PlugSnapshot	vim/autoload/plug.vim	/^  command! -nargs=? -bar -bang -complete=file PlugSnapshot call s:snapshot(<bang>0, <f-args>)$/;"	c
+PlugStatus	local/share/nvim/site/autoload/plug.vim	/^  command! -nargs=0 -bar PlugStatus  call s:status()$/;"	c
+PlugStatus	vim/autoload/plug.vim	/^  command! -nargs=0 -bar PlugStatus  call s:status()$/;"	c
+PlugUpdate	local/share/nvim/site/autoload/plug.vim	/^  command! -nargs=* -bar -bang -complete=customlist,s:names PlugUpdate  call s:update(<bang>0, [/;"	c
+PlugUpdate	vim/autoload/plug.vim	/^  command! -nargs=* -bar -bang -complete=customlist,s:names PlugUpdate  call s:update(<bang>0, [/;"	c
+PlugUpgrade	local/share/nvim/site/autoload/plug.vim	/^  command! -nargs=0 -bar PlugUpgrade if s:upgrade() | execute 'source' s:esc(s:me) | endif$/;"	c
+PlugUpgrade	vim/autoload/plug.vim	/^  command! -nargs=0 -bar PlugUpgrade if s:upgrade() | execute 'source' s:esc(s:me) | endif$/;"	c
+R	local/share/nvim/site/autoload/plug.vim	/^  nnoremap <silent> <buffer> R  :call <SID>retry()<cr>$/;"	m
+R	vim/autoload/plug.vim	/^  nnoremap <silent> <buffer> R  :call <SID>retry()<cr>$/;"	m
+Rg	config/nvim/init.vim	/^command! -bang -nargs=* Rg$/;"	c
+Rg	vimrc	/^command! -bang -nargs=* Rg$/;"	c
+RgFiles	config/nvim/init.vim	/^command! -bang -nargs=0 RgFiles$/;"	c
+RgFiles	vimrc	/^command! -bang -nargs=0 RgFiles$/;"	c
+S	local/share/nvim/site/autoload/plug.vim	/^  nnoremap <silent> <buffer> S  :PlugStatus<cr>$/;"	m
+S	vim/autoload/plug.vim	/^  nnoremap <silent> <buffer> S  :PlugStatus<cr>$/;"	m
+SQLLogDock	config/sqlitebrowser/sqlitebrowser.conf	/^[SQLLogDock]$/;"	s
+Settings	config/gtk-3.0/settings.ini	/^[Settings]$/;"	s
+Settings	config/gtk-3.0/settings.sync-conflict-20190913-021436-IHCCEWH.ini	/^[Settings]$/;"	s
+Settings	config/gtk-3.0/settings.sync-conflict-20191114-150012-L4ZHWTU.ini	/^[Settings]$/;"	s
+ShowMaps	config/nvim/init.vim	/^com! ShowMaps call s:ShowMaps()      " Enable :ShowMaps to call the function$/;"	c
+SudoW	config/nvim/init.vim	/^command SudoW w ! sudo tee % > \/dev\/null$/;"	c
+SudoW	vimrc	/^command SudoW w ! sudo tee % > \/dev\/null$/;"	c
+SynGroup	config/nvim/init.vim	/^function! SynGroup()$/;"	f
+SynStack	config/nvim/init.vim	/^function! SynStack()$/;"	f
+TRACE	local/share/antigen.zsh	/^TRACE () {$/;"	f
+ToggleAutoWrap	config/nvim/init.vim	/^command -nargs=0 ToggleAutoWrap :call AutoWrapToggle()$/;"	c
+U	local/share/nvim/site/autoload/plug.vim	/^  nnoremap <silent> <buffer> U  :call <SID>status_update()<cr>$/;"	m
+U	local/share/nvim/site/autoload/plug.vim	/^  xnoremap <silent> <buffer> U  :call <SID>status_update()<cr>$/;"	m
+U	vim/autoload/plug.vim	/^  nnoremap <silent> <buffer> U  :call <SID>status_update()<cr>$/;"	m
+U	vim/autoload/plug.vim	/^  xnoremap <silent> <buffer> U  :call <SID>status_update()<cr>$/;"	m
+User-Agent	docker/config.json	/^		"User-Agent": "Docker-Client\/18.09.4 (linux)"$/;"	s	object:HttpHeaders
+VimColorTest	vim/plugin/vim-color-test.vim	/^command! VimColorTest call VimColorTest('vim-color-test.tmp', 1, 256)$/;"	c
+VimColorTest	vim/plugin/vim-color-test.vim	/^function! VimColorTest(outfile, fgend, bgend)$/;"	f
+WARN	local/share/antigen.zsh	/^WARN () {$/;"	f
+X	local/share/nvim/site/autoload/plug.vim	/^    nnoremap <silent> <buffer> X :call <SID>revert()<cr>$/;"	m
+X	vim/autoload/plug.vim	/^    nnoremap <silent> <buffer> X :call <SID>revert()<cr>$/;"	m
+[[	local/share/nvim/site/autoload/plug.vim	/^  nnoremap <silent> <buffer> [[ :silent! call <SID>section('b')<cr>$/;"	m
+[[	vim/autoload/plug.vim	/^  nnoremap <silent> <buffer> [[ :silent! call <SID>section('b')<cr>$/;"	m
+]]	local/share/nvim/site/autoload/plug.vim	/^  nnoremap <silent> <buffer> ]] :silent! call <SID>section('')<cr>$/;"	m
+]]	vim/autoload/plug.vim	/^  nnoremap <silent> <buffer> ]] :silent! call <SID>section('')<cr>$/;"	m
+_ANTIGEN_EXTENSIONS=	local/share/antigen.zsh	/^  _ANTIGEN_EXTENSIONS=()$/;"	f
+_ANTIGEN_EXTENSIONS=	local/share/antigen.zsh	/^typeset -g _ANTIGEN_EXTENSIONS; _ANTIGEN_EXTENSIONS=()$/;"	f
+_ANTIGEN_HOOKS=	local/share/antigen.zsh	/^  _ANTIGEN_HOOKS=()$/;"	f
+_ANTIGEN_HOOKS=	local/share/antigen.zsh	/^typeset -Ag _ANTIGEN_HOOKS; _ANTIGEN_HOOKS=()$/;"	f
+_ANTIGEN_HOOKS_META=	local/share/antigen.zsh	/^  _ANTIGEN_HOOKS_META=()$/;"	f
+_ANTIGEN_HOOKS_META=	local/share/antigen.zsh	/^typeset -Ag _ANTIGEN_HOOKS_META; _ANTIGEN_HOOKS_META=()$/;"	f
+_DEFERRED_BUNDLE=	local/share/antigen.zsh	/^  typeset -ga _DEFERRED_BUNDLE; _DEFERRED_BUNDLE=()$/;"	f
+_PARALLEL_BUNDLE=	local/share/antigen.zsh	/^  typeset -ga _PARALLEL_BUNDLE; _PARALLEL_BUNDLE=()$/;"	f
+_ZCACHE_BUNDLE_SOURCE=	local/share/antigen.zsh	/^  _ZCACHE_BUNDLE_SOURCE=(); _ZCACHE_CAPTURE_BUNDLE=()$/;"	f
+_ZCACHE_CAPTURE_BUNDLE=	local/share/antigen.zsh	/^  _ZCACHE_BUNDLE_SOURCE=(); _ZCACHE_CAPTURE_BUNDLE=()$/;"	f
+__bundle	local/share/antigen.zsh	/^  __bundle() {$/;"	f
+__cleanup	local/share/antigen.zsh	/^  __cleanup() {$/;"	f
+__list	local/share/antigen.zsh	/^  __list() {$/;"	f
+_antigen	local/share/antigen.zsh	/^_antigen () {$/;"	f
+access_key_id	rclone.conf	/^access_key_id = c050b72164dc8dbcf4109e85e1b1aea68d27e4b16a93fdc8db755c0d6385c61a$/;"	k	section:barthrogers
+acd	rclone.conf	/^[acd]$/;"	s
+acl	rclone.conf	/^acl = private$/;"	k	section:barthrogers
+active	config/sqlitebrowser/sqlitebrowser.conf	/^active=true$/;"	k	section:remote
+all_scopes	config/nvim/coc-settings.json	/^            "jedi_symbols": {"enabled": true, "all_scopes": true},$/;"	b	object:languageserver.python.settings.pyls.plugins.jedi_symbols
+antigen	local/share/antigen.zsh	/^    antigen() {$/;"	f
+antigen	local/share/antigen.zsh	/^antigen () {$/;"	f
+antigen-add-hook	local/share/antigen.zsh	/^antigen-add-hook () {$/;"	f
+antigen-apply	local/share/antigen.zsh	/^antigen-apply () {$/;"	f
+antigen-apply-cached	local/share/antigen.zsh	/^  antigen-apply-cached () {$/;"	f
+antigen-apply-defer	local/share/antigen.zsh	/^  antigen-apply-defer () {$/;"	f
+antigen-apply-lock	local/share/antigen.zsh	/^  antigen-apply-lock () {$/;"	f
+antigen-apply-parallel	local/share/antigen.zsh	/^  antigen-apply-parallel () {$/;"	f
+antigen-apply-parallel-execute	local/share/antigen.zsh	/^  antigen-apply-parallel-execute () {$/;"	f
+antigen-bundle	local/share/antigen.zsh	/^antigen-bundle () {$/;"	f
+antigen-bundle-cached	local/share/antigen.zsh	/^  antigen-bundle-cached () {$/;"	f
+antigen-bundle-defer	local/share/antigen.zsh	/^  antigen-bundle-defer () {$/;"	f
+antigen-bundle-parallel	local/share/antigen.zsh	/^    antigen-bundle-parallel () {$/;"	f
+antigen-bundle-parallel-execute	local/share/antigen.zsh	/^  antigen-bundle-parallel-execute () {$/;"	f
+antigen-bundles	local/share/antigen.zsh	/^antigen-bundles () {$/;"	f
+antigen-cache-gen	local/share/antigen.zsh	/^antigen-cache-gen () {$/;"	f
+antigen-cleanup	local/share/antigen.zsh	/^antigen-cleanup () {$/;"	f
+antigen-ext	local/share/antigen.zsh	/^antigen-ext () {$/;"	f
+antigen-ext-init	local/share/antigen.zsh	/^antigen-ext-init () {$/;"	f
+antigen-ext-list	local/share/antigen.zsh	/^antigen-ext-list () {$/;"	f
+antigen-help	local/share/antigen.zsh	/^antigen-help () {$/;"	f
+antigen-init	local/share/antigen.zsh	/^antigen-init () {$/;"	f
+antigen-list	local/share/antigen.zsh	/^antigen-list () {$/;"	f
+antigen-lock	local/share/antigen.zsh	/^  antigen-lock () {$/;"	f
+antigen-purge	local/share/antigen.zsh	/^antigen-purge () {$/;"	f
+antigen-remove-hook	local/share/antigen.zsh	/^antigen-remove-hook () {$/;"	f
+antigen-reset	local/share/antigen.zsh	/^antigen-reset () {$/;"	f
+antigen-restore	local/share/antigen.zsh	/^antigen-restore () {$/;"	f
+antigen-revert	local/share/antigen.zsh	/^antigen-revert () {$/;"	f
+antigen-selfupdate	local/share/antigen.zsh	/^antigen-selfupdate () {$/;"	f
+antigen-snapshot	local/share/antigen.zsh	/^antigen-snapshot () {$/;"	f
+antigen-theme	local/share/antigen.zsh	/^antigen-theme () {$/;"	f
+antigen-update	local/share/antigen.zsh	/^antigen-update () {$/;"	f
+antigen-use	local/share/antigen.zsh	/^antigen-use () {$/;"	f
+antigen-version	local/share/antigen.zsh	/^antigen-version () {$/;"	f
+args	config/nvim/coc-settings.json	/^      "args": [],$/;"	a	object:languageserver.python
+args	config/nvim/coc-settings.json	/^      "args": [],$/;"	a	object:languageserver.typescript
+asia.gcr.io	docker/config.json	/^		"asia.gcr.io": "gcloud",$/;"	s	object:credHelpers
+auth	docker/config.json	/^			"auth": "ci1iYXI6ZEFoV1lNdVZMYzhuUW96OA=="$/;"	s	object:auths.registry.gitlab.com
+auths	docker/config.json	/^	"auths": {$/;"	o
+auto_completion	config/sqlitebrowser/sqlitebrowser.conf	/^auto_completion=true$/;"	k	section:editor
+b:blockCommentEndRE	vim/indent/IndentAnything_html.vim	/^let b:blockCommentEndRE    = '-->'$/;"	v
+b:blockCommentMiddleExtra	vim/indent/IndentAnything_html.vim	/^let b:blockCommentMiddleExtra = 3$/;"	v
+b:blockCommentMiddleRE	vim/indent/IndentAnything_html.vim	/^let b:blockCommentMiddleRE = '-'$/;"	v
+b:blockCommentRE	vim/indent/IndentAnything_html.vim	/^let b:blockCommentRE = 'htmlComment'$/;"	v
+b:blockCommentStartRE	vim/indent/IndentAnything_html.vim	/^let b:blockCommentStartRE  = '<!--'$/;"	v
+b:commentRE	vim/indent/IndentAnything_html.vim	/^let b:commentRE      = b:blockCommentRE$/;"	v
+b:defaultIndentExpr	vim/indent/IndentAnything_html.vim	/^let b:defaultIndentExpr = &indentexpr$/;"	v
+b:delimitMate_expand_inside_quotes	config/nvim/ftplugin/python.vim	/^let b:delimitMate_expand_inside_quotes = 1$/;"	v
+b:delimitMate_expand_inside_quotes	vim/ftplugin/python.vim	/^let b:delimitMate_expand_inside_quotes = 1$/;"	v
+b:delimitMate_nesting_quotes	config/nvim/ftplugin/python.vim	/^let b:delimitMate_nesting_quotes = ['"', '`', "'"]$/;"	v
+b:delimitMate_nesting_quotes	vim/ftplugin/python.vim	/^let b:delimitMate_nesting_quotes = ['"', '`', "'"]$/;"	v
+b:did_indent	vim/indent/css.vim	/^let b:did_indent = 1$/;"	v
+b:did_indent	vim/indent/javascript.vim	/^let b:did_indent = 1$/;"	v
+b:did_indent	vim/indent/php.vim	/^let b:did_indent = 1$/;"	v
+b:did_indent	vim/indent/python.vim	/^let b:did_indent = 1$/;"	v
+b:doubleQuoteStringRE	vim/indent/IndentAnything_html.vim	/^let b:doubleQuoteStringRE = b:stringRE$/;"	v
+b:indent_anything_echo	vim/indent/IndentAnything_html.vim	/^let b:indent_anything_echo = 1$/;"	v
+b:php_noindent_switch	vim/indent/css.vim	/^	let b:php_noindent_switch=1$/;"	v
+b:php_noindent_switch	vim/indent/php.vim	/^	let b:php_noindent_switch=1$/;"	v
+b:singleQuoteStringRE	vim/indent/IndentAnything_html.vim	/^let b:singleQuoteStringRE = b:stringRE$/;"	v
+b:stringRE	vim/indent/IndentAnything_html.vim	/^let b:stringRE            = 'htmlString'$/;"	v
+backend	host-htpc/config/compton.conf	/^backend = "glx";$/;"	k
+barthrogers	rclone.conf	/^[barthrogers]$/;"	s
+bin_bg_colour	config/sqlitebrowser/sqlitebrowser.conf	/^bin_bg_colour=@Variant(\\0\\0\\0\\x43\\x1\\xff\\xff\\xff\\xff\\xff\\xff\\xff\\xff\\0\\0)$/;"	k	section:databrowser
+bin_fg_colour	config/sqlitebrowser/sqlitebrowser.conf	/^bin_fg_colour=@Variant(\\0\\0\\0\\x43\\x1\\xff\\xff\\xc0\\xc0\\xc0\\xc0\\xc0\\xc0\\0\\0)$/;"	k	section:databrowser
+bucket_acl	rclone.conf	/^bucket_acl = projectPrivate$/;"	k	section:fanai-dev
+c	ipython/profile_default/ipython_config.py	/^c = get_config()  # NOQA$/;"	v
+checkversion	config/sqlitebrowser/sqlitebrowser.conf	/^[checkversion]$/;"	s
+chksum	local/share/antigen.zsh	/^    chksum() { (md5sum; test $? = 127 && md5) 2>\/dev\/null | cut -d' ' -f1 }$/;"	f
+client_certificates	config/sqlitebrowser/sqlitebrowser.conf	/^client_certificates=@Invalid()$/;"	k	section:remote
+client_id	rclone.conf	/^client_id = $/;"	k	section:acd
+client_id	rclone.conf	/^client_id = $/;"	k	section:fanai-dev
+client_id	rclone.conf	/^client_id = $/;"	k	section:gsuite
+client_secret	rclone.conf	/^client_secret = $/;"	k	section:acd
+client_secret	rclone.conf	/^client_secret = $/;"	k	section:fanai-dev
+client_secret	rclone.conf	/^client_secret = $/;"	k	section:gsuite
+clonedirectory	config/sqlitebrowser/sqlitebrowser.conf	/^clonedirectory=\/home\/ryan\/.local\/share\/sqlitebrowser\/DB Browser for SQLite$/;"	k	section:remote
+coc.preferences.diagnostic.errorSign	config/nvim/coc-settings.json	/^  "coc.preferences.diagnostic.errorSign": ">>",$/;"	s
+coc.preferences.diagnostic.errorSign	vim/coc-settings.json	/^  "coc.preferences.diagnostic.errorSign": ">>",$/;"	s
+coc.preferences.diagnostic.hintSign	config/nvim/coc-settings.json	/^  "coc.preferences.diagnostic.hintSign": ">>",$/;"	s
+coc.preferences.diagnostic.hintSign	vim/coc-settings.json	/^  "coc.preferences.diagnostic.hintSign": ">>",$/;"	s
+coc.preferences.diagnostic.infoSign	config/nvim/coc-settings.json	/^  "coc.preferences.diagnostic.infoSign": ">>",$/;"	s
+coc.preferences.diagnostic.infoSign	vim/coc-settings.json	/^  "coc.preferences.diagnostic.infoSign": ">>",$/;"	s
+coc.preferences.diagnostic.signOffset	config/nvim/coc-settings.json	/^  "coc.preferences.diagnostic.signOffset": 1000,$/;"	n
+coc.preferences.diagnostic.signOffset	vim/coc-settings.json	/^  "coc.preferences.diagnostic.signOffset": 1000,$/;"	n
+coc.preferences.diagnostic.warningSign	config/nvim/coc-settings.json	/^  "coc.preferences.diagnostic.warningSign": "⚠",$/;"	s
+coc.preferences.diagnostic.warningSign	vim/coc-settings.json	/^  "coc.preferences.diagnostic.warningSign": "⚠",$/;"	s
+com	conky/conky-dash/gmail.py	/^com="wget -O - https:\/\/"+username+":"+password+"@mail.google.com\/mail\/feed\/atom --no-check-/;"	v
+comma-dangle	eslintrc.json	/^      "comma-dangle": ["error", "always-multiline"]$/;"	a	object:rules
+command	config/nvim/coc-settings.json	/^      "command": "javascript-typescript-langserver",$/;"	s	object:languageserver.typescript
+command	config/nvim/coc-settings.json	/^      "command": "pyls",$/;"	s	object:languageserver.python
+commandPath	config/nvim/coc-settings.json	/^          "commandPath": "\/home\/ryan\/.pyenv\/versions\/neovim\/bin\/pyls",$/;"	s	object:languageserver.python.settings.pyls
+comment_bold	config/sqlitebrowser/sqlitebrowser.conf	/^comment_bold=false$/;"	k	section:syntaxhighlighter
+comment_colour	config/sqlitebrowser/sqlitebrowser.conf	/^comment_colour=#008000$/;"	k	section:syntaxhighlighter
+comment_italic	config/sqlitebrowser/sqlitebrowser.conf	/^comment_italic=false$/;"	k	section:syntaxhighlighter
+comment_underline	config/sqlitebrowser/sqlitebrowser.conf	/^comment_underline=false$/;"	k	section:syntaxhighlighter
+compdef	local/share/antigen.zsh	/^compdef () { __deferred_compdefs=($__deferred_compdefs "$*") }$/;"	f
+conky_draw_fig	conky/conky-calendar/calendar.lua	/^function conky_draw_fig()$/;"	f
+conky_ring_stats	conky/conky-ring/ring.lua	/^function conky_ring_stats()$/;"	f
+conky_start	conky/conky-ring/ring.lua	/^function conky_start()$/;"	f
+count	conky/conky-rss/rss.py	/^count =  len(feed['entries'])$/;"	v
+credHelpers	docker/config.json	/^	"credHelpers": {$/;"	o
+currentline_bold	config/sqlitebrowser/sqlitebrowser.conf	/^currentline_bold=false$/;"	k	section:syntaxhighlighter
+currentline_colour	config/sqlitebrowser/sqlitebrowser.conf	/^currentline_colour=#39393b$/;"	k	section:syntaxhighlighter
+currentline_italic	config/sqlitebrowser/sqlitebrowser.conf	/^currentline_italic=false$/;"	k	section:syntaxhighlighter
+currentline_underline	config/sqlitebrowser/sqlitebrowser.conf	/^currentline_underline=false$/;"	k	section:syntaxhighlighter
+d	local/share/nvim/site/autoload/plug.vim	/^      nnoremap <silent> <buffer> d :set opfunc=<sid>delete_op<cr>g@$/;"	m
+d	local/share/nvim/site/autoload/plug.vim	/^      xnoremap <silent> <buffer> d :<c-u>call <sid>delete_op(visualmode(), 1)<cr>$/;"	m
+d	vim/autoload/plug.vim	/^      nnoremap <silent> <buffer> d :set opfunc=<sid>delete_op<cr>g@$/;"	m
+d	vim/autoload/plug.vim	/^      xnoremap <silent> <buffer> d :<c-u>call <sid>delete_op(visualmode(), 1)<cr>$/;"	m
+databrowser	config/sqlitebrowser/sqlitebrowser.conf	/^[databrowser]$/;"	s
+db	config/sqlitebrowser/sqlitebrowser.conf	/^[db]$/;"	s
+dd	local/share/nvim/site/autoload/plug.vim	/^      nmap     <silent> <buffer> dd d_$/;"	m
+dd	vim/autoload/plug.vim	/^      nmap     <silent> <buffer> dd d_$/;"	m
+defaultencoding	config/sqlitebrowser/sqlitebrowser.conf	/^defaultencoding=UTF-8$/;"	k	section:db
+defaultfieldtype	config/sqlitebrowser/sqlitebrowser.conf	/^defaultfieldtype=0$/;"	k	section:db
+defaultlocation	config/sqlitebrowser/sqlitebrowser.conf	/^defaultlocation=\/home\/ryan$/;"	k	section:db
+defaultsqltext	config/sqlitebrowser/sqlitebrowser.conf	/^defaultsqltext=$/;"	k	section:db
+delta	host-htpc/config/compton.conf	/^fade-delta = 5;				# The time between steps in a fade in milliseconds. (default 5).$/;"	k
+disableregex	config/sqlitebrowser/sqlitebrowser.conf	/^disableregex=false$/;"	k	section:extensions
+dlist_append	config/base16-gnome-terminal/base16-3024.dark.sh	/^dlist_append() {$/;"	f
+dlist_append	config/base16-gnome-terminal/base16-3024.light.sh	/^dlist_append() {$/;"	f
+dlist_append	config/base16-gnome-terminal/base16-apathy.dark.sh	/^dlist_append() {$/;"	f
+dlist_append	config/base16-gnome-terminal/base16-apathy.light.sh	/^dlist_append() {$/;"	f
+dlist_append	config/base16-gnome-terminal/base16-ashes.dark.sh	/^dlist_append() {$/;"	f
+dlist_append	config/base16-gnome-terminal/base16-ashes.light.sh	/^dlist_append() {$/;"	f
+dlist_append	config/base16-gnome-terminal/base16-atelierdune.dark.sh	/^dlist_append() {$/;"	f
+dlist_append	config/base16-gnome-terminal/base16-atelierdune.light.sh	/^dlist_append() {$/;"	f
+dlist_append	config/base16-gnome-terminal/base16-atelierforest.dark.sh	/^dlist_append() {$/;"	f
+dlist_append	config/base16-gnome-terminal/base16-atelierforest.light.sh	/^dlist_append() {$/;"	f
+dlist_append	config/base16-gnome-terminal/base16-atelierheath.dark.sh	/^dlist_append() {$/;"	f
+dlist_append	config/base16-gnome-terminal/base16-atelierheath.light.sh	/^dlist_append() {$/;"	f
+dlist_append	config/base16-gnome-terminal/base16-atelierlakeside.dark.sh	/^dlist_append() {$/;"	f
+dlist_append	config/base16-gnome-terminal/base16-atelierlakeside.light.sh	/^dlist_append() {$/;"	f
+dlist_append	config/base16-gnome-terminal/base16-atelierseaside.dark.sh	/^dlist_append() {$/;"	f
+dlist_append	config/base16-gnome-terminal/base16-atelierseaside.light.sh	/^dlist_append() {$/;"	f
+dlist_append	config/base16-gnome-terminal/base16-bespin.dark.sh	/^dlist_append() {$/;"	f
+dlist_append	config/base16-gnome-terminal/base16-bespin.light.sh	/^dlist_append() {$/;"	f
+dlist_append	config/base16-gnome-terminal/base16-brewer.dark.sh	/^dlist_append() {$/;"	f
+dlist_append	config/base16-gnome-terminal/base16-brewer.light.sh	/^dlist_append() {$/;"	f
+dlist_append	config/base16-gnome-terminal/base16-bright.dark.sh	/^dlist_append() {$/;"	f
+dlist_append	config/base16-gnome-terminal/base16-bright.light.sh	/^dlist_append() {$/;"	f
+dlist_append	config/base16-gnome-terminal/base16-chalk.dark.sh	/^dlist_append() {$/;"	f
+dlist_append	config/base16-gnome-terminal/base16-chalk.light.sh	/^dlist_append() {$/;"	f
+dlist_append	config/base16-gnome-terminal/base16-codeschool.dark.sh	/^dlist_append() {$/;"	f
+dlist_append	config/base16-gnome-terminal/base16-codeschool.light.sh	/^dlist_append() {$/;"	f
+dlist_append	config/base16-gnome-terminal/base16-colors.dark.sh	/^dlist_append() {$/;"	f
+dlist_append	config/base16-gnome-terminal/base16-colors.light.sh	/^dlist_append() {$/;"	f
+dlist_append	config/base16-gnome-terminal/base16-default.dark.sh	/^dlist_append() {$/;"	f
+dlist_append	config/base16-gnome-terminal/base16-default.light.sh	/^dlist_append() {$/;"	f
+dlist_append	config/base16-gnome-terminal/base16-eighties.dark.sh	/^dlist_append() {$/;"	f
+dlist_append	config/base16-gnome-terminal/base16-eighties.light.sh	/^dlist_append() {$/;"	f
+dlist_append	config/base16-gnome-terminal/base16-embers.dark.sh	/^dlist_append() {$/;"	f
+dlist_append	config/base16-gnome-terminal/base16-embers.light.sh	/^dlist_append() {$/;"	f
+dlist_append	config/base16-gnome-terminal/base16-flat.dark.sh	/^dlist_append() {$/;"	f
+dlist_append	config/base16-gnome-terminal/base16-flat.light.sh	/^dlist_append() {$/;"	f
+dlist_append	config/base16-gnome-terminal/base16-google.dark.sh	/^dlist_append() {$/;"	f
+dlist_append	config/base16-gnome-terminal/base16-google.light.sh	/^dlist_append() {$/;"	f
+dlist_append	config/base16-gnome-terminal/base16-grayscale.dark.sh	/^dlist_append() {$/;"	f
+dlist_append	config/base16-gnome-terminal/base16-grayscale.light.sh	/^dlist_append() {$/;"	f
+dlist_append	config/base16-gnome-terminal/base16-greenscreen.dark.sh	/^dlist_append() {$/;"	f
+dlist_append	config/base16-gnome-terminal/base16-greenscreen.light.sh	/^dlist_append() {$/;"	f
+dlist_append	config/base16-gnome-terminal/base16-harmonic16.dark.sh	/^dlist_append() {$/;"	f
+dlist_append	config/base16-gnome-terminal/base16-harmonic16.light.sh	/^dlist_append() {$/;"	f
+dlist_append	config/base16-gnome-terminal/base16-isotope.dark.sh	/^dlist_append() {$/;"	f
+dlist_append	config/base16-gnome-terminal/base16-isotope.light.sh	/^dlist_append() {$/;"	f
+dlist_append	config/base16-gnome-terminal/base16-londontube.dark.sh	/^dlist_append() {$/;"	f
+dlist_append	config/base16-gnome-terminal/base16-londontube.light.sh	/^dlist_append() {$/;"	f
+dlist_append	config/base16-gnome-terminal/base16-marrakesh.dark.sh	/^dlist_append() {$/;"	f
+dlist_append	config/base16-gnome-terminal/base16-marrakesh.light.sh	/^dlist_append() {$/;"	f
+dlist_append	config/base16-gnome-terminal/base16-mocha.dark.sh	/^dlist_append() {$/;"	f
+dlist_append	config/base16-gnome-terminal/base16-mocha.light.sh	/^dlist_append() {$/;"	f
+dlist_append	config/base16-gnome-terminal/base16-monokai.dark.sh	/^dlist_append() {$/;"	f
+dlist_append	config/base16-gnome-terminal/base16-monokai.light.sh	/^dlist_append() {$/;"	f
+dlist_append	config/base16-gnome-terminal/base16-ocean.dark.sh	/^dlist_append() {$/;"	f
+dlist_append	config/base16-gnome-terminal/base16-ocean.light.sh	/^dlist_append() {$/;"	f
+dlist_append	config/base16-gnome-terminal/base16-paraiso.dark.sh	/^dlist_append() {$/;"	f
+dlist_append	config/base16-gnome-terminal/base16-paraiso.light.sh	/^dlist_append() {$/;"	f
+dlist_append	config/base16-gnome-terminal/base16-railscasts.dark.sh	/^dlist_append() {$/;"	f
+dlist_append	config/base16-gnome-terminal/base16-railscasts.light.sh	/^dlist_append() {$/;"	f
+dlist_append	config/base16-gnome-terminal/base16-shapeshifter.dark.sh	/^dlist_append() {$/;"	f
+dlist_append	config/base16-gnome-terminal/base16-shapeshifter.light.sh	/^dlist_append() {$/;"	f
+dlist_append	config/base16-gnome-terminal/base16-solarized.dark.sh	/^dlist_append() {$/;"	f
+dlist_append	config/base16-gnome-terminal/base16-solarized.light.sh	/^dlist_append() {$/;"	f
+dlist_append	config/base16-gnome-terminal/base16-summerfruit.dark.sh	/^dlist_append() {$/;"	f
+dlist_append	config/base16-gnome-terminal/base16-summerfruit.light.sh	/^dlist_append() {$/;"	f
+dlist_append	config/base16-gnome-terminal/base16-tomorrow.dark.sh	/^dlist_append() {$/;"	f
+dlist_append	config/base16-gnome-terminal/base16-tomorrow.light.sh	/^dlist_append() {$/;"	f
+dlist_append	config/base16-gnome-terminal/base16-twilight.dark.sh	/^dlist_append() {$/;"	f
+dlist_append	config/base16-gnome-terminal/base16-twilight.light.sh	/^dlist_append() {$/;"	f
+draw_image	conky/conky-ring/ring.lua	/^function draw_image()$/;"	f
+draw_ring	conky/conky-ring/ring.lua	/^function draw_ring(cr,t,pt)$/;"	f
+draw_ring_cc	conky/conky-ring/ring.lua	/^function draw_ring_cc(cr,t,pt)$/;"	f
+dset	config/base16-gnome-terminal/base16-3024.dark.sh	/^dset() {$/;"	f
+dset	config/base16-gnome-terminal/base16-3024.light.sh	/^dset() {$/;"	f
+dset	config/base16-gnome-terminal/base16-apathy.dark.sh	/^dset() {$/;"	f
+dset	config/base16-gnome-terminal/base16-apathy.light.sh	/^dset() {$/;"	f
+dset	config/base16-gnome-terminal/base16-ashes.dark.sh	/^dset() {$/;"	f
+dset	config/base16-gnome-terminal/base16-ashes.light.sh	/^dset() {$/;"	f
+dset	config/base16-gnome-terminal/base16-atelierdune.dark.sh	/^dset() {$/;"	f
+dset	config/base16-gnome-terminal/base16-atelierdune.light.sh	/^dset() {$/;"	f
+dset	config/base16-gnome-terminal/base16-atelierforest.dark.sh	/^dset() {$/;"	f
+dset	config/base16-gnome-terminal/base16-atelierforest.light.sh	/^dset() {$/;"	f
+dset	config/base16-gnome-terminal/base16-atelierheath.dark.sh	/^dset() {$/;"	f
+dset	config/base16-gnome-terminal/base16-atelierheath.light.sh	/^dset() {$/;"	f
+dset	config/base16-gnome-terminal/base16-atelierlakeside.dark.sh	/^dset() {$/;"	f
+dset	config/base16-gnome-terminal/base16-atelierlakeside.light.sh	/^dset() {$/;"	f
+dset	config/base16-gnome-terminal/base16-atelierseaside.dark.sh	/^dset() {$/;"	f
+dset	config/base16-gnome-terminal/base16-atelierseaside.light.sh	/^dset() {$/;"	f
+dset	config/base16-gnome-terminal/base16-bespin.dark.sh	/^dset() {$/;"	f
+dset	config/base16-gnome-terminal/base16-bespin.light.sh	/^dset() {$/;"	f
+dset	config/base16-gnome-terminal/base16-brewer.dark.sh	/^dset() {$/;"	f
+dset	config/base16-gnome-terminal/base16-brewer.light.sh	/^dset() {$/;"	f
+dset	config/base16-gnome-terminal/base16-bright.dark.sh	/^dset() {$/;"	f
+dset	config/base16-gnome-terminal/base16-bright.light.sh	/^dset() {$/;"	f
+dset	config/base16-gnome-terminal/base16-chalk.dark.sh	/^dset() {$/;"	f
+dset	config/base16-gnome-terminal/base16-chalk.light.sh	/^dset() {$/;"	f
+dset	config/base16-gnome-terminal/base16-codeschool.dark.sh	/^dset() {$/;"	f
+dset	config/base16-gnome-terminal/base16-codeschool.light.sh	/^dset() {$/;"	f
+dset	config/base16-gnome-terminal/base16-colors.dark.sh	/^dset() {$/;"	f
+dset	config/base16-gnome-terminal/base16-colors.light.sh	/^dset() {$/;"	f
+dset	config/base16-gnome-terminal/base16-default.dark.sh	/^dset() {$/;"	f
+dset	config/base16-gnome-terminal/base16-default.light.sh	/^dset() {$/;"	f
+dset	config/base16-gnome-terminal/base16-eighties.dark.sh	/^dset() {$/;"	f
+dset	config/base16-gnome-terminal/base16-eighties.light.sh	/^dset() {$/;"	f
+dset	config/base16-gnome-terminal/base16-embers.dark.sh	/^dset() {$/;"	f
+dset	config/base16-gnome-terminal/base16-embers.light.sh	/^dset() {$/;"	f
+dset	config/base16-gnome-terminal/base16-flat.dark.sh	/^dset() {$/;"	f
+dset	config/base16-gnome-terminal/base16-flat.light.sh	/^dset() {$/;"	f
+dset	config/base16-gnome-terminal/base16-google.dark.sh	/^dset() {$/;"	f
+dset	config/base16-gnome-terminal/base16-google.light.sh	/^dset() {$/;"	f
+dset	config/base16-gnome-terminal/base16-grayscale.dark.sh	/^dset() {$/;"	f
+dset	config/base16-gnome-terminal/base16-grayscale.light.sh	/^dset() {$/;"	f
+dset	config/base16-gnome-terminal/base16-greenscreen.dark.sh	/^dset() {$/;"	f
+dset	config/base16-gnome-terminal/base16-greenscreen.light.sh	/^dset() {$/;"	f
+dset	config/base16-gnome-terminal/base16-harmonic16.dark.sh	/^dset() {$/;"	f
+dset	config/base16-gnome-terminal/base16-harmonic16.light.sh	/^dset() {$/;"	f
+dset	config/base16-gnome-terminal/base16-isotope.dark.sh	/^dset() {$/;"	f
+dset	config/base16-gnome-terminal/base16-isotope.light.sh	/^dset() {$/;"	f
+dset	config/base16-gnome-terminal/base16-londontube.dark.sh	/^dset() {$/;"	f
+dset	config/base16-gnome-terminal/base16-londontube.light.sh	/^dset() {$/;"	f
+dset	config/base16-gnome-terminal/base16-marrakesh.dark.sh	/^dset() {$/;"	f
+dset	config/base16-gnome-terminal/base16-marrakesh.light.sh	/^dset() {$/;"	f
+dset	config/base16-gnome-terminal/base16-mocha.dark.sh	/^dset() {$/;"	f
+dset	config/base16-gnome-terminal/base16-mocha.light.sh	/^dset() {$/;"	f
+dset	config/base16-gnome-terminal/base16-monokai.dark.sh	/^dset() {$/;"	f
+dset	config/base16-gnome-terminal/base16-monokai.light.sh	/^dset() {$/;"	f
+dset	config/base16-gnome-terminal/base16-ocean.dark.sh	/^dset() {$/;"	f
+dset	config/base16-gnome-terminal/base16-ocean.light.sh	/^dset() {$/;"	f
+dset	config/base16-gnome-terminal/base16-paraiso.dark.sh	/^dset() {$/;"	f
+dset	config/base16-gnome-terminal/base16-paraiso.light.sh	/^dset() {$/;"	f
+dset	config/base16-gnome-terminal/base16-railscasts.dark.sh	/^dset() {$/;"	f
+dset	config/base16-gnome-terminal/base16-railscasts.light.sh	/^dset() {$/;"	f
+dset	config/base16-gnome-terminal/base16-shapeshifter.dark.sh	/^dset() {$/;"	f
+dset	config/base16-gnome-terminal/base16-shapeshifter.light.sh	/^dset() {$/;"	f
+dset	config/base16-gnome-terminal/base16-solarized.dark.sh	/^dset() {$/;"	f
+dset	config/base16-gnome-terminal/base16-solarized.light.sh	/^dset() {$/;"	f
+dset	config/base16-gnome-terminal/base16-summerfruit.dark.sh	/^dset() {$/;"	f
+dset	config/base16-gnome-terminal/base16-summerfruit.light.sh	/^dset() {$/;"	f
+dset	config/base16-gnome-terminal/base16-tomorrow.dark.sh	/^dset() {$/;"	f
+dset	config/base16-gnome-terminal/base16-tomorrow.light.sh	/^dset() {$/;"	f
+dset	config/base16-gnome-terminal/base16-twilight.dark.sh	/^dset() {$/;"	f
+dset	config/base16-gnome-terminal/base16-twilight.light.sh	/^dset() {$/;"	f
+editor	config/sqlitebrowser/sqlitebrowser.conf	/^[editor]$/;"	s
+editor.lineNumbers	config/Code/User/settings.json	/^    "editor.lineNumbers": "relative",$/;"	s
+editor.multiCursorModifier	config/Code/User/settings.json	/^    "editor.multiCursorModifier": "ctrlCmd",$/;"	s
+enable	config/nvim/coc-settings.json	/^          "enable": true,$/;"	b	object:languageserver.python.settings.pyls
+enabled	config/nvim/coc-settings.json	/^              "enabled": false,$/;"	b	object:languageserver.python.settings.pyls.plugins.pydocstyle
+enabled	config/nvim/coc-settings.json	/^            "jedi_completion": {"enabled": true},$/;"	b	object:languageserver.python.settings.pyls.plugins.jedi_completion
+enabled	config/nvim/coc-settings.json	/^            "jedi_hover": {"enabled": true},$/;"	b	object:languageserver.python.settings.pyls.plugins.jedi_hover
+enabled	config/nvim/coc-settings.json	/^            "jedi_references": {"enabled": true},$/;"	b	object:languageserver.python.settings.pyls.plugins.jedi_references
+enabled	config/nvim/coc-settings.json	/^            "jedi_signature_help": {"enabled": true},$/;"	b	object:languageserver.python.settings.pyls.plugins.jedi_signature_help
+enabled	config/nvim/coc-settings.json	/^            "jedi_symbols": {"enabled": true, "all_scopes": true},$/;"	b	object:languageserver.python.settings.pyls.plugins.jedi_symbols
+enabled	config/nvim/coc-settings.json	/^            "mccabe": {"enabled": true, "threshold": 15},$/;"	b	object:languageserver.python.settings.pyls.plugins.mccabe
+enabled	config/nvim/coc-settings.json	/^            "preload": {"enabled": true},$/;"	b	object:languageserver.python.settings.pyls.plugins.preload
+enabled	config/nvim/coc-settings.json	/^            "pycodestyle": {"enabled": true},$/;"	b	object:languageserver.python.settings.pyls.plugins.pycodestyle
+enabled	config/sqlitebrowser/sqlitebrowser.conf	/^enabled=true$/;"	k	section:checkversion
+encacd	rclone.conf	/^[encacd]$/;"	s
+endpoint	rclone.conf	/^endpoint = nyc3.digitaloceanspaces.com$/;"	k	section:barthrogers
+env_auth	rclone.conf	/^env_auth = true$/;"	k	section:barthrogers
+envcmd	config/xonsh/config.json	/^   "envcmd": "env",$/;"	s	object:foreign_shells.0
+error_indicators	config/sqlitebrowser/sqlitebrowser.conf	/^error_indicators=true$/;"	k	section:editor
+eu.gcr.io	docker/config.json	/^		"eu.gcr.io": "gcloud",$/;"	s	object:credHelpers
+exclude	host-htpc/config/compton.conf	/^shadow-exclude = [$/;"	k
+experimental	docker/config.json	/^	"experimental": "enabled"$/;"	s
+extends	eslintrc.json	/^    "extends": "standard",$/;"	s
+extensions	config/sqlitebrowser/sqlitebrowser.conf	/^[extensions]$/;"	s
+fading	host-htpc/config/compton.conf	/^fading = true;				# Fade windows during opacity changes.$/;"	k
+fanai-dev	rclone.conf	/^[fanai-dev]$/;"	s
+fc	conky/conky-dash/gmail.py	/^fc=int(msg[index+11:index2])$/;"	v
+feed	conky/conky-rss/rss.py	/^feed = feedparser.parse( rss_url )$/;"	v
+filename_encryption	rclone.conf	/^filename_encryption = standard$/;"	k	section:encacd
+files.trimTrailingWhitespace	config/Code/User/settings.json	/^    "files.trimTrailingWhitespace": true$/;"	b
+filetypedetect	local/share/nvim/site/autoload/plug.vim	/^        augroup filetypedetect$/;"	a
+filetypedetect	vim/autoload/plug.vim	/^        augroup filetypedetect$/;"	a
+filetypes	config/nvim/coc-settings.json	/^      "filetypes": ["python"],$/;"	a	object:languageserver.python
+filetypes	config/nvim/coc-settings.json	/^      "filetypes": ["typescript"]$/;"	a	object:languageserver.typescript
+filter_delay	config/sqlitebrowser/sqlitebrowser.conf	/^filter_delay=200$/;"	k	section:databrowser
+filter_escape	config/sqlitebrowser/sqlitebrowser.conf	/^filter_escape=\\\\$/;"	k	section:databrowser
+font	config/sqlitebrowser/sqlitebrowser.conf	/^font=DejaVu Sans Mono$/;"	k	section:editor
+font	config/sqlitebrowser/sqlitebrowser.conf	/^font=DejaVu Sans$/;"	k	section:databrowser
+fontsize	config/sqlitebrowser/sqlitebrowser.conf	/^fontsize=10$/;"	k	section:databrowser
+fontsize	config/sqlitebrowser/sqlitebrowser.conf	/^fontsize=9$/;"	k	section:editor
+fontsize	config/sqlitebrowser/sqlitebrowser.conf	/^fontsize=9$/;"	k	section:log
+foreign_shells	config/xonsh/config.json	/^ "foreign_shells": [$/;"	a
+foreignkeys	config/sqlitebrowser/sqlitebrowser.conf	/^foreignkeys=true$/;"	k	section:db
+function_bold	config/sqlitebrowser/sqlitebrowser.conf	/^function_bold=true$/;"	k	section:syntaxhighlighter
+function_colour	config/sqlitebrowser/sqlitebrowser.conf	/^function_colour=#b6b3ff$/;"	k	section:syntaxhighlighter
+function_italic	config/sqlitebrowser/sqlitebrowser.conf	/^function_italic=false$/;"	k	section:syntaxhighlighter
+function_underline	config/sqlitebrowser/sqlitebrowser.conf	/^function_underline=false$/;"	k	section:syntaxhighlighter
+g:EasyMotion_do_mapping	config/nvim/init.vim	/^let g:EasyMotion_do_mapping = 1$/;"	v
+g:EasyMotion_do_mapping	vimrc	/^let g:EasyMotion_do_mapping = 1$/;"	v
+g:EasyMotion_smartcase	config/nvim/init.vim	/^let g:EasyMotion_smartcase = 1$/;"	v
+g:EasyMotion_smartcase	vimrc	/^let g:EasyMotion_smartcase = 1$/;"	v
+g:NERDAltDelims_haskell	config/nvim/init.vim	/^let g:NERDAltDelims_haskell = 1$/;"	v
+g:NERDAltDelims_haskell	vimrc	/^let g:NERDAltDelims_haskell = 1$/;"	v
+g:NERDCustomDelimiters	config/nvim/init.vim	/^let g:NERDCustomDelimiters = {$/;"	v
+g:NERDCustomDelimiters	vimrc	/^let g:NERDCustomDelimiters = {$/;"	v
+g:SimpleJsIntenter_BreifMode	config/nvim/init.vim	/^let g:SimpleJsIntenter_BreifMode=1$/;"	v
+g:SimpleJsIntenter_BreifMode	vimrc	/^let g:SimpleJsIntenter_BreifMode=1$/;"	v
+g:SuperTabDefaultCompletionType	config/nvim/init.vim	/^  let g:SuperTabDefaultCompletionType = '<C-n>'$/;"	v
+g:UltiSnipsExpandTrigger	config/nvim/init.vim	/^let g:UltiSnipsExpandTrigger="<C-u>"$/;"	v
+g:UltiSnipsExpandTrigger	vimrc	/^let g:UltiSnipsExpandTrigger="<C-u>"$/;"	v
+g:UltiSnipsSnippetDirectories	config/nvim/init.vim	/^let g:UltiSnipsSnippetDirectories=['UltiSnips', $HOME.'\/.vim\/bundle\/vim-snippets\/UltiSnips']$/;"	v
+g:UltiSnipsSnippetDirectories	vimrc	/^let g:UltiSnipsSnippetDirectories=['UltiSnips', $HOME.'\/.vim\/bundle\/vim-snippets\/UltiSnips']$/;"	v
+g:_plug_bang	local/share/nvim/site/autoload/plug.vim	/^    let g:_plug_bang = (s:is_win && has('gui_running') ? 'silent ' : '').'!'.escape(cmd, '#!%')$/;"	v
+g:_plug_bang	vim/autoload/plug.vim	/^    let g:_plug_bang = (s:is_win && has('gui_running') ? 'silent ' : '').'!'.escape(cmd, '#!%')$/;"	v
+g:airline#extensions#branch#enabled	config/nvim/init.vim	/^let g:airline#extensions#branch#enabled = 1$/;"	v
+g:airline#extensions#branch#enabled	vimrc	/^let g:airline#extensions#branch#enabled = 1$/;"	v
+g:airline#extensions#coc#enabled	config/nvim/init.vim	/^  let g:airline#extensions#coc#enabled = 1$/;"	v
+g:airline#extensions#default#section_truncate_width	config/nvim/init.vim	/^let g:airline#extensions#default#section_truncate_width = {$/;"	v
+g:airline#extensions#languageclient#enabled	config/nvim/init.vim	/^let g:airline#extensions#languageclient#enabled = 1$/;"	v
+g:airline#extensions#tagbar#enabled	config/nvim/init.vim	/^let g:airline#extensions#tagbar#enabled = 0$/;"	v
+g:airline#extensions#tagbar#enabled	vimrc	/^let g:airline#extensions#tagbar#enabled = 0$/;"	v
+g:airline_detect_whitespace	config/nvim/init.vim	/^let g:airline_detect_whitespace = 1$/;"	v
+g:airline_detect_whitespace	vimrc	/^let g:airline_detect_whitespace = 1$/;"	v
+g:airline_left_alt_sep	config/nvim/init.vim	/^let g:airline_left_alt_sep = '>'$/;"	v
+g:airline_left_alt_sep	vimrc	/^let g:airline_left_alt_sep = '>'$/;"	v
+g:airline_left_sep	config/nvim/init.vim	/^let g:airline_left_sep = '▶'$/;"	v
+g:airline_left_sep	vimrc	/^let g:airline_left_sep = '▶'$/;"	v
+g:airline_powerline_fonts	config/nvim/init.vim	/^let g:airline_powerline_fonts = 1$/;"	v
+g:airline_powerline_fonts	vimrc	/^let g:airline_powerline_fonts = 1$/;"	v
+g:airline_right_alt_sep	config/nvim/init.vim	/^let g:airline_right_alt_sep = '<'$/;"	v
+g:airline_right_alt_sep	vimrc	/^let g:airline_right_alt_sep = '<'$/;"	v
+g:airline_right_sep	config/nvim/init.vim	/^let g:airline_right_sep = '◀'$/;"	v
+g:airline_right_sep	vimrc	/^let g:airline_right_sep = '◀'$/;"	v
+g:airline_section_error	config/nvim/init.vim	/^  let g:airline_section_error = '%{airline#util#wrap(airline#extensions#coc#get_error(),0)}'$/;"	v
+g:airline_section_warning	config/nvim/init.vim	/^  let g:airline_section_warning = '%{airline#util#wrap(airline#extensions#coc#get_warning(),0)}'$/;"	v
+g:airline_symbols	config/nvim/init.vim	/^    let g:airline_symbols = {}$/;"	v
+g:airline_symbols	config/nvim/init.vim	/^let g:airline_symbols.branch = '⎇ '$/;"	v
+g:airline_symbols	config/nvim/init.vim	/^let g:airline_symbols.linenr = '¶'$/;"	v
+g:airline_symbols	config/nvim/init.vim	/^let g:airline_symbols.space = "\\ua0"$/;"	v
+g:airline_symbols	vimrc	/^    let g:airline_symbols = {}$/;"	v
+g:airline_symbols	vimrc	/^let g:airline_symbols.branch = '⎇ '$/;"	v
+g:airline_symbols	vimrc	/^let g:airline_symbols.linenr = '¶'$/;"	v
+g:airline_symbols	vimrc	/^let g:airline_symbols.space = "\\ua0"$/;"	v
+g:airline_theme	config/nvim/init.vim	/^let g:airline_theme = 'oceanicnext'$/;"	v
+g:airline_theme	vimrc	/^let g:airline_theme = 'deus'$/;"	v
+g:colors_name	vim/colors/toothpaste.vim	/^let g:colors_name = "toothpaste"$/;"	v
+g:delimitMate_expand_cr	config/nvim/init.vim	/^let g:delimitMate_expand_cr = 1$/;"	v
+g:delimitMate_expand_cr	vimrc	/^let g:delimitMate_expand_cr = 1$/;"	v
+g:delimitMate_expand_space	config/nvim/init.vim	/^let g:delimitMate_expand_space = 1$/;"	v
+g:delimitMate_expand_space	vimrc	/^let g:delimitMate_expand_space = 1$/;"	v
+g:elm_format_autosave	config/nvim/init.vim	/^let g:elm_format_autosave=1$/;"	v
+g:elm_format_autosave	vimrc	/^let g:elm_format_autosave=1$/;"	v
+g:elm_format_fail_silently	config/nvim/init.vim	/^let g:elm_format_fail_silently=1$/;"	v
+g:elm_setup_keybindings	config/nvim/init.vim	/^let g:elm_setup_keybindings=0$/;"	v
+g:elm_setup_keybindings	vimrc	/^let g:elm_setup_keybindings=0$/;"	v
+g:fzf_action	config/nvim/init.vim	/^let g:fzf_action = {$/;"	v
+g:grepper	config/nvim/init.vim	/^let g:grepper.tools = ['rg', 'ag', 'ack', 'grep', 'git']$/;"	v
+g:grepper	vimrc	/^let g:grepper.tools = ['rg', 'ag', 'ack', 'grep', 'git']$/;"	v
+g:gutentags_file_list_command	config/nvim/init.vim	/^  let g:gutentags_file_list_command = 'git ls-tree --full-tree -r --name-only HEAD'$/;"	v
+g:gutentags_file_list_command	config/nvim/init.vim	/^  let g:gutentags_file_list_command = 'rg --files'$/;"	v
+g:gutentags_file_list_command	vimrc	/^  let g:gutentags_file_list_command = 'git ls-tree --full-tree -r --name-only HEAD'$/;"	v
+g:gutentags_file_list_command	vimrc	/^  let g:gutentags_file_list_command = 'rg --files'$/;"	v
+g:hindent_indent_size	config/nvim/init.vim	/^let g:hindent_indent_size = 4$/;"	v
+g:hindent_indent_size	vimrc	/^let g:hindent_indent_size = 4$/;"	v
+g:hindent_line_length	config/nvim/init.vim	/^let g:hindent_line_length = 100$/;"	v
+g:hindent_line_length	vimrc	/^let g:hindent_line_length = 100$/;"	v
+g:hindent_on_save	config/nvim/init.vim	/^let g:hindent_on_save = 1$/;"	v
+g:hindent_on_save	vimrc	/^let g:hindent_on_save = 1$/;"	v
+g:html_indent_tags	vim/indent/css.vim	/^	let g:html_indent_tags = a:tag$/;"	v
+g:html_indent_tags	vim/indent/css.vim	/^	let g:html_indent_tags = g:html_indent_tags.'\\|'.a:tag$/;"	v
+g:html_indent_tags	vim/indent/html.vim	/^	let g:html_indent_tags = a:tag$/;"	v
+g:html_indent_tags	vim/indent/html.vim	/^	let g:html_indent_tags = g:html_indent_tags.'\\|'.a:tag$/;"	v
+g:html_indent_tags	vim/indent/php.vim	/^	let g:html_indent_tags = a:tag$/;"	v
+g:html_indent_tags	vim/indent/php.vim	/^	let g:html_indent_tags = g:html_indent_tags.'\\|'.a:tag$/;"	v
+g:js_indent_log	vim/indent/javascript.vim	/^	let g:js_indent_log = 0$/;"	v
+g:loaded_plug	local/share/nvim/site/autoload/plug.vim	/^let g:loaded_plug = 1$/;"	v
+g:loaded_plug	vim/autoload/plug.vim	/^let g:loaded_plug = 1$/;"	v
+g:lsc_auto_completeopt	vimrc	/^  let g:lsc_auto_completeopt = v:false$/;"	v
+g:lsc_auto_map	vimrc	/^  let g:lsc_auto_map = {$/;"	v
+g:lsc_server_commands	vimrc	/^  let g:lsc_server_commands = {$/;"	v
+g:mkdp_auto_close	config/nvim/init.vim	/^let g:mkdp_auto_close = 1$/;"	v
+g:mkdp_auto_close	vimrc	/^let g:mkdp_auto_close = 0$/;"	v
+g:mkdp_auto_open	vimrc	/^let g:mkdp_auto_open = 1$/;"	v
+g:mkdp_auto_start	config/nvim/init.vim	/^let g:mkdp_auto_start = 0$/;"	v
+g:mkdp_auto_start	vimrc	/^let g:mkdp_auto_start = 0$/;"	v
+g:mkdp_browser	config/nvim/init.vim	/^let g:mkdp_browser = ''$/;"	v
+g:mkdp_browserfunc	config/nvim/init.vim	/^let g:mkdp_browserfunc = ''$/;"	v
+g:mkdp_command_for_global	config/nvim/init.vim	/^let g:mkdp_command_for_global = 0$/;"	v
+g:mkdp_command_for_global	vimrc	/^let g:mkdp_command_for_global = 0$/;"	v
+g:mkdp_echo_preview_url	config/nvim/init.vim	/^let g:mkdp_echo_preview_url = 0$/;"	v
+g:mkdp_highlight_css	config/nvim/init.vim	/^let g:mkdp_highlight_css = ''$/;"	v
+g:mkdp_markdown_css	config/nvim/init.vim	/^let g:mkdp_markdown_css = ''$/;"	v
+g:mkdp_open_ip	config/nvim/init.vim	/^let g:mkdp_open_ip = ''$/;"	v
+g:mkdp_open_to_the_world	config/nvim/init.vim	/^let g:mkdp_open_to_the_world = 0$/;"	v
+g:mkdp_page_title	config/nvim/init.vim	/^let g:mkdp_page_title = '「${name}」'$/;"	v
+g:mkdp_path_to_chrome	vimrc	/^let g:mkdp_path_to_chrome = "firefox"$/;"	v
+g:mkdp_port	config/nvim/init.vim	/^let g:mkdp_port = ''$/;"	v
+g:mkdp_preview_options	config/nvim/init.vim	/^let g:mkdp_preview_options = {$/;"	v
+g:mkdp_refresh_slow	config/nvim/init.vim	/^let g:mkdp_refresh_slow = 0$/;"	v
+g:mkdp_refresh_slow	vimrc	/^let g:mkdp_refresh_slow = 0$/;"	v
+g:plug_home	local/share/nvim/site/autoload/plug.vim	/^  let g:plug_home = home$/;"	v
+g:plug_home	vim/autoload/plug.vim	/^  let g:plug_home = home$/;"	v
+g:plugs	local/share/nvim/site/autoload/plug.vim	/^    let g:plugs[name] = spec$/;"	v
+g:plugs	local/share/nvim/site/autoload/plug.vim	/^  let g:plugs = {}$/;"	v
+g:plugs	vim/autoload/plug.vim	/^    let g:plugs[name] = spec$/;"	v
+g:plugs	vim/autoload/plug.vim	/^  let g:plugs = {}$/;"	v
+g:plugs_order	local/share/nvim/site/autoload/plug.vim	/^  let g:plugs_order = []$/;"	v
+g:plugs_order	local/share/nvim/site/autoload/plug.vim	/^  let g:plugs_order = get(g:, 'plugs_order', keys(g:plugs))$/;"	v
+g:plugs_order	vim/autoload/plug.vim	/^  let g:plugs_order = []$/;"	v
+g:plugs_order	vim/autoload/plug.vim	/^  let g:plugs_order = get(g:, 'plugs_order', keys(g:plugs))$/;"	v
+g:python3_host_prog	config/nvim/init.vim	/^let g:python3_host_prog='~\/.pyenv\/versions\/neovim\/bin\/python3'$/;"	v
+g:python_highlight_all	config/nvim/init.vim	/^let g:python_highlight_all = 1$/;"	v
+g:python_highlight_all	vimrc	/^let g:python_highlight_all = 1$/;"	v
+g:qf_mapping_ack_style	config/nvim/init.vim	/^let g:qf_mapping_ack_style = 1$/;"	v
+g:qf_mapping_ack_style	vimrc	/^let g:qf_mapping_ack_style = 1$/;"	v
+g:rustfmt_autosave	config/nvim/init.vim	/^let g:rustfmt_autosave = 1$/;"	v
+g:rustftm_autosave	vimrc	/^let g:rustftm_autosave = 1$/;"	v
+g:session_autoload	config/nvim/init.vim	/^let g:session_autoload='no'$/;"	v
+g:session_autoload	vimrc	/^let g:session_autoload='no'$/;"	v
+g:session_autosave	config/nvim/init.vim	/^let g:session_autosave='yes'$/;"	v
+g:session_autosave	vimrc	/^let g:session_autosave='yes'$/;"	v
+g:session_autosave_silent	config/nvim/init.vim	/^let g:session_autosave_silent='yes'$/;"	v
+g:session_autosave_silent	vimrc	/^let g:session_autosave_silent='yes'$/;"	v
+g:session_autosave_to	config/nvim/init.vim	/^let g:session_autosave_to='autosave'$/;"	v
+g:session_autosave_to	vimrc	/^let g:session_autosave_to='autosave'$/;"	v
+g:slime_no_mappings	config/nvim/init.vim	/^let g:slime_no_mappings = 1$/;"	v
+g:slime_no_mappings	vimrc	/^let g:slime_no_mappings = 1$/;"	v
+g:slime_target	config/nvim/init.vim	/^let g:slime_target = 'tmux'$/;"	v
+g:slime_target	vimrc	/^let g:slime_target = 'tmux'$/;"	v
+g:tagbar_ctags_bin	config/nvim/init.vim	/^let g:tagbar_ctags_bin = 'ctags'$/;"	v
+g:tagbar_ctags_bin	vimrc	/^let g:tagbar_ctags_bin = 'ctags'$/;"	v
+g:tagbar_type_rust	config/nvim/init.vim	/^  let g:tagbar_type_rust = {$/;"	v
+g:tagbar_type_rust	vimrc	/^  let g:tagbar_type_rust = {$/;"	v
+g:user_emmet_install_global	config/nvim/init.vim	/^let g:user_emmet_install_global = 1$/;"	v
+g:user_emmet_install_global	vimrc	/^let g:user_emmet_install_global = 1$/;"	v
+g:user_emmet_leader_key	config/nvim/init.vim	/^let g:user_emmet_leader_key='<C-e>'$/;"	v
+g:user_emmet_leader_key	vimrc	/^let g:user_emmet_leader_key='<C-e>'$/;"	v
+gcr.io	docker/config.json	/^		"gcr.io": "gcloud",$/;"	s	object:credHelpers
+geometry	config/sqlitebrowser/sqlitebrowser.conf	/^geometry=@ByteArray(\\x1\\xd9\\xd0\\xcb\\0\\x2\\0\\0\\0\\0\\0\\x66\\0\\0\\x2W\\0\\0\\x6:\\0\\0\\/;"	k	section:MainWindow
+glist_append	config/base16-gnome-terminal/base16-3024.dark.sh	/^glist_append() {$/;"	f
+glist_append	config/base16-gnome-terminal/base16-3024.light.sh	/^glist_append() {$/;"	f
+glist_append	config/base16-gnome-terminal/base16-apathy.dark.sh	/^glist_append() {$/;"	f
+glist_append	config/base16-gnome-terminal/base16-apathy.light.sh	/^glist_append() {$/;"	f
+glist_append	config/base16-gnome-terminal/base16-ashes.dark.sh	/^glist_append() {$/;"	f
+glist_append	config/base16-gnome-terminal/base16-ashes.light.sh	/^glist_append() {$/;"	f
+glist_append	config/base16-gnome-terminal/base16-atelierdune.dark.sh	/^glist_append() {$/;"	f
+glist_append	config/base16-gnome-terminal/base16-atelierdune.light.sh	/^glist_append() {$/;"	f
+glist_append	config/base16-gnome-terminal/base16-atelierforest.dark.sh	/^glist_append() {$/;"	f
+glist_append	config/base16-gnome-terminal/base16-atelierforest.light.sh	/^glist_append() {$/;"	f
+glist_append	config/base16-gnome-terminal/base16-atelierheath.dark.sh	/^glist_append() {$/;"	f
+glist_append	config/base16-gnome-terminal/base16-atelierheath.light.sh	/^glist_append() {$/;"	f
+glist_append	config/base16-gnome-terminal/base16-atelierlakeside.dark.sh	/^glist_append() {$/;"	f
+glist_append	config/base16-gnome-terminal/base16-atelierlakeside.light.sh	/^glist_append() {$/;"	f
+glist_append	config/base16-gnome-terminal/base16-atelierseaside.dark.sh	/^glist_append() {$/;"	f
+glist_append	config/base16-gnome-terminal/base16-atelierseaside.light.sh	/^glist_append() {$/;"	f
+glist_append	config/base16-gnome-terminal/base16-bespin.dark.sh	/^glist_append() {$/;"	f
+glist_append	config/base16-gnome-terminal/base16-bespin.light.sh	/^glist_append() {$/;"	f
+glist_append	config/base16-gnome-terminal/base16-brewer.dark.sh	/^glist_append() {$/;"	f
+glist_append	config/base16-gnome-terminal/base16-brewer.light.sh	/^glist_append() {$/;"	f
+glist_append	config/base16-gnome-terminal/base16-bright.dark.sh	/^glist_append() {$/;"	f
+glist_append	config/base16-gnome-terminal/base16-bright.light.sh	/^glist_append() {$/;"	f
+glist_append	config/base16-gnome-terminal/base16-chalk.dark.sh	/^glist_append() {$/;"	f
+glist_append	config/base16-gnome-terminal/base16-chalk.light.sh	/^glist_append() {$/;"	f
+glist_append	config/base16-gnome-terminal/base16-codeschool.dark.sh	/^glist_append() {$/;"	f
+glist_append	config/base16-gnome-terminal/base16-codeschool.light.sh	/^glist_append() {$/;"	f
+glist_append	config/base16-gnome-terminal/base16-colors.dark.sh	/^glist_append() {$/;"	f
+glist_append	config/base16-gnome-terminal/base16-colors.light.sh	/^glist_append() {$/;"	f
+glist_append	config/base16-gnome-terminal/base16-default.dark.sh	/^glist_append() {$/;"	f
+glist_append	config/base16-gnome-terminal/base16-default.light.sh	/^glist_append() {$/;"	f
+glist_append	config/base16-gnome-terminal/base16-eighties.dark.sh	/^glist_append() {$/;"	f
+glist_append	config/base16-gnome-terminal/base16-eighties.light.sh	/^glist_append() {$/;"	f
+glist_append	config/base16-gnome-terminal/base16-embers.dark.sh	/^glist_append() {$/;"	f
+glist_append	config/base16-gnome-terminal/base16-embers.light.sh	/^glist_append() {$/;"	f
+glist_append	config/base16-gnome-terminal/base16-flat.dark.sh	/^glist_append() {$/;"	f
+glist_append	config/base16-gnome-terminal/base16-flat.light.sh	/^glist_append() {$/;"	f
+glist_append	config/base16-gnome-terminal/base16-google.dark.sh	/^glist_append() {$/;"	f
+glist_append	config/base16-gnome-terminal/base16-google.light.sh	/^glist_append() {$/;"	f
+glist_append	config/base16-gnome-terminal/base16-grayscale.dark.sh	/^glist_append() {$/;"	f
+glist_append	config/base16-gnome-terminal/base16-grayscale.light.sh	/^glist_append() {$/;"	f
+glist_append	config/base16-gnome-terminal/base16-greenscreen.dark.sh	/^glist_append() {$/;"	f
+glist_append	config/base16-gnome-terminal/base16-greenscreen.light.sh	/^glist_append() {$/;"	f
+glist_append	config/base16-gnome-terminal/base16-harmonic16.dark.sh	/^glist_append() {$/;"	f
+glist_append	config/base16-gnome-terminal/base16-harmonic16.light.sh	/^glist_append() {$/;"	f
+glist_append	config/base16-gnome-terminal/base16-isotope.dark.sh	/^glist_append() {$/;"	f
+glist_append	config/base16-gnome-terminal/base16-isotope.light.sh	/^glist_append() {$/;"	f
+glist_append	config/base16-gnome-terminal/base16-londontube.dark.sh	/^glist_append() {$/;"	f
+glist_append	config/base16-gnome-terminal/base16-londontube.light.sh	/^glist_append() {$/;"	f
+glist_append	config/base16-gnome-terminal/base16-marrakesh.dark.sh	/^glist_append() {$/;"	f
+glist_append	config/base16-gnome-terminal/base16-marrakesh.light.sh	/^glist_append() {$/;"	f
+glist_append	config/base16-gnome-terminal/base16-mocha.dark.sh	/^glist_append() {$/;"	f
+glist_append	config/base16-gnome-terminal/base16-mocha.light.sh	/^glist_append() {$/;"	f
+glist_append	config/base16-gnome-terminal/base16-monokai.dark.sh	/^glist_append() {$/;"	f
+glist_append	config/base16-gnome-terminal/base16-monokai.light.sh	/^glist_append() {$/;"	f
+glist_append	config/base16-gnome-terminal/base16-ocean.dark.sh	/^glist_append() {$/;"	f
+glist_append	config/base16-gnome-terminal/base16-ocean.light.sh	/^glist_append() {$/;"	f
+glist_append	config/base16-gnome-terminal/base16-paraiso.dark.sh	/^glist_append() {$/;"	f
+glist_append	config/base16-gnome-terminal/base16-paraiso.light.sh	/^glist_append() {$/;"	f
+glist_append	config/base16-gnome-terminal/base16-pop.dark.sh	/^glist_append() {$/;"	f
+glist_append	config/base16-gnome-terminal/base16-railscasts.dark.sh	/^glist_append() {$/;"	f
+glist_append	config/base16-gnome-terminal/base16-railscasts.light.sh	/^glist_append() {$/;"	f
+glist_append	config/base16-gnome-terminal/base16-shapeshifter.dark.sh	/^glist_append() {$/;"	f
+glist_append	config/base16-gnome-terminal/base16-shapeshifter.light.sh	/^glist_append() {$/;"	f
+glist_append	config/base16-gnome-terminal/base16-solarized.dark.sh	/^glist_append() {$/;"	f
+glist_append	config/base16-gnome-terminal/base16-solarized.light.sh	/^glist_append() {$/;"	f
+glist_append	config/base16-gnome-terminal/base16-summerfruit.dark.sh	/^glist_append() {$/;"	f
+glist_append	config/base16-gnome-terminal/base16-summerfruit.light.sh	/^glist_append() {$/;"	f
+glist_append	config/base16-gnome-terminal/base16-tomorrow.dark.sh	/^glist_append() {$/;"	f
+glist_append	config/base16-gnome-terminal/base16-tomorrow.light.sh	/^glist_append() {$/;"	f
+glist_append	config/base16-gnome-terminal/base16-twilight.dark.sh	/^glist_append() {$/;"	f
+glist_append	config/base16-gnome-terminal/base16-twilight.light.sh	/^glist_append() {$/;"	f
+global	host-eris/pip/pip.conf	/^[global]$/;"	s
+global	host-pluto/host-fanai-laptop/pip/pip.conf	/^[global]$/;"	s
+gset	config/base16-gnome-terminal/base16-3024.dark.sh	/^gset() {$/;"	f
+gset	config/base16-gnome-terminal/base16-3024.light.sh	/^gset() {$/;"	f
+gset	config/base16-gnome-terminal/base16-apathy.dark.sh	/^gset() {$/;"	f
+gset	config/base16-gnome-terminal/base16-apathy.light.sh	/^gset() {$/;"	f
+gset	config/base16-gnome-terminal/base16-ashes.dark.sh	/^gset() {$/;"	f
+gset	config/base16-gnome-terminal/base16-ashes.light.sh	/^gset() {$/;"	f
+gset	config/base16-gnome-terminal/base16-atelierdune.dark.sh	/^gset() {$/;"	f
+gset	config/base16-gnome-terminal/base16-atelierdune.light.sh	/^gset() {$/;"	f
+gset	config/base16-gnome-terminal/base16-atelierforest.dark.sh	/^gset() {$/;"	f
+gset	config/base16-gnome-terminal/base16-atelierforest.light.sh	/^gset() {$/;"	f
+gset	config/base16-gnome-terminal/base16-atelierheath.dark.sh	/^gset() {$/;"	f
+gset	config/base16-gnome-terminal/base16-atelierheath.light.sh	/^gset() {$/;"	f
+gset	config/base16-gnome-terminal/base16-atelierlakeside.dark.sh	/^gset() {$/;"	f
+gset	config/base16-gnome-terminal/base16-atelierlakeside.light.sh	/^gset() {$/;"	f
+gset	config/base16-gnome-terminal/base16-atelierseaside.dark.sh	/^gset() {$/;"	f
+gset	config/base16-gnome-terminal/base16-atelierseaside.light.sh	/^gset() {$/;"	f
+gset	config/base16-gnome-terminal/base16-bespin.dark.sh	/^gset() {$/;"	f
+gset	config/base16-gnome-terminal/base16-bespin.light.sh	/^gset() {$/;"	f
+gset	config/base16-gnome-terminal/base16-brewer.dark.sh	/^gset() {$/;"	f
+gset	config/base16-gnome-terminal/base16-brewer.light.sh	/^gset() {$/;"	f
+gset	config/base16-gnome-terminal/base16-bright.dark.sh	/^gset() {$/;"	f
+gset	config/base16-gnome-terminal/base16-bright.light.sh	/^gset() {$/;"	f
+gset	config/base16-gnome-terminal/base16-chalk.dark.sh	/^gset() {$/;"	f
+gset	config/base16-gnome-terminal/base16-chalk.light.sh	/^gset() {$/;"	f
+gset	config/base16-gnome-terminal/base16-codeschool.dark.sh	/^gset() {$/;"	f
+gset	config/base16-gnome-terminal/base16-codeschool.light.sh	/^gset() {$/;"	f
+gset	config/base16-gnome-terminal/base16-colors.dark.sh	/^gset() {$/;"	f
+gset	config/base16-gnome-terminal/base16-colors.light.sh	/^gset() {$/;"	f
+gset	config/base16-gnome-terminal/base16-default.dark.sh	/^gset() {$/;"	f
+gset	config/base16-gnome-terminal/base16-default.light.sh	/^gset() {$/;"	f
+gset	config/base16-gnome-terminal/base16-eighties.dark.sh	/^gset() {$/;"	f
+gset	config/base16-gnome-terminal/base16-eighties.light.sh	/^gset() {$/;"	f
+gset	config/base16-gnome-terminal/base16-embers.dark.sh	/^gset() {$/;"	f
+gset	config/base16-gnome-terminal/base16-embers.light.sh	/^gset() {$/;"	f
+gset	config/base16-gnome-terminal/base16-flat.dark.sh	/^gset() {$/;"	f
+gset	config/base16-gnome-terminal/base16-flat.light.sh	/^gset() {$/;"	f
+gset	config/base16-gnome-terminal/base16-google.dark.sh	/^gset() {$/;"	f
+gset	config/base16-gnome-terminal/base16-google.light.sh	/^gset() {$/;"	f
+gset	config/base16-gnome-terminal/base16-grayscale.dark.sh	/^gset() {$/;"	f
+gset	config/base16-gnome-terminal/base16-grayscale.light.sh	/^gset() {$/;"	f
+gset	config/base16-gnome-terminal/base16-greenscreen.dark.sh	/^gset() {$/;"	f
+gset	config/base16-gnome-terminal/base16-greenscreen.light.sh	/^gset() {$/;"	f
+gset	config/base16-gnome-terminal/base16-harmonic16.dark.sh	/^gset() {$/;"	f
+gset	config/base16-gnome-terminal/base16-harmonic16.light.sh	/^gset() {$/;"	f
+gset	config/base16-gnome-terminal/base16-isotope.dark.sh	/^gset() {$/;"	f
+gset	config/base16-gnome-terminal/base16-isotope.light.sh	/^gset() {$/;"	f
+gset	config/base16-gnome-terminal/base16-londontube.dark.sh	/^gset() {$/;"	f
+gset	config/base16-gnome-terminal/base16-londontube.light.sh	/^gset() {$/;"	f
+gset	config/base16-gnome-terminal/base16-marrakesh.dark.sh	/^gset() {$/;"	f
+gset	config/base16-gnome-terminal/base16-marrakesh.light.sh	/^gset() {$/;"	f
+gset	config/base16-gnome-terminal/base16-mocha.dark.sh	/^gset() {$/;"	f
+gset	config/base16-gnome-terminal/base16-mocha.light.sh	/^gset() {$/;"	f
+gset	config/base16-gnome-terminal/base16-monokai.dark.sh	/^gset() {$/;"	f
+gset	config/base16-gnome-terminal/base16-monokai.light.sh	/^gset() {$/;"	f
+gset	config/base16-gnome-terminal/base16-ocean.dark.sh	/^gset() {$/;"	f
+gset	config/base16-gnome-terminal/base16-ocean.light.sh	/^gset() {$/;"	f
+gset	config/base16-gnome-terminal/base16-paraiso.dark.sh	/^gset() {$/;"	f
+gset	config/base16-gnome-terminal/base16-paraiso.light.sh	/^gset() {$/;"	f
+gset	config/base16-gnome-terminal/base16-pop.dark.sh	/^gset() {$/;"	f
+gset	config/base16-gnome-terminal/base16-railscasts.dark.sh	/^gset() {$/;"	f
+gset	config/base16-gnome-terminal/base16-railscasts.light.sh	/^gset() {$/;"	f
+gset	config/base16-gnome-terminal/base16-shapeshifter.dark.sh	/^gset() {$/;"	f
+gset	config/base16-gnome-terminal/base16-shapeshifter.light.sh	/^gset() {$/;"	f
+gset	config/base16-gnome-terminal/base16-solarized.dark.sh	/^gset() {$/;"	f
+gset	config/base16-gnome-terminal/base16-solarized.light.sh	/^gset() {$/;"	f
+gset	config/base16-gnome-terminal/base16-summerfruit.dark.sh	/^gset() {$/;"	f
+gset	config/base16-gnome-terminal/base16-summerfruit.light.sh	/^gset() {$/;"	f
+gset	config/base16-gnome-terminal/base16-tomorrow.dark.sh	/^gset() {$/;"	f
+gset	config/base16-gnome-terminal/base16-tomorrow.light.sh	/^gset() {$/;"	f
+gset	config/base16-gnome-terminal/base16-twilight.dark.sh	/^gset() {$/;"	f
+gset	config/base16-gnome-terminal/base16-twilight.light.sh	/^gset() {$/;"	f
+gsuite	rclone.conf	/^[gsuite]$/;"	s
+hideschemalinebreaks	config/sqlitebrowser/sqlitebrowser.conf	/^hideschemalinebreaks=true$/;"	k	section:db
+hook]]=	local/share/antigen.zsh	/^    hooks[$hooks[(I)$hook]]=()$/;"	f
+horizontal_tiling	config/sqlitebrowser/sqlitebrowser.conf	/^horizontal_tiling=false$/;"	k	section:editor
+identifier_bold	config/sqlitebrowser/sqlitebrowser.conf	/^identifier_bold=false$/;"	k	section:syntaxhighlighter
+identifier_colour	config/sqlitebrowser/sqlitebrowser.conf	/^identifier_colour=#c998d3$/;"	k	section:syntaxhighlighter
+identifier_italic	config/sqlitebrowser/sqlitebrowser.conf	/^identifier_italic=false$/;"	k	section:syntaxhighlighter
+identifier_underline	config/sqlitebrowser/sqlitebrowser.conf	/^identifier_underline=false$/;"	k	section:syntaxhighlighter
+images	config/gtk-3.0/settings.ini	/^gtk-button-images=1$/;"	k	section:Settings
+images	config/gtk-3.0/settings.ini	/^gtk-menu-images=1$/;"	k	section:Settings
+images	config/gtk-3.0/settings.sync-conflict-20190913-021436-IHCCEWH.ini	/^gtk-button-images=1$/;"	k	section:Settings
+images	config/gtk-3.0/settings.sync-conflict-20190913-021436-IHCCEWH.ini	/^gtk-menu-images=1$/;"	k	section:Settings
+images	config/gtk-3.0/settings.sync-conflict-20191114-150012-L4ZHWTU.ini	/^gtk-button-images=1$/;"	k	section:Settings
+images	config/gtk-3.0/settings.sync-conflict-20191114-150012-L4ZHWTU.ini	/^gtk-menu-images=1$/;"	k	section:Settings
+index	conky/conky-dash/gmail.py	/^index=string.find(msg,"<fullcount>")$/;"	v
+index2	conky/conky-dash/gmail.py	/^index2=string.find(msg,"<\/fullcount>")$/;"	v
+init_drawing_surface	conky/conky-ring/ring.lua	/^function init_drawing_surface()$/;"	f
+installedESLint	eslintrc.json	/^    "installedESLint": true,$/;"	b
+it	conky/conky-ring/ring.lua	/^IMPORTANT: if you are using the 'cpu' function, it will cause a segmentation fault if it tries t/;"	f
+jedi_completion	config/nvim/coc-settings.json	/^            "jedi_completion": {"enabled": true},$/;"	o	object:languageserver.python.settings.pyls.plugins
+jedi_hover	config/nvim/coc-settings.json	/^            "jedi_hover": {"enabled": true},$/;"	o	object:languageserver.python.settings.pyls.plugins
+jedi_references	config/nvim/coc-settings.json	/^            "jedi_references": {"enabled": true},$/;"	o	object:languageserver.python.settings.pyls.plugins
+jedi_signature_help	config/nvim/coc-settings.json	/^            "jedi_signature_help": {"enabled": true},$/;"	o	object:languageserver.python.settings.pyls.plugins
+jedi_symbols	config/nvim/coc-settings.json	/^            "jedi_symbols": {"enabled": true, "all_scopes": true},$/;"	o	object:languageserver.python.settings.pyls.plugins
+keyword_bold	config/sqlitebrowser/sqlitebrowser.conf	/^keyword_bold=true$/;"	k	section:syntaxhighlighter
+keyword_colour	config/sqlitebrowser/sqlitebrowser.conf	/^keyword_colour=#94a0f0$/;"	k	section:syntaxhighlighter
+keyword_italic	config/sqlitebrowser/sqlitebrowser.conf	/^keyword_italic=false$/;"	k	section:syntaxhighlighter
+keyword_underline	config/sqlitebrowser/sqlitebrowser.conf	/^keyword_underline=false$/;"	k	section:syntaxhighlighter
+language	config/sqlitebrowser/sqlitebrowser.conf	/^language=en_US$/;"	k	section:%General
+languageserver	config/nvim/coc-settings.json	/^  "languageserver": {$/;"	o
+languageserver	vim/coc-settings.json	/^  "languageserver": {$/;"	o
+lineType	config/sqlitebrowser/sqlitebrowser.conf	/^lineType=1$/;"	k	section:PlotDock
+list	config/sqlitebrowser/sqlitebrowser.conf	/^list=@Invalid()$/;"	k	section:extensions
+list=	local/share/antigen.zsh	/^  typeset -Ua list; list=()$/;"	f
+location_constraint	rclone.conf	/^location_constraint = $/;"	k	section:barthrogers
+log	config/sqlitebrowser/sqlitebrowser.conf	/^[log]$/;"	s
+marketplace.gcr.io	docker/config.json	/^		"marketplace.gcr.io": "gcloud",$/;"	s	object:credHelpers
+match	config/nvim/coc-settings.json	/^              "match": "(?!test_).*\\\\.py",$/;"	s	object:languageserver.python.settings.pyls.plugins.pydocstyle
+matchDir	config/nvim/coc-settings.json	/^              "matchDir": "[^\\\\.].*"$/;"	s	object:languageserver.python.settings.pyls.plugins.pydocstyle
+mccabe	config/nvim/coc-settings.json	/^            "mccabe": {"enabled": true, "threshold": 15},$/;"	o	object:languageserver.python.settings.pyls.plugins
+msg	conky/conky-dash/gmail.py	/^msg=temp.read()$/;"	v
+my_git_formatter	p10k.zsh	/^  function my_git_formatter() {$/;"	f
+name	config/gtk-3.0/settings.ini	/^gtk-cursor-theme-name=breeze_cursors$/;"	k	section:Settings
+name	config/gtk-3.0/settings.ini	/^gtk-font-name=Noto Sans Regular 10$/;"	k	section:Settings
+name	config/gtk-3.0/settings.ini	/^gtk-icon-theme-name=Adwaita$/;"	k	section:Settings
+name	config/gtk-3.0/settings.ini	/^gtk-theme-name=Breeze-Dark$/;"	k	section:Settings
+name	config/gtk-3.0/settings.sync-conflict-20190913-021436-IHCCEWH.ini	/^gtk-cursor-theme-name=Adwaita$/;"	k	section:Settings
+name	config/gtk-3.0/settings.sync-conflict-20190913-021436-IHCCEWH.ini	/^gtk-font-name=Noto Sans Regular 10$/;"	k	section:Settings
+name	config/gtk-3.0/settings.sync-conflict-20190913-021436-IHCCEWH.ini	/^gtk-icon-theme-name=Adwaita$/;"	k	section:Settings
+name	config/gtk-3.0/settings.sync-conflict-20190913-021436-IHCCEWH.ini	/^gtk-theme-name=Breeze-Dark$/;"	k	section:Settings
+name	config/gtk-3.0/settings.sync-conflict-20191114-150012-L4ZHWTU.ini	/^gtk-cursor-theme-name=breeze_cursors$/;"	k	section:Settings
+name	config/gtk-3.0/settings.sync-conflict-20191114-150012-L4ZHWTU.ini	/^gtk-font-name=Noto Sans Regular 10$/;"	k	section:Settings
+name	config/gtk-3.0/settings.sync-conflict-20191114-150012-L4ZHWTU.ini	/^gtk-icon-theme-name=breeze-dark$/;"	k	section:Settings
+name	config/gtk-3.0/settings.sync-conflict-20191114-150012-L4ZHWTU.ini	/^gtk-theme-name=Breeze$/;"	k	section:Settings
+null_bg_colour	config/sqlitebrowser/sqlitebrowser.conf	/^null_bg_colour=@Variant(\\0\\0\\0\\x43\\x1\\xff\\xff\\xff\\xff\\xff\\xff\\xff\\xff\\0\\0)$/;"	k	section:databrowser
+null_fg_colour	config/sqlitebrowser/sqlitebrowser.conf	/^null_fg_colour=@Variant(\\0\\0\\0\\x43\\x1\\xff\\xff\\xc0\\xc0\\xc0\\xc0\\xc0\\xc0\\0\\0)$/;"	k	section:databrowser
+null_text	config/sqlitebrowser/sqlitebrowser.conf	/^null_text=NULL$/;"	k	section:databrowser
+o	local/share/nvim/site/autoload/plug.vim	/^      nmap <buffer> o <plug>(plug-preview)$/;"	m
+o	vim/autoload/plug.vim	/^      nmap <buffer> o <plug>(plug-preview)$/;"	m
+object_acl	rclone.conf	/^object_acl = projectPrivate$/;"	k	section:fanai-dev
+opacity	host-htpc/config/compton.conf	/^detect-client-opacity = true;$/;"	k
+opacity	host-htpc/config/compton.conf	/^shadow-opacity = 0.4;$/;"	k
+overlay	host-htpc/config/compton.conf	/^paint-on-overlay = true;$/;"	k
+password	conky/conky-dash/gmail.py	/^password="password"$/;"	v
+password	rclone.conf	/^password = seVZrTAPPHUam6yHRkSKsYgaaIMl0TeI7i9NR3BGF0_s-FeA-skjG6yijXE7fcdEmV4p-clIjpetfBg$/;"	k	section:encacd
+password2	rclone.conf	/^password2 = R4ERfVp9O_ZZZHdayYAIgsvV53-UlNvzdLEz_fHGBUA0tIHttEGajGKMYWUoOT-YGNOubaJZG1y3OyY$/;"	k	section:encacd
+php_noindent_switch	vim/indent/css.vim	/^let php_noindent_switch=0    " set this to '1' to not try to indent switch\/case statements$/;"	v
+php_noindent_switch	vim/indent/php.vim	/^let php_noindent_switch=0    " set this to '1' to not try to indent switch\/case statements$/;"	v
+pid]]=	local/share/antigen.zsh	/^          pids[$pids[(I)$pid]]=()$/;"	f
+pids=	local/share/antigen.zsh	/^    typeset -a pids; pids=()$/;"	f
+pixmap	host-htpc/config/compton.conf	/^glx-no-rebind-pixmap = true;$/;"	k
+plug#	local/share/nvim/site/autoload/plug.vim	/^function! plug#(repo, ...)$/;"	f
+plug#	vim/autoload/plug.vim	/^function! plug#(repo, ...)$/;"	f
+plug#begin	local/share/nvim/site/autoload/plug.vim	/^function! plug#begin(...)$/;"	f
+plug#begin	vim/autoload/plug.vim	/^function! plug#begin(...)$/;"	f
+plug#end	local/share/nvim/site/autoload/plug.vim	/^function! plug#end()$/;"	f
+plug#end	vim/autoload/plug.vim	/^function! plug#end()$/;"	f
+plug#helptags	local/share/nvim/site/autoload/plug.vim	/^function! plug#helptags()$/;"	f
+plug#helptags	vim/autoload/plug.vim	/^function! plug#helptags()$/;"	f
+plug#load	local/share/nvim/site/autoload/plug.vim	/^function! plug#load(...)$/;"	f
+plug#load	vim/autoload/plug.vim	/^function! plug#load(...)$/;"	f
+plug#shellescape	local/share/nvim/site/autoload/plug.vim	/^function! plug#shellescape(arg, ...)$/;"	f
+plugins	config/nvim/coc-settings.json	/^          "plugins": {$/;"	o	object:languageserver.python.settings.pyls
+plugins	eslintrc.json	/^    "plugins": [$/;"	a
+pointShape	config/sqlitebrowser/sqlitebrowser.conf	/^pointShape=4$/;"	k	section:PlotDock
+possible	host-htpc/config/compton.conf	/^unredir-if-possible = true;$/;"	k
+prefetchsize	config/sqlitebrowser/sqlitebrowser.conf	/^prefetchsize=50000$/;"	k	section:db
+preload	config/nvim/coc-settings.json	/^            "preload": {"enabled": true},$/;"	o	object:languageserver.python.settings.pyls.plugins
+project_number	rclone.conf	/^project_number = fanai-development$/;"	k	section:fanai-dev
+prompt_example	p10k.zsh	/^  function prompt_example() {$/;"	f
+pycodestyle	config/nvim/coc-settings.json	/^            "pycodestyle": {"enabled": true},$/;"	o	object:languageserver.python.settings.pyls.plugins
+pydocstyle	config/nvim/coc-settings.json	/^            "pydocstyle": {$/;"	o	object:languageserver.python.settings.pyls.plugins
+pyls	config/nvim/coc-settings.json	/^        "pyls": {$/;"	o	object:languageserver.python.settings
+python	config/nvim/coc-settings.json	/^    "python": {$/;"	o	object:languageserver
+python_highlight_all	config/nvim/init.vim	/^let python_highlight_all = 1$/;"	v
+python_highlight_all	vimrc	/^let python_highlight_all = 1$/;"	v
+q	local/share/nvim/site/autoload/plug.vim	/^  nnoremap <silent> <buffer> q  :if b:plug_preview==1<bar>pc<bar>endif<bar>bd<cr>$/;"	m
+q	local/share/nvim/site/autoload/plug.vim	/^  nnoremap <silent> <buffer> q :q<cr>$/;"	m
+q	vim/autoload/plug.vim	/^  nnoremap <silent> <buffer> q  :if b:plug_preview==1<bar>pc<bar>endif<bar>bd<cr>$/;"	m
+q	vim/autoload/plug.vim	/^  nnoremap <silent> <buffer> q :q<cr>$/;"	m
+radius	host-htpc/config/compton.conf	/^shadow-radius = 10;			# The blur radius for shadows. (default 10)$/;"	k
+recentFileList	config/sqlitebrowser/sqlitebrowser.conf	/^recentFileList=\/home\/ryan\/Downloads\/mc.db$/;"	k	section:%General
+record]]=	local/share/antigen.zsh	/^      _ANTIGEN_BUNDLE_RECORD[$_ANTIGEN_BUNDLE_RECORD[(I)$record]]=()$/;"	f
+reg_bg_colour	config/sqlitebrowser/sqlitebrowser.conf	/^reg_bg_colour=@Variant(\\0\\0\\0\\x43\\x1\\xff\\xff\\xff\\xff\\xff\\xff\\xff\\xff\\0\\0)$/;"	k	section:databrowser
+reg_fg_colour	config/sqlitebrowser/sqlitebrowser.conf	/^reg_fg_colour=@Variant(\\0\\0\\0\\x43\\x1\\xff\\xff\\0\\0\\0\\0\\0\\0\\0\\0)$/;"	k	section:databrowser
+region	rclone.conf	/^region = "nyc3.digitaloceanspaces.com"$/;"	k	section:barthrogers
+registry.gitlab.com	docker/config.json	/^		"registry.gitlab.com": {$/;"	o	object:auths
+remote	config/sqlitebrowser/sqlitebrowser.conf	/^[remote]$/;"	s
+remote	rclone.conf	/^remote = acd:enc$/;"	k	section:encacd
+rgb_to_r_g_b	conky/conky-ring/ring.lua	/^function rgb_to_r_g_b(colour,alpha)$/;"	f
+rss_url	conky/conky-rss/rss.py	/^rss_url = "http:\/\/news.google.com\/?output=rss"$/;"	v
+rules	eslintrc.json	/^    "rules": {$/;"	o
+s:BlockStarter	vim/indent/python.vim	/^function! s:BlockStarter(lnum, block_start_re)$/;"	f
+s:GetArrayBeg	vim/indent/javascript.vim	/^function! s:GetArrayBeg(lnum)$/;"	f
+s:GetContinuationBegin	vim/indent/javascript.vim	/^function! s:GetContinuationBegin(lnum) $/;"	f
+s:GetNonCommentLine	vim/indent/javascript.vim	/^function! s:GetNonCommentLine(lnum)$/;"	f
+s:GetObjectBeg	vim/indent/javascript.vim	/^function! s:GetObjectBeg(lnum)$/;"	f
+s:GetParenBeg	vim/indent/javascript.vim	/^function! s:GetParenBeg(lnum)$/;"	f
+s:IsArrayBeg	vim/indent/javascript.vim	/^function! s:IsArrayBeg(line)$/;"	f
+s:IsArrayEnd	vim/indent/javascript.vim	/^function! s:IsArrayEnd(line)$/;"	f
+s:IsComment	vim/indent/javascript.vim	/^function! s:IsComment(lnum)$/;"	f
+s:IsContinuationLine	vim/indent/javascript.vim	/^function! s:IsContinuationLine(line)$/;"	f
+s:IsControlBeg	vim/indent/javascript.vim	/^function! s:IsControlBeg(line)$/;"	f
+s:IsControlEnd	vim/indent/javascript.vim	/^function! s:IsControlEnd(line)$/;"	f
+s:IsControlMid	vim/indent/javascript.vim	/^function! s:IsControlMid(line)$/;"	f
+s:IsControlMidStrict	vim/indent/javascript.vim	/^function! s:IsControlMidStrict(line)$/;"	f
+s:IsInComment	vim/indent/javascript.vim	/^function! s:IsInComment(lnum, cnum)$/;"	f
+s:IsObjectBeg	vim/indent/javascript.vim	/^function! s:IsObjectBeg(line)$/;"	f
+s:IsObjectEnd	vim/indent/javascript.vim	/^function! s:IsObjectEnd(line)$/;"	f
+s:IsParenBeg	vim/indent/javascript.vim	/^function! s:IsParenBeg(line)$/;"	f
+s:IsParenEnd	vim/indent/javascript.vim	/^function! s:IsParenEnd(line)$/;"	f
+s:IsSwitchBeginNextLine	vim/indent/javascript.vim	/^function! s:IsSwitchBeginNextLine(line) $/;"	f
+s:IsSwitchBeginSameLine	vim/indent/javascript.vim	/^function! s:IsSwitchBeginSameLine(line) $/;"	f
+s:IsSwitchMid	vim/indent/javascript.vim	/^function! s:IsSwitchMid(line)$/;"	f
+s:Log	vim/indent/javascript.vim	/^function! s:Log(msg)$/;"	f
+s:SearchForPair	vim/indent/javascript.vim	/^function! s:SearchForPair(lnum, beg, end)$/;"	f
+s:SearchParensPair	vim/indent/python.vim	/^function! s:SearchParensPair()$/;"	f
+s:ShowMaps	config/nvim/init.vim	/^function! s:ShowMaps()$/;"	f
+s:StatementStart	vim/indent/python.vim	/^function! s:StatementStart(lnum)$/;"	f
+s:TYPE	local/share/nvim/site/autoload/plug.vim	/^let s:TYPE = {$/;"	v
+s:TYPE	vim/autoload/plug.vim	/^let s:TYPE = {$/;"	v
+s:append_ul	local/share/nvim/site/autoload/plug.vim	/^function! s:append_ul(lnum, text)$/;"	f
+s:append_ul	vim/autoload/plug.vim	/^function! s:append_ul(lnum, text)$/;"	f
+s:array_beg	vim/indent/javascript.vim	/^let s:array_beg = '\\[[^\\]]*' . s:js_end_line_comment . '$'$/;"	v
+s:array_end	vim/indent/javascript.vim	/^let s:array_end = '^' . s:js_mid_line_comment . '[^\\[]*\\][;,]*' . s:js_end_line_comment . '$'$/;"	v
+s:ask	local/share/nvim/site/autoload/plug.vim	/^function! s:ask(message, ...)$/;"	f
+s:ask	vim/autoload/plug.vim	/^function! s:ask(message, ...)$/;"	f
+s:ask_no_interrupt	local/share/nvim/site/autoload/plug.vim	/^function! s:ask_no_interrupt(...)$/;"	f
+s:ask_no_interrupt	vim/autoload/plug.vim	/^function! s:ask_no_interrupt(...)$/;"	f
+s:assign_name	local/share/nvim/site/autoload/plug.vim	/^function! s:assign_name()$/;"	f
+s:assign_name	vim/autoload/plug.vim	/^function! s:assign_name()$/;"	f
+s:assoc	local/share/nvim/site/autoload/plug.vim	/^function! s:assoc(dict, key, val)$/;"	f
+s:assoc	vim/autoload/plug.vim	/^function! s:assoc(dict, key, val)$/;"	f
+s:bang	local/share/nvim/site/autoload/plug.vim	/^function! s:bang(cmd, ...)$/;"	f
+s:bang	vim/autoload/plug.vim	/^function! s:bang(cmd, ...)$/;"	f
+s:bar	local/share/nvim/site/autoload/plug.vim	/^function! s:bar()$/;"	f
+s:bar	vim/autoload/plug.vim	/^function! s:bar()$/;"	f
+s:base_spec	local/share/nvim/site/autoload/plug.vim	/^let s:base_spec = { 'branch': 'master', 'frozen': 0 }$/;"	v
+s:base_spec	vim/autoload/plug.vim	/^let s:base_spec = { 'branch': 'master', 'frozen': 0 }$/;"	v
+s:batchfile	local/share/nvim/site/autoload/plug.vim	/^  function! s:batchfile(cmd)$/;"	f
+s:check_ruby	local/share/nvim/site/autoload/plug.vim	/^function! s:check_ruby()$/;"	f
+s:check_ruby	vim/autoload/plug.vim	/^function! s:check_ruby()$/;"	f
+s:checkout	local/share/nvim/site/autoload/plug.vim	/^function! s:checkout(spec)$/;"	f
+s:checkout	vim/autoload/plug.vim	/^function! s:checkout(spec)$/;"	f
+s:chsh	local/share/nvim/site/autoload/plug.vim	/^function! s:chsh(swap)$/;"	f
+s:chsh	vim/autoload/plug.vim	/^function! s:chsh(swap)$/;"	f
+s:clean	local/share/nvim/site/autoload/plug.vim	/^function! s:clean(force)$/;"	f
+s:clean	vim/autoload/plug.vim	/^function! s:clean(force)$/;"	f
+s:cntrl_beg	vim/indent/javascript.vim	/^let s:cntrl_beg = s:cntrl_beg_keys . s:js_end_line_comment . '$' $/;"	v
+s:cntrl_beg_keys	vim/indent/javascript.vim	/^let s:cntrl_beg_keys = '\\(\\(\\(if\\|for\\|with\\|while\\)\\s*(.*)\\)\\|\\(try\\|do\\)\\)\\s*'$/;"	v
+s:cntrl_end	vim/indent/javascript.vim	/^let s:cntrl_end = '\\(while\\s*(.*)\\)\\s*;\\=\\s*' . s:js_end_line_comment . '$'$/;"	v
+s:cntrl_mid	vim/indent/javascript.vim	/^let s:cntrl_mid = s:cntrl_mid_keys . s:js_end_line_comment . '$' $/;"	v
+s:cntrl_mid_keys	vim/indent/javascript.vim	/^let s:cntrl_mid_keys = '\\(\\(\\(else\\s*if\\|catch\\)\\s*(.*)\\)\\|\\(finally\\|else\\)\\)\\s*'$/;"	v
+s:compare_git_uri	local/share/nvim/site/autoload/plug.vim	/^function! s:compare_git_uri(a, b)$/;"	f
+s:compare_git_uri	vim/autoload/plug.vim	/^function! s:compare_git_uri(a, b)$/;"	f
+s:continuation	vim/indent/javascript.vim	/^let s:continuation = '\\(+\\|\\\\\\)\\{1}' . s:js_line_comment . '$' $/;"	v
+s:cpo_save	local/share/nvim/site/autoload/plug.vim	/^let s:cpo_save = &cpo$/;"	v
+s:cpo_save	vim/autoload/plug.vim	/^let s:cpo_save = &cpo$/;"	v
+s:cpo_save	vim/indent/html.vim	/^let s:cpo_save = &cpo$/;"	v
+s:define_commands	local/share/nvim/site/autoload/plug.vim	/^function! s:define_commands()$/;"	f
+s:define_commands	vim/autoload/plug.vim	/^function! s:define_commands()$/;"	f
+s:delete	local/share/nvim/site/autoload/plug.vim	/^function! s:delete(range, force)$/;"	f
+s:delete	vim/autoload/plug.vim	/^function! s:delete(range, force)$/;"	f
+s:delete_op	local/share/nvim/site/autoload/plug.vim	/^function! s:delete_op(type, ...)$/;"	f
+s:delete_op	vim/autoload/plug.vim	/^function! s:delete_op(type, ...)$/;"	f
+s:diff	local/share/nvim/site/autoload/plug.vim	/^function! s:diff()$/;"	f
+s:diff	vim/autoload/plug.vim	/^function! s:diff()$/;"	f
+s:dirpath	local/share/nvim/site/autoload/plug.vim	/^  function! s:dirpath(path)$/;"	f
+s:dirpath	vim/autoload/plug.vim	/^  function! s:dirpath(path)$/;"	f
+s:do	local/share/nvim/site/autoload/plug.vim	/^function! s:do(pull, force, todo)$/;"	f
+s:do	vim/autoload/plug.vim	/^function! s:do(pull, force, todo)$/;"	f
+s:doautocmd	local/share/nvim/site/autoload/plug.vim	/^function! s:doautocmd(...)$/;"	f
+s:doautocmd	vim/autoload/plug.vim	/^function! s:doautocmd(...)$/;"	f
+s:dobufread	local/share/nvim/site/autoload/plug.vim	/^function! s:dobufread(names)$/;"	f
+s:dobufread	vim/autoload/plug.vim	/^function! s:dobufread(names)$/;"	f
+s:err	local/share/nvim/site/autoload/plug.vim	/^function! s:err(msg)$/;"	f
+s:err	vim/autoload/plug.vim	/^function! s:err(msg)$/;"	f
+s:esc	local/share/nvim/site/autoload/plug.vim	/^function! s:esc(path)$/;"	f
+s:esc	vim/autoload/plug.vim	/^function! s:esc(path)$/;"	f
+s:escrtp	local/share/nvim/site/autoload/plug.vim	/^function! s:escrtp(path)$/;"	f
+s:escrtp	vim/autoload/plug.vim	/^function! s:escrtp(path)$/;"	f
+s:extract_name	local/share/nvim/site/autoload/plug.vim	/^function! s:extract_name(str, prefix, suffix)$/;"	f
+s:extract_name	vim/autoload/plug.vim	/^function! s:extract_name(str, prefix, suffix)$/;"	f
+s:find_name	local/share/nvim/site/autoload/plug.vim	/^function! s:find_name(lnum)$/;"	f
+s:find_name	vim/autoload/plug.vim	/^function! s:find_name(lnum)$/;"	f
+s:finish	local/share/nvim/site/autoload/plug.vim	/^function! s:finish(pull)$/;"	f
+s:finish	vim/autoload/plug.vim	/^function! s:finish(pull)$/;"	f
+s:finish_bindings	local/share/nvim/site/autoload/plug.vim	/^function! s:finish_bindings()$/;"	f
+s:finish_bindings	vim/autoload/plug.vim	/^function! s:finish_bindings()$/;"	f
+s:first_rtp	local/share/nvim/site/autoload/plug.vim	/^let s:first_rtp = s:escrtp(get(s:split_rtp(), 0, ''))$/;"	v
+s:first_rtp	vim/autoload/plug.vim	/^let s:first_rtp = s:escrtp(get(s:split_rtp(), 0, ''))$/;"	v
+s:format_git_log	local/share/nvim/site/autoload/plug.vim	/^function! s:format_git_log(line)$/;"	f
+s:format_git_log	vim/autoload/plug.vim	/^function! s:format_git_log(line)$/;"	f
+s:format_message	local/share/nvim/site/autoload/plug.vim	/^function! s:format_message(bullet, name, message)$/;"	f
+s:format_message	vim/autoload/plug.vim	/^function! s:format_message(bullet, name, message)$/;"	f
+s:git_validate	local/share/nvim/site/autoload/plug.vim	/^function! s:git_validate(spec, check_branch)$/;"	f
+s:git_validate	vim/autoload/plug.vim	/^function! s:git_validate(spec, check_branch)$/;"	f
+s:git_version_requirement	local/share/nvim/site/autoload/plug.vim	/^function! s:git_version_requirement(...)$/;"	f
+s:git_version_requirement	vim/autoload/plug.vim	/^function! s:git_version_requirement(...)$/;"	f
+s:glob	local/share/nvim/site/autoload/plug.vim	/^function! s:glob(from, pattern)$/;"	f
+s:glob	vim/autoload/plug.vim	/^function! s:glob(from, pattern)$/;"	f
+s:glob_dir	local/share/nvim/site/autoload/plug.vim	/^function! s:glob_dir(path)$/;"	f
+s:glob_dir	vim/autoload/plug.vim	/^function! s:glob_dir(path)$/;"	f
+s:hash_match	local/share/nvim/site/autoload/plug.vim	/^function! s:hash_match(a, b)$/;"	f
+s:hash_match	vim/autoload/plug.vim	/^function! s:hash_match(a, b)$/;"	f
+s:infer_properties	local/share/nvim/site/autoload/plug.vim	/^function! s:infer_properties(name, repo)$/;"	f
+s:infer_properties	vim/autoload/plug.vim	/^function! s:infer_properties(name, repo)$/;"	f
+s:install	local/share/nvim/site/autoload/plug.vim	/^function! s:install(force, names)$/;"	f
+s:install	vim/autoload/plug.vim	/^function! s:install(force, names)$/;"	f
+s:is_local_plug	local/share/nvim/site/autoload/plug.vim	/^  function! s:is_local_plug(repo)$/;"	f
+s:is_local_plug	vim/autoload/plug.vim	/^  function! s:is_local_plug(repo)$/;"	f
+s:is_managed	local/share/nvim/site/autoload/plug.vim	/^function! s:is_managed(name)$/;"	f
+s:is_managed	vim/autoload/plug.vim	/^function! s:is_managed(name)$/;"	f
+s:is_preview_window_open	local/share/nvim/site/autoload/plug.vim	/^function! s:is_preview_window_open()$/;"	f
+s:is_preview_window_open	vim/autoload/plug.vim	/^function! s:is_preview_window_open()$/;"	f
+s:is_updated	local/share/nvim/site/autoload/plug.vim	/^function! s:is_updated(dir)$/;"	f
+s:is_updated	vim/autoload/plug.vim	/^function! s:is_updated(dir)$/;"	f
+s:is_win	local/share/nvim/site/autoload/plug.vim	/^let s:is_win = has('win32')$/;"	v
+s:is_win	vim/autoload/plug.vim	/^let s:is_win = has('win32')$/;"	v
+s:job_abort	local/share/nvim/site/autoload/plug.vim	/^function! s:job_abort()$/;"	f
+s:job_abort	vim/autoload/plug.vim	/^function! s:job_abort()$/;"	f
+s:job_cb	local/share/nvim/site/autoload/plug.vim	/^function! s:job_cb(fn, job, ch, data)$/;"	f
+s:job_cb	vim/autoload/plug.vim	/^function! s:job_cb(fn, job, ch, data)$/;"	f
+s:job_exit_cb	local/share/nvim/site/autoload/plug.vim	/^function! s:job_exit_cb(self, data) abort$/;"	f
+s:job_exit_cb	vim/autoload/plug.vim	/^function! s:job_exit_cb(self, data) abort$/;"	f
+s:job_out_cb	local/share/nvim/site/autoload/plug.vim	/^function! s:job_out_cb(self, data) abort$/;"	f
+s:job_out_cb	vim/autoload/plug.vim	/^function! s:job_out_cb(self, data) abort$/;"	f
+s:js_end_line_comment	vim/indent/javascript.vim	/^let s:js_end_line_comment = s:js_mid_line_comment . '\\s*\\(\/\/.*\\)*'$/;"	v
+s:js_line_comment	vim/indent/javascript.vim	/^let s:js_line_comment = s:js_end_line_comment$/;"	v
+s:js_mid_line_comment	vim/indent/javascript.vim	/^let s:js_mid_line_comment = '\\s*\\(\\\/\\*.*\\*\\\/\\)*\\s*'$/;"	v
+s:last_non_empty_line	local/share/nvim/site/autoload/plug.vim	/^function! s:last_non_empty_line(lines)$/;"	f
+s:last_non_empty_line	vim/autoload/plug.vim	/^function! s:last_non_empty_line(lines)$/;"	f
+s:last_rtp	local/share/nvim/site/autoload/plug.vim	/^let s:last_rtp  = s:escrtp(get(s:split_rtp(), -1, ''))$/;"	v
+s:last_rtp	vim/autoload/plug.vim	/^let s:last_rtp  = s:escrtp(get(s:split_rtp(), -1, ''))$/;"	v
+s:lastline	local/share/nvim/site/autoload/plug.vim	/^function! s:lastline(msg)$/;"	f
+s:lastline	vim/autoload/plug.vim	/^function! s:lastline(msg)$/;"	f
+s:lazy	local/share/nvim/site/autoload/plug.vim	/^function! s:lazy(plug, opt)$/;"	f
+s:lazy	vim/autoload/plug.vim	/^function! s:lazy(plug, opt)$/;"	f
+s:lines	local/share/nvim/site/autoload/plug.vim	/^function! s:lines(msg)$/;"	f
+s:lines	vim/autoload/plug.vim	/^function! s:lines(msg)$/;"	f
+s:load_plugin	local/share/nvim/site/autoload/plug.vim	/^function! s:load_plugin(spec)$/;"	f
+s:load_plugin	vim/autoload/plug.vim	/^function! s:load_plugin(spec)$/;"	f
+s:loaded	local/share/nvim/site/autoload/plug.vim	/^let s:loaded = get(s:, 'loaded', {})$/;"	v
+s:loaded	vim/autoload/plug.vim	/^let s:loaded = get(s:, 'loaded', {})$/;"	v
+s:loaded_names	local/share/nvim/site/autoload/plug.vim	/^function! s:loaded_names()$/;"	f
+s:loaded_names	vim/autoload/plug.vim	/^function! s:loaded_names()$/;"	f
+s:lod	local/share/nvim/site/autoload/plug.vim	/^function! s:lod(names, types, ...)$/;"	f
+s:lod	vim/autoload/plug.vim	/^function! s:lod(names, types, ...)$/;"	f
+s:lod_cmd	local/share/nvim/site/autoload/plug.vim	/^function! s:lod_cmd(cmd, bang, l1, l2, args, names)$/;"	f
+s:lod_cmd	vim/autoload/plug.vim	/^function! s:lod_cmd(cmd, bang, l1, l2, args, names)$/;"	f
+s:lod_ft	local/share/nvim/site/autoload/plug.vim	/^function! s:lod_ft(pat, names)$/;"	f
+s:lod_ft	vim/autoload/plug.vim	/^function! s:lod_ft(pat, names)$/;"	f
+s:lod_map	local/share/nvim/site/autoload/plug.vim	/^function! s:lod_map(map, names, with_prefix, prefix)$/;"	f
+s:lod_map	vim/autoload/plug.vim	/^function! s:lod_map(map, names, with_prefix, prefix)$/;"	f
+s:log	local/share/nvim/site/autoload/plug.vim	/^function! s:log(bullet, name, lines)$/;"	f
+s:log	vim/autoload/plug.vim	/^function! s:log(bullet, name, lines)$/;"	f
+s:log4	local/share/nvim/site/autoload/plug.vim	/^function! s:log4(name, msg)$/;"	f
+s:log4	vim/autoload/plug.vim	/^function! s:log4(name, msg)$/;"	f
+s:logpos	local/share/nvim/site/autoload/plug.vim	/^function! s:logpos(name)$/;"	f
+s:logpos	vim/autoload/plug.vim	/^function! s:logpos(name)$/;"	f
+s:lpad	local/share/nvim/site/autoload/plug.vim	/^function! s:lpad(str, len)$/;"	f
+s:lpad	vim/autoload/plug.vim	/^function! s:lpad(str, len)$/;"	f
+s:mac_gui	local/share/nvim/site/autoload/plug.vim	/^let s:mac_gui = has('gui_macvim') && has('gui_running')$/;"	v
+s:mac_gui	vim/autoload/plug.vim	/^let s:mac_gui = has('gui_macvim') && has('gui_running')$/;"	v
+s:maxoff	vim/indent/python.vim	/^let s:maxoff = 50$/;"	v
+s:me	local/share/nvim/site/autoload/plug.vim	/^let s:me = resolve(expand('<sfile>:p'))$/;"	v
+s:me	vim/autoload/plug.vim	/^let s:me = resolve(expand('<sfile>:p'))$/;"	v
+s:names	local/share/nvim/site/autoload/plug.vim	/^function! s:names(...)$/;"	f
+s:names	vim/autoload/plug.vim	/^function! s:names(...)$/;"	f
+s:new_window	local/share/nvim/site/autoload/plug.vim	/^function! s:new_window()$/;"	f
+s:new_window	vim/autoload/plug.vim	/^function! s:new_window()$/;"	f
+s:nvim	local/share/nvim/site/autoload/plug.vim	/^let s:nvim = has('nvim-0.2') || (has('nvim') && exists('*jobwait') && !s:is_win)$/;"	v
+s:nvim	vim/autoload/plug.vim	/^let s:nvim = has('nvim-0.2') || (has('nvim') && exists('*jobwait') && !s:is_win)$/;"	v
+s:nvim_cb	local/share/nvim/site/autoload/plug.vim	/^function! s:nvim_cb(job_id, data, event) dict abort$/;"	f
+s:nvim_cb	vim/autoload/plug.vim	/^function! s:nvim_cb(job_id, data, event) dict abort$/;"	f
+s:object_beg	vim/indent/javascript.vim	/^let s:object_beg = '{[^}]*' . s:js_end_line_comment . '$'$/;"	v
+s:object_end	vim/indent/javascript.vim	/^let s:object_end = '^' . s:js_mid_line_comment . '}[;,]\\='$/;"	v
+s:paren_beg	vim/indent/javascript.vim	/^let s:paren_beg = '([^)]*' . s:js_end_line_comment . '$'$/;"	v
+s:paren_end	vim/indent/javascript.vim	/^let s:paren_end = '^' . s:js_mid_line_comment . '[^(]*)[;,]*'$/;"	v
+s:parse_options	local/share/nvim/site/autoload/plug.vim	/^function! s:parse_options(arg)$/;"	f
+s:parse_options	vim/autoload/plug.vim	/^function! s:parse_options(arg)$/;"	f
+s:path	local/share/nvim/site/autoload/plug.vim	/^  function! s:path(path)$/;"	f
+s:path	vim/autoload/plug.vim	/^  function! s:path(path)$/;"	f
+s:plug_buf	local/share/nvim/site/autoload/plug.vim	/^let s:plug_buf = get(s:, 'plug_buf', -1)$/;"	v
+s:plug_buf	vim/autoload/plug.vim	/^let s:plug_buf = get(s:, 'plug_buf', -1)$/;"	v
+s:plug_src	local/share/nvim/site/autoload/plug.vim	/^let s:plug_src = 'https:\/\/github.com\/junegunn\/vim-plug.git'$/;"	v
+s:plug_src	vim/autoload/plug.vim	/^let s:plug_src = 'https:\/\/github.com\/junegunn\/vim-plug.git'$/;"	v
+s:plug_tab	local/share/nvim/site/autoload/plug.vim	/^let s:plug_tab = get(s:, 'plug_tab', -1)$/;"	v
+s:plug_tab	vim/autoload/plug.vim	/^let s:plug_tab = get(s:, 'plug_tab', -1)$/;"	v
+s:plug_window_exists	local/share/nvim/site/autoload/plug.vim	/^function! s:plug_window_exists()$/;"	f
+s:plug_window_exists	vim/autoload/plug.vim	/^function! s:plug_window_exists()$/;"	f
+s:prepare	local/share/nvim/site/autoload/plug.vim	/^function! s:prepare(...)$/;"	f
+s:prepare	vim/autoload/plug.vim	/^function! s:prepare(...)$/;"	f
+s:preview_commit	local/share/nvim/site/autoload/plug.vim	/^function! s:preview_commit()$/;"	f
+s:preview_commit	vim/autoload/plug.vim	/^function! s:preview_commit()$/;"	f
+s:progress_bar	local/share/nvim/site/autoload/plug.vim	/^function! s:progress_bar(line, bar, total)$/;"	f
+s:progress_bar	vim/autoload/plug.vim	/^function! s:progress_bar(line, bar, total)$/;"	f
+s:progress_opt	local/share/nvim/site/autoload/plug.vim	/^function! s:progress_opt(base)$/;"	f
+s:progress_opt	vim/autoload/plug.vim	/^function! s:progress_opt(base)$/;"	f
+s:reap	local/share/nvim/site/autoload/plug.vim	/^function! s:reap(name)$/;"	f
+s:reap	vim/autoload/plug.vim	/^function! s:reap(name)$/;"	f
+s:regress_bar	local/share/nvim/site/autoload/plug.vim	/^function! s:regress_bar()$/;"	f
+s:regress_bar	vim/autoload/plug.vim	/^function! s:regress_bar()$/;"	f
+s:reload_plugins	local/share/nvim/site/autoload/plug.vim	/^function! s:reload_plugins()$/;"	f
+s:reload_plugins	vim/autoload/plug.vim	/^function! s:reload_plugins()$/;"	f
+s:remove_rtp	local/share/nvim/site/autoload/plug.vim	/^function! s:remove_rtp()$/;"	f
+s:remove_rtp	vim/autoload/plug.vim	/^function! s:remove_rtp()$/;"	f
+s:remove_triggers	local/share/nvim/site/autoload/plug.vim	/^function! s:remove_triggers(name)$/;"	f
+s:remove_triggers	vim/autoload/plug.vim	/^function! s:remove_triggers(name)$/;"	f
+s:reorg_rtp	local/share/nvim/site/autoload/plug.vim	/^function! s:reorg_rtp()$/;"	f
+s:reorg_rtp	vim/autoload/plug.vim	/^function! s:reorg_rtp()$/;"	f
+s:retry	local/share/nvim/site/autoload/plug.vim	/^function! s:retry()$/;"	f
+s:retry	vim/autoload/plug.vim	/^function! s:retry()$/;"	f
+s:revert	local/share/nvim/site/autoload/plug.vim	/^function! s:revert()$/;"	f
+s:revert	vim/autoload/plug.vim	/^function! s:revert()$/;"	f
+s:rm_rf	local/share/nvim/site/autoload/plug.vim	/^function! s:rm_rf(dir)$/;"	f
+s:rm_rf	vim/autoload/plug.vim	/^function! s:rm_rf(dir)$/;"	f
+s:rtp	local/share/nvim/site/autoload/plug.vim	/^  function! s:rtp(spec)$/;"	f
+s:rtp	vim/autoload/plug.vim	/^  function! s:rtp(spec)$/;"	f
+s:section	local/share/nvim/site/autoload/plug.vim	/^function! s:section(flags)$/;"	f
+s:section	vim/autoload/plug.vim	/^function! s:section(flags)$/;"	f
+s:shellesc	vim/autoload/plug.vim	/^function! s:shellesc(arg)$/;"	f
+s:shellesc_cmd	local/share/nvim/site/autoload/plug.vim	/^function! s:shellesc_cmd(arg, script)$/;"	f
+s:shellesc_cmd	vim/autoload/plug.vim	/^function! s:shellesc_cmd(arg)$/;"	f
+s:shellesc_ps1	local/share/nvim/site/autoload/plug.vim	/^function! s:shellesc_ps1(arg)$/;"	f
+s:snapshot	local/share/nvim/site/autoload/plug.vim	/^function! s:snapshot(force, ...) abort$/;"	f
+s:snapshot	vim/autoload/plug.vim	/^function! s:snapshot(force, ...) abort$/;"	f
+s:source	local/share/nvim/site/autoload/plug.vim	/^function! s:source(from, ...)$/;"	f
+s:source	vim/autoload/plug.vim	/^function! s:source(from, ...)$/;"	f
+s:spawn	local/share/nvim/site/autoload/plug.vim	/^function! s:spawn(name, cmd, opts)$/;"	f
+s:spawn	vim/autoload/plug.vim	/^function! s:spawn(name, cmd, opts)$/;"	f
+s:split_rtp	local/share/nvim/site/autoload/plug.vim	/^function! s:split_rtp()$/;"	f
+s:split_rtp	vim/autoload/plug.vim	/^function! s:split_rtp()$/;"	f
+s:status	local/share/nvim/site/autoload/plug.vim	/^function! s:status()$/;"	f
+s:status	vim/autoload/plug.vim	/^function! s:status()$/;"	f
+s:status_load	local/share/nvim/site/autoload/plug.vim	/^function! s:status_load(lnum)$/;"	f
+s:status_load	vim/autoload/plug.vim	/^function! s:status_load(lnum)$/;"	f
+s:status_update	local/share/nvim/site/autoload/plug.vim	/^function! s:status_update() range$/;"	f
+s:status_update	vim/autoload/plug.vim	/^function! s:status_update() range$/;"	f
+s:switch_beg_next_line	vim/indent/javascript.vim	/^let s:switch_beg_next_line = 'switch\\s*(.*)\\s*' . s:js_mid_line_comment . s:js_end_line_commen/;"	v
+s:switch_beg_same_line	vim/indent/javascript.vim	/^let s:switch_beg_same_line = 'switch\\s*(.*)\\s*' . s:js_mid_line_comment . '{\\s*' . s:js_line_/;"	v
+s:switch_in	local/share/nvim/site/autoload/plug.vim	/^function! s:switch_in()$/;"	f
+s:switch_in	vim/autoload/plug.vim	/^function! s:switch_in()$/;"	f
+s:switch_mid	vim/indent/javascript.vim	/^let s:switch_mid = '^.*\\(case.*\\|default\\)\\s*:\\s*' $/;"	v
+s:switch_out	local/share/nvim/site/autoload/plug.vim	/^function! s:switch_out(...)$/;"	f
+s:switch_out	vim/autoload/plug.vim	/^function! s:switch_out(...)$/;"	f
+s:syn_comment	vim/indent/javascript.vim	/^let s:syn_comment = '\\(Comment\\|String\\|Regexp\\)'$/;"	v
+s:syntax	local/share/nvim/site/autoload/plug.vim	/^function! s:syntax()$/;"	f
+s:syntax	vim/autoload/plug.vim	/^function! s:syntax()$/;"	f
+s:system	local/share/nvim/site/autoload/plug.vim	/^function! s:system(cmd, ...)$/;"	f
+s:system	vim/autoload/plug.vim	/^function! s:system(cmd, ...)$/;"	f
+s:system_chomp	local/share/nvim/site/autoload/plug.vim	/^function! s:system_chomp(...)$/;"	f
+s:system_chomp	vim/autoload/plug.vim	/^function! s:system_chomp(...)$/;"	f
+s:tick	local/share/nvim/site/autoload/plug.vim	/^function! s:tick()$/;"	f
+s:tick	vim/autoload/plug.vim	/^function! s:tick()$/;"	f
+s:to_a	local/share/nvim/site/autoload/plug.vim	/^function! s:to_a(v)$/;"	f
+s:to_a	vim/autoload/plug.vim	/^function! s:to_a(v)$/;"	f
+s:to_s	local/share/nvim/site/autoload/plug.vim	/^function! s:to_s(v)$/;"	f
+s:to_s	vim/autoload/plug.vim	/^function! s:to_s(v)$/;"	f
+s:triggers	local/share/nvim/site/autoload/plug.vim	/^let s:triggers = get(s:, 'triggers', {})$/;"	v
+s:triggers	vim/autoload/plug.vim	/^let s:triggers = get(s:, 'triggers', {})$/;"	v
+s:trim	local/share/nvim/site/autoload/plug.vim	/^function! s:trim(str)$/;"	f
+s:trim	vim/autoload/plug.vim	/^function! s:trim(str)$/;"	f
+s:update	local/share/nvim/site/autoload/plug.vim	/^function! s:update(force, names)$/;"	f
+s:update	vim/autoload/plug.vim	/^function! s:update(force, names)$/;"	f
+s:update_finish	local/share/nvim/site/autoload/plug.vim	/^function! s:update_finish()$/;"	f
+s:update_finish	vim/autoload/plug.vim	/^function! s:update_finish()$/;"	f
+s:update_impl	local/share/nvim/site/autoload/plug.vim	/^function! s:update_impl(pull, force, args) abort$/;"	f
+s:update_impl	vim/autoload/plug.vim	/^function! s:update_impl(pull, force, args) abort$/;"	f
+s:update_python	local/share/nvim/site/autoload/plug.vim	/^function! s:update_python()$/;"	f
+s:update_python	vim/autoload/plug.vim	/^function! s:update_python()$/;"	f
+s:update_ruby	local/share/nvim/site/autoload/plug.vim	/^function! s:update_ruby()$/;"	f
+s:update_ruby	vim/autoload/plug.vim	/^function! s:update_ruby()$/;"	f
+s:update_vim	local/share/nvim/site/autoload/plug.vim	/^function! s:update_vim()$/;"	f
+s:update_vim	vim/autoload/plug.vim	/^function! s:update_vim()$/;"	f
+s:upgrade	local/share/nvim/site/autoload/plug.vim	/^function! s:upgrade()$/;"	f
+s:upgrade	vim/autoload/plug.vim	/^function! s:upgrade()$/;"	f
+s:upgrade_specs	local/share/nvim/site/autoload/plug.vim	/^function! s:upgrade_specs()$/;"	f
+s:upgrade_specs	vim/autoload/plug.vim	/^function! s:upgrade_specs()$/;"	f
+s:version_requirement	local/share/nvim/site/autoload/plug.vim	/^function! s:version_requirement(val, min)$/;"	f
+s:version_requirement	vim/autoload/plug.vim	/^function! s:version_requirement(val, min)$/;"	f
+s:vim8	local/share/nvim/site/autoload/plug.vim	/^let s:vim8 = has('patch-8.0.0039') && exists('*job_start')$/;"	v
+s:vim8	vim/autoload/plug.vim	/^let s:vim8 = has('patch-8.0.0039') && exists('*job_start')$/;"	v
+s:warn	local/share/nvim/site/autoload/plug.vim	/^function! s:warn(cmd, msg)$/;"	f
+s:warn	vim/autoload/plug.vim	/^function! s:warn(cmd, msg)$/;"	f
+s:with_cd	local/share/nvim/site/autoload/plug.vim	/^function! s:with_cd(cmd, dir, ...)$/;"	f
+s:with_cd	vim/autoload/plug.vim	/^function! s:with_cd(cmd, dir)$/;"	f
+s:wrap_cmds	local/share/nvim/site/autoload/plug.vim	/^  function! s:wrap_cmds(cmds)$/;"	f
+savedefaultlocation	config/sqlitebrowser/sqlitebrowser.conf	/^savedefaultlocation=2$/;"	k	section:db
+secret_access_key	rclone.conf	/^secret_access_key = $/;"	k	section:barthrogers
+server_side_encryption	rclone.conf	/^server_side_encryption = $/;"	k	section:barthrogers
+service_account_file	rclone.conf	/^service_account_file = $/;"	k	section:fanai-dev
+settings	config/nvim/coc-settings.json	/^      "settings": {$/;"	o	object:languageserver.python
+setup_rings	conky/conky-ring/ring.lua	/^	local function setup_rings(cr,pt)$/;"	f
+setup_rings_cc	conky/conky-ring/ring.lua	/^	local function setup_rings_cc(cr,pt)$/;"	f
+shadow	host-htpc/config/compton.conf	/^clear-shadow = true;		# Zero the part of the shadow's mask behind the window (experimental).$/;"	k
+shadow	host-htpc/config/compton.conf	/^no-dnd-shadow = true;		# Don't draw shadows on DND windows.$/;"	k
+shadow	host-htpc/config/compton.conf	/^no-dock-shadow = true;		# Avoid drawing shadows on dock\/panel windows.$/;"	k
+shadow	host-htpc/config/compton.conf	/^shadow = true;				# Enabled client-side shadows on windows.$/;"	k
+shell	config/xonsh/config.json	/^   "shell": "bash"$/;"	s	object:foreign_shells.0
+slider	config/gtk-3.0/settings.ini	/^gtk-primary-button-warps-slider=0$/;"	k	section:Settings
+slider	config/gtk-3.0/settings.sync-conflict-20190913-021436-IHCCEWH.ini	/^gtk-primary-button-warps-slider=0$/;"	k	section:Settings
+slider	config/gtk-3.0/settings.sync-conflict-20191114-150012-L4ZHWTU.ini	/^gtk-primary-button-warps-slider=0$/;"	k	section:Settings
+spaced-comment	eslintrc.json	/^      "spaced-comment": ["off", "always"],$/;"	a	object:rules
+splitterSize	config/sqlitebrowser/sqlitebrowser.conf	/^splitterSize=@ByteArray(\\0\\0\\0\\xff\\0\\0\\0\\x1\\0\\0\\0\\x2\\0\\0\\x1\\x80\\0\\0\\x1\\x90\\/;"	k	section:PlotDock
+staging-k8s.gcr.io	docker/config.json	/^		"staging-k8s.gcr.io": "gcloud",$/;"	s	object:credHelpers
+stencil	host-htpc/config/compton.conf	/^glx-no-stencil = true;$/;"	k
+step	host-htpc/config/compton.conf	/^fade-in-step = 0.03;		# Opacity change between steps while fading in. (default 0.03).$/;"	k
+step	host-htpc/config/compton.conf	/^fade-out-step = 0.03;		# Opacity change between steps while fading out. (default 0.03).$/;"	k
+storage_class	rclone.conf	/^storage_class = $/;"	k	section:barthrogers
+string_bold	config/sqlitebrowser/sqlitebrowser.conf	/^string_bold=false$/;"	k	section:syntaxhighlighter
+string_colour	config/sqlitebrowser/sqlitebrowser.conf	/^string_colour=#ff0000$/;"	k	section:syntaxhighlighter
+string_italic	config/sqlitebrowser/sqlitebrowser.conf	/^string_italic=false$/;"	k	section:syntaxhighlighter
+string_underline	config/sqlitebrowser/sqlitebrowser.conf	/^string_underline=false$/;"	k	section:syntaxhighlighter
+style	config/gtk-3.0/settings.ini	/^gtk-toolbar-style=GTK_TOOLBAR_BOTH_HORIZ$/;"	k	section:Settings
+style	config/gtk-3.0/settings.sync-conflict-20190913-021436-IHCCEWH.ini	/^gtk-toolbar-style=GTK_TOOLBAR_BOTH_HORIZ$/;"	k	section:Settings
+style	config/gtk-3.0/settings.sync-conflict-20191114-150012-L4ZHWTU.ini	/^gtk-toolbar-style=GTK_TOOLBAR_ICONS$/;"	k	section:Settings
+style bg	tmux.conf	/^set-window-option -g window-status-current-style bg=colour234$/;"	k
+style fg	tmux.conf	/^set -g message-style fg=colour16,bg=colour215$/;"	k
+style fg	tmux.conf	/^set -g pane-active-border-style fg=colour33$/;"	k
+style fg	tmux.conf	/^set -g status-style fg=colour255,bg=colour33$/;"	k
+symbol_limit	config/sqlitebrowser/sqlitebrowser.conf	/^symbol_limit=5000$/;"	k	section:databrowser
+syntaxhighlighter	config/sqlitebrowser/sqlitebrowser.conf	/^[syntaxhighlighter]$/;"	s
+table_bold	config/sqlitebrowser/sqlitebrowser.conf	/^table_bold=true$/;"	k	section:syntaxhighlighter
+table_colour	config/sqlitebrowser/sqlitebrowser.conf	/^table_colour=#008080$/;"	k	section:syntaxhighlighter
+table_italic	config/sqlitebrowser/sqlitebrowser.conf	/^table_italic=false$/;"	k	section:syntaxhighlighter
+table_underline	config/sqlitebrowser/sqlitebrowser.conf	/^table_underline=false$/;"	k	section:syntaxhighlighter
+tabsize	config/sqlitebrowser/sqlitebrowser.conf	/^tabsize=4$/;"	k	section:editor
+temp	conky/conky-dash/gmail.py	/^temp=os.popen(com)$/;"	v
+theme	config/gtk-3.0/settings.ini	/^gtk-application-prefer-dark-theme=true$/;"	k	section:Settings
+theme	config/gtk-3.0/settings.ini	/^gtk-fallback-icon-theme=hicolor$/;"	k	section:Settings
+theme	config/gtk-3.0/settings.sync-conflict-20190913-021436-IHCCEWH.ini	/^gtk-application-prefer-dark-theme=true$/;"	k	section:Settings
+theme	config/gtk-3.0/settings.sync-conflict-20190913-021436-IHCCEWH.ini	/^gtk-fallback-icon-theme=hicolor$/;"	k	section:Settings
+theme	config/gtk-3.0/settings.sync-conflict-20191114-150012-L4ZHWTU.ini	/^gtk-application-prefer-dark-theme=true$/;"	k	section:Settings
+theme	config/gtk-3.0/settings.sync-conflict-20191114-150012-L4ZHWTU.ini	/^gtk-fallback-icon-theme=oxygen$/;"	k	section:Settings
+threshold	config/nvim/coc-settings.json	/^            "mccabe": {"enabled": true, "threshold": 15},$/;"	n	object:languageserver.python.settings.pyls.plugins.mccabe
+token	rclone.conf	/^token = {"access_token":"Atza|IwEBIEsZEnFaA-xMqt5p2zsxi9ezrQZifPH8YmHpQQWtIH7gPvmBgSWTA7g5s66oow/;"	k	section:acd
+token	rclone.conf	/^token = {"access_token":"ya29.Gl1hBmILKTYfGj1Y2Jibgho8bVj_zfAnPs2vKNNc5zRXapnvXlKcbFCD9LpvAV6DPO/;"	k	section:gsuite
+token	rclone.conf	/^token = {"access_token":"ya29.Gl2xBVgKzatV9kJecpZLaIIurDAGc7hO-MtzCDQ5hHP1Vz0g20md2e7aOpZz3IsTqZ/;"	k	section:fanai-dev
+type	rclone.conf	/^type = amazon cloud drive$/;"	k	section:acd
+type	rclone.conf	/^type = crypt$/;"	k	section:encacd
+type	rclone.conf	/^type = drive$/;"	k	section:gsuite
+type	rclone.conf	/^type = google cloud storage$/;"	k	section:fanai-dev
+type	rclone.conf	/^type = s3$/;"	k	section:barthrogers
+typescript	config/nvim/coc-settings.json	/^    "typescript": {$/;"	o	object:languageserver
+url	host-eris/pip/pip.conf	/^extra-index-url = https:\/\/packages:MhUaELHvsJYf9MBo34oV@pypi.infra.fanai.io\/packages\/stable\//;"	k	section:global
+url	host-eris/pip/pip.conf	/^index-url = https:\/\/packages:MhUaELHvsJYf9MBo34oV@pypi.infra.fanai.io\/root\/pypi\/+simple\/$/;"	k	section:global
+url	host-pluto/host-fanai-laptop/pip/pip.conf	/^extra-index-url = https:\/\/packages:MhUaELHvsJYf9MBo34oV@pypi.infra.fanai.io\/packages\/stable\//;"	k	section:global
+url	host-pluto/host-fanai-laptop/pip/pip.conf	/^index-url = https:\/\/packages:MhUaELHvsJYf9MBo34oV@pypi.infra.fanai.io\/root\/pypi\/+simple\/$/;"	k	section:global
+us.gcr.io	docker/config.json	/^		"us.gcr.io": "gcloud"$/;"	s	object:credHelpers
+username	conky/conky-dash/gmail.py	/^username="username"$/;"	v
+version	config/fontconfig/fonts.conf	/^<?xml version="1.0" encoding="UTF-8"?>$/;"	k
+vim.disableAnnoyingNeovimMessage	config/Code/User/settings.json	/^    "vim.disableAnnoyingNeovimMessage": true,$/;"	b
+vsync	host-htpc/config/compton.conf	/^vsync = "opengl-swc"; $/;"	k
+windowState	config/sqlitebrowser/sqlitebrowser.conf	/^windowState=@ByteArray(\\0\\0\\0\\xff\\0\\0\\0\\0\\xfd\\0\\0\\0\\x1\\0\\0\\0\\x1\\0\\0\\x1\\xdc\\/;"	k	section:MainWindow
+wintypes	host-htpc/config/compton.conf	/^wintypes:$/;"	k
+x	host-htpc/config/compton.conf	/^shadow-offset-x = -15;		# The left offset for shadows. (default -15)$/;"	k
+y	host-htpc/config/compton.conf	/^shadow-offset-y = -12;		# The top offset for shadows. (default -12)$/;"	k

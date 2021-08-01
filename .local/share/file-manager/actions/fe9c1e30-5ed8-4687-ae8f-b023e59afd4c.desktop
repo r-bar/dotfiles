@@ -1,0 +1,20 @@
+[Desktop Entry]
+Type=Action
+TargetToolbar=true
+TargetLocation=true
+Icon[en_US]=Terminal
+Icon[en]=Terminal
+Icon[C]=Terminal
+ToolbarLabel[en_US]=*Open Terminal
+ToolbarLabel[en]=*Open Terminal
+ToolbarLabel[C]=*Open Terminal
+Name[en_US]=*Open Terminal
+Name[en]=*Open Terminal
+Name[C]=*Open Terminal
+Profiles=profile-zero;
+
+[X-Action-Profile profile-zero]
+Exec=x-terminal-emulator --working-directory=%f
+Name[en_US]=Gnome Compatability
+Name[en]=Gnome Compatability
+Name[C]=Gnome Compatability

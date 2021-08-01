@@ -1,0 +1,24 @@
+# automatically unlock the bitwarden cli and save the session variable without
+# leaking it into the environment
+function bw {
+  SESSION_FILE="/tmp/$USER-bw-session"
+  BW_SESSION="$(cat $SESSION_FILE 2> /dev/null)"
+  STATUS="$(command bw --session $BW_SESSION status | jq -r .status)"
+
+  case $STATUS in
+    unauthenticated)
+      BW_SESSION="$(command bw login --raw)"
+      echo "$BW_SESSION" > $SESSION_FILE
+      chmod 600 $SESSION_FILE
+      ;;
+    locked)
+      BW_SESSION="$(command bw unlock --raw)"
+      echo "$BW_SESSION" > $SESSION_FILE
+      chmod 600 $SESSION_FILE
+      ;;
+    *)
+      ;;
+  esac
+
+  command bw --session $BW_SESSION $@
+}

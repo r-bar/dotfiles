@@ -6,8 +6,11 @@
 [pull]
   rebase = false
 [diff]
-  tool = nvimfugitive
-  prompt = true
+	tool = diffy
+  prompt = false
+[difftool]
+  tool = diffy
+  prompt = false
 [merge]
   tool = nvimfugitive
 [branch]

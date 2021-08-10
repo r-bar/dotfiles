@@ -2,7 +2,7 @@
 import os
 import sys
 import shutil
-from subprocess import run
+from subprocess import run, SubprocessError
 
 
 OSTYPE = os.environ.get('OSTYPE')
@@ -52,4 +52,8 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    try:
+        main()
+    except SubprocessError as exc:
+        print(exc.stderr, file=sys.stderr)
+        exit(1)

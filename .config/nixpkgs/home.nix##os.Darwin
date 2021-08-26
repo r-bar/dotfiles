@@ -65,6 +65,7 @@ let
     #podman-compose # not supported for darwin
     #buildah # not supported for darwin
     hexyl
+    neovim
   ];
 
   opsPkgs = with pkgs; [
@@ -87,13 +88,13 @@ in
     defaultCommand = "fd --type f";
   };
 
-  programs.neovim = {
-    enable = true;
-    viAlias = true;
-    vimdiffAlias = true;
-    withPython3 = true;
-    withNodeJs = true;
-  };
+#  programs.neovim = {
+#    enable = true;
+#    viAlias = true;
+#    vimdiffAlias = true;
+#    withPython3 = true;
+#    withNodeJs = true;
+#  };
 
   programs.direnv = {
     enable = true;

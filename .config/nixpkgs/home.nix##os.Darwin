@@ -25,6 +25,7 @@ let
     rename
     gnupg
     htop
+    transcrypt
   ];
 
   languagePkgs = with pkgs; [

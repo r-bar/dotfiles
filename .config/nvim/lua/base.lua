@@ -40,7 +40,6 @@ config.packages = {
 }
 
 function config.config()
-  vim.g.python3_host_prog = '/usr/bin/python3'
 
   -- default indent options
   vim.o.filetype = 'on'

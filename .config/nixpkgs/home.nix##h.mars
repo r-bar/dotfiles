@@ -91,7 +91,6 @@ in
 
   programs.fzf = {
     enable = true;
-    enableZshIntegration = true;
     defaultCommand = "fd --type f";
   };
 
@@ -109,6 +108,15 @@ in
     devtoolsPkgs
     opsPkgs
   ];
+
+  home.file = {
+    ".zshrc.d/60-fzf.nix.zsh".text = ''
+      if [[ $options[zle] = on ]]; then
+        . ${config.programs.fzf.package}/share/fzf/completion.zsh
+        . ${config.programs.fzf.package}/share/fzf/key-bindings.zsh
+      fi
+    '';
+  };
 
   # …
 }

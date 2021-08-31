@@ -26,6 +26,8 @@ let
     gnupg
     htop
     gcc
+    podman
+    podman-compose
   ];
 
   languagePkgs = with pkgs; [

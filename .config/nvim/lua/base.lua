@@ -1,5 +1,6 @@
 local config = require('utils').Config:new()
 local Package = require('utils').Package
+local run = require('utils').run
 local set = vim.api.nvim_set_var
 
 config.packages = {
@@ -122,6 +123,9 @@ function config.config()
   end
   vim.o.backupdir = [[~/.cache/nvim/swpbak//,/tmp//]]
   vim.o.directory = [[~/.cache/nvim/swpbak//,/tmp//]]
+  if not vim.fn.isdirectory(vim.o.backupdir) then
+    --run('mkdir -p ' . )
+  end
 
   vim.o.fillchars = 'vert:|'
 

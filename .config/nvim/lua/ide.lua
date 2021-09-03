@@ -32,6 +32,7 @@ config.packages = {
     }
   end};
   Package:new{'honza/vim-snippets'};
+  Package:new{'junegunn/fzf', ['do'] = function() vim.fn['fzf#install']() end};
   Package:new{'junegunn/fzf.vim', config = function()
     vim.api.nvim_set_var('fzf_action', {
       ['ctrl-t'] = 'tab split';

@@ -28,12 +28,14 @@ let
     gcc
     podman
     podman-compose
+    httpie
   ];
 
   languagePkgs = with pkgs; [
     rustup
     nodejs
     yarn
+    lua
   ];
 
   pythonPkgs = with pkgs; [
@@ -73,6 +75,8 @@ let
     neovim
     python39Packages.pynvim
     nodePackages.neovim
+    transcrypt
+    efm-langserver
   ];
 
   opsPkgs = with pkgs; [

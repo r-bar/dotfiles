@@ -118,14 +118,11 @@ function config.config()
   vim.o.scrolloff = 3
 
   -- set a directory so .swp and backup files are not spread around the system
-  if not vim.fn.isdirectory(vim.env.HOME .. '/.cache/nvim/swpbak') then
-    vim.cmd([[:silent !mkdir -p ~/.cache/nvim/swpbak > /dev/null 2>&1]])
-  end
-  vim.o.backupdir = [[~/.cache/nvim/swpbak//,/tmp//]]
-  vim.o.directory = [[~/.cache/nvim/swpbak//,/tmp//]]
-  if not vim.fn.isdirectory(vim.o.backupdir) then
-    --run('mkdir -p ' . )
-  end
+  --if not vim.fn.isdirectory(vim.env.HOME .. '/.cache/nvim/swpbak') then
+    --vim.cmd([[:silent !mkdir -p ~/.cache/nvim/swpbak > /dev/null 2>&1]])
+  --end
+  --vim.o.backupdir = [[~/.cache/nvim/swpbak//,/tmp//]]
+  --vim.o.directory = [[~/.cache/nvim/swpbak//,/tmp//]]
 
   vim.o.fillchars = 'vert:|'
 

@@ -11,7 +11,7 @@ let
   ];
 
   generalPkgs = with pkgs; [
-    gnugrep # requires by direnv-nix on MacOs
+    gnugrep # required by direnv-nix on MacOs
     rclone
     tmux
     bat
@@ -39,17 +39,16 @@ let
   ];
 
   pythonPkgs = with pkgs; [
-    python38
-    python38Packages.ipython
-    python38Packages.pip
-    poetry
+    python39
+    python39Packages.ipython
+    python39Packages.pip
   ];
 
   devtoolsPkgs = with pkgs; [
     universal-ctags
     postgresql
     sqlite
-    python38Packages.j2cli
+    python39Packages.j2cli
     git
     fd
     watchexec
@@ -78,6 +77,7 @@ let
     transcrypt
     efm-langserver
     awscli2
+    argocd
   ];
 
   opsPkgs = with pkgs; [
@@ -100,9 +100,7 @@ in
   };
 
   programs.direnv = {
-    enable = true;
-  };
-  programs.nix-direnv = {
+    nix-direnv = { enable = true; };
     enable = true;
   };
 

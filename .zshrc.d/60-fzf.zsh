@@ -12,7 +12,7 @@ COMPLETION=(
 )
 for file in $COMPLETION[@]; do
   if [[ $- == *i* ]] && [[ -f $file ]]; then
-    echo found completion
+    #echo found completion
     source $file
     break
   fi
@@ -26,7 +26,7 @@ KEY_BINDINGS=(
 )
 for file in $KEY_BINDINGS[@]; do
   if [ -f $file ]; then
-    echo fount keys
+    #echo found keys
     source $file
     break
   fi

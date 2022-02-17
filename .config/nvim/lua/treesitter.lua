@@ -19,59 +19,62 @@ config.packages = {
       }
     end,
   },
-  Package:new{
-    'nvim-treesitter/nvim-treesitter-textobjects',
-    config = function()
-      require'nvim-treesitter.configs'.setup {
-        textobjects = {
-          lsp_interop = {
-            enable = false,
-            peek_definition_code = {
-              ["df"] = "@function.outer",
-              ["dF"] = "@class.outer",
-            },
-          },
-          select = {
-            enable = true,
-            keymaps = {
-              -- You can use the capture groups defined in textobjects.scm
-              ["af"] = "@function.outer",
-              ["if"] = "@function.inner",
-              ["ac"] = "@class.outer",
-              ["ic"] = "@class.inner",
+  -- disabled due to apparent incompatability with new treesitter api. I believe
+  -- this is the related issue:
+  -- https://github.com/nvim-treesitter/nvim-treesitter-textobjects/issues/171
+  --Package:new{
+  --  'nvim-treesitter/nvim-treesitter-textobjects',
+  --  config = function()
+  --    require'nvim-treesitter.configs'.setup {
+  --      textobjects = {
+  --        lsp_interop = {
+  --          enable = false,
+  --          peek_definition_code = {
+  --            ["df"] = "@function.outer",
+  --            ["dF"] = "@class.outer",
+  --          },
+  --        },
+  --        select = {
+  --          enable = true,
+  --          keymaps = {
+  --            -- You can use the capture groups defined in textobjects.scm
+  --            ["af"] = "@function.outer",
+  --            ["if"] = "@function.inner",
+  --            ["ac"] = "@class.outer",
+  --            ["ic"] = "@class.inner",
 
-              -- Or you can define your own textobjects like this
-              ["iF"] = {
-                --python = "(function_definition) @function",
-                --cpp = "(function_definition) @function",
-                --c = "(function_definition) @function",
-                --java = "(method_declaration) @function",
-              },
-            },
-          },
-          move = {
-            enable = true,
-            goto_next_start = {
-              ["]m"] = "@function.outer",
-              ["]]"] = "@class.outer",
-            },
-            goto_next_end = {
-              ["]M"] = "@function.outer",
-              ["]["] = "@class.outer",
-            },
-            goto_previous_start = {
-              ["[m"] = "@function.outer",
-              ["[["] = "@class.outer",
-            },
-            goto_previous_end = {
-              ["[M"] = "@function.outer",
-              ["[]"] = "@class.outer",
-            },
-          },
-        },
-      }
-    end,
-  },
+  --            -- Or you can define your own textobjects like this
+  --            ["iF"] = {
+  --              --python = "(function_definition) @function",
+  --              --cpp = "(function_definition) @function",
+  --              --c = "(function_definition) @function",
+  --              --java = "(method_declaration) @function",
+  --            },
+  --          },
+  --        },
+  --        move = {
+  --          enable = true,
+  --          goto_next_start = {
+  --            ["]m"] = "@function.outer",
+  --            ["]]"] = "@class.outer",
+  --          },
+  --          goto_next_end = {
+  --            ["]M"] = "@function.outer",
+  --            ["]["] = "@class.outer",
+  --          },
+  --          goto_previous_start = {
+  --            ["[m"] = "@function.outer",
+  --            ["[["] = "@class.outer",
+  --          },
+  --          goto_previous_end = {
+  --            ["[M"] = "@function.outer",
+  --            ["[]"] = "@class.outer",
+  --          },
+  --        },
+  --      },
+  --    }
+  --  end,
+  --},
   Package:new{
     'nvim-treesitter/playground',
     ['do'] = function() vim.cmd 'TSInstall query' end,

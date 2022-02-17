@@ -15,3 +15,4 @@ else
   alias ll='ls -l' # long list
 fi
 alias dc=docker-compose
+alias pubssh='ssh -o "UserKnownHostsFile=/dev/null" -o "StrictHostKeyChecking=no"'

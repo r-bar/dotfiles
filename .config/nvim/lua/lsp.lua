@@ -1,6 +1,6 @@
 local config = require('utils').Config:new()
 local Package = require('utils').Package
-local LSP_CONTAINER_OPTIONS = {container_runtime = 'nerdctl'}
+local LSP_CONTAINER_OPTIONS = {container_runtime = vim.env.LSP_CONTAINER_RUNTIME or 'podman'}
 
 config.packages = {
   Package:new{'neovim/nvim-lsp'},
@@ -156,19 +156,20 @@ function config.config()
     html = { on_attach = on_attach };
     bashls = { on_attach = on_attach , cmd = lspcontainers.command('bashls', LSP_CONTAINER_OPTIONS) };
     --pylsp = { on_attach = on_attach, cmd = lspcontainers.command('pylsp', LSP_CONTAINER_OPTIONS) };
-    jedi_language_server = { on_attach = on_attach };
+    pylsp = { on_attach = on_attach };
+    --jedi_language_server = { on_attach = on_attach };
     -- main config file for efm is at ~/.config/efm-langserver/config.yaml
-    efm = {
-      init_options = {
-        server_capabilities = {
-          documentFormatting = true;
-          diagnostics = true;
-          documentSymbol = false;
-          definition = false;
-        };
-      };
-      filetypes = {"python"};
-    };
+    --efm = {
+    --  init_options = {
+    --    server_capabilities = {
+    --      documentFormatting = true;
+    --      diagnostics = true;
+    --      documentSymbol = false;
+    --      definition = false;
+    --    };
+    --  };
+    --  filetypes = {"python"};
+    --};
     sumneko_lua = {
       cmd = lspcontainers.command('sumneko_lua', LSP_CONTAINER_OPTIONS);
       settings = {

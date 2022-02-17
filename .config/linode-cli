@@ -1,0 +1,9 @@
+[DEFAULT]
+default-user = rbar
+
+[rbar]
+token = 71cf292232aa8b47051fe03eb13b0b203d42542e70ad01e0e9276ce087998036
+region = us-west
+type = g6-nanode-1
+image = linode/ubuntu20.04
+

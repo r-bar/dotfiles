@@ -16,3 +16,4 @@
 .flyrc filter=crypt diff=crypt merge=crypt
 /.config/syncthing/* filter=crypt diff=crypt merge=crypt
 .kube/** filter=crypt diff=crypt merge=crypt
+.config/linode-cli filter=crypt diff=crypt merge=crypt

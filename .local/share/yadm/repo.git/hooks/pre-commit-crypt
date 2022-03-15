@@ -1,26 +1,5 @@
 #!/usr/bin/env bash
 # Transcrypt pre-commit hook: fail if secret file in staging lacks the magic prefix "Salted" in B64
-IFS=$'\n'
-for secret_file in $(git -c core.quotePath=false ls-files | git -c core.quotePath=false check-attr --stdin filter | awk 'BEGIN { FS = ":" }; /crypt$/{ print $1 }'); do
-  # Get prefix of raw file in Git's index using the :FILENAME revision syntax
-  firstbytes=$(git show :$secret_file | head -c 8)
-  # An empty file does not need to be, and is not, encrypted
-  if [[ $firstbytes == "" ]]; then
-    :  # Do nothing
-  # The first bytes of an encrypted file must be "Salted" in Base64
-  elif [[ $firstbytes != "U2FsdGVk" ]]; then
-    printf 'Transcrypt managed file is not encrypted in the Git index: %s\n' $secret_file >&2
-    printf '\n' >&2
-    printf 'You probably staged this file using a tool that does not apply' >&2
-    printf ' .gitattribute filters as required by Transcrypt.\n' >&2
-    printf '\n' >&2
-    printf 'Fix this by re-staging the file with a compatible tool or with'
-    printf ' Git on the command line:\n' >&2
-    printf '\n' >&2
-    printf '    git reset -- %s\n' $secret_file >&2
-    printf '    git add %s\n' $secret_file >&2
-    printf '\n' >&2
-    exit 1
-  fi
-done
-unset IFS
+RELATIVE_GIT_DIR=$(git rev-parse --git-dir 2>/dev/null || printf '')
+CRYPT_DIR=$(git config transcrypt.crypt-dir 2>/dev/null || printf '%s/crypt' "${RELATIVE_GIT_DIR}")
+"${CRYPT_DIR}/transcrypt" pre_commit

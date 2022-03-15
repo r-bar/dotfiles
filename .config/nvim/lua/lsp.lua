@@ -69,6 +69,21 @@ function config.config()
   --vim.cmd [[nnoremap <silent> gW    <cmd>lua vim.lsp.buf.workspace_symbol()<CR>]]
   --vim.cmd [[nnoremap <silent> gd    <cmd>lua vim.lsp.buf.declaration()<CR>]]
 
+  vim.diagnostic.config({
+    underline = true,
+    signs = true,
+    virtual_text = false,
+    float = {
+      show_header = true,
+      --source = 'if_many',
+      source = 'always',
+      border = 'rounded',
+      focusable = false,
+    },
+    update_in_insert = false, -- default to false
+    severity_sort = false, -- default to false
+  })
+
   local map = function(key, command)
     vim.api.nvim_set_keymap('n', key, command, { noremap = true, silent = true })
   end
@@ -81,6 +96,8 @@ function config.config()
   map('gr',        [[<cmd>lua vim.lsp.buf.references()<CR>]])
   map('gs',        [[<cmd>lua vim.lsp.buf.signature_help()<CR>]])
   map('gt',        [[<cmd>lua vim.lsp.buf.type_definition()<CR>]])
+  map('<leader>e', [[<cmd>lua vim.diagnostic.open_float()<CR>]])
+
 
   vim.cmd [[command LspClients :lua print(vim.inspect(vim.lsp.buf_get_clients()))]]
   vim.cmd [[command Format :lua vim.lsp.buf.formatting_sync(nil, 1000)]]
@@ -155,8 +172,6 @@ function config.config()
     };
     html = { on_attach = on_attach };
     bashls = { on_attach = on_attach , cmd = lspcontainers.command('bashls', LSP_CONTAINER_OPTIONS) };
-    --pylsp = { on_attach = on_attach, cmd = lspcontainers.command('pylsp', LSP_CONTAINER_OPTIONS) };
-    pylsp = { on_attach = on_attach };
     --jedi_language_server = { on_attach = on_attach };
     -- main config file for efm is at ~/.config/efm-langserver/config.yaml
     --efm = {
@@ -199,6 +214,12 @@ function config.config()
       };
     };
   }
+
+  if vim.fn.executable('pylsp') then
+    servers.pylsp = { on_attach = on_attach }
+  else
+    servers.pylsp = { on_attach = on_attach, cmd = lspcontainers.command('pylsp', LSP_CONTAINER_OPTIONS) };
+  end
 
   for lsp, args in pairs(servers) do
     lspconfig[lsp].setup(args)

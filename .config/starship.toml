@@ -1,3 +1,21 @@
+format = """\
+  $username\
+  $hostname\
+  $directory\
+  $git_branch\
+  $git_commit\
+  $git_state\
+  $git_status\
+  $kubernetes\
+  $cmd_duration\
+  $custom\
+  $line_break\
+  $jobs\
+  $battery\
+  $time\
+  $character\
+  """
+
 [cmd_duration]
 min_time = 2
 
@@ -22,3 +40,23 @@ disabled = false
 #format = "%T"
 prefix = ""
 style = "dim white"
+
+[aws]
+prefix = ""
+
+[battery]
+disabled = false
+
+[battery.display]
+threshold = 100
+
+[username]
+format = "[$user]($style)@"
+
+[kubernetes]
+disabled = false
+symbol = "☸"
+format = "[$symbol$context(($namespace))]($style)"
+
+[hostname]
+format = "[$hostname]($style):"

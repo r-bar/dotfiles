@@ -2,6 +2,7 @@
 
 import sys
 from pathlib import Path
+from textwrap import dedent
 
 
 def rtouch(path: str | Path):
@@ -11,8 +12,22 @@ def rtouch(path: str | Path):
     path.touch(exist_ok=True)
 
 
-def main():
-    for path in sys.argv[1:]:
+def usage():
+    print(dedent(
+        """
+        USAGE: rtouch <PATH> [PATH] ...
+
+        Touch the file and recursively create any required directories in the
+        path.
+        """
+    ))
+
+
+def main(paths=sys.argv[1:]):
+    if not paths or '--help' in paths:
+        usage()
+        exit(1)
+    for path in paths:
         rtouch(path)
 
 

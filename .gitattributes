@@ -18,3 +18,4 @@
 .kube/** filter=crypt diff=crypt merge=crypt
 .config/linode-cli filter=crypt diff=crypt merge=crypt
 .ngrok2/** filter=crypt diff=crypt merge=crypt
+.config/mkcert filter=crypt diff=crypt merge=crypt

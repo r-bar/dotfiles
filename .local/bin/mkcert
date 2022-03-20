@@ -1,0 +1,186 @@
+#!/usr/bin/env python3
+
+import itertools as it
+import json
+import shutil
+from argparse import ArgumentParser
+from configparser import ConfigParser
+from pathlib import Path
+from subprocess import run
+from tempfile import TemporaryDirectory
+from textwrap import dedent
+
+DEFAULTS = {
+    "default_bits": "2048",
+    "prompt": "no",
+    "default_md": "sha256",
+    "x509_extensions": "v3_req",
+    "distinguished_name": "dn",
+    "C": "US",
+    "ST": "CA",
+    "L": "Los Angeles",
+    "O": "IT",
+    "OU": "IT Department",
+    "emailAddress": "admin@example.com",
+    "domains": ["localhost", "*.localhost"],
+    "days": "730",
+}
+
+
+class OpensslConfig:
+    CA_CONF_TEMPLATE = dedent(
+        """\
+        [req]
+        default_bits = {default_bits}
+        prompt = {prompt}
+        default_md = {default_md}
+        x509_extensions = {x509_extensions}
+        distinguished_name = {distinguished_name}
+
+        [dn]
+        C = {C}
+        ST = {ST}
+        L = {L}
+        O = {O}
+        OU = {OU}
+        emailAddress = {emailAddress}
+        CN = {CN}
+
+        [v3_req]
+        subjectAltName = @alt_names
+
+        [alt_names]
+        """
+    )
+
+    FIELDS = {
+        "default_bits",
+        "prompt",
+        "default_md",
+        "x509_extensions",
+        "distinguished_name",
+        "C",
+        "ST",
+        "L",
+        "O",
+        "OU",
+        "emailAddress",
+        "domains",
+    }
+
+    def __init__(self, filepath: str | Path, values: dict = None):
+        self.filepath = filepath
+        self.values = values or {}
+
+    def content(self) -> str:
+        values = {
+            k: v
+            for k, v in it.chain(self.values.items(), DEFAULTS.items())
+            if k in self.FIELDS
+        }
+        domains = values.pop("domains")
+        data = self.CA_CONF_TEMPLATE.format(CN=domains[0], **values)
+        for i, domain in enumerate(domains, start=1):
+            data += f"DNS.{i} = {domain}\n"
+        return data
+
+    @classmethod
+    def load(cls, filepath: str | Path) -> "OpensslConfig":
+        config = ConfigParser()
+        config.read(filepath)
+        values = dict(
+            (k, v)
+            for section in config.sections()
+            for k, v in dict(config[section]).items()
+            if section in {"DEFAULT", "alt_names"} and k != "CN"
+        )
+        values["domains"] = [config["dn"]["CN"], *config["alt_names"].values()]
+        return cls(filepath, values)
+
+    def save(self):
+        self.filepath.parent.mkdir(exist_ok=True, parents=True)
+        with open(self.filepath, "w") as f:
+            f.write(self.content())
+
+
+class Cli(ArgumentParser):
+    config_file_values = set(DEFAULTS.keys())
+    rc_filepath = Path.home() / '.config' / 'mkcert'
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.add_argument("--rc", type=Path, default=self.rc_filepath)
+        self.add_argument("--openssl-config", type=Path)
+        self.add_argument("-s", "-default_bits", "--key-size", dest="default_bits")
+        self.add_argument("-m", "-default_md", "--message-digest", dest="default_md")
+        self.add_argument("-c", "--country", dest="C")
+        self.add_argument("-st", "--state", dest="ST")
+        self.add_argument("-l", "--locality", dest="L")
+        self.add_argument("-o", "--organization", dest="O")
+        self.add_argument("-e", "-emailAddress", "--email", dest="emailAddress")
+        self.add_argument("-d", "--domain", dest="domains", action="append")
+        self.add_argument("--days", type=int)
+        self.add_argument("--save", action="store_true")
+        self.add_argument("output_directory", nargs="?", default=".", type=Path)
+        self.args = self.parse_args()
+
+    def cli_config(self) -> dict:
+        """Config file values passed via the CLI"""
+        return {k: v for k, v in vars(self.args).items() if v is not None}
+
+    def openssl_config(self) -> dict:
+        if filepath := self.args.openssl_config:
+            return OpensslConfig.load(filepath).values
+        else:
+            return {}
+
+    def config(self) -> dict:
+        """Returns the merged values from the builtin default values, the rc, the passed openssl_config"""
+        return DEFAULTS | self.load_rc() | self.openssl_config() | self.cli_config()
+
+    def save_rc(self):
+        excluded = {"output_directory", "openssl_config", "rc", "save"}
+        data = {k: v for k, v in self.config().items() if k not in excluded}
+        with open(self.args.rc.resolve(), "w") as f:
+            json.dump(data, f, indent=2)
+
+    def load_rc(self):
+        try:
+            with open(self.args.rc, "r") as f:
+                return json.load(f)
+        except Exception:
+            return {}
+
+
+def main():
+    cli = Cli()
+    config = cli.config()
+    cmd = [
+        "openssl",
+        "req",
+        "-newkey",
+        "rsa:2048",
+        "-x509",
+        "-nodes",
+        "-keyout",
+        "server.key",
+        "-new",
+        "-out",
+        "server.crt",
+        "-config",
+        "./openssl.conf",
+        "-sha256",
+        "-days",
+        str(config["days"]),
+    ]
+    output_dir = Path(cli.args.output_directory)
+    OpensslConfig(output_dir / "openssl.conf", config).save()
+    run(cmd, cwd=output_dir, check=True)
+    # save the config file after the openssl command to let openssl validate
+    # our values
+    if cli.args.save:
+        cli.save_rc()
+
+
+if __name__ == "__main__":
+    main()

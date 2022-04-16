@@ -58,7 +58,7 @@
   #pager = delta
   excludesfile = ~/.gitignore
 [mergetool "nvimfugitive"]
-  cmd = nvim -f -c \"Gdiff\" \"$MERGED\"
+  cmd = nvim -f -c \"Gdiffsplit!\" \"$MERGED\"
 #[delta]
 #  line-numbers = true
 #  side-by-side = true

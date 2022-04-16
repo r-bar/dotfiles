@@ -100,7 +100,7 @@ function config.config()
 
 
   vim.cmd [[command LspClients :lua print(vim.inspect(vim.lsp.buf_get_clients()))]]
-  vim.cmd [[command Format :lua vim.lsp.buf.formatting_sync(nil, 1000)]]
+  vim.cmd [[command Format :lua vim.lsp.buf.formatting_sync(nil, 5000)]]
   vim.cmd [[command LspStop :lua vim.lsp.stop_client(vim.lsp.get_active_clients())]]
   vim.cmd [[command LspDiagnostics :lua vim.lsp.diagnostic.set_loclist()]]
 

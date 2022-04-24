@@ -1,0 +1,65 @@
+function upload {
+  local upload_path=${UPLOAD_PATH:-"linode:barth-tech/uploads"}
+  #local secret="$(uuidgen)"
+  local secret="$(genpasswd 5)"
+  local copy_args=()
+  local link_args=()
+  local localpath=""
+
+  read -r -d '' usage <<EOF
+USAGE
+  upload [COPY_ARGS]... PATH
+
+DESCRIPTION
+  Upload PATH to a location under \$UPLOAD_PATH ($UPLOAD_PATH) using rclone.
+  COPY_ARGS are passed directly to the rclone copy command. Then generate and print an
+  expiring link to the file to stdout.
+
+EXAMPLES
+Basic usage:
+  upload foo/bar.tar.gz
+  
+Show upload progress:
+  upload -P foo/bar.tar.gz
+
+Set expiration duration for link:
+  upload --expire=1d foo/bar.tar.gz
+EOF
+
+  while [[ $# -gt 0 ]]; do
+    case $1 in
+      --help)
+        echo "$usage"
+        return 0
+        ;;
+
+      --expire=*)
+        link_args+="$1"
+        shift
+        ;;
+
+      -*|--*)
+        copy_args="$1"
+        shift
+        ;;
+
+      *)
+        if [ -z "$localpath" ]; then
+          localpath="$1"
+          shift
+        else
+          >&2 echo "Only 1 file can be uploaded"
+          return 1
+        fi
+        ;;
+    esac
+  done
+
+  if [ -z "$localpath" ]; then
+    echo "$usage"
+    return 1
+  fi
+        
+  rclone copy $copy_args "$localpath" "$upload_path/$secret"
+  rclone link $link_args "$upload_path/$secret/$(basename $localpath)"
+}

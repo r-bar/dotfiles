@@ -11,7 +11,7 @@ config.packages = {
         ensure_installed = "maintained", -- one of "all", "maintained" (parsers with maintainers), or a list of languages
         highlight = {
           enable = true,              -- false will disable the whole extension
-          disable = {'python'},  -- list of language that will be disabled
+          --disable = {'python'},  -- list of language that will be disabled
         },
         -- bug causing issues with python indentation:
         -- https://github.com/neovim/neovim/issues/13786

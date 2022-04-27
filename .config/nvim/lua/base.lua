@@ -110,8 +110,6 @@ function config.config()
     vim.o.grepformat = [[%f:%l:%c:%m,%f:%l:%m]]
   end
   vim.cmd([[autocmd QuickFixCmdPost * nested cwindow 20 | redraw!]])
-  vim.cmd([[command! -nargs=+ Grep execute "let @/ = '<args>' | set hlsearch | silent grep! <args>"]])
-  vim.api.nvim_set_keymap('n', '<leader>g', ':Grep<space>', {noremap = true})
 
   -- keep a couple lines between the cursor and the edge of the screen while
   -- scrolling

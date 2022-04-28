@@ -1,10 +1,10 @@
 function proj() {
   proj_dir="${PROJ_DIR:=$HOME/src}"
+  projects="$(fd '^\.git$' -H $proj_dir | while read git_dir; do dirname $git_dir; done | sed "s#^$proj_dir/##")"
   if [ -z "$1" ]; then
-    projects="$(fd '^\.git$' -H $proj_dir | while read git_dir; do dirname $git_dir; done | sed "s#^$proj_dir/##")"
     proj_name="$(fzf --header 'Select a project' <<< "$projects")"
   else
-    proj_name="$(fd --type d -1 $1 $proj_dir | sed "s#^$proj_dir/##")"
+    proj_name="$(fzf --filter $1 <<< "$projects" | head -n 1)"
   fi
   if [ -d $proj_dir/$proj_name ]; then
     tmux renamew $(basename $proj_name)

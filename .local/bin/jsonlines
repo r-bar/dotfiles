@@ -1,0 +1,53 @@
+#!/usr/bin/python3
+import sys
+import json
+from subprocess import run
+from typing import Iterator
+from argparse import ArgumentParser, FileType
+from io import StringIO
+
+UNSET = object()
+
+
+class Cli(ArgumentParser):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.add_argument('--output', '-o', type=FileType('w'), default=sys.stdout)
+        self.add_argument('--inflate', '-i', action='store_true')
+        self.add_argument('input', type=FileType('r'), default=sys.stdin, nargs='?')
+        self.args = self.parse_args()
+
+
+def flatten(data, prefix=".") -> Iterator[tuple[str, str]]:
+    if isinstance(data, dict) and data:
+        for k, v in data.items():
+            new_prefix = prefix + str(k) if prefix.endswith('.') else f'{prefix}.{k}'
+            yield from flatten(v, prefix=new_prefix)
+    elif isinstance(data, list) and data:
+        for i, v in enumerate(data):
+            new_prefix = prefix + str(i) if prefix.endswith('.') else f'{prefix}[{i}]'
+            yield from flatten(v, prefix=f'{prefix}.{i}')
+    else:
+        yield (prefix, json.dumps(data))
+
+
+# def expand(line, data=UNSET) -> Any:
+#     address, v = line.split(':')
+#     head, tail = address.strip().split('.')
+#     v = json.loads(v)
+#     ptr = data
+#     if head == '' and not tail:
+#         return data
+#     else:
+#         return 
+
+
+def main():
+    cli = Cli()
+    data = json.load(cli.args.input)
+    for k, v in flatten(data):
+        print(f'{k}: {v}', file=cli.args.output)
+
+
+if __name__ == '__main__':
+    main()

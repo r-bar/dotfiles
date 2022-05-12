@@ -11,11 +11,11 @@ Flyer is a wrapper for the concourse fly CLI. It adds one extra value to the
 EOF
   }
   function _flyer_default_target() {
-    grep '^default_target' .flyrc | awk '{print $2}'
+    grep '^default_target' ~/.flyrc | awk '{print $2}'
   }
 
   function _flyer_set_default_target() {
-    awk -i inplace "/^default_target/{printf \"%s %s\", \$1, \"$1\"; next} {print \$0}" .flyrc
+    awk -i inplace "/^default_target/{printf \"%s %s\", \$1, \"$1\"; next} {print \$0}" ~/.flyrc
   }
 
   local target_seen=0;

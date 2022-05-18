@@ -52,9 +52,9 @@ function config.config()
   --vim.o.listchars = 'space:·,eol:$,tab:⇥,trail:~,extends:>,precedes:<,nbsp:+'
   --vim.o.listchars = 'space:·,eol:$,tab:⇥,trail:~,extends:>,precedes:<'
   vim.o.listchars = 'space:.,nbsp:+,tab:⇥ ,extends:>,precedes:<,trail:~,'
-  vim.api.nvim_set_keymap('n', '<F8>', ':set line! | echo &listchars<CR>', {noremap = true})
-  vim.api.nvim_set_keymap('v', '<F8>', ':set line! | echo &listchars<CR>', {noremap = true})
-  vim.api.nvim_set_keymap('i', '<F8>', ':set line! | echo &listchars<CR>', {noremap = true})
+  vim.api.nvim_set_keymap('n', '<F8>', ':set list! | echo &listchars<CR>', {noremap = true})
+  vim.api.nvim_set_keymap('v', '<F8>', ':set list! | echo &listchars<CR>', {noremap = true})
+  vim.api.nvim_set_keymap('i', '<F8>', ':set list! | echo &listchars<CR>', {noremap = true})
 
   -- elimitnate escape sequence lag in vim (delay after leaving insert mode)
   vim.o.timeout = false

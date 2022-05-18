@@ -49,6 +49,13 @@ function config.config()
   vim.o.tabstop = 2
   vim.o.expandtab = true
 
+  --vim.o.listchars = 'space:·,eol:$,tab:⇥,trail:~,extends:>,precedes:<,nbsp:+'
+  --vim.o.listchars = 'space:·,eol:$,tab:⇥,trail:~,extends:>,precedes:<'
+  vim.o.listchars = 'space:.,nbsp:+,tab:⇥ ,extends:>,precedes:<,trail:~,'
+  vim.api.nvim_set_keymap('n', '<F8>', ':set line! | echo &listchars<CR>', {noremap = true})
+  vim.api.nvim_set_keymap('v', '<F8>', ':set line! | echo &listchars<CR>', {noremap = true})
+  vim.api.nvim_set_keymap('i', '<F8>', ':set line! | echo &listchars<CR>', {noremap = true})
+
   -- elimitnate escape sequence lag in vim (delay after leaving insert mode)
   vim.o.timeout = false
   vim.o.ttimeout = true
@@ -173,19 +180,7 @@ function config.config()
   vim.o.relativenumber = true
   vim.o.number = true
 
-  vim.cmd([[
-  function! NumberToggle()
-    if(&relativenumber == 1 && &number == 1)
-      set norelativenumber
-      set nonumber
-    else
-      set relativenumber
-      set number
-    endif
-  endfunc
-  ]])
-
-  vim.api.nvim_set_keymap('n', '<leader>n', ':call NumberToggle()<CR>', {noremap = true})
+  vim.api.nvim_set_keymap('n', '<leader>n', ':set number!<CR>', {noremap = true})
 
   -- command for writing files when accidentally opened without sudo
   vim.cmd([[command SudoW w ! sudo tee % > /dev/null]])

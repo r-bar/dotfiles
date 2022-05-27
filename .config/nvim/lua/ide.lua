@@ -51,7 +51,7 @@ config.packages = {
     'https://github.com/Yggdroot/indentLine.git';
     config = function()
       vim.g.indentLine_char = "¦"
-      vim.g.indentLine_fileType = {'yaml', 'lua'}
+      vim.g.indentLine_fileType = {'yaml', 'lua', 'helm'}
     end;
   };
   Package:new{

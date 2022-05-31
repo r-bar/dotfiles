@@ -164,14 +164,40 @@ function config.config()
     vimls = { on_attach = on_attach };
     yamlls = {
       on_attach = on_attach;
-      cmd = lspcontainers.command('yamlls', LSP_CONTAINER_OPTIONS)
+      cmd = lspcontainers.command('yamlls', LSP_CONTAINER_OPTIONS);
     };
     jsonls = {
-      cmd = { "json-languageserver", "--stdio" };
+      cmd = lspcontainers.command('jsonls', LSP_CONTAINER_OPTIONS);
       on_attach = on_attach;
     };
-    html = { on_attach = on_attach };
-    bashls = { on_attach = on_attach , cmd = lspcontainers.command('bashls', LSP_CONTAINER_OPTIONS) };
+    html = {
+      on_attach = on_attach;
+      cmd = lspcontainers.command('html', LSP_CONTAINER_OPTIONS)
+    };
+    svelte = {
+      on_attach = on_attach;
+      cmd = lspcontainers.command('svelte', LSP_CONTAINER_OPTIONS);
+    };
+    gopls = {
+      on_attach = on_attach;
+      cmd = lspcontainers.command('gopls', LSP_CONTAINER_OPTIONS);
+    };
+    dockerls = {
+      on_attach = on_attach;
+      cmd = lspcontainers.command('dockerls', LSP_CONTAINER_OPTIONS);
+    };
+    graphql = {
+      on_attach = on_attach;
+      cmd = lspcontainers.command('graphql', LSP_CONTAINER_OPTIONS);
+    };
+    clangd = {
+      on_attach = on_attach;
+      cmd = lspcontainers.command('clangd', LSP_CONTAINER_OPTIONS);
+    };
+    bashls = {
+      on_attach = on_attach;
+      cmd = lspcontainers.command('bashls', LSP_CONTAINER_OPTIONS);
+    };
     --jedi_language_server = { on_attach = on_attach };
     -- main config file for efm is at ~/.config/efm-langserver/config.yaml
     --efm = {
@@ -215,11 +241,54 @@ function config.config()
     };
   }
 
-  if vim.fn.executable('pylsp') then
-    servers.pylsp = { on_attach = on_attach }
-  else
-    servers.pylsp = { on_attach = on_attach, cmd = lspcontainers.command('pylsp', LSP_CONTAINER_OPTIONS) };
+  local function pylsp_cmd(runtime, workdir, image)
+    if workdir == nil then
+      workdir = require('lspconfig/server_configurations/pylsp').default_config.root_dir(vim.env.PWD)
+    end
+    if runtime == nil then
+      runtime = LSP_CONTAINER_OPTIONS.container_runtime
+    end
+    if image == nil then
+      image = 'registry.barth.tech/library/pylsp:latest';
+    end
+
+    local pylsp_options = {'--interactive', '--rm', '--volume', workdir..':/workdir'}
+    if vim.env.VIRTUAL_ENV then
+      vim.list_extend(pylsp_options, { '--volume', vim.env.VIRTUAL_ENV .. ':/env:ro', '--env', 'VIRTUAL_ENV=/env' })
+    end
+    local cmd = {runtime, 'container', 'run'}
+    vim.list_extend(cmd, pylsp_options)
+    table.insert(cmd, image)
+    return cmd
   end
+
+  servers.pylsp = {
+    on_attach = on_attach;
+    cmd = pylsp_cmd();
+    on_new_config = function(new_config, root_dir)
+      new_config.cmd = pylsp_cmd(nil, root_dir, nil)
+    end;
+  }
+  --servers.pylsp = {
+    --on_attach = on_attach;
+    --cmd = lspcontainers.command('pylsp', vim.tbl_extend('force', LSP_CONTAINER_OPTIONS, {
+      --image = 'registry.barth.tech/library/pylsp:latest';
+      --cmd = function(runtime, workdir, image)
+        --local pylsp_options = {'--interactive', '--rm', '--volume', workdir}
+        --if vim.env.VIRTUAL_ENV then
+          --pylsp_options[#pylsp_options+1] = '--volume=' .. vim.env.VIRTUAL_ENV .. ':/venv'
+          --pylsp_options[#pylsp_options+1] = '--env=VIRTUAL_ENV=/venv'
+          --vim.cmd("echom 'in virtualenv'")
+        --end
+        --vim.cmd("echom 'got here'")
+        --local cmd = {runtime, 'container', 'run'}
+        --vim.list_extend(cmd, pylsp_options)
+        --cmd[#cmd+1] = image
+        --return cmd
+      --end;
+    --}));
+  --}
+  --end
 
   for lsp, args in pairs(servers) do
     lspconfig[lsp].setup(args)

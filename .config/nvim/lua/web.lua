@@ -1,8 +1,7 @@
-local config = require('utils').Config:new()
-local Package = require('utils').Package
+local M = {}
 local set = vim.api.nvim_set_var
 
-config.packages = {
+M.packages = {
   Package:new{
     'mattn/emmet-vim',
     ['for'] = {'html', 'liquid', 'eruby', 'typescript', 'javascript', 'reason', 'jinja.html'},
@@ -130,4 +129,4 @@ config.packages = {
 
 }
 
-return config
+return M

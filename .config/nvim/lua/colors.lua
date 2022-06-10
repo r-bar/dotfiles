@@ -1,5 +1,4 @@
-local config = require('utils').Config:new()
-local Package = require('utils').Package
+local M = {}
 
 
 local LOAD_ALL = false
@@ -7,7 +6,7 @@ local LOAD_ALL = false
 local colorscheme = 'iceberg'
 
 
-function colormatch(pattern)
+local function colormatch(pattern)
   if pattern == nil then error 'cannot match nil pattern' end
   return LOAD_ALL or string.match(pattern, colorscheme)
 end
@@ -17,7 +16,7 @@ end
 --end
 
 
-config.packages = {
+M.packages = {
   Package:new{
     'https://github.com/jacoborus/tender.vim.git',
     enabled = colormatch 'tender'
@@ -31,9 +30,9 @@ config.packages = {
     enabled = colormatch 'iceberg',
     config = function()
       --vim.cmd [[hi! pythonParameters Normal]]
-      vim.cmd [[hi! pythonParameters ctermbg=234 ctermfg=252 guibg=#161821 guifg=#c6c8d1]]
-      vim.cmd [[hi! TSParameter ctermbg=234 ctermfg=252 guibg=#161821 guifg=#c6c8d1]]
-      vim.cmd [[hi! TSParameterReference ctermbg=234 ctermfg=252 guibg=#161821 guifg=#c6c8d1]]
+      --vim.cmd [[hi! pythonParameters ctermbg=234 ctermfg=252 guibg=#161821 guifg=#c6c8d1]]
+      --vim.cmd [[hi! TSParameter ctermbg=234 ctermfg=252 guibg=#161821 guifg=#c6c8d1]]
+      --vim.cmd [[hi! TSParameterReference ctermbg=234 ctermfg=252 guibg=#161821 guifg=#c6c8d1]]
     end,
   },
   Package:new{
@@ -88,7 +87,7 @@ config.packages = {
 }
 
 
-function config.config()
+function M.config()
   vim.api.nvim_set_option('termguicolors', true)
   -- force rendering in 256 color mode
   vim.api.nvim_set_option('t_Co', '256')
@@ -136,4 +135,4 @@ function config.config()
 
 end
 
-return config
+return M

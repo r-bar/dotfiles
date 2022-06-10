@@ -1,8 +1,12 @@
-local config = require('utils').Config:new()
-local Package = require('utils').Package
-local LSP_CONTAINER_OPTIONS = {container_runtime = vim.env.LSP_CONTAINER_RUNTIME or 'podman'}
+local M = {}
 
-config.packages = {
+-- Global lsp server options
+M.options = {
+  -- options for lspcontainers, not part of actual lspconfig setup arguments
+  containers = {container_runtime = vim.env.LSP_CONTAINER_RUNTIME or 'podman'}
+}
+
+M.packages = {
   Package:new{'neovim/nvim-lsp'},
   Package:new{'neovim/nvim-lspconfig'},
   Package:new{'https://github.com/hrsh7th/nvim-compe.git', config = function()
@@ -48,9 +52,7 @@ config.packages = {
   Package:new{'https://github.com/lspcontainers/lspcontainers.nvim.git'};
 }
 
-function config.config()
-  local lspcontainers = require 'lspcontainers'
-
+function M.config()
   --vim.cmd [[imap <expr> <Tab>   pumvisible() ? "\<C-n>" : "\<Tab>"]]
   --vim.cmd [[imap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"]]
   vim.api.nvim_set_keymap('i', '<Tab>',   [[pumvisible() ? "\<C-n>" : "\<Tab>"]], { expr = true })
@@ -118,33 +120,16 @@ function config.config()
   local lspconfig = require 'lspconfig'
   local configs = require 'lspconfig/configs'
 
-  local on_attach = function(client, bufnr)
-    local function buf_set_keymap(...) vim.api.nvim_buf_set_keymap(bufnr, ...) end
-    local function buf_set_option(...) vim.api.nvim_buf_set_option(bufnr, ...) end
 
-    local opts = { noremap = true, silent = true }
-      -- Set some keybinds conditional on server capabilities
-    if client.resolved_capabilities.document_formatting then
-      buf_set_keymap("n", "<leader>f", "<cmd>lua vim.lsp.buf.formatting()<CR>", opts)
-    elseif client.resolved_capabilities.document_range_formatting then
-      buf_set_keymap("n", "<leader>f", "<cmd>lua vim.lsp.buf.formatting()<CR>", opts)
-    end
 
-    -- Set autocommands conditional on server_capabilities
-    if client.resolved_capabilities.document_highlight then
-      vim.api.nvim_exec([[
-        augroup lsp_document_highlight
-          autocmd!
-          autocmd CursorHold <buffer> lua vim.lsp.buf.document_highlight()
-          autocmd CursorMoved <buffer> lua vim.lsp.buf.clear_references()
-        augroup END
-      ]], false)
-    end
-  end
+end
 
-  local servers = {
+
+function M.lsp_callback(options)
+  local lspcontainers = require 'lspcontainers'
+
+  return {
     rust_analyzer = {
-      on_attach = on_attach;
       settings = {
         ["rust-analyzer"] = {
           cargo = { loadOutDirsFromCheck = true };
@@ -154,51 +139,43 @@ function config.config()
       };
     };
     tsserver = {
-      on_attach = on_attach;
       before_init = function(params)
         params.processId = vim.NIL
       end;
-      cmd = lspcontainers.command('tsserver', LSP_CONTAINER_OPTIONS);
+      cmd = lspcontainers.command('tsserver', options.containers);
       --root_dir = util.root_pattern(".git", vim.fn.getcwd());
     };
-    vimls = { on_attach = on_attach };
+    vimls = {};
     yamlls = {
-      on_attach = on_attach;
-      cmd = lspcontainers.command('yamlls', LSP_CONTAINER_OPTIONS);
+      cmd = lspcontainers.command('yamlls', options.containers);
     };
     jsonls = {
-      cmd = lspcontainers.command('jsonls', LSP_CONTAINER_OPTIONS);
-      on_attach = on_attach;
+      cmd = lspcontainers.command('jsonls', options.containers);
     };
     html = {
-      on_attach = on_attach;
-      cmd = lspcontainers.command('html', LSP_CONTAINER_OPTIONS)
+      cmd = lspcontainers.command('html', options.containers)
     };
     svelte = {
-      on_attach = on_attach;
-      cmd = lspcontainers.command('svelte', LSP_CONTAINER_OPTIONS);
+      cmd = lspcontainers.command('svelte', options.containers);
     };
     gopls = {
-      on_attach = on_attach;
-      cmd = lspcontainers.command('gopls', LSP_CONTAINER_OPTIONS);
+      cmd = lspcontainers.command('gopls', options.containers);
     };
     dockerls = {
-      on_attach = on_attach;
-      cmd = lspcontainers.command('dockerls', LSP_CONTAINER_OPTIONS);
+      cmd = lspcontainers.command('dockerls', options.containers);
     };
     graphql = {
-      on_attach = on_attach;
-      cmd = lspcontainers.command('graphql', LSP_CONTAINER_OPTIONS);
+      cmd = lspcontainers.command('graphql', options.containers);
     };
     clangd = {
-      on_attach = on_attach;
-      cmd = lspcontainers.command('clangd', LSP_CONTAINER_OPTIONS);
+      cmd = lspcontainers.command('clangd', options.containers);
     };
     bashls = {
-      on_attach = on_attach;
-      cmd = lspcontainers.command('bashls', LSP_CONTAINER_OPTIONS);
+      cmd = lspcontainers.command('bashls', options.containers);
     };
-    --jedi_language_server = { on_attach = on_attach };
+    -- haskell language server
+    hls = {};
+
     -- main config file for efm is at ~/.config/efm-langserver/config.yaml
     --efm = {
     --  init_options = {
@@ -212,7 +189,7 @@ function config.config()
     --  filetypes = {"python"};
     --};
     sumneko_lua = {
-      cmd = lspcontainers.command('sumneko_lua', LSP_CONTAINER_OPTIONS);
+      cmd = lspcontainers.command('sumneko_lua', options.containers);
       settings = {
         Lua = {
           runtime = {
@@ -240,60 +217,53 @@ function config.config()
       };
     };
   }
-
-  local function pylsp_cmd(runtime, workdir, image)
-    if workdir == nil then
-      workdir = require('lspconfig/server_configurations/pylsp').default_config.root_dir(vim.env.PWD)
-    end
-    if runtime == nil then
-      runtime = LSP_CONTAINER_OPTIONS.container_runtime
-    end
-    if image == nil then
-      image = 'registry.barth.tech/library/pylsp:latest';
-    end
-
-    local pylsp_options = {'--interactive', '--rm', '--volume', workdir..':/workdir'}
-    if vim.env.VIRTUAL_ENV then
-      vim.list_extend(pylsp_options, { '--volume', vim.env.VIRTUAL_ENV .. ':/env:ro', '--env', 'VIRTUAL_ENV=/env' })
-    end
-    local cmd = {runtime, 'container', 'run'}
-    vim.list_extend(cmd, pylsp_options)
-    table.insert(cmd, image)
-    return cmd
-  end
-
-  servers.pylsp = {
-    on_attach = on_attach;
-    cmd = pylsp_cmd();
-    on_new_config = function(new_config, root_dir)
-      new_config.cmd = pylsp_cmd(nil, root_dir, nil)
-    end;
-  }
-  --servers.pylsp = {
-    --on_attach = on_attach;
-    --cmd = lspcontainers.command('pylsp', vim.tbl_extend('force', LSP_CONTAINER_OPTIONS, {
-      --image = 'registry.barth.tech/library/pylsp:latest';
-      --cmd = function(runtime, workdir, image)
-        --local pylsp_options = {'--interactive', '--rm', '--volume', workdir}
-        --if vim.env.VIRTUAL_ENV then
-          --pylsp_options[#pylsp_options+1] = '--volume=' .. vim.env.VIRTUAL_ENV .. ':/venv'
-          --pylsp_options[#pylsp_options+1] = '--env=VIRTUAL_ENV=/venv'
-          --vim.cmd("echom 'in virtualenv'")
-        --end
-        --vim.cmd("echom 'got here'")
-        --local cmd = {runtime, 'container', 'run'}
-        --vim.list_extend(cmd, pylsp_options)
-        --cmd[#cmd+1] = image
-        --return cmd
-      --end;
-    --}));
-  --}
-  --end
-
-  for lsp, args in pairs(servers) do
-    lspconfig[lsp].setup(args)
-  end
-
 end
 
-return config
+
+-- Global on_attach callback
+function M.options.on_attach(client, bufnr)
+    local function buf_set_keymap(...) vim.api.nvim_buf_set_keymap(bufnr, ...) end
+
+    local keymap_opts = { noremap = true, silent = true }
+    -- Set some keybinds conditional on server capabilities
+    if (
+      client.resolved_capabilities.document_formatting
+      or client.resolved_capabilities.document_range_formatting
+    ) then
+      buf_set_keymap("n", "<leader>f", "<cmd>lua vim.lsp.buf.formatting()<CR>", keymap_opts)
+    end
+
+    -- Set autocommands conditional on server_capabilities
+    if client.resolved_capabilities.document_highlight then
+      vim.api.nvim_exec([[
+        augroup lsp_document_highlight
+          autocmd!
+          autocmd CursorHold <buffer> lua vim.lsp.buf.document_highlight()
+          autocmd CursorMoved <buffer> lua vim.lsp.buf.clear_references()
+        augroup END
+      ]], false)
+    end
+end
+
+-- callback should take options table and return a table of server names and
+-- their lspconfig arguments
+function M.initialize(callback)
+  return callback(M.options)
+end
+
+-- Merge any global options with server specific options
+function M.merge_args(args)
+  local final_args = {}
+  if args.on_attach == nil then
+    final_args.on_attach = M.on_attach
+  else
+    function final_args.on_attach(client, bufnr)
+      M.options.on_attach(client, bufnr)
+      args.on_attach(client, bufnr)
+    end
+  end
+  final_args = vim.tbl_extend('keep', final_args, args)
+  return final_args
+end
+
+return M

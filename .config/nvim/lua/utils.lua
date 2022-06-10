@@ -1,11 +1,55 @@
 local M = {}
+local Config = {}
+-- expose Package as a global configuration primitive
+Package = {}
 
+function pformat(thing, indent, _indent)
+  local output_indent = 0
+  local indent_str = ' '
+  indent = indent or 0
+  _indent = _indent or 0
+
+  while string.len(indent_str) < (indent * _indent) do
+    indent_str = indent_str .. ' '
+    output_indent = output_indent + 1
+  end
+
+  local output = ''
+
+  if type(thing) == 'table' then
+    if indent > 0 then
+      output = output .. '{\n'
+    else
+      output = output .. '{'
+    end
+    for k, v in pairs(thing) do
+      output = output .. indent_str .. k .. ' = ' .. pformat(v, indent, _indent + 1) .. ';'
+      if indent > 0 then
+        output = output .. '\n'
+      end
+    end
+    if indent > 0 then
+      output = output .. indent_str .. '}\n'
+    else
+      output = output .. indent_str .. '}'
+    end
+    return output
+  elseif type(thing) == 'string' then
+    return string.format("'%s'", thing)
+  else
+    return string.format('%s', thing)
+  end
+end
+
+function pprint(thing, indent)
+  print(pformat(thing, indent))
+end
 
 function M.run(command)
   local handle = require('io').popen(command)
   local result = handle:read("*a")
-  handle:close()
-  return result
+  local exitcode = handle:close()
+  return result, exitcode
 end
 
 
@@ -17,10 +61,15 @@ function M.data_home()
   end
 end
 
+
+function M.echom(...)
+  vim.cmd(string.format("echom '%s'", string.format(...)))
+end
+
+
 -- implementation details sourced from
 -- https://github.com/junegunn/vim-plug/issues/912#issuecomment-559973123
 
-Package = {}
 
 function Package:new(args)
   local new = {
@@ -74,13 +123,13 @@ end
 M.Package = Package
 
 
-local Config = {}
 
 function Config:new()
   local new = {
     packages = {};
-    config = function() end;
-    more_configs = {};
+    configs = {};
+    lsp_server_callbacks = {};
+    lsp_servers = {};
   }
   self.__index = self
   return setmetatable(new, self)
@@ -100,20 +149,46 @@ function Config:init(path)
   for _, package in ipairs(self.packages) do
     package:configure()
   end
-  self.config()
-  for _, config in ipairs(self.more_configs) do
+
+  for _, config in ipairs(self.configs) do
     config()
   end
+
+  -- only load lspconfig module after packages have been initialized
+  local lspconfig = require('lspconfig')
+  local lsp = require('lsp')
+  for _, func in ipairs(self.lsp_server_callbacks) do
+    for server, base_args in pairs(lsp.initialize(func)) do
+      if self.lsp_servers[server] ~= nil then
+        error(string.format("%s language server configured twice"))
+      end
+      self.lsp_servers[server] = lsp.merge_args(base_args)
+    end
+  end
+  for server, args in pairs(self.lsp_servers) do
+    lspconfig[server].setup(args)
+  end
 end
 
-function Config:add(other)
-  for i=1, #other.packages do
-    self.packages[#self.packages + 1] = other.packages[i]
+-- Config modules ex
+function Config:add(module)
+  if module.packages ~= nil then
+    vim.list_extend(self.packages, module.packages)
+    --for i=1, #module.packages do
+    --  self.packages[#self.packages + 1] = module.packages[i]
+    --end
   end
-  self.more_configs[#self.more_configs + 1] = other.config
+
+  if module.config ~= nil then
+    self.configs[#self.configs + 1] = module.config
+  end
+
+  if module.lsp_callback ~= nil then
+    self.lsp_server_callbacks[#self.lsp_server_callbacks + 1] = module.lsp_callback
+  end
 end
+
 
 M.Config = Config
-
-
+M.Package = Package
 return M

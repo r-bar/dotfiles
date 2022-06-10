@@ -1,8 +1,7 @@
-local config = require('utils').Config:new()
-local Package = require('utils').Package
+local M = {}
 local set = vim.api.nvim_set_var
 
-config.packages = {
+M.packages = {
 
   Package:new{'https://github.com/scrooloose/nerdcommenter.git', config = function()
     set('NERDAltDelims_haskell', 1)
@@ -64,4 +63,4 @@ config.packages = {
   };
 }
 
-return config
+return M

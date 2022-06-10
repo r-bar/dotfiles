@@ -1,9 +1,18 @@
-local config = require('utils').Config:new()
-local Package = require('utils').Package
+local M = {}
+local echom = require('utils').echom
 local run = require('utils').run
 local set = vim.api.nvim_set_var
 
-config.packages = {
+local function python_provider()
+  if vim.fn.executable('podman') then
+  elseif vim.fn.executable('docker') then
+  else
+    vim.cmd('')
+    vim.fn.system('')
+  end
+end
+
+M.packages = {
   Package:new{'https://github.com/nvim-lua/plenary.nvim.git'};
   Package:new{'https://github.com/vim-scripts/LargeFile.git'};
   Package:new{'https://github.com/vim-scripts/IndentAnything.git'};
@@ -40,7 +49,7 @@ config.packages = {
   Package:new{'tpope/vim-abolish'};
 }
 
-function config.config()
+function M.config()
 
   -- default indent options
   vim.o.filetype = 'on'
@@ -183,6 +192,24 @@ function config.config()
   -- command for writing files when accidentally opened without sudo
   vim.cmd([[command SudoW w ! sudo tee % > /dev/null]])
 
+  -- pipe registers around more easily
+  vim.cmd([[
+    command! 
+    \ -count=0 -nargs=? 
+    \ -complete=file 
+    \ DumpRegister 
+    \ echo 'call writefile(getreg("<count>", 1, 1), empty(trim("<args>"))?tempname():trim("<args>"))'
+  ]])
+
+  vim.cmd([[
+    command!
+    \ -count=0 -nargs=+
+    \ -complete=shellcmd
+    \ PipeReg
+    \ echo 'call system("<args>", getreg("r", 1, 1) + (getregtype("r") isnot# "v" ? [""] : []))'
+  ]])
+
+
 end
 
-return config
+return M

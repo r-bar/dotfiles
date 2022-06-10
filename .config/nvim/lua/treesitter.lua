@@ -1,7 +1,6 @@
-local config = require('utils').Config:new()
-local Package = require('utils').Package
+local M = {}
 
-config.packages = {
+M.packages = {
   Package:new{
     'nvim-treesitter/nvim-treesitter',
     ['do'] = function() vim.cmd 'TSUpdate' end,
@@ -92,7 +91,7 @@ config.packages = {
   },
 }
 
-function config.get_tsnode()
+function M.get_tsnode()
   local bufnr = vim.fn.bufnr()
   local lang = vim.api.nvim_buf_get_option(bufnr, 'filetype')
   local parser = vim.treesitter.get_parser(bufnr, lang)
@@ -104,7 +103,4 @@ function config.get_tsnode()
   return node
 end
 
-function config.config()
-end
-
-return config
+return M

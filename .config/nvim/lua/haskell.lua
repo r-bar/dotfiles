@@ -1,8 +1,7 @@
-local config = require('utils').Config:new()
-local Package = require('utils').Package
+local M = {}
 local set = vim.api.nvim_set_var
 
-config.packages = {
+M.packages = {
   Package:new{'https://github.com/Twinside/vim-syntax-haskell-cabal.git'},
   Package:new{'https://github.com/pbrisbin/vim-syntax-shakespeare.git'},
   Package:new{'https://github.com/alx741/vim-yesod.git'},
@@ -16,4 +15,4 @@ config.packages = {
   },
 }
 
-return config
+return M

@@ -1,11 +1,10 @@
-local config = require('utils').Config:new()
-local Package = require('utils').Package
+local M = {}
 
-config.packages = {
+M.packages = {
   Package:new{'vimwiki/vimwiki', ['for'] = 'markdown', enabled = true};
 }
 
-function config.config()
+function M.config()
   vim.g.vimwiki_global_ext = 0
   vim.g.vimwiki_list = {
     {
@@ -22,4 +21,4 @@ function config.config()
   }
 end
 
-return config
+return M

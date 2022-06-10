@@ -209,6 +209,7 @@ function M.config()
     \ echo 'call system("<args>", getreg("r", 1, 1) + (getregtype("r") isnot# "v" ? [""] : []))'
   ]])
 
+  vim.g.python3_host_prog = vim.env.NVIM_PYTHON or '/usr/bin/python3'
 
 end
 

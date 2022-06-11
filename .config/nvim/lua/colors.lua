@@ -2,8 +2,7 @@ local M = {}
 
 
 local LOAD_ALL = false
---colorscheme = 'equinusocio_material'
-local colorscheme = 'iceberg'
+local colorscheme = 'nordfox'
 
 
 local function colormatch(pattern)
@@ -11,19 +10,97 @@ local function colormatch(pattern)
   return LOAD_ALL or string.match(pattern, colorscheme)
 end
 
---function colormatch()
---  return true
---end
-
-
 M.packages = {
   Package:new{
+    'https://github.com/catppuccin/nvim.git',
+    enabled = colormatch 'catppuccin',
+    as = 'catppuccin',
+    config = function()
+      local catppuccin = require('catppuccin')
+      vim.g.catppuccin_flavour = "macchiato" -- latte, frappe, macchiato, mocha
+      catppuccin.setup{
+        transparent_background = false,
+        term_colors = false,
+        styles = {
+          comments = "italic",
+          conditionals = "italic",
+          loops = "NONE",
+          functions = "NONE",
+          keywords = "NONE",
+          strings = "NONE",
+          variables = "NONE",
+          numbers = "NONE",
+          booleans = "NONE",
+          properties = "NONE",
+          types = "NONE",
+          operators = "NONE",
+        },
+        integrations = {
+          treesitter = true,
+          native_lsp = {
+            enabled = true,
+            virtual_text = {
+              errors = "italic",
+              hints = "italic",
+              warnings = "italic",
+              information = "italic",
+            },
+            underlines = {
+              errors = "underline",
+              hints = "underline",
+              warnings = "underline",
+              information = "underline",
+            },
+          },
+          lsp_trouble = false,
+          cmp = true,
+          lsp_saga = false,
+          gitgutter = false,
+          gitsigns = true,
+          telescope = true,
+          nvimtree = {
+            enabled = true,
+            show_root = false,
+            transparent_panel = false,
+          },
+          neotree = {
+            enabled = false,
+            show_root = false,
+            transparent_panel = false,
+          },
+          which_key = false,
+          indent_blankline = {
+            enabled = true,
+            colored_indent_levels = false,
+          },
+          dashboard = true,
+          neogit = false,
+          vim_sneak = false,
+          fern = false,
+          barbar = false,
+          bufferline = true,
+          markdown = true,
+          lightspeed = false,
+          ts_rainbow = false,
+          hop = false,
+          notify = true,
+          telekasten = true,
+          symbols_outline = true,
+        }
+      }
+    end,
+  },
+  Package:new{
     'https://github.com/jacoborus/tender.vim.git',
-    enabled = colormatch 'tender'
+    enabled = colormatch 'tender',
   },
   Package:new{
     'https://github.com/dfxyz/CandyPaper.vim.git',
     enabled = colormatch 'candy',
+  },
+  Package:new{
+    'https://github.com/christophermca/meta5',
+    enabled = colormatch 'meta5',
   },
   Package:new{
     'https://github.com/cocopon/iceberg.vim',
@@ -36,11 +113,7 @@ M.packages = {
     end,
   },
   Package:new{
-    'https://github.com/christophermca/meta5',
-    enabled = colormatch 'meta5',
-  },
-  Package:new{
-    'https://github.com/chriskempson/base16-vim.git',
+    'https://github.com/base16-project/base16-vim.git',
     enabled = colormatch 'base16',
   },
   Package:new{
@@ -60,29 +133,88 @@ M.packages = {
     enabled = colormatch 'lucius',
   },
   Package:new{
-    'https://github.com/rakr/vim-colors-rakr.git',
-    enabled = colormatch 'rakr',
-  },
-  Package:new{
     'chuling/equinusocio-material.vim',
     config = function() vim.api.nvim_set_var('equinusocio_material_style', 'darker') end,
     enabled = colormatch 'equinusocio',
   },
   Package:new{
     'https://github.com/tomasiser/vim-code-dark.git',
-    enabled = colormatch 'code-dark',
+    enabled = colormatch 'codedark',
   },
   Package:new{
     'https://github.com/Th3Whit3Wolf/one-nvim.git',
-    enabled = colormatch 'one',
-  },
-  Package:new{
-    'https://github.com/Iron-E/nvim-highlite.git',
-    enabled = colormatch 'highlite',
+    enabled = colormatch 'one-nvim',
   },
   Package:new{
     'https://github.com/whatyouhide/vim-gotham.git',
     enabled = colormatch 'gotham',
+  },
+  Package:new{
+    'https://github.com/Domeee/mosel.nvim.git',
+    enabled = colormatch 'mosel',
+  },
+  Package:new{
+    'https://github.com/sonph/onehalf.git',
+    enabled = colormatch 'onehalf',
+    rtp = 'vim/',
+  },
+  Package:new{
+    'https://github.com/arcticicestudio/nord-vim.git',
+    enabled = colormatch 'nord',
+  },
+  Package:new{
+    'https://github.com/ayu-theme/ayu-vim.git',
+    enabled = colormatch 'ayu',
+    config = function()
+      -- one of 'dark', 'light', 'mirage'
+      vim.g.ayucolor = 'dark'
+    end
+  },
+  Package:new{
+    'https://github.com/rose-pine/neovim.git',
+    as = 'rose-pine',
+    tag = 'v1.*',
+  },
+  Package:new{
+    'https://github.com/EdenEast/nightfox.nvim.git',
+    config = function()
+      -- There is no need to call setup if you don't want to change the default options and settings.
+      require('nightfox').setup({
+        -- Default options
+        --options = {
+        --  -- Compiled file's destination location
+        --  compile_path = vim.fn.stdpath("cache") .. "/nightfox",
+        --  compile_file_suffix = "_compiled", -- Compiled file suffix
+        --  transparent = false,    -- Disable setting background
+        --  terminal_colors = true, -- Set terminal colors (vim.g.terminal_color_*) used in `:terminal`
+        --  dim_inactive = false,   -- Non focused panes set to alternative background
+        --  styles = {              -- Style to be applied to different syntax groups
+        --    comments = "NONE",    -- Value is any valid attr-list value `:help attr-list`
+        --    conditionals = "NONE",
+        --    constants = "NONE",
+        --    functions = "NONE",
+        --    keywords = "NONE",
+        --    numbers = "NONE",
+        --    operators = "NONE",
+        --    strings = "NONE",
+        --    types = "NONE",
+        --    variables = "NONE",
+        --  },
+        --  inverse = {             -- Inverse highlight for different types
+        --    match_paren = false,
+        --    visual = false,
+        --    search = false,
+        --  },
+        --  modules = {             -- List of various plugins and additional options
+        --    -- ...
+        --  },
+        --}
+        options = {
+          dim_inactive = true,
+          terminal_colors = true,
+        },
+      })
+    end,
   },
 }
 
@@ -93,45 +225,44 @@ function M.config()
   vim.api.nvim_set_option('t_Co', '256')
   vim.cmd('colorscheme '..colorscheme)
   vim.cmd [[
-  if &term =~ '256color'
+    if &term =~ '256color'
     " disable Background Color Erase (BCE) so that color schemes
     " render properly when inside 256-color tmux and GNU screen.
     " see also http://snk.tuxfamily.org/log/vim-256color-bce.html
     set t_ut=
-  endif
-
-  " turn syntax highlighting on
-  filetype indent plugin on
-  syntax enable
-
-  " setting the colorscheme, favorites listed here
-  "set background=dark
-
-  " prevent the colorscheme from overriding the default background color
-  "hi Normal guibg=NONE ctermbg=NONE
-  " force default text color
-  "hi Normal ctermfg=white
-  " other overrides
-  "hi MatchParen ctermbg=none ctermfg=yellow
-
-  let g:clear_background = 0
-  " Adds or removes the background color. Can be used to help slow terminals.
-  function! ToggleBackground()
-    if g:clear_background == 0
-      hi Normal guibg=NONE ctermbg=NONE
-      let g:clear_background = 1
-    else
-      execute 'colorscheme ' . g:colors_name
-      let g:clear_background = 0
     endif
-  endfunction
-  command ToggleBackground :call ToggleBackground()<Enter>
 
-  " some draw speed tweaks
-  set lazyredraw
-  set synmaxcol=300  " default: 3000
+    " turn syntax highlighting on
+    filetype indent plugin on
+    syntax enable
 
-  ]]
+    " setting the colorscheme, favorites listed here
+    "set background=dark
+
+    " prevent the colorscheme from overriding the default background color
+    "hi Normal guibg=NONE ctermbg=NONE
+    " force default text color
+    "hi Normal ctermfg=white
+    " other overrides
+    "hi MatchParen ctermbg=none ctermfg=yellow
+
+    let g:clear_background = 0
+    " Adds or removes the background color. Can be used to help slow terminals.
+    function! ToggleBackground()
+    if g:clear_background == 0
+    hi Normal guibg=NONE ctermbg=NONE
+    let g:clear_background = 1
+    else
+    execute 'colorscheme ' . g:colors_name
+    let g:clear_background = 0
+    endif
+    endfunction
+    command ToggleBackground :call ToggleBackground()<Enter>
+
+    " some draw speed tweaks
+    set lazyredraw
+    set synmaxcol=300  " default: 3000
+    ]]
 
 end
 

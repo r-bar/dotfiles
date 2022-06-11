@@ -249,13 +249,13 @@ function M.config()
     let g:clear_background = 0
     " Adds or removes the background color. Can be used to help slow terminals.
     function! ToggleBackground()
-    if g:clear_background == 0
-    hi Normal guibg=NONE ctermbg=NONE
-    let g:clear_background = 1
-    else
-    execute 'colorscheme ' . g:colors_name
-    let g:clear_background = 0
-    endif
+      if g:clear_background == 0
+        hi Normal guibg=NONE ctermbg=NONE
+        let g:clear_background = 1
+      else
+        execute 'colorscheme ' . g:colors_name
+        let g:clear_background = 0
+      endif
     endfunction
     command ToggleBackground :call ToggleBackground()<Enter>
 

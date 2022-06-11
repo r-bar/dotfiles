@@ -218,52 +218,50 @@ M.packages = {
   },
 }
 
+function M.background_disable()
+  vim.cmd('hi Normal guibg=NONE ctermbg=NONE')
+  vim.g.clear_background = 1
+end
+
+function M.background_enable()
+  vim.cmd('colorscheme ' .. colorscheme)
+  vim.g.clear_background = 0
+end
+
+function M.background_toggle()
+  if vim.g.clear_background == 0 then
+    M.background_disable()
+  else
+    M.background_enable()
+  end
+end
 
 function M.config()
-  vim.api.nvim_set_option('termguicolors', true)
+  vim.cmd[[
+    syntax enable
+    filetype indent plugin on
+
+    if &term =~ '256color'
+      " disable Background Color Erase (BCE) so that color schemes
+      " render properly when inside 256-color tmux and GNU screen.
+      " see also http://snk.tuxfamily.org/log/vim-256color-bce.html
+      set t_ut=
+    endif
+  ]]
+
   -- force rendering in 256 color mode
   vim.api.nvim_set_option('t_Co', '256')
   vim.cmd('colorscheme '..colorscheme)
-  vim.cmd [[
-    if &term =~ '256color'
-    " disable Background Color Erase (BCE) so that color schemes
-    " render properly when inside 256-color tmux and GNU screen.
-    " see also http://snk.tuxfamily.org/log/vim-256color-bce.html
-    set t_ut=
-    endif
+  M.background_enable()
 
-    " turn syntax highlighting on
-    filetype indent plugin on
-    syntax enable
+  vim.cmd('command BackgroundEnable :lua require("colors").background_enable()<Enter>')
+  vim.cmd('command BackgroundDisable :lua require("colors").background_disable()<Enter>')
+  vim.cmd('command BackgroundToggle :lua require("colors").background_toggle()<Enter>')
 
-    " setting the colorscheme, favorites listed here
-    "set background=dark
-
-    " prevent the colorscheme from overriding the default background color
-    "hi Normal guibg=NONE ctermbg=NONE
-    " force default text color
-    "hi Normal ctermfg=white
-    " other overrides
-    "hi MatchParen ctermbg=none ctermfg=yellow
-
-    let g:clear_background = 0
-    " Adds or removes the background color. Can be used to help slow terminals.
-    function! ToggleBackground()
-      if g:clear_background == 0
-        hi Normal guibg=NONE ctermbg=NONE
-        let g:clear_background = 1
-      else
-        execute 'colorscheme ' . g:colors_name
-        let g:clear_background = 0
-      endif
-    endfunction
-    command ToggleBackground :call ToggleBackground()<Enter>
-
-    " some draw speed tweaks
-    set lazyredraw
-    set synmaxcol=300  " default: 3000
-    ]]
-
+  -- draw speed tweaks
+  vim.api.nvim_set_option('termguicolors', true)
+  vim.api.nvim_set_option('lazyredraw', true)
+  vim.api.nvim_set_option('synmaxcol', 300)  -- default: 3000
 end
 
 return M

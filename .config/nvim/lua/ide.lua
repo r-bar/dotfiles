@@ -61,6 +61,11 @@ M.packages = {
     'https://github.com/majutsushi/tagbar.git';
     enabled = false and vim.fn.executable('ctags');
   };
+  Package:new{'editorconfig/editorconfig-vim',
+    config = function()
+      vim.g.EditorConfig_exclude_patterns = {'fugitive://.*', 'scp://.*'}
+    end
+  };
 }
 
 return M

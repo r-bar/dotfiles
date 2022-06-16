@@ -49,7 +49,7 @@ M.packages = {
       --vim.cmd [[autocmd CursorHold,CursorHoldI * lua require'nvim-lightbulb'.update_lightbulb()]]
     end;
   };
-  Package:new{'https://github.com/lspcontainers/lspcontainers.nvim.git'};
+  Package:new{'https://github.com/r-bar/lspcontainers.nvim.git'};
 }
 
 function M.config()
@@ -115,18 +115,31 @@ function M.config()
   command LspRestart :call LspRestart()
   ]], false)
 
-  --vim.lsp.set_log_level("debug")
-
-  local lspconfig = require 'lspconfig'
-  local configs = require 'lspconfig/configs'
-
-
-
+  vim.lsp.set_log_level('debug')
 end
 
 
 function M.lsp_callback(options)
   local lspcontainers = require 'lspcontainers'
+
+  local function eslint_cmd(runtime, workdir, image)
+    local base_config = require 'lspconfig.server_configurations.eslint'
+    local base_cmd = base_config.default_config.cmd
+
+    if image == nil then
+      image = 'registry.barth.tech/library/vscode-langservers:latest'
+    end
+    if runtime == nil then
+      runtime = options.containers.container_runtime
+    end
+    if workdir == nil then
+      workdir = base_config.default_config.root_dir(vim.env.PWD)
+    end
+
+    local cmd = {runtime, 'run', '--rm', '-i', '-v', workdir..':'..workdir, '-w', workdir, image}
+    vim.list_extend(cmd, base_cmd)
+    return cmd
+  end
 
   return {
     rust_analyzer = {
@@ -176,18 +189,12 @@ function M.lsp_callback(options)
     -- haskell language server
     hls = {};
 
-    -- main config file for efm is at ~/.config/efm-langserver/config.yaml
-    --efm = {
-    --  init_options = {
-    --    server_capabilities = {
-    --      documentFormatting = true;
-    --      diagnostics = true;
-    --      documentSymbol = false;
-    --      definition = false;
-    --    };
-    --  };
-    --  filetypes = {"python"};
-    --};
+    eslint = {
+      cmd = lspcontainers.command('eslint', vim.tbl_extend("force", options.containers, {
+        image = 'registry.barth.tech/library/vscode-langservers:latest';
+        cmd_builder = eslint_cmd;
+      }));
+    };
     sumneko_lua = {
       cmd = lspcontainers.command('sumneko_lua', options.containers);
       settings = {
@@ -253,17 +260,16 @@ end
 
 -- Merge any global options with server specific options
 function M.merge_args(args)
-  local final_args = {}
+  local base_args = {}
   if args.on_attach == nil then
-    final_args.on_attach = M.on_attach
+    base_args.on_attach = M.on_attach
   else
-    function final_args.on_attach(client, bufnr)
+    function base_args.on_attach(client, bufnr)
       M.options.on_attach(client, bufnr)
       args.on_attach(client, bufnr)
     end
   end
-  final_args = vim.tbl_extend('keep', final_args, args)
-  return final_args
+  return vim.tbl_extend('keep', base_args, args)
 end
 
 return M

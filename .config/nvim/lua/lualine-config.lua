@@ -61,14 +61,7 @@ M.packages = {
         sections = {
           lualine_a = {'mode'},
           lualine_b = {'branch', 'diff'},
-          lualine_c = {
-            --{
-            --  'filename',
-            --  file_status = true,
-            --  path = 1,
-            --},
-            'FugitiveBufname',
-          },
+          lualine_c = {'FugitiveBufname'},
           lualine_x = {'diagnostics'},
           lualine_y = {'encoding', 'fileformat', 'filetype'},
           lualine_z = {'progress', 'location'},
@@ -86,5 +79,9 @@ M.packages = {
     end,
   },
 }
+
+function M.config()
+  vim.o.cmdheight = 2
+end
 
 return M

@@ -3,13 +3,13 @@ local Config = {}
 -- expose Package as a global configuration primitive
 Package = {}
 
-function pformat(thing, indent, _indent)
+function pformat(thing, indent, _level)
   local output_indent = 0
   local indent_str = ' '
   indent = indent or 0
-  _indent = _indent or 0
+  _level = _level or 0
 
-  while string.len(indent_str) < (indent * _indent) do
+  while string.len(indent_str) < (indent * _level) do
     indent_str = indent_str .. ' '
     output_indent = output_indent + 1
   end
@@ -23,7 +23,7 @@ function pformat(thing, indent, _indent)
       output = output .. '{'
     end
     for k, v in pairs(thing) do
-      output = output .. indent_str .. k .. ' = ' .. pformat(v, indent, _indent + 1) .. ';'
+      output = output .. indent_str .. k .. ' = ' .. pformat(v, indent, _level + 1) .. ';'
       if indent > 0 then
         output = output .. '\n'
       end
@@ -155,12 +155,12 @@ function Config:init(path)
   end
 
   -- only load lspconfig module after packages have been initialized
-  local lspconfig = require('lspconfig')
-  local lsp = require('lsp')
+  local lspconfig = require 'lspconfig'
+  local lsp = require 'lsp'
   for _, func in ipairs(self.lsp_server_callbacks) do
     for server, base_args in pairs(lsp.initialize(func)) do
       if self.lsp_servers[server] ~= nil then
-        error(string.format("%s language server configured twice"))
+        error(string.format("%s language server configured twice", server))
       end
       self.lsp_servers[server] = lsp.merge_args(base_args)
     end

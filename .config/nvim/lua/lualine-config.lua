@@ -1,5 +1,15 @@
 local M = {}
 
+local function bufchanged()
+  local bufnr = vim.fn.bufnr()
+  local bufinfo = vim.fn.getbufinfo(bufnr)[1]
+  if bufinfo.changed == 1 then
+    return '(changed)'
+  else
+    return ''
+  end
+end
+
 M.packages = {
   -- required for lualine
   Package:new{
@@ -61,7 +71,7 @@ M.packages = {
         sections = {
           lualine_a = {'mode'},
           lualine_b = {'branch', 'diff'},
-          lualine_c = {'FugitiveBufname'},
+          lualine_c = {'FugitiveBufname', bufchanged},
           lualine_x = {'diagnostics'},
           lualine_y = {'encoding', 'fileformat', 'filetype'},
           lualine_z = {'progress', 'location'},
@@ -69,10 +79,10 @@ M.packages = {
         extensions = {'quickfix', 'fzf', 'fugitive'},
         inactive_sections = {
           lualine_a = {},
-          lualine_b = {},
-          lualine_c = {'FugitiveBufname'},
-          lualine_x = {'location'},
-          lualine_y = {},
+          lualine_b = {'FugitiveBufname', bufchanged},
+          lualine_c = {},
+          lualine_x = {},
+          lualine_y = {'location'},
           lualine_z = {}
         },
       }

@@ -79,10 +79,10 @@ M.packages = {
         extensions = {'quickfix', 'fzf', 'fugitive'},
         inactive_sections = {
           lualine_a = {},
-          lualine_b = {},
-          lualine_c = {'FugitiveBufname', bufchanged},
-          lualine_x = {'location'},
-          lualine_y = {},
+          lualine_b = {'FugitiveBufname', bufchanged},
+          lualine_c = {},
+          lualine_x = {},
+          lualine_y = {'location'},
           lualine_z = {}
         },
       }

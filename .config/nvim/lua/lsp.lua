@@ -166,10 +166,16 @@ function M.lsp_callback(options)
       cmd = lspcontainers.command('jsonls', options.containers);
     };
     html = {
-      cmd = lspcontainers.command('html', options.containers)
+      cmd = lspcontainers.command('html', options.containers);
     };
     svelte = {
-      cmd = lspcontainers.command('svelte', options.containers);
+      -- There seem to be issues with the containerized version of the language
+      -- server exiting early without an error. Since the svelte language server
+      -- is so framework specific it is more reasonable to expect it to be part
+      -- of the dev dependencies of the project. Just use the natively installed
+      -- version for now.
+      --cmd = lspcontainers.command('svelte', options.containers);
+      cmd = {'npm', 'exec', 'svelte-language-server', '--', '--stdio'};
     };
     gopls = {
       cmd = lspcontainers.command('gopls', options.containers);
@@ -237,7 +243,7 @@ function M.options.on_attach(client, bufnr)
       client.resolved_capabilities.document_formatting
       or client.resolved_capabilities.document_range_formatting
     ) then
-      buf_set_keymap("n", "<leader>f", "<cmd>lua vim.lsp.buf.formatting()<CR>", keymap_opts)
+      buf_set_keymap("n", "<leader>f", "<cmd>lua vim.lsp.buf.formatting{timeout_ms=5000}<CR>", keymap_opts)
     end
 
     -- Set autocommands conditional on server_capabilities

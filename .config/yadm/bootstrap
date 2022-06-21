@@ -7,24 +7,23 @@
 # in ~/.kube/config.d
 init_kubeconfig() {
   if [ -f ~/.kube/config ]; then
-    echo Existing kubeconfig found. Current contents:
+    echo "Existing kubeconfig found. Current contents:"
+    echo
     cat ~/.kube/config
-    echo Would you like to overwrite it with the skeleton kubeconfig? (Y/n)
+    echo
+    echo
+    echo -n "Would you like to overwrite it with the skeleton kubeconfig? (Y/n) "
     read response
     case "$response" in
-      y*|Y*)
-        cp ~/.kube/config.skeleton ~/.kube/config
-        ;;
       n*|N*)
-        echo No changes made to kubeconfig
-        break
+        echo "No changes made to kubeconfig"
         ;;
-      "")
+      y*|Y*|"")
         cp ~/.kube/config.skeleton ~/.kube/config
         ;;
       *)
+        echo "Invalid response"
         init_kubeconfig
-        break
         ;;
     esac
   else

@@ -165,6 +165,9 @@ function M.lsp_callback(options)
     jsonls = {
       cmd = lspcontainers.command('jsonls', options.containers);
     };
+    jsonnet_ls = {
+      cmd = lspcontainers.command('jsonnet_js', options.containers);
+    };
     html = {
       cmd = lspcontainers.command('html', options.containers);
     };

@@ -136,3 +136,12 @@ repositories:
   password: ""
   url: https://community-charts.github.io/helm-charts
   username: ""
+- caFile: ""
+  certFile: ""
+  insecure_skip_tls_verify: false
+  keyFile: ""
+  name: k8s-at-home
+  pass_credentials_all: false
+  password: ""
+  url: https://k8s-at-home.com/charts/
+  username: ""

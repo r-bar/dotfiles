@@ -15,7 +15,7 @@ M.packages = {
 function M.lsp_callback(options)
   local lspcontainers = require 'lspcontainers'
 
-  local pylsp = lspcontainers.configure('pylsp')
+  local pylsp = lspcontainers.configure('pylsp', require('lsp').options.containers)
 
   return {
     pylsp = {

@@ -142,15 +142,6 @@ function M.lsp_callback(options)
   end
 
   return {
-    rust_analyzer = {
-      settings = {
-        ["rust-analyzer"] = {
-          cargo = { loadOutDirsFromCheck = true };
-          procMacro = { enable = true };
-          updates = { channel = "nightly" };
-        };
-      };
-    };
     tsserver = {
       before_init = function(params)
         params.processId = vim.NIL

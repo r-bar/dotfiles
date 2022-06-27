@@ -23,4 +23,19 @@ function M.config()
   set('rustfmt_autosave', 1)
 end
 
+function M.lsp_callback(options)
+  return {
+    rust_analyzer = {
+      settings = {
+        ["rust-analyzer"] = {
+          cargo = { loadOutDirsFromCheck = true };
+          procMacro = { enable = true };
+          updates = { channel = "nightly" };
+          checkOnSave = { command = "clippy" };
+        };
+      };
+    };
+  }
+end
+
 return M

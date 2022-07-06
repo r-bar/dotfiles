@@ -32,6 +32,7 @@ function M.lsp_callback(options)
           procMacro = { enable = true };
           updates = { channel = "nightly" };
           checkOnSave = { command = "clippy" };
+          diagnostics = { experimental = { enable = true } };
         };
       };
     };

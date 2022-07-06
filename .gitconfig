@@ -3,12 +3,9 @@
 [pull]
   rebase = false
 [diff]
-	tool = diffy
-  prompt = false
-[difftool]
-  tool = diffy
-  prompt = false
+  colorMoved = default
 [merge]
+  conflictstyle = diff3
   tool = nvimfugitive
 [branch]
   sort = authordate
@@ -52,7 +49,7 @@
   changed = "!bash -c \"git diff $(git merge-base $1 $2) $2\""
   #po = "git push --set-upstream origin $(git branch | awk '/^\* / { print $2 }')"
 [core]
-  #pager = delta
+  pager = delta
   excludesfile = ~/.gitignore
 [mergetool "nvimfugitive"]
   cmd = nvim -f -c \"Gdiffsplit!\" \"$MERGED\"
@@ -64,3 +61,10 @@
 	defaultBranch = master
 [include]
   path = .gitconfig.local
+[interactive]
+  diffFilter = delta --color-only
+[add.interactive]
+  useBuiltin = false # required for git 2.37
+[delta]
+  navigate = true
+  light = false

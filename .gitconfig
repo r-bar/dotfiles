@@ -68,3 +68,4 @@
 [delta]
   navigate = true
   light = false
+  zero-type = dim syntax

@@ -142,6 +142,9 @@ function M.lsp_callback(options)
   end
 
   return {
+    cssls = {
+      cmd = lspcontainers.command('cssls', options.containers);
+    };
     tsserver = {
       before_init = function(params)
         params.processId = vim.NIL

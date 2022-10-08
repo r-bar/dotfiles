@@ -13,7 +13,7 @@ end
 M.packages = {
   Package:new{
     'https://github.com/catppuccin/nvim.git',
-    enabled = colormatch 'catppuccin',
+    enabled = false,
     as = 'catppuccin',
     config = function()
       local catppuccin = require('catppuccin')

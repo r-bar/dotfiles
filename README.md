@@ -10,7 +10,7 @@ web application development.
 
 ## Cloning
 ```
-yadm clone git@github.com:r-bar/dotfiles.git
+yadm clone --recursive git@github.com:r-bar/dotfiles.git
 yadm transcrypt -F -c aes-256-cbc:pbkdf2:1024 -p <PASSWORD>
 yadm checkout -f # force decryption filters to run
 ```
@@ -21,4 +21,9 @@ yadm clone git@github.com:r-bar/dotfiles.git
 yadm transcrypt -F -c aes-256-cbc:pbkdf2:1024 -p <PASSWORD>
 yadm checkout -f # force decryption filters to run
 git remote set-url origin git@github.com:r-bar/dotfiles.git
+```
+
+## Refresh submodules
+```
+yadm submodule update
 ```

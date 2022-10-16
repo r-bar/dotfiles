@@ -9,38 +9,106 @@ M.options = {
 M.packages = {
   Package:new{'neovim/nvim-lsp'},
   Package:new{'neovim/nvim-lspconfig'},
-  Package:new{'https://github.com/hrsh7th/nvim-compe.git', config = function()
+  --Package:new{'https://github.com/hrsh7th/nvim-compe.git', config = function()
+  --  vim.o.completeopt = [[menuone,noinsert,noselect]]
+
+  --  require'compe'.setup {
+  --    enabled = true;
+  --    debug = false;
+  --    min_length = 1;
+  --    preselect = 'disable'; -- 'enable' || 'disable' || 'always'
+  --    throttle_time = 80;
+  --    source_timeout = 200;
+  --    resolve_timeout = 800;
+  --    incomplete_delay = 400;
+  --    max_abbr_width = 100;
+  --    max_kind_width = 100;
+  --    max_menu_width = 100;
+  --    documentation = true;
+  --    allow_prefix_unmatch = false;
+
+  --    source = {
+  --      path = true;
+  --      buffer = true;
+  --      --vsnip = true;
+  --      ultisnips = true;
+  --      nvim_lsp = true;
+  --    };
+  --  }
+
+  --  vim.cmd [[inoremap <silent><expr> <C-Space> compe#complete()]]
+  --  vim.cmd [[inoremap <silent><expr> <CR>      compe#confirm('<CR>')]]
+  --  vim.cmd [[inoremap <silent><expr> <C-e>     compe#close('<C-e>')]]
+
+  --end};
+  Package:new{'hrsh7th/cmp-nvim-lsp', config = function()
     vim.o.completeopt = [[menuone,noinsert,noselect]]
+    local cmp = require('cmp')
+    local luasnip = require('luasnip')
 
-    require'compe'.setup {
-      enabled = true;
-      debug = false;
-      min_length = 1;
-      preselect = 'disable'; -- 'enable' || 'disable' || 'always'
-      throttle_time = 80;
-      source_timeout = 200;
-      resolve_timeout = 800;
-      incomplete_delay = 400;
-      max_abbr_width = 100;
-      max_kind_width = 100;
-      max_menu_width = 100;
-      documentation = true;
-      allow_prefix_unmatch = false;
+    local has_words_before = function()
+      local line, col = unpack(vim.api.nvim_win_get_cursor(0))
+      return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match("%s") == nil
+    end
 
-      source = {
-        path = true;
-        buffer = true;
-        --vsnip = true;
-        ultisnips = true;
-        nvim_lsp = true;
-      };
-    }
-
-    vim.cmd [[inoremap <silent><expr> <C-Space> compe#complete()]]
-    vim.cmd [[inoremap <silent><expr> <CR>      compe#confirm('<CR>')]]
-    vim.cmd [[inoremap <silent><expr> <C-e>     compe#close('<C-e>')]]
+    cmp.setup({
+      snippet = {
+        -- REQUIRED - you must specify a snippet engine
+        expand = function(args)
+          --vim.fn["vsnip#anonymous"](args.body) -- For `vsnip` users.
+          luasnip.lsp_expand(args.body) -- For `luasnip` users.
+          --require('snippy').expand_snippet(args.body) -- For `snippy` users.
+          --vim.fn["UltiSnips#Anon"](args.body) -- For `ultisnips` users.
+        end,
+      },
+      window = {
+        --completion = cmp.config.window.bordered(),
+        --documentation = cmp.config.window.bordered(),
+      },
+      mapping = cmp.mapping.preset.insert({
+        -- https://github.com/hrsh7th/nvim-cmp/wiki/Example-mappings#luasnip
+        ["<Tab>"] = cmp.mapping(function(fallback)
+          if cmp.visible() then
+            cmp.select_next_item()
+          elseif luasnip.expand_or_jumpable() then
+            luasnip.expand_or_jump()
+          elseif has_words_before() then
+            cmp.complete()
+          else
+            fallback()
+          end
+        end, { "i", "s" }),
+        ["<S-Tab>"] = cmp.mapping(function(fallback)
+          if cmp.visible() then
+            cmp.select_prev_item()
+          elseif luasnip.jumpable(-1) then
+            luasnip.jump(-1)
+          else
+            fallback()
+          end
+        end, { "i", "s" }),
+        ['<C-b>'] = cmp.mapping.scroll_docs(-4),
+        ['<C-f>'] = cmp.mapping.scroll_docs(4),
+        ['<C-Space>'] = cmp.mapping.complete(),
+        ['<C-e>'] = cmp.mapping.abort(),
+        ['<CR>'] = cmp.mapping.confirm({ select = true }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
+      }),
+      sources = cmp.config.sources({
+        { name = 'nvim_lsp' },
+        --{ name = 'vsnip' }, -- For vsnip users.
+        { name = 'luasnip' }, -- For luasnip users.
+        --{ name = 'ultisnips' }, -- For ultisnips users.
+        --{ name = 'snippy' }, -- For snippy users.
+      }, {
+        { name = 'buffer' },
+      })
+    })
 
   end};
+  Package:new{'hrsh7th/cmp-buffer'};
+  Package:new{'hrsh7th/cmp-path'};
+  Package:new{'hrsh7th/cmp-cmdline'};
+  Package:new{'hrsh7th/nvim-cmp'};
   Package:new{'gfanto/fzf-lsp.nvim'};
   Package:new{
     'https://github.com/kosayoda/nvim-lightbulb.git';
@@ -53,12 +121,8 @@ M.packages = {
 }
 
 function M.config()
-  --vim.cmd [[imap <expr> <Tab>   pumvisible() ? "\<C-n>" : "\<Tab>"]]
-  --vim.cmd [[imap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"]]
-  vim.api.nvim_set_keymap('i', '<Tab>',   [[pumvisible() ? "\<C-n>" : "\<Tab>"]], { expr = true })
-  vim.api.nvim_set_keymap('i', '<S-Tab>', [[pumvisible() ? "\<C-p>" : "\<S-Tab>"]], { expr = true })
-  --let g:SuperTabDefaultCompletionType = '<c-n>'
-
+  --vim.api.nvim_set_keymap('i', '<Tab>',   [[pumvisible() ? "\<C-n>" : "\<Tab>"]], { expr = true })
+  --vim.api.nvim_set_keymap('i', '<S-Tab>', [[pumvisible() ? "\<C-p>" : "\<S-Tab>"]], { expr = true })
   -- leave <c-]> as mapping for ctags based lookup
   --vim.cmd [[nnoremap <silent> <c-]> <cmd>lua vim.lsp.buf.definition()<CR>]]
   --vim.cmd [[nnoremap <silent> <leader>d <cmd>lua vim.lsp.buf.definition()<CR>]]
@@ -264,6 +328,16 @@ end
 -- Merge any global options with server specific options
 function M.merge_args(args)
   local base_args = {}
+
+  local cmp_nvim_lsp_installed, cmp_nvim_lsp = pcall(require, 'cmp_nvim_lsp')
+  if cmp_nvim_lsp_installed then
+    -- Set up capabilities for cmp_nvim.
+    --base_args.capabilities = cmp_nvim_lsp.update_capabilities(
+    --  vim.lsp.protocol.make_client_capabilities()
+    --)
+    base_args.capabilities = cmp_nvim_lsp.default_capabilities()
+  end
+
   if args.on_attach == nil then
     base_args.on_attach = M.on_attach
   else

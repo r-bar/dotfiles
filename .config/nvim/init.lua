@@ -7,8 +7,6 @@ require('package_manager').load_package_manager()
 CONFIG:add(require('base'))
 CONFIG:add(require('syntax'))
 CONFIG:add(require('colors'))
---CONFIG:add(require('airline'))
--- must be loaded after colors module
 CONFIG:add(require('lualine-config'))
 CONFIG:add(require('ide'))
 CONFIG:add(require('tmux'))

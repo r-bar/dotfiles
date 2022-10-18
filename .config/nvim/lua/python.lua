@@ -1,5 +1,4 @@
 local M = {}
-local set = vim.api.nvim_set_var
 
 M.packages = {
   --Package:new{
@@ -20,6 +19,26 @@ function M.lsp_callback(options)
   return {
     pylsp = {
       cmd = pylsp.cmd;
+      -- https://github.com/python-lsp/python-lsp-server/blob/develop/CONFIGURATION.md
+      settings = {
+        pylsp = {
+          configurationSources = {
+            'flake8',
+            --'pycodestyle',
+            'pydocstyle',
+            'rope',
+            'mccabe',
+            'black',
+            'flake8',
+            'pylint',
+            'isort',
+            'pylsp_rope',
+          },
+          plugins = {
+            pylsp_mypy = { enabled = false },
+          },
+        },
+      },
       -- the on_new_config callback is invoked everytime lspconfig calculates a
       -- new root directory for an opened buffer
       on_new_config = function(new_config, root_dir)

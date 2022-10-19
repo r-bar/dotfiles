@@ -9,38 +9,6 @@ M.options = {
 M.packages = {
   Package:new{'neovim/nvim-lsp'},
   Package:new{'neovim/nvim-lspconfig'},
-  --Package:new{'https://github.com/hrsh7th/nvim-compe.git', config = function()
-  --  vim.o.completeopt = [[menuone,noinsert,noselect]]
-
-  --  require'compe'.setup {
-  --    enabled = true;
-  --    debug = false;
-  --    min_length = 1;
-  --    preselect = 'disable'; -- 'enable' || 'disable' || 'always'
-  --    throttle_time = 80;
-  --    source_timeout = 200;
-  --    resolve_timeout = 800;
-  --    incomplete_delay = 400;
-  --    max_abbr_width = 100;
-  --    max_kind_width = 100;
-  --    max_menu_width = 100;
-  --    documentation = true;
-  --    allow_prefix_unmatch = false;
-
-  --    source = {
-  --      path = true;
-  --      buffer = true;
-  --      --vsnip = true;
-  --      ultisnips = true;
-  --      nvim_lsp = true;
-  --    };
-  --  }
-
-  --  vim.cmd [[inoremap <silent><expr> <C-Space> compe#complete()]]
-  --  vim.cmd [[inoremap <silent><expr> <CR>      compe#confirm('<CR>')]]
-  --  vim.cmd [[inoremap <silent><expr> <C-e>     compe#close('<C-e>')]]
-
-  --end};
   Package:new{'hrsh7th/cmp-nvim-lsp', config = function()
     vim.o.completeopt = [[menuone,noinsert,noselect]]
     local cmp = require('cmp')
@@ -121,19 +89,6 @@ M.packages = {
 }
 
 function M.config()
-  --vim.api.nvim_set_keymap('i', '<Tab>',   [[pumvisible() ? "\<C-n>" : "\<Tab>"]], { expr = true })
-  --vim.api.nvim_set_keymap('i', '<S-Tab>', [[pumvisible() ? "\<C-p>" : "\<S-Tab>"]], { expr = true })
-  -- leave <c-]> as mapping for ctags based lookup
-  --vim.cmd [[nnoremap <silent> <c-]> <cmd>lua vim.lsp.buf.definition()<CR>]]
-  --vim.cmd [[nnoremap <silent> <leader>d <cmd>lua vim.lsp.buf.definition()<CR>]]
-  --vim.cmd [[nnoremap <silent> K     <cmd>lua vim.lsp.buf.hover()<CR>]]
-  --vim.cmd [[nnoremap <silent> gD    <cmd>lua vim.lsp.buf.implementation()<CR>]]
-  --vim.cmd [[nnoremap <silent> gs    <cmd>lua vim.lsp.buf.signature_help()<CR>]]
-  --vim.cmd [[nnoremap <silent> gt    <cmd>lua vim.lsp.buf.type_definition()<CR>]]
-  --vim.cmd [[nnoremap <silent> gr    <cmd>lua vim.lsp.buf.references()<CR>]]
-  --vim.cmd [[nnoremap <silent> g0    <cmd>lua vim.lsp.buf.document_symbol()<CR>]]
-  --vim.cmd [[nnoremap <silent> gW    <cmd>lua vim.lsp.buf.workspace_symbol()<CR>]]
-  --vim.cmd [[nnoremap <silent> gd    <cmd>lua vim.lsp.buf.declaration()<CR>]]
 
   vim.diagnostic.config({
     underline = true,
@@ -166,7 +121,7 @@ function M.config()
 
 
   vim.cmd [[command LspClients :lua print(vim.inspect(vim.lsp.buf_get_clients()))]]
-  vim.cmd [[command Format :lua vim.lsp.buf.formatting_sync(nil, 5000)]]
+  vim.cmd [[command Format :lua vim.lsp.buf.format{async = false}]]
   vim.cmd [[command LspStop :lua vim.lsp.stop_client(vim.lsp.get_active_clients())]]
   vim.cmd [[command LspDiagnostics :lua vim.diagnostic.setqflist()]]
 
@@ -185,25 +140,6 @@ end
 
 function M.lsp_callback(options)
   local lspcontainers = require 'lspcontainers'
-
-  local function eslint_cmd(runtime, workdir, image)
-    local base_config = require 'lspconfig.server_configurations.eslint'
-    local base_cmd = base_config.default_config.cmd
-
-    if image == nil then
-      image = 'registry.barth.tech/library/vscode-langservers:latest'
-    end
-    if runtime == nil then
-      runtime = options.containers.container_runtime
-    end
-    if workdir == nil then
-      workdir = base_config.default_config.root_dir(vim.env.PWD)
-    end
-
-    local cmd = {runtime, 'run', '--rm', '-i', '-v', workdir..':'..workdir, '-w', workdir, image}
-    vim.list_extend(cmd, base_cmd)
-    return cmd
-  end
 
   return {
     cssls = {
@@ -237,6 +173,7 @@ function M.lsp_callback(options)
       -- version for now.
       --cmd = lspcontainers.command('svelte', options.containers);
       cmd = {'npm', 'exec', 'svelte-language-server', '--', '--stdio'};
+      --cmd = 'npm exec svelte-language-server -- --stdio';
     };
     gopls = {
       cmd = lspcontainers.command('gopls', options.containers);
@@ -259,7 +196,6 @@ function M.lsp_callback(options)
     eslint = {
       cmd = lspcontainers.command('eslint', vim.tbl_extend("force", options.containers, {
         image = 'registry.barth.tech/library/vscode-langservers:latest';
-        cmd_builder = eslint_cmd;
       }));
     };
     sumneko_lua = {

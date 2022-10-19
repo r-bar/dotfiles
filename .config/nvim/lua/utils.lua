@@ -196,7 +196,7 @@ function Config:init(path)
     config()
   end
   -- only load lspconfig module after packages have been initialized
-  pcall(self._lsp_init, self)
+  self:_lsp_init()
 end
 
 function Config:_plug_up(path)
@@ -227,11 +227,16 @@ function Config:_lsp_init()
   local lspconfig = require 'lspconfig'
   local lsp = require 'lsp'
   for _, func in ipairs(self.lsp_server_callbacks) do
-    for server, base_args in pairs(lsp.initialize(func)) do
-      if self.lsp_servers[server] ~= nil then
-        error(string.format("%s language server configured twice", server))
+    local initialize_success, err = xpcall(lsp.initialize, debug.traceback, func)
+    if not initialize_success then
+      print(err)
+    else
+      for server, base_args in pairs(lsp.initialize(func)) do
+        if self.lsp_servers[server] ~= nil then
+          error(string.format("%s language server configured twice", server))
+        end
+        self.lsp_servers[server] = lsp.merge_args(base_args)
       end
-      self.lsp_servers[server] = lsp.merge_args(base_args)
     end
   end
   for server, args in pairs(self.lsp_servers) do

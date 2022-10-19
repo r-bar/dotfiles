@@ -247,3 +247,6 @@
 [submodule ".local/share/nvim/site/pack/base/opt/vim-yesod"]
 	path = .local/share/nvim/site/pack/base/opt/vim-yesod
 	url = https://github.com/alx741/vim-yesod.git
+[submodule ".local/share/nvim/site/pack/base/opt/tokyonight.nvim"]
+	path = .local/share/nvim/site/pack/base/opt/tokyonight.nvim
+	url = https://github.com/folke/tokyonight.nvim.git

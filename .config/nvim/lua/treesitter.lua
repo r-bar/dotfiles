@@ -15,6 +15,7 @@ M.packages = {
         -- bug causing issues with python indentation:
         -- https://github.com/neovim/neovim/issues/13786
         indent = { enable = true, disable = {'python', 'yaml'} },
+        textobjects = { enable = true },
       }
     end,
   },

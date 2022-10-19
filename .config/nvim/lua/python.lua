@@ -1,10 +1,6 @@
 local M = {}
 
 M.packages = {
-  --Package:new{
-  --  'https://github.com/vim-python/python-syntax.git',
-  --  config = function() set('python_highlight_all', 1) end,
-  --},
   Package:new{'https://github.com/Vimjas/vim-python-pep8-indent.git'},
   -- provides python text objects (can probably be removed when treesitter works)
   --Package:new{'https://github.com/jeetsukumaran/vim-pythonsense.git'},

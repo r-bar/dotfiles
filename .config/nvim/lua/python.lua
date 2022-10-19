@@ -36,6 +36,7 @@ function M.lsp_callback(options)
           },
           plugins = {
             pylsp_mypy = { enabled = false },
+            pycodestyle = { enabled = false },
           },
         },
       },

@@ -21,6 +21,9 @@ function M.load_package_manager(reinstall)
 end
 
 function Package:new(args)
+  if type(args) ~= 'table' then
+    error("Package:new must be passed a table as it's only argument")
+  end
   local new = {
     enabled = true;
   }

@@ -1,8 +1,8 @@
+require('package_manager').load_package_manager()
 local Utils = require('utils')
 local Config = require('config').Config
 CONFIG = Config:new()
 
-require('package_manager').load_package_manager()
 
 CONFIG:add(require('settings.base'))
 CONFIG:add(require('settings.syntax'))

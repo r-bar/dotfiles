@@ -12,16 +12,6 @@ M.packages = {
   Package:new{'https://github.com/nvim-lualine/lualine.nvim.git'},
 }
 
-local function buf_changed()
-  local bufnr = vim.fn.bufnr()
-  local bufinfo = vim.fn.getbufinfo(bufnr)[1]
-  if bufinfo.changed == 1 then
-    return '(changed)'
-  else
-    return ''
-  end
-end
-
 local function git_status()
   -- samples: "[Git:3c477c6(master)]" "[Git(master)]"
   local fugitive = vim.fn.FugitiveStatusline()
@@ -58,7 +48,7 @@ function M.config()
     sections = {
       lualine_a = {'mode'},
       lualine_b = {git_status, 'diff'},
-      lualine_c = {'filename', buf_changed},
+      lualine_c = {'filename'},
       lualine_x = {require('lsp-status').status, 'diagnostics'},
       --lualine_x = {'diagnostics'},
       lualine_y = {'encoding', 'fileformat', 'filetype'},
@@ -67,7 +57,7 @@ function M.config()
     extensions = {'quickfix', 'fzf', 'fugitive'},
     inactive_sections = {
       lualine_a = {},
-      lualine_b = {'filename', buf_changed},
+      lualine_b = {'filename', git_status},
       lualine_c = {},
       lualine_x = {},
       lualine_y = {'location'},

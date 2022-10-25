@@ -1,0 +1,4 @@
+tmux-layout() {
+  tmux select-layout main-vertical
+  tmux resize-pane -x 100 -t :.1
+}

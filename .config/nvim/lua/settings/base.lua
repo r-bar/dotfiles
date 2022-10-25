@@ -3,17 +3,28 @@ local echom = require('utils').echom
 local run = require('utils').run
 local set = vim.api.nvim_set_var
 
-local function python_provider()
-  if vim.fn.executable('podman') then
-  elseif vim.fn.executable('docker') then
-  else
-    vim.cmd('')
-    vim.fn.system('')
-  end
-end
-
 M.packages = {
-  Package:new{'https://github.com/tpope/vim-tbone.git'}, --  " tmux integration},
+  Package:new{
+    'https://github.com/tpope/vim-tbone.git',
+    config = function()
+      vim.api.nvim_create_user_command(
+        'Tset',
+        function(info)
+          print(vim.inspect(info))
+          if info.args == "" and TMUX_TARGET == nil then
+            print('tmux target is not set')
+            return
+          elseif info.args == "" then
+            print('tmux target is '..TMUX_TARGET)
+            return
+          end
+          TMUX_TARGET = info.args
+          echom('tmux target is now '..TMUX_TARGET)
+        end,
+        {nargs = '?', desc = 'Set the default tmux pane target for other tmux commands like Tcmd'}
+      )
+    end,
+  }, --  " tmux integration},
   Package:new{'https://github.com/nvim-lua/plenary.nvim.git'};
   Package:new{'https://github.com/vim-scripts/LargeFile.git'};
   Package:new{'https://github.com/vim-scripts/IndentAnything.git'};
@@ -211,6 +222,48 @@ function M.config()
   ]])
 
   vim.g.python3_host_prog = vim.env.NVIM_PYTHON or '/usr/bin/python3'
+
+  vim.api.nvim_create_user_command(
+    "CmdReg",
+    function(info)
+      --print(vim.inspect(info))
+      local reg = nil
+      local cmd_args = {}
+      for _, arg in ipairs(info.fargs) do
+        if reg == nil then
+          reg = arg
+        else
+          cmd_args[#cmd_args+1] = arg
+        end
+      end
+      cmd_args = table.concat(cmd_args, " ")
+      local output, success = run(cmd_args)
+      if not success then
+        error('Error executing command')
+      end
+      output = output:strip()
+      vim.fn.setreg(reg, output)
+    end,
+    {
+      nargs = '+',
+      complete = 'shellcmd',
+      desc = 'Insert the output of the given command at the cursor position',
+    }
+  )
+
+  vim.api.nvim_create_user_command(
+    "CmdIns",
+    function(info)
+      --print(vim.inspect(info))
+      vim.cmd('CmdReg " '..info.args)
+      vim.cmd[[norm Pl]]
+    end,
+    {
+      nargs = '+',
+      complete = 'shellcmd',
+      desc = 'Insert the output of the given command at the cursor position',
+    }
+  )
 
 end
 

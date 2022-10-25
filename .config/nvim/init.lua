@@ -1,22 +1,21 @@
 local Utils = require('utils')
-CONFIG = Utils.Config:new()
+local Config = require('config').Config
+CONFIG = Config:new()
 
 require('package_manager').load_package_manager()
 
--- Each entry is expected to export an instance of utils.Config
-CONFIG:add(require('base'))
-CONFIG:add(require('syntax'))
-CONFIG:add(require('colors'))
-CONFIG:add(require('lualine-config'))
-CONFIG:add(require('ide'))
-CONFIG:add(require('tmux'))
-CONFIG:add(require('lsp'))
-CONFIG:add(require('treesitter'))
-CONFIG:add(require('python'))
-CONFIG:add(require('web'))
-CONFIG:add(require('haskell'))
-CONFIG:add(require('rust'))
-CONFIG:add(require('vimwiki'))
+CONFIG:add(require('settings.base'))
+CONFIG:add(require('settings.syntax'))
+CONFIG:add(require('settings.colors'))
+CONFIG:add(require('settings.lualine-config'))
+CONFIG:add(require('settings.ide'))
+CONFIG:add(require('settings.lsp'))
+CONFIG:add(require('settings.treesitter'))
+CONFIG:add(require('settings.python'))
+CONFIG:add(require('settings.web'))
+CONFIG:add(require('settings.haskell'))
+CONFIG:add(require('settings.rust'))
+CONFIG:add(require('settings.vimwiki'))
 
 CONFIG:init()
 

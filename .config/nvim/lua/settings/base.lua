@@ -13,6 +13,7 @@ local function python_provider()
 end
 
 M.packages = {
+  Package:new{'https://github.com/tpope/vim-tbone.git'}, --  " tmux integration},
   Package:new{'https://github.com/nvim-lua/plenary.nvim.git'};
   Package:new{'https://github.com/vim-scripts/LargeFile.git'};
   Package:new{'https://github.com/vim-scripts/IndentAnything.git'};
@@ -59,9 +60,9 @@ function M.config()
   vim.o.expandtab = true
 
   vim.o.listchars = 'space:.,nbsp:+,tab:⇥ ,extends:>,precedes:<,trail:~,'
-  vim.api.nvim_set_keymap('n', '<F8>', ':set list! | echo &listchars<CR>', {noremap = true})
-  vim.api.nvim_set_keymap('v', '<F8>', ':set list! | echo &listchars<CR>', {noremap = true})
-  vim.api.nvim_set_keymap('i', '<F8>', ':set list! | echo &listchars<CR>', {noremap = true})
+  vim.keymap.set('n', '<F8>', ':set list! | echo &listchars<CR>', {noremap = true})
+  vim.keymap.set('v', '<F8>', ':set list! | echo &listchars<CR>', {noremap = true})
+  vim.keymap.set('i', '<F8>', ':set list! | echo &listchars<CR>', {noremap = true})
 
   -- elimitnate escape sequence lag in vim (delay after leaving insert mode)
   vim.o.timeout = false
@@ -156,25 +157,25 @@ function M.config()
   vim.cmd([[nn <F7> :setlocal spell! spell?<CR>]])
 
   -- Shortcuts for navigating between windows
-  vim.api.nvim_set_keymap('n', '<C-h>', '<C-w>h', {noremap = true})
-  vim.api.nvim_set_keymap('n', '<C-j>', '<C-w>j', {noremap = true})
-  vim.api.nvim_set_keymap('n', '<C-k>', '<C-w>k', {noremap = true})
-  vim.api.nvim_set_keymap('n', '<C-l>', '<C-w>l', {noremap = true})
+  vim.keymap.set('n', '<C-h>', '<C-w>h', {noremap = true})
+  vim.keymap.set('n', '<C-j>', '<C-w>j', {noremap = true})
+  vim.keymap.set('n', '<C-k>', '<C-w>k', {noremap = true})
+  vim.keymap.set('n', '<C-l>', '<C-w>l', {noremap = true})
 
-  vim.api.nvim_set_keymap('n', '+', '<C-w>+', {noremap = true})
-  vim.api.nvim_set_keymap('n', '-', '<C-w>-', {noremap = true})
+  vim.keymap.set('n', '+', '<C-w>+', {noremap = true})
+  vim.keymap.set('n', '-', '<C-w>-', {noremap = true})
 
 
   -- shortcut to jump to last buffer
-  vim.api.nvim_set_keymap('n', '<Backspace>', ':b#<Enter>', {noremap = true})
+  vim.keymap.set('n', '<Backspace>', ':b#<Enter>', {noremap = true})
 
   -- map insert blank line below and above to enter and shift-enter
-  vim.api.nvim_set_keymap('n', '<Enter>', 'i<Enter><ESC>', {noremap = true})
+  vim.keymap.set('n', '<Enter>', 'i<Enter><ESC>', {noremap = true})
   --vim.api.nvim_set_keymap('n', '<Shift-Enter>', 'O<ESC>', {noremap = true})
 
   -- allow easier copy and pasting into the X clipboard
-  vim.api.nvim_set_keymap('v', '<C-c>', '"+y', {noremap = true})
-  vim.api.nvim_set_keymap('n', '<leader>y', ':w ! xclip -selection clipboard<CR>', {noremap = true})
+  vim.keymap.set('v', '<C-c>', '"+y', {noremap = true})
+  vim.keymap.set('n', '<leader>y', ':w ! xclip -selection clipboard<CR>', {noremap = true})
 
 
   -- reload the file if no keys have been pressed in <updatetime> or when
@@ -187,7 +188,7 @@ function M.config()
   vim.o.relativenumber = true
   vim.o.number = true
 
-  vim.api.nvim_set_keymap('n', '<leader>n', ':set number!<CR>', {noremap = true})
+  vim.keymap.set('n', '<leader>n', ':set number!<CR>', {noremap = true})
 
   -- command for writing files when accidentally opened without sudo
   vim.cmd([[command SudoW w ! sudo tee % > /dev/null]])

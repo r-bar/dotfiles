@@ -137,7 +137,7 @@ end
 function M.lsp_callback(options)
   local lspcontainers = require 'lspcontainers'
 
-  return {
+  local servers = {
     cssls = {
       cmd = lspcontainers.command('cssls', options.containers);
     };
@@ -148,9 +148,8 @@ function M.lsp_callback(options)
       cmd = lspcontainers.command('tsserver', options.containers);
       --root_dir = util.root_pattern(".git", vim.fn.getcwd());
     };
-    vimls = {};
     yamlls = {
-      cmd = lspcontainers.command('yamlls', options.containers);
+      --cmd = lspcontainers.command('yamlls', options.containers);
     };
     jsonls = {
       cmd = lspcontainers.command('jsonls', options.containers);
@@ -160,16 +159,6 @@ function M.lsp_callback(options)
     };
     html = {
       cmd = lspcontainers.command('html', options.containers);
-    };
-    svelte = {
-      -- There seem to be issues with the containerized version of the language
-      -- server exiting early without an error. Since the svelte language server
-      -- is so framework specific it is more reasonable to expect it to be part
-      -- of the dev dependencies of the project. Just use the natively installed
-      -- version for now.
-      --cmd = lspcontainers.command('svelte', options.containers);
-      cmd = {'npm', 'exec', 'svelte-language-server', '--', '--stdio'};
-      --cmd = 'npm exec svelte-language-server -- --stdio';
     };
     gopls = {
       cmd = lspcontainers.command('gopls', options.containers);
@@ -182,9 +171,6 @@ function M.lsp_callback(options)
     };
     clangd = {
       cmd = lspcontainers.command('clangd', options.containers);
-    };
-    bashls = {
-      cmd = lspcontainers.command('bashls', options.containers);
     };
     -- haskell language server
     hls = {};
@@ -223,6 +209,26 @@ function M.lsp_callback(options)
       };
     };
   }
+
+  if vim.fn.executable('bash-language-server') then
+    -- the container version of bashls seems to be missing shellcheck
+    servers.bashls = {}
+  end
+
+  if vim.fn.executable('svelte-language-server') then
+    servers.svelte = {
+      -- There seem to be issues with the containerized version of the language
+      -- server exiting early without an error. Since the svelte language server
+      -- is so framework specific it is more reasonable to expect it to be part
+      -- of the dev dependencies of the project. Just use the natively installed
+      -- version for now.
+      --cmd = lspcontainers.command('svelte', options.containers);
+      cmd = {'npm', 'exec', 'svelte-language-server', '--', '--stdio'};
+      --cmd = 'npm exec svelte-language-server -- --stdio';
+    }
+  end
+
+  return servers
 end
 
 return M

@@ -12,14 +12,15 @@ M.packages = {
   Package:new{'https://github.com/nvim-lualine/lualine.nvim.git'},
 }
 
-local function git_status()
+function M.git_status()
+  bufnr = bufnr or 0
   -- samples: "[Git:3c477c6(master)]" "[Git(master)]"
   local fugitive = vim.fn.FugitiveStatusline()
   if fugitive == nil or fugitive == "" then
     return ""
   end
 
-  local commit, branch = fugitive:match('%[Git:?(.*)%((.*)%)%]')
+  local commit, branch = require('utils').parse_fugitive_status(fugitive)
   if commit == nil and branch == nil then
     return fugitive
   elseif commit == "" then
@@ -47,7 +48,7 @@ function M.config()
     },
     sections = {
       lualine_a = {'mode'},
-      lualine_b = {git_status, 'diff'},
+      lualine_b = {M.git_status, 'diff'},
       lualine_c = {'filename'},
       lualine_x = {require('lsp-status').status, 'diagnostics'},
       --lualine_x = {'diagnostics'},
@@ -57,7 +58,7 @@ function M.config()
     extensions = {'quickfix', 'fzf', 'fugitive'},
     inactive_sections = {
       lualine_a = {},
-      lualine_b = {'filename', git_status},
+      lualine_b = {'filename', M.git_status},
       lualine_c = {},
       lualine_x = {},
       lualine_y = {'location'},

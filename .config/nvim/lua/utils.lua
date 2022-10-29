@@ -48,7 +48,7 @@ M.pprint = pprint
 
 function run(command)
   local handle = require('io').popen(command)
-  local result = handle:read("*a")
+  local result = handle:read('*a')
   local exitcode = handle:close()
   return result, exitcode
 end
@@ -64,10 +64,9 @@ function M.data_home()
 end
 
 
-function echom(...)
+function M.echom(...)
   vim.cmd(string.format("echom '%s'", string.format(...)))
 end
-M.echom = echom
 
 -- implementation details sourced from
 -- https://github.com/junegunn/vim-plug/issues/912#issuecomment-559973123
@@ -88,7 +87,7 @@ function string.split(s, sep)
 end
 
 -- [0] 4:nvim-config, current pane 2 - (23:15 24-Oct-22)
-function tmux_parse_pane(pane_string)
+function M.tmux_parse_pane(pane_string)
   local session, window, pane = string.match(pane_string, '%[(.+)%] (%d+):.*, current pane (%d+)')
   -- return nil when you request a aliased window (like ~) and the alias does
   -- not resolve
@@ -101,9 +100,8 @@ function tmux_parse_pane(pane_string)
     pane = tonumber(pane),
   }
 end
-M.tmux_parse_pane = tmux_parse_pane
 
-function tmux_get_pane(pane)
+function M.tmux_get_pane(pane)
   local cmd = 'tmux display -p'
   -- the cmd is executed in a shell so we have to escape ~
   -- add some extra convenience
@@ -119,21 +117,22 @@ function tmux_get_pane(pane)
   end
   return tmux_parse_pane(pane_string)
 end
-M.tmux_get_pane = tmux_get_pane
 
-function tmux_marked_pane()
+function M.tmux_marked_pane()
   return tmux_get_pane('~')
 end
-M.tmux_marked_pane = tmux_get_pane
 
-function tmux_set_target(target)
+function M.tmux_set_target(target)
   TMUX_TARGET = target
 end
-M.tmux_set_target = tmux_set_target
 
-function tmux_get_target(target)
+function M.tmux_get_target(target)
   return TMUX_TARGET
 end
-M.tmux_get_target = tmux_get_target
+
+function M.parse_fugitive_status(statusline)
+  return statusline:match('%[Git:?(.*)%((.*)%)%]')
+end
+
 
 return M

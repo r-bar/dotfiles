@@ -23,7 +23,17 @@ function M.previous_git_version(bufnr)
 end
 
 M.packages = {
-
+  Package:new{
+    "https://github.com/ThePrimeagen/harpoon.git",
+    config = function()
+      require('harpoon').setup({ save_on_toggle = true })
+      vim.keymap.set('n', '<leader>m', function() require('harpoon.mark').add_file() end)
+      vim.keymap.set('n', '<leader>o', function() require('harpoon.ui').nav_next() end)
+      vim.keymap.set('n', '<leader>i', function() require('harpoon.ui').nav_prev() end)
+      vim.keymap.set('n', '<leader>p', function() require('harpoon.cmd-ui').toggle_quick_menu() end)
+      vim.keymap.set('n', '<ctrl-p>', function() require('harpoon.cmd-ui').toggle_quick_menu() end)
+    end,
+  },
   Package:new{
     'https://github.com/scrooloose/nerdcommenter.git',
     config = function()

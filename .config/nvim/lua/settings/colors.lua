@@ -2,12 +2,12 @@ local M = {}
 
 
 local LOAD_ALL = false
-local colorscheme = 'tokyonight'
+M.colorscheme = 'tokyonight'
 
 
 local function colormatch(pattern)
   if pattern == nil then error 'cannot match nil pattern' end
-  return LOAD_ALL or string.match(pattern, colorscheme)
+  return LOAD_ALL or string.match(pattern, M.colorscheme)
 end
 
 M.packages = {
@@ -267,7 +267,7 @@ function M.background_disable()
 end
 
 function M.background_enable()
-  vim.cmd('colorscheme ' .. colorscheme)
+  vim.cmd('colorscheme ' .. M.colorscheme)
   vim.g.clear_background = 0
 end
 
@@ -294,7 +294,7 @@ function M.config()
 
   -- force rendering in 256 color mode
   vim.api.nvim_set_option('t_Co', '256')
-  vim.cmd('colorscheme '..colorscheme)
+  vim.cmd('colorscheme '..M.colorscheme)
   M.background_enable()
 
   vim.cmd('command BackgroundEnable :lua require("colors").background_enable()<Enter>')

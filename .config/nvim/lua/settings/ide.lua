@@ -115,6 +115,34 @@ M.packages = {
       vim.g.EditorConfig_exclude_patterns = {'fugitive://.*', 'scp://.*'}
     end,
   };
+  Package:new{
+    'https://github.com/NarutoXY/silicon.lua.git',
+    config = function()
+      local silicon = require('silicon')
+      require('silicon').setup{
+        theme = 'OneHalfDark',
+        font = 'Fira Code',
+      }
+      vim.api.nvim_create_user_command(
+        'Screenshot',
+        function(info)
+          if vim.fn.executable('silicon') then
+            local args = {}
+            if string.match(info.args, 'clip') then
+              args.to_clip = true
+            end
+            if string.match(info.args, 'buf') then
+              args.show_buf = true
+            end
+            silicon.visualise_api(args)
+          else
+            print('Executable silicon must be installed to take screenshots')
+          end
+        end,
+        { range = '%' }
+      )
+    end,
+  }
 }
 
 return M

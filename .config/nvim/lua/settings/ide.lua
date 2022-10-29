@@ -139,7 +139,7 @@ M.packages = {
             print('Executable silicon must be installed to take screenshots')
           end
         end,
-        { range = '%' }
+        { range = '%', nargs = '*' }
       )
     end,
   }

@@ -34,6 +34,8 @@ end
 function M.config()
   vim.o.cmdheight = 2
 
+  local filename = {'filename', path = 1}
+
   require('lualine').setup{
     options = {
       theme = 'auto',
@@ -49,7 +51,7 @@ function M.config()
     sections = {
       lualine_a = {'mode'},
       lualine_b = {M.git_status, 'diff'},
-      lualine_c = {'filename'},
+      lualine_c = {filename},
       lualine_x = {require('lsp-status').status, 'diagnostics'},
       --lualine_x = {'diagnostics'},
       lualine_y = {'encoding', 'fileformat', 'filetype'},
@@ -58,7 +60,7 @@ function M.config()
     extensions = {'quickfix', 'fzf', 'fugitive'},
     inactive_sections = {
       lualine_a = {},
-      lualine_b = {'filename', M.git_status},
+      lualine_b = {filename, M.git_status},
       lualine_c = {},
       lualine_x = {},
       lualine_y = {'location'},

@@ -59,6 +59,10 @@ M.packages = {
   Package:new{'https://github.com/kana/vim-fakeclip.git'};
   Package:new{'danro/rename.vim'};
   Package:new{'tpope/vim-abolish'};
+  Package:new{'https://github.com/dhruvasagar/vim-zoom.git', config = function()
+    vim.g.zoom_tmux_z = true
+    vim.keymap.set('n', '<C-w>z', '<Plug>(zoom-toggle)', {noremap = true})
+  end};
 }
 
 function M.config()

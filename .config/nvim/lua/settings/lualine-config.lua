@@ -31,6 +31,13 @@ function M.git_status()
   end
 end
 
+function M.zoom_status()
+  local status_fn = vim.fn['zoom#statusline']
+  if status_fn ~= nil then
+    return status_fn()
+  end
+end
+
 function M.config()
   vim.o.cmdheight = 2
 
@@ -51,7 +58,7 @@ function M.config()
     sections = {
       lualine_a = {'mode'},
       lualine_b = {M.git_status, 'diff'},
-      lualine_c = {filename},
+      lualine_c = {filename, M.zoom_status},
       lualine_x = {require('lsp-status').status, 'diagnostics'},
       --lualine_x = {'diagnostics'},
       lualine_y = {'encoding', 'fileformat', 'filetype'},

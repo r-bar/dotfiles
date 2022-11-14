@@ -5,21 +5,19 @@ web application development.
 
 ## Requirements
 * [yadm](https://yadm.io/)
-* [transcrypt](https://github.com/r-bar/transcrypt) required to read /
+* [git-crypt](https://github.com/AGWA/git-crypt) required to read /
   modify encrypted files
 
 ## Cloning
 ```
 yadm clone --recursive git@github.com:r-bar/dotfiles.git
-yadm transcrypt -F -c aes-256-cbc:pbkdf2:1024 -p <PASSWORD>
-yadm checkout -f # force decryption filters to run
+base64 -d base64.txt | yadm git-crypt unlock -
 ```
 
 Bootstrap without an authorized ssh key:
 ```
 yadm clone git@github.com:r-bar/dotfiles.git
-yadm transcrypt -F -c aes-256-cbc:pbkdf2:1024 -p <PASSWORD>
-yadm checkout -f # force decryption filters to run
+base64 -d base64.txt | yadm git-crypt unlock -
 git remote set-url origin git@github.com:r-bar/dotfiles.git
 ```
 

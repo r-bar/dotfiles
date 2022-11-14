@@ -1,21 +1,21 @@
-.ssh/** filter=crypt diff=crypt merge=crypt
-/.ngrok2/ngrok.yaml filter=crypt diff=crypt merge=crypt
-/.config/syncthing/cert.pem* filter=crypt diff=crypt merge=crypt
-/.config/syncthing/https-key.pem* filter=crypt diff=crypt merge=crypt
-/.config/syncthing/key.pem* filter=crypt diff=crypt merge=crypt
-/.config/syncthing/csrftokens.txt* filter=crypt diff=crypt merge=crypt
-/.kube/config.d/* filter=crypt diff=crypt merge=crypt
-/.aws/credentials filter=crypt diff=crypt merge=crypt
-/.docker/config.json filter=crypt diff=crypt merge=crypt
-.smbcredentials filter=crypt diff=crypt merge=crypt
-.gist filter=crypt diff=crypt merge=crypt
-.gnupg filter=crypt diff=crypt merge=crypt
-/.config/doctl/config.yaml* filter=crypt diff=crypt merge=crypt
-/.conky/conky-dash/gmail.py filter=crypt diff=crypt merge=crypt
-.rclone.conf filter=crypt diff=crypt merge=crypt
-.flyrc filter=crypt diff=crypt merge=crypt
-/.config/syncthing/* filter=crypt diff=crypt merge=crypt
-.kube/** filter=crypt diff=crypt merge=crypt
-.config/linode-cli filter=crypt diff=crypt merge=crypt
-.ngrok2/** filter=crypt diff=crypt merge=crypt
-.config/mkcert filter=crypt diff=crypt merge=crypt
+.ssh/** filter=git-crypt diff=git-crypt
+/.ngrok2/ngrok.yaml filter=git-crypt diff=git-crypt
+/.config/syncthing/cert.pem* filter=git-crypt diff=git-crypt
+/.config/syncthing/https-key.pem* filter=git-crypt diff=git-crypt
+/.config/syncthing/key.pem* filter=git-crypt diff=git-crypt
+/.config/syncthing/csrftokens.txt* filter=git-crypt diff=git-crypt
+/.kube/config.d/* filter=git-crypt diff=git-crypt
+/.aws/credentials filter=git-crypt diff=git-crypt
+/.docker/config.json filter=git-crypt diff=git-crypt
+.smbcredentials filter=git-crypt diff=git-crypt
+.gist filter=git-crypt diff=git-crypt
+.gnupg filter=git-crypt diff=git-crypt
+/.config/doctl/config.yaml* filter=git-crypt diff=git-crypt
+/.conky/conky-dash/gmail.py filter=git-crypt diff=git-crypt
+.rclone.conf filter=git-crypt diff=git-crypt
+.flyrc filter=git-crypt diff=git-crypt
+/.config/syncthing/* filter=git-crypt diff=git-crypt
+.kube/** filter=git-crypt diff=git-crypt
+.config/linode-cli filter=git-crypt diff=git-crypt
+.ngrok2/** filter=git-crypt diff=git-crypt
+.config/mkcert filter=git-crypt diff=git-crypt

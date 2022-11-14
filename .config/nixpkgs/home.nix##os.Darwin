@@ -68,6 +68,7 @@ let
     hexyl
     neovim
     autoconf
+    git-crypt
   ];
 
   opsPkgs = with pkgs; [
@@ -82,6 +83,9 @@ let
 in
 
 {
+  home.stateVersion = "22.11";
+  home.username = "ryanbarth";
+  home.homeDirectory = "/Users/ryanbarth";
   programs.home-manager.enable = true;
 
   programs.fzf = {

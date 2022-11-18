@@ -13,14 +13,14 @@ function M.options.on_attach(client, bufnr)
     local keymap_opts = { noremap = true, silent = true }
     -- Set some keybinds conditional on server capabilities
     if (
-      client.resolved_capabilities.document_formatting
-      or client.resolved_capabilities.document_range_formatting
+      client.server_capabilities.document_formatting
+      or client.server_capabilities.document_range_formatting
     ) then
       buf_set_keymap("n", "<leader>f", "<cmd>lua vim.lsp.buf.formatting{timeout_ms=5000}<CR>", keymap_opts)
     end
 
     -- Set autocommands conditional on server_capabilities
-    if client.resolved_capabilities.document_highlight then
+    if client.server_capabilities.document_highlight then
       vim.api.nvim_exec([[
         augroup lsp_document_highlight
           autocmd!

@@ -7,8 +7,8 @@ setlocal expandtab
 setlocal nosmartindent
 setlocal colorcolumn=79
 
-let b:AutoPairs = extend(copy(g:AutoPairs), {
-    \"f'":"'", 'f"':'"',
-    \"r'":"'", 'r"':'"',
-    \"b'":"'", 'b"':'"'
-    \})
+"let b:AutoPairs = extend(copy(g:AutoPairs), {
+"    \"f'":"'", 'f"':'"',
+"    \"r'":"'", 'r"':'"',
+"    \"b'":"'", 'b"':'"'
+"    \})

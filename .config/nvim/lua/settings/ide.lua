@@ -52,10 +52,39 @@ M.packages = {
   Package:new{'https://github.com/tpope/vim-fugitive.git'};
   Package:new{'https://github.com/tmhedberg/matchit.git'};
   Package:new{'https://github.com/Valloric/MatchTagAlways.git'};
-  Package:new{'https://github.com/jiangmiao/auto-pairs.git'};
+  Package:new{
+    'https://github.com/jiangmiao/auto-pairs.git',
+    config = function()
+      vim.api.nvim_create_autocmd({"FileType"}, {
+        pattern = {"*.py"},
+        callback = function()
+          -- local python_pairs = {}
+          vim.b.AutoPairs = vim.tbl_extend("force", vim.g.AutoPairs, {
+            ["f'"] = "'",
+            ['f"'] = '"',
+            ["r'"] = "'",
+            ['r"'] = '"',
+            ["b'"] = "'",
+            ['b"'] = '"',
+          })
+        end,
+      })
+      --vim.api.nvim_create_autocmd({"FileType"}, {
+      --  pattern = {"*.html", "*.md", "*.html.j2"},
+      --  callback = function()
+      --    -- local python_pairs = {}
+      --    vim.b.AutoPairs = vim.tbl_extend("force", vim.g.AutoPairs, {
+      --      ["<div>"] = "</div>",
+      --    })
+      --  end,
+      --})
+    end,
+  };
   Package:new{'https://github.com/kana/vim-textobj-user.git'};
   Package:new{'glts/vim-textobj-comment'};
   Package:new{'https://github.com/AndrewRadev/splitjoin.vim.git', branch = 'main'};
+  Package:new{'https://github.com/rafamadriz/friendly-snippets.git'};
+  Package:new{'honza/vim-snippets'};
   Package:new{
     'https://github.com/L3MON4D3/LuaSnip.git',
     tag = 'v1.*',
@@ -74,17 +103,15 @@ M.packages = {
       ]])
     end,
   };
-  Package:new{'honza/vim-snippets'};
-  Package:new{'https://github.com/rafamadriz/friendly-snippets.git'};
   Package:new{'junegunn/fzf', ['do'] = function() vim.fn['fzf#install']() end};
   Package:new{
     'junegunn/fzf.vim',
     config = function()
-      vim.api.nvim_set_var('fzf_action', {
+      vim.g.fzf_action = {
         ['ctrl-t'] = 'tab split';
         ['ctrl-x'] = 'split';
         ['ctrl-v'] = 'vsplit';
-      })
+      }
       vim.cmd [[nnoremap <silent> <Leader>t :Files<Enter>]]
       vim.cmd [[nnoremap <silent> <Leader>b :Buffers<Enter>]]
       vim.cmd [[nnoremap <silent> <Leader>h :History<Enter>]]

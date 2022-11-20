@@ -3,12 +3,13 @@ local M = {}
 M.packages = {
   Package:new{'neovim/nvim-lsp'},
   Package:new{'neovim/nvim-lspconfig'},
+  Package:new{'hrsh7th/nvim-cmp'};
   Package:new{'hrsh7th/cmp-nvim-lsp', config = function()
     vim.o.completeopt = [[menuone,noinsert,noselect]]
     local cmp = require('cmp')
     local luasnip = require('luasnip')
 
-    local has_words_before = function()
+    local function has_words_before()
       local line, col = unpack(vim.api.nvim_win_get_cursor(0))
       return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match("%s") == nil
     end
@@ -29,17 +30,17 @@ M.packages = {
       },
       mapping = cmp.mapping.preset.insert({
         -- https://github.com/hrsh7th/nvim-cmp/wiki/Example-mappings#luasnip
-        --["<Tab>"] = cmp.mapping(function(fallback)
-        --  if cmp.visible() then
-        --    cmp.select_next_item()
-        --  --elseif luasnip.expand_or_jumpable() then
-        --    luasnip.expand_or_jump()
-        --  elseif has_words_before() then
-        --    cmp.complete()
-        --  else
-        --    fallback()
-        --  end
-        --end, { "i", "s" }),
+        ["<Tab>"] = cmp.mapping(function(fallback)
+          if cmp.visible() then
+            cmp.select_next_item()
+          elseif has_words_before() then
+            cmp.complete()
+          elseif luasnip.expand_or_jumpable() then
+            luasnip.expand_or_jump()
+          else
+            fallback()
+          end
+        end, { "i", "s" }),
         --["<S-Tab>"] = cmp.mapping(function(fallback)
         --  if cmp.visible() then
         --    cmp.select_prev_item()
@@ -49,12 +50,12 @@ M.packages = {
         --    fallback()
         --  end
         --end, { "i", "s" }),
-        ['<Tab>'] = cmp.mapping.select_next_item(),
+        --['<Tab>'] = cmp.mapping.select_next_item(),
         ['<S-Tab>'] = cmp.mapping.select_prev_item(),
         ['<C-b>'] = cmp.mapping.scroll_docs(-4),
         ['<C-f>'] = cmp.mapping.scroll_docs(4),
         ['<C-Space>'] = cmp.mapping.complete(),
-        ['<C-e>'] = cmp.mapping.abort(),
+        ['<C-c>'] = cmp.mapping.abort(),
         ['<CR>'] = cmp.mapping.confirm({ select = false }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
       }),
       sources = cmp.config.sources({
@@ -72,7 +73,6 @@ M.packages = {
   Package:new{'hrsh7th/cmp-buffer'};
   Package:new{'hrsh7th/cmp-path'};
   Package:new{'hrsh7th/cmp-cmdline'};
-  Package:new{'hrsh7th/nvim-cmp'};
   Package:new{'gfanto/fzf-lsp.nvim'};
   Package:new{
     'https://github.com/kosayoda/nvim-lightbulb.git';

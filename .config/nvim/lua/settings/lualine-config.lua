@@ -56,7 +56,7 @@ function M.config()
       section_separators = { left = '▶', right = '◀'},
     },
     sections = {
-      lualine_a = {'mode'},
+      lualine_a = {{'mode', fmt = function(str) return str:sub(1,1) end}},
       lualine_b = {M.git_status, 'diff'},
       lualine_c = {filename, M.zoom_status},
       lualine_x = {require('lsp-status').status, 'diagnostics'},

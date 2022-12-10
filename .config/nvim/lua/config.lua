@@ -23,7 +23,7 @@ function Config:init(path)
     config()
   end
   -- only load lspconfig module after packages have been initialized
-  self:_lsp_init()
+  --self:_lsp_init()
 end
 
 function Config:_plug_up(path)

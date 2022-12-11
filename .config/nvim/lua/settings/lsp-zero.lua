@@ -15,8 +15,9 @@ M.packages = {
   Package:new{'hrsh7th/cmp-nvim-lua'},
 
   -- Snippets
+  --already loaded in the snippets settings
   --Package:new{'L3MON4D3/LuaSnip'},
-  Package:new{'rafamadriz/friendly-snippets'},
+  --Package:new{'rafamadriz/friendly-snippets'},
 
   Package:new{'VonHeikemen/lsp-zero.nvim'},
 }
@@ -34,9 +35,29 @@ M.packages = {
 
 function M.config()
   local lspzero = require('lsp-zero')
+  local cmp_autopairs = require('nvim-autopairs.completion.cmp')
+  local cmp = require('cmp')
+
   lspzero.preset('recommended')
   lspzero.setup()
+
+  vim.api.nvim_exec([[
+  function! LspRestart()
+    lua vim.lsp.buf.clear_references()
+    lua vim.lsp.stop_client(vim.lsp.get_active_clients())
+    edit
+  endfunc
+  command LspRestart :call LspRestart()
+  ]], false)
+  vim.cmd [[command Format :lua vim.lsp.buf.format{async = false}]]
+  vim.cmd [[command LspStop :lua vim.lsp.stop_client(vim.lsp.get_active_clients())]]
+  vim.cmd [[command LspDiagnostics :lua vim.diagnostic.setqflist()]]
   vim.keymap.set('n', '<leader>e', [[<cmd>lua vim.diagnostic.open_float()<CR>]])
+
+  cmp.event:on(
+    'confirm_done',
+    cmp_autopairs.on_confirm_done()
+  )
 end
 
 return M

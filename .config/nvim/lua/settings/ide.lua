@@ -116,7 +116,49 @@ M.packages = {
         { range = '%', nargs = '*' }
       )
     end,
-  }
+  },
+  Package:new{
+    'https://github.com/windwp/nvim-autopairs.git',
+    config = function()
+      require("nvim-autopairs").setup{
+        check_ts = true,
+        ts_config = {
+          lua = {'string'},-- it will not add a pair on that treesitter node
+          javascript = {'template_string'},
+          java = false,-- don't check treesitter on java
+        }
+      }
+    end,
+  },
+  Package:new{
+    'https://github.com/jiangmiao/auto-pairs.git',
+    enabled = false,
+    config = function()
+      vim.api.nvim_create_autocmd({"FileType"}, {
+        pattern = {"*.py"},
+        callback = function()
+          -- local python_pairs = {}
+          vim.b.AutoPairs = vim.tbl_extend("force", vim.g.AutoPairs, {
+            ["f'"] = "'",
+            ['f"'] = '"',
+            ["r'"] = "'",
+            ['r"'] = '"',
+            ["b'"] = "'",
+            ['b"'] = '"',
+          })
+        end,
+      })
+      --vim.api.nvim_create_autocmd({"FileType"}, {
+      --  pattern = {"*.html", "*.md", "*.html.j2"},
+      --  callback = function()
+      --    -- local python_pairs = {}
+      --    vim.b.AutoPairs = vim.tbl_extend("force", vim.g.AutoPairs, {
+      --      ["<div>"] = "</div>",
+      --    })
+      --  end,
+      --})
+    end,
+  },
 }
 
 return M

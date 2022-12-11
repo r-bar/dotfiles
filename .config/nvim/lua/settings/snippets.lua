@@ -3,9 +3,9 @@ local M = {}
 M.packages = {
   Package:new{'https://github.com/rafamadriz/friendly-snippets.git'};
   Package:new{'honza/vim-snippets'};
+  Package:new{'https://github.com/molleweide/LuaSnip-snippets.nvim.git'};
   Package:new{
     'https://github.com/L3MON4D3/LuaSnip.git',
-    enabled = false,
     tag = 'v1.*',
     config = function()
       local ok, ls = pcall(require, 'luasnip')
@@ -20,6 +20,7 @@ M.packages = {
       }
       require("luasnip.loaders.from_vscode").lazy_load()
       require("luasnip.loaders.from_snipmate").lazy_load()
+      --ls.snippets = require("luasnip-snippets").load_snippets()
       vim.cmd([[
         " press <Tab> to expand or jump in a snippet. These can also be mapped separately
         " via <Plug>luasnip-expand-snippet and <Plug>luasnip-jump-next.

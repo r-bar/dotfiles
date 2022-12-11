@@ -201,35 +201,6 @@ M.packages = {
       }
     end,
   },
-  Package:new{
-    'https://github.com/jiangmiao/auto-pairs.git',
-    enabled = false,
-    config = function()
-      vim.api.nvim_create_autocmd({"FileType"}, {
-        pattern = {"*.py"},
-        callback = function()
-          -- local python_pairs = {}
-          vim.b.AutoPairs = vim.tbl_extend("force", vim.g.AutoPairs, {
-            ["f'"] = "'",
-            ['f"'] = '"',
-            ["r'"] = "'",
-            ['r"'] = '"',
-            ["b'"] = "'",
-            ['b"'] = '"',
-          })
-        end,
-      })
-      --vim.api.nvim_create_autocmd({"FileType"}, {
-      --  pattern = {"*.html", "*.md", "*.html.j2"},
-      --  callback = function()
-      --    -- local python_pairs = {}
-      --    vim.b.AutoPairs = vim.tbl_extend("force", vim.g.AutoPairs, {
-      --      ["<div>"] = "</div>",
-      --    })
-      --  end,
-      --})
-    end,
-  },
 }
 
 return M

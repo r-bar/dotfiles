@@ -26,6 +26,8 @@ let
     gnupg
     htop
     transcrypt
+    lima
+    aws-mfa
   ];
 
   languagePkgs = with pkgs; [
@@ -35,19 +37,20 @@ let
   ];
 
   pythonPkgs = with pkgs; [
-    python38
-    python38Packages.ipython
-    python38Packages.pip
+    python310
+    python310Packages.ipython
+    python310Packages.pip
     poetry
+    python310Packages.pynvim
   ];
 
   devtoolsPkgs = with pkgs; [
     universal-ctags
     postgresql
     sqlite
-    python38Packages.j2cli
+    python310Packages.j2cli
     git
-    fd
+    #fd
     watchexec
     exa
     #pyenv # does not exist
@@ -103,7 +106,7 @@ in
 
   programs.direnv = {
     enable = true;
-    enableNixDirenvIntegration = true;
+    nix-direnv.enable = true;
   };
 
   # extra packages without additional configuration

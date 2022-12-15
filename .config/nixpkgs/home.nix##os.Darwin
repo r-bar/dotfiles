@@ -11,6 +11,8 @@ let
   ];
 
   generalPkgs = with pkgs; [
+    coreutils
+    findutils
     gnugrep # requires by direnv-nix on MacOs
     rclone
     tmux

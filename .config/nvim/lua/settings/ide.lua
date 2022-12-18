@@ -1,5 +1,4 @@
 local M = {}
-local set = vim.api.nvim_set_var
 
 function M.git_changes(file)
   file = file or vim.api.nvim_buf_get_name(0)
@@ -24,29 +23,9 @@ end
 
 M.packages = {
   Package:new{
-    "https://github.com/ThePrimeagen/harpoon.git",
-    config = function()
-      require('harpoon').setup({ save_on_toggle = true })
-      vim.keymap.set('n', '<leader>m', function() require('harpoon.mark').add_file() end)
-      vim.keymap.set('n', '<leader>o', function() require('harpoon.ui').nav_next() end)
-      vim.keymap.set('n', '<leader>i', function() require('harpoon.ui').nav_prev() end)
-      vim.keymap.set('n', '<leader>p', function() require('harpoon.cmd-ui').toggle_quick_menu() end)
-      vim.keymap.set('n', '<ctrl-p>', function() require('harpoon.cmd-ui').toggle_quick_menu() end)
-    end,
-  },
-  Package:new{
     'https://github.com/scrooloose/nerdcommenter.git',
     config = function()
-      set('NERDAltDelims_haskell', 1)
-      --[[
-      set(
-        'NERDCustomDelimiters',
-        { purescript = { left = '--', leftAlt = '{--', rightAlt = '--}' }
-        , reason = { left = '//', leftAlt = '/*', rightAlt = '*/' }
-        , json = { left = '//' }
-        }
-      )
-      --]]
+      vim.g['NERDAltDelims_haskell'] = 1
     end
   };
   Package:new{'https://github.com/tpope/vim-fugitive.git'};
@@ -56,24 +35,6 @@ M.packages = {
   Package:new{'https://github.com/kana/vim-textobj-user.git'};
   Package:new{'glts/vim-textobj-comment'};
   Package:new{'https://github.com/AndrewRadev/splitjoin.vim.git', branch = 'main'};
-  Package:new{
-    'junegunn/fzf.vim',
-    ['do'] = function() vim.fn['fzf#install']() end,
-    config = function()
-      vim.g.fzf_action = {
-        ['ctrl-t'] = 'tab split';
-        ['ctrl-x'] = 'split';
-        ['ctrl-v'] = 'vsplit';
-      }
-      vim.cmd [[nnoremap <silent> <Leader>t :Files<Enter>]]
-      vim.cmd [[nnoremap <silent> <Leader>b :Buffers<Enter>]]
-      vim.cmd [[nnoremap <silent> <Leader>h :History<Enter>]]
-      vim.cmd [[nnoremap <silent> <leader>j :BTags<Enter>]]
-      vim.cmd [[nnoremap <silent> <leader>s :DocumentSymbols<Enter>]]
-      vim.cmd [[nnoremap <silent> <leader>a :CodeActions<Enter>]]
-      vim.cmd [[vnoremap <silent> <leader>a :RangeCodeActions<Enter>]]
-    end
-  };
   Package:new{
     'https://github.com/Yggdroot/indentLine.git';
     config = function()
@@ -131,32 +92,23 @@ M.packages = {
     end,
   },
   Package:new{
-    'https://github.com/jiangmiao/auto-pairs.git',
-    enabled = false,
+    "https://github.com/mbbill/undotree.git",
     config = function()
-      vim.api.nvim_create_autocmd({"FileType"}, {
-        pattern = {"*.py"},
-        callback = function()
-          -- local python_pairs = {}
-          vim.b.AutoPairs = vim.tbl_extend("force", vim.g.AutoPairs, {
-            ["f'"] = "'",
-            ['f"'] = '"',
-            ["r'"] = "'",
-            ['r"'] = '"',
-            ["b'"] = "'",
-            ['b"'] = '"',
-          })
-        end,
-      })
-      --vim.api.nvim_create_autocmd({"FileType"}, {
-      --  pattern = {"*.html", "*.md", "*.html.j2"},
-      --  callback = function()
-      --    -- local python_pairs = {}
-      --    vim.b.AutoPairs = vim.tbl_extend("force", vim.g.AutoPairs, {
-      --      ["<div>"] = "</div>",
-      --    })
-      --  end,
-      --})
+      vim.keymap.set('n', '<leader>u', ':UndotreeToggle<CR>')
+      vim.cmd [[
+      if has("persistent_undo")
+        let target_path = expand('~/.undodir')
+
+        " create the directory and any parent directories
+        " if the location does not exist.
+        if !isdirectory(target_path)
+          call mkdir(target_path, "p", 0700)
+        endif
+
+        let &undodir=target_path
+        set undofile
+      endif
+      ]]
     end,
   },
 }

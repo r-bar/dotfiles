@@ -19,6 +19,9 @@ M.packages = {
   --Package:new{'L3MON4D3/LuaSnip'},
   --Package:new{'rafamadriz/friendly-snippets'},
 
+  -- Extras
+  Package:new{'gfanto/fzf-lsp.nvim'};
+
   Package:new{'VonHeikemen/lsp-zero.nvim'},
 }
 

@@ -63,6 +63,7 @@ M.packages = {
     vim.g.zoom_tmux_z = true
     vim.keymap.set('n', '<C-w>z', '<Plug>(zoom-toggle)', {noremap = true})
   end};
+  Package:new{'IndianBoy42/tree-sitter-just'},
 }
 
 function M.config()

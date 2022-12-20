@@ -4,7 +4,7 @@ local run = require('utils').run
 local set = vim.api.nvim_set_var
 
 M.packages = {
-  Package:new{
+  Package:new {
     'https://github.com/tpope/vim-tbone.git',
     config = function()
       vim.api.nvim_create_user_command(
@@ -15,51 +15,51 @@ M.packages = {
             print('tmux target is not set')
             return
           elseif info.args == "" then
-            print('tmux target is '..TMUX_TARGET)
+            print('tmux target is ' .. TMUX_TARGET)
             return
           end
           TMUX_TARGET = info.args
-          echom('tmux target is now '..TMUX_TARGET)
+          echom('tmux target is now ' .. TMUX_TARGET)
         end,
-        {nargs = '?', desc = 'Set the default tmux pane target for other tmux commands like Tcmd'}
+        { nargs = '?', desc = 'Set the default tmux pane target for other tmux commands like Tcmd' }
       )
     end,
   }, --  " tmux integration},
-  Package:new{'https://github.com/nvim-lua/plenary.nvim.git'};
-  Package:new{'https://github.com/vim-scripts/LargeFile.git'};
-  Package:new{'https://github.com/vim-scripts/IndentAnything.git'};
-  Package:new{'https://github.com/MarcWeber/vim-addon-local-vimrc.git'};
-  Package:new{'https://github.com/michaeljsmith/vim-indent-object.git'};
-  Package:new{'https://github.com/tpope/vim-repeat.git'};
---  Package:new{
---    'https://github.com/xolox/vim-session.git';
---    requires = 'https://github.com/xolox/vim-misc.git':
---    config = function()
---      set('session_autoload', 'no')
---      set('session_autosave', 'yes')
---      set('session_autosave_to', 'autosave')
---      set('session_autosave_silent', 'yes')
---    end;
---  };
-  Package:new{'https://github.com/tpope/vim-surround.git'};
+  Package:new { 'https://github.com/nvim-lua/plenary.nvim.git' };
+  Package:new { 'https://github.com/vim-scripts/LargeFile.git' };
+  Package:new { 'https://github.com/vim-scripts/IndentAnything.git' };
+  Package:new { 'https://github.com/MarcWeber/vim-addon-local-vimrc.git' };
+  Package:new { 'https://github.com/michaeljsmith/vim-indent-object.git' };
+  Package:new { 'https://github.com/tpope/vim-repeat.git' };
+  --  Package:new{
+  --    'https://github.com/xolox/vim-session.git';
+  --    requires = 'https://github.com/xolox/vim-misc.git':
+  --    config = function()
+  --      set('session_autoload', 'no')
+  --      set('session_autosave', 'yes')
+  --      set('session_autosave_to', 'autosave')
+  --      set('session_autosave_silent', 'yes')
+  --    end;
+  --  };
+  Package:new { 'https://github.com/tpope/vim-surround.git' };
   -- more control about where a buffer is sent from quickfix
-  Package:new{'https://github.com/yssl/QFEnter.git'};
+  Package:new { 'https://github.com/yssl/QFEnter.git' };
   -- additional quickfix window keybindings and more
-  Package:new{'https://github.com/romainl/vim-qf.git', config = function()
+  Package:new { 'https://github.com/romainl/vim-qf.git', config = function()
     -- vim-qf use ack.vim style quickfix mappings
     vim.g.qf_mapping_ack_style = 1
-  end};
-  Package:new{'https://github.com/wellle/targets.vim'};
-  Package:new{'https://github.com/easymotion/vim-easymotion.git', config = function()
+  end };
+  Package:new { 'https://github.com/wellle/targets.vim' };
+  Package:new { 'https://github.com/easymotion/vim-easymotion.git', config = function()
     --set('EasyMotion_smartcase', 1)
     --set('EasyMotion_do_mapping', 1)
-  end};
+  end };
   -- nix package manager syntax
-  Package:new{'LnL7/vim-nix'};
-  Package:new{'https://github.com/kana/vim-fakeclip.git'};
-  Package:new{'danro/rename.vim'};
-  Package:new{'tpope/vim-abolish'};
-  Package:new{'https://github.com/dhruvasagar/vim-zoom.git', config = function()
+  Package:new { 'LnL7/vim-nix' };
+  Package:new { 'https://github.com/kana/vim-fakeclip.git' };
+  Package:new { 'danro/rename.vim' };
+  Package:new { 'tpope/vim-abolish' };
+  Package:new { 'https://github.com/dhruvasagar/vim-zoom.git', config = function()
     vim.g.zoom_tmux_z = true
     vim.keymap.set('n', '<C-w>z', '<Plug>(zoom-toggle)', {noremap = true})
   end};
@@ -76,9 +76,9 @@ function M.config()
   vim.o.expandtab = true
 
   vim.o.listchars = 'space:.,nbsp:+,tab:⇥ ,extends:>,precedes:<,trail:~,'
-  vim.keymap.set('n', '<F8>', ':set list! | echo &listchars<CR>', {noremap = true})
-  vim.keymap.set('v', '<F8>', ':set list! | echo &listchars<CR>', {noremap = true})
-  vim.keymap.set('i', '<F8>', ':set list! | echo &listchars<CR>', {noremap = true})
+  vim.keymap.set('n', '<F8>', ':set list! | echo &listchars<CR>', { noremap = true })
+  vim.keymap.set('v', '<F8>', ':set list! | echo &listchars<CR>', { noremap = true })
+  vim.keymap.set('i', '<F8>', ':set list! | echo &listchars<CR>', { noremap = true })
 
   -- elimitnate escape sequence lag in vim (delay after leaving insert mode)
   vim.o.timeout = false
@@ -148,7 +148,7 @@ function M.config()
 
   -- set a directory so .swp and backup files are not spread around the system
   --if not vim.fn.isdirectory(vim.env.HOME .. '/.cache/nvim/swpbak') then
-    --vim.cmd([[:silent !mkdir -p ~/.cache/nvim/swpbak > /dev/null 2>&1]])
+  --vim.cmd([[:silent !mkdir -p ~/.cache/nvim/swpbak > /dev/null 2>&1]])
   --end
   --vim.o.backupdir = [[~/.cache/nvim/swpbak//,/tmp//]]
   --vim.o.directory = [[~/.cache/nvim/swpbak//,/tmp//]]
@@ -173,38 +173,37 @@ function M.config()
   vim.cmd([[nn <F7> :setlocal spell! spell?<CR>]])
 
   -- Shortcuts for navigating between windows
-  vim.keymap.set('n', '<C-h>', '<C-w>h', {noremap = true})
-  vim.keymap.set('n', '<C-j>', '<C-w>j', {noremap = true})
-  vim.keymap.set('n', '<C-k>', '<C-w>k', {noremap = true})
-  vim.keymap.set('n', '<C-l>', '<C-w>l', {noremap = true})
+  vim.keymap.set('n', '<C-h>', '<C-w>h', { noremap = true })
+  vim.keymap.set('n', '<C-j>', '<C-w>j', { noremap = true })
+  vim.keymap.set('n', '<C-k>', '<C-w>k', { noremap = true })
+  vim.keymap.set('n', '<C-l>', '<C-w>l', { noremap = true })
 
-  vim.keymap.set('n', '+', '<C-w>+', {noremap = true})
-  vim.keymap.set('n', '-', '<C-w>-', {noremap = true})
+  vim.keymap.set('n', '+', '<C-w>+', { noremap = true })
+  vim.keymap.set('n', '-', '<C-w>-', { noremap = true })
 
 
   -- shortcut to jump to last buffer
-  vim.keymap.set('n', '<Backspace>', ':b#<Enter>', {noremap = true})
+  vim.keymap.set('n', '<Backspace>', ':b#<Enter>', { noremap = true })
 
   -- map insert blank line below and above to enter and shift-enter
-  vim.keymap.set('n', '<Enter>', 'i<Enter><ESC>', {noremap = true})
+  vim.keymap.set('n', '<Enter>', 'i<Enter><ESC>', { noremap = true })
   --vim.api.nvim_set_keymap('n', '<Shift-Enter>', 'O<ESC>', {noremap = true})
 
   -- allow easier copy and pasting into the X clipboard
-  vim.keymap.set('v', '<C-c>', '"+y', {noremap = true})
-  vim.keymap.set('n', '<leader>y', ':w ! xclip -selection clipboard<CR>', {noremap = true})
+  vim.keymap.set('v', '<C-c>', '"+y', { noremap = true })
+  vim.keymap.set('n', '<leader>y', ':w ! xclip -selection clipboard<CR>', { noremap = true })
 
+  -- Q mode sucks, never enter Q mode
+  vim.keymap.set('n', 'Q', "<nop>")
 
   -- reload the file if no keys have been pressed in <updatetime> or when
   -- entering the buffer
   vim.cmd([[au BufEnter * :silent! !]])
 
-
   -- setup the gutter display
   vim.o.signcolumn = 'yes'
   vim.o.relativenumber = true
   vim.o.number = true
-
-  vim.keymap.set('n', '<leader>n', ':set number!<CR>', {noremap = true})
 
   -- command for writing files when accidentally opened without sudo
   vim.cmd([[command SudoW w ! sudo tee % > /dev/null]])
@@ -238,7 +237,7 @@ function M.config()
         if reg == nil then
           reg = arg
         else
-          cmd_args[#cmd_args+1] = arg
+          cmd_args[#cmd_args + 1] = arg
         end
       end
       cmd_args = table.concat(cmd_args, " ")
@@ -260,8 +259,8 @@ function M.config()
     "CmdIns",
     function(info)
       --print(vim.inspect(info))
-      vim.cmd('CmdReg " '..info.args)
-      vim.cmd[[norm Pl]]
+      vim.cmd('CmdReg " ' .. info.args)
+      vim.cmd [[norm Pl]]
     end,
     {
       nargs = '+',

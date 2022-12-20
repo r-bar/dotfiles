@@ -3,8 +3,8 @@ local M = {}
 M.packages = {
   Package:new{
     'nvim-treesitter/nvim-treesitter',
-    ['do'] = function() vim.cmd 'TSUpdate' end,
-    branch = '0.5-compat',
+    ['do'] = function() vim.cmd 'TSUpdateSync' end,
+    branch = 'master',
     config = function()
       require('nvim-treesitter.configs').setup{
         ensure_installed = "all",

@@ -3,7 +3,7 @@
 
 \x auto
 
-\set ECHO_HIDDEN true
+--\set ECHO_HIDDEN true
 \pset linestyle 'unicode'
 
 \setenv EDITOR nvim

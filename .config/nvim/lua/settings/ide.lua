@@ -36,23 +36,6 @@ M.packages = {
   Package:new{'glts/vim-textobj-comment'};
   Package:new{'https://github.com/AndrewRadev/splitjoin.vim.git', branch = 'main'};
   Package:new{
-    'junegunn/fzf.vim',
-    config = function()
-      vim.g.fzf_action = {
-        ['ctrl-t'] = 'tab split';
-        ['ctrl-x'] = 'split';
-        ['ctrl-v'] = 'vsplit';
-      }
-      vim.cmd [[nnoremap <silent> <Leader>t :Files<Enter>]]
-      vim.cmd [[nnoremap <silent> <Leader>b :Buffers<Enter>]]
-      vim.cmd [[nnoremap <silent> <Leader>h :History<Enter>]]
-      vim.cmd [[nnoremap <silent> <leader>j :BTags<Enter>]]
-      vim.cmd [[nnoremap <silent> <leader>s :DocumentSymbols<Enter>]]
-      vim.cmd [[nnoremap <silent> <leader>a :CodeActions<Enter>]]
-      vim.cmd [[vnoremap <silent> <leader>a :RangeCodeActions<Enter>]]
-    end
-  };
-  Package:new{
     'https://github.com/Yggdroot/indentLine.git';
     config = function()
       vim.g.indentLine_char = "¦"

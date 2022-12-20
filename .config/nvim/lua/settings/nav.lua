@@ -23,7 +23,6 @@ M.packages = {
   },
   Package:new{
     "junegunn/fzf.vim",
-    ["do"] = function() vim.fn["fzf#install"]() end,
     config = function()
       vim.g.fzf_action = {
         ["ctrl-t"] = "tab split";

@@ -140,6 +140,7 @@ function M.config()
     vim.o.grepformat = [[%f:%l:%c:%m,%f:%l:%m]]
   end
   vim.cmd([[autocmd QuickFixCmdPost * nested cwindow 20 | redraw!]])
+  vim.keymap.set("n", "<leader>g", ':grep "<cword>"<CR>')
 
   -- keep a couple lines between the cursor and the edge of the screen while
   -- scrolling

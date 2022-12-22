@@ -32,3 +32,4 @@ init_kubeconfig() {
 }
 
 init_kubeconfig
+yadm alt

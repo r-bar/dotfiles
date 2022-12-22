@@ -61,6 +61,12 @@ function M.config()
     cmp_autopairs.on_confirm_done()
   )
   lspzero.setup()
+
+  vim.api.nvim_create_autocmd({"VimLeavePre"}, {
+    callback = function()
+      vim.fn.system("rm $HOME/.local/state/nvim/lsp.log")
+    end,
+  })
 end
 
 return M

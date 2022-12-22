@@ -1,15 +1,15 @@
 local M = {}
 
 M.packages = {
-  Package:new{'https://github.com/nvim-lua/lsp-status.nvim.git'},
+  Package:new { 'https://github.com/nvim-lua/lsp-status.nvim.git' },
   -- required for lualine
-  Package:new{
+  Package:new {
     'https://github.com/kyazdani42/nvim-web-devicons.git',
     config = function()
-      require('nvim-web-devicons').setup{}
+      require('nvim-web-devicons').setup {}
     end,
   },
-  Package:new{'https://github.com/nvim-lualine/lualine.nvim.git'},
+  Package:new { 'https://github.com/nvim-lualine/lualine.nvim.git' },
 }
 
 function M.git_status()
@@ -41,36 +41,36 @@ end
 function M.config()
   vim.o.cmdheight = 2
 
-  local filename = {'filename', path = 1}
+  local filename = { 'filename', path = 1 }
 
-  require('lualine').setup{
+  require('lualine').setup {
     options = {
       theme = 'auto',
       icons_enabled = false,
       --component_separators = { left = '>', right = '<'},
       --component_separators = { left = '|', right = '|'},
-      component_separators = { left = '', right = ''},
+      component_separators = { left = '', right = '' },
       --section_separators = { left = '⯈', right = '⯇'},
       --section_separators = { left = '', right = ''},
       --section_separators = { left = '◣', right = '◢'},
-      section_separators = { left = '▶', right = '◀'},
+      section_separators = { left = '▶', right = '◀' },
     },
     sections = {
-      lualine_a = {{'mode', fmt = function(str) return str:sub(1,1) end}},
-      lualine_b = {M.git_status, 'diff'},
-      lualine_c = {filename, M.zoom_status},
-      lualine_x = {require('lsp-status').status, 'diagnostics'},
+      lualine_a = { { 'mode', fmt = function(str) return str:sub(1, 1) end } },
+      lualine_b = { M.git_status, 'diff' },
+      lualine_c = { filename, M.zoom_status },
+      lualine_x = { require('lsp-status').status, 'diagnostics' },
       --lualine_x = {'diagnostics'},
-      lualine_y = {'encoding', 'fileformat', 'filetype'},
-      lualine_z = {'progress', 'location'},
+      lualine_y = { 'encoding', 'fileformat', 'filetype' },
+      lualine_z = { 'progress', 'location' },
     },
-    extensions = {'quickfix', 'fzf', 'fugitive'},
+    extensions = { 'quickfix', 'fzf', 'fugitive' },
     inactive_sections = {
       lualine_a = {},
-      lualine_b = {filename, M.git_status},
+      lualine_b = { M.git_status, filename },
       lualine_c = {},
       lualine_x = {},
-      lualine_y = {'location'},
+      lualine_y = { 'location' },
       lualine_z = {}
     },
   }

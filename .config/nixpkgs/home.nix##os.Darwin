@@ -38,12 +38,15 @@ let
     yarn
   ];
 
+  pythonEnv = pkgs.python310.withPackages (ps: [
+    ps.pynvim
+    ps.ipython
+    ps.pip
+  ]);
+
   pythonPkgs = with pkgs; [
-    python310
-    python310Packages.ipython
-    python310Packages.pip
+    pythonEnv
     poetry
-    python310Packages.pynvim
   ];
 
   devtoolsPkgs = with pkgs; [

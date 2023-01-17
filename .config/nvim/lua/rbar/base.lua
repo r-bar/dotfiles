@@ -89,16 +89,6 @@ function M.config()
   -- Set F7 to toggle the spellchecker
   vim.cmd([[nn <F7> :setlocal spell! spell?<CR>]])
 
-  -- Shortcuts for navigating between windows
-  vim.keymap.set('n', '<C-h>', '<C-w>h', { noremap = true })
-  vim.keymap.set('n', '<C-j>', '<C-w>j', { noremap = true })
-  vim.keymap.set('n', '<C-k>', '<C-w>k', { noremap = true })
-  vim.keymap.set('n', '<C-l>', '<C-w>l', { noremap = true })
-
-  vim.keymap.set('n', '+', '<C-w>+', { noremap = true })
-  vim.keymap.set('n', '-', '<C-w>-', { noremap = true })
-
-
   -- shortcut to jump to last buffer
   vim.keymap.set('n', '<Backspace>', ':b#<Enter>', { noremap = true })
 

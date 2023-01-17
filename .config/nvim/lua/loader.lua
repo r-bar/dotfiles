@@ -25,13 +25,13 @@ M.CURRENT_SNAPSHOT_FILE = vim.fn.stdpath("config") .. "/snapshots/current"
 -- 2. Loads all package (use) declarations
 -- 3. Syncs packages if necessary
 -- 4. Runs all config functions
-function M.init()
+function M.packer_init()
   local packer_bootstrap, packer = M.ensure_packer()
 
-  packer.set_handler("config", function(_plugins, plugin, value)
-    local plugin_name = plugin[1]
-    M.global_configs[plugin_name] = value
-  end)
+  --packer.set_handler("config", function(_plugins, plugin, value)
+  --  local plugin_name = plugin[1]
+  --  M.global_configs[plugin_name] = value
+  --end)
 
   packer.startup{function(use)
     use "wbthomason/packer.nvim"
@@ -50,6 +50,28 @@ function M.init()
       print(string.format("Error running config in %s: %s", module_name, e))
     end
   end
+end
+
+function M.lazy_init()
+  local opts = {defaults = { lazy = false }}
+  local bootstrapped, lazy = M.ensure_lazy()
+
+  if bootstrapped then
+    lazy.sync()
+  end
+
+  lazy.setup(M.global_uses, opts)
+
+  for module_name, config in pairs(M.global_configs) do
+    local success, err = pcall(config)
+    if not success then
+      print(string.format("Error running config in %s: %s", module_name, e))
+    end
+  end
+end
+
+function M.init()
+  return M.lazy_init()
 end
 
 -- Reloads all registered config modules and re-runs .init()
@@ -74,6 +96,27 @@ function M.ensure_packer()
     installed = true
   end
   return installed, require("packer")
+end
+
+function M.ensure_lazy()
+  local installed = false
+  local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
+  if not vim.loop.fs_stat(lazypath) then
+    vim.fn.system({
+      "git",
+      "clone",
+      "--filter=blob:none",
+      "https://github.com/folke/lazy.nvim.git",
+      "--branch=stable", -- latest stable release
+      lazypath,
+    })
+  end
+  vim.opt.rtp:prepend(lazypath)
+  return installed, require("lazy")
+end
+
+function M.ensure_package_manager()
+  return M.ensure_lazy()
 end
 
 -- Adds packer use() arguments to a global registry to be loaded later during M.init()

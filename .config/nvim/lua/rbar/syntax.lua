@@ -7,7 +7,6 @@ function M.packages(use)
   use "https://github.com/towolf/vim-helm.git"
   use "https://github.com/google/vim-jsonnet.git"
   use "https://github.com/r-bar/ebnf.vim.git"
-  use { "https://github.com/sheerun/vim-polyglot.git", ft = { "plantuml" } }
   use { "https://github.com/cespare/vim-toml.git", ft = "toml" }
   use "https://github.com/chr4/nginx.vim.git"
   use {'https://github.com/digitaltoad/vim-pug.git', ft = 'pug'}

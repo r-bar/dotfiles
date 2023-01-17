@@ -8,7 +8,10 @@ loader.lazy_use 'danro/rename.vim'
 loader.lazy_use 'https://github.com/tmhedberg/matchit.git'
 loader.lazy_use 'https://github.com/Valloric/MatchTagAlways.git'
 loader.lazy_use 'https://github.com/kana/vim-textobj-user.git'
-loader.lazy_use 'glts/vim-textobj-comment'
+loader.lazy_use {
+  'glts/vim-textobj-comment',
+  dependencies = {'https://github.com/kana/vim-textobj-user.git'},
+}
 loader.lazy_use{'https://github.com/AndrewRadev/splitjoin.vim.git', branch = 'main'}
 loader.lazy_use{
   'https://github.com/Yggdroot/indentLine.git';
@@ -103,6 +106,9 @@ loader.lazy_use{
   end,
 }
 loader.lazy_use 'https://github.com/scrooloose/nerdcommenter.git'
+loader.lazy_use 'https://github.com/tpope/vim-fugitive.git'
+loader.lazy_use 'https://github.com/romainl/vim-qf.git'
+loader.lazy_use 'https://github.com/yssl/QFEnter.git'
 
 
 loader.load 'rbar/base'
@@ -110,9 +116,8 @@ loader.load 'rbar/colors'
 loader.load 'rbar/lualine'
 loader.load 'rbar/treesitter'
 loader.load 'rbar/lsp'
-loader.load 'rbar/harpoon'
-loader.load 'rbar/fzf'
 loader.load 'rbar/syntax'
+loader.load 'rbar/nav'
 loader.load 'rbar/ft_python'
 
 vim.g.python3_host_prog = vim.env.NVIM_PYTHON or '/usr/bin/python3'

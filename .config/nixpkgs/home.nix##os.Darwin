@@ -38,6 +38,7 @@ let
     yarn
   ];
 
+  # https://github.com/NixOS/nixpkgs/blob/29647c9b582338b23577be9f9bddba4295e16111/doc/languages-frameworks/python.section.md#ad-hoc-temporary-python-environment-with-nix-shell-ad-hoc-temporary-python-environment-with-nix-shell
   pythonEnv = pkgs.python310.withPackages (ps: [
     ps.pynvim
     ps.ipython

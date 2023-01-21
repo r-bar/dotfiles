@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
 import os
+import re
 import sys
 import shutil
+from typing import NamedTuple, Optional
 from subprocess import run, SubprocessError
 
 
@@ -13,13 +15,131 @@ Inserts into the system clipboard from stdin or prints the clipboard contents
 to stdout.
 
 Options:
+    -s, --ssh   Send over connecting ssh socket
     -h, --help  This help message.
     -o          Force printing to stdout
 """
 
 
-def clipboard_commands() -> tuple[list[str], list[str]]:
+class NetstatInternetEntry(NamedTuple):
+    proto: str
+    recvq: int
+    sendq: int
+    local_addr: str
+    remote_addr: str
+    state: Optional[str]
+
+    def parse(cls, line: str, columns: list[tuple[int, int]]) -> 'NetstatInternetEntry':
+        parts = [
+            line[start:end].strip() or None
+            for start, end in columns
+        ]
+        proto = parts[0]
+        state = None
+        assert proto == 'unix', f'unknown protocol {proto}'
+        if len(parts) == 6:
+            state = parts[5]
+        return cls(
+            parts[0],
+            int(parts[1]),
+            int(parts[2]),
+            parts[3],
+            parts[4],
+            state,
+        )
+
+
+class NetstatUnixEntry(NamedTuple):
+    proto: str
+    refcnt: int
+    flags: str
+    type: str
+    state: str
+    inode: int
+    path: str | None
+
+    def parse(cls, line: str, columns: list[tuple[int, int]]) -> 'NetstatUnixEntry':
+        parts = [
+            line[start:end].strip() or None
+            for start, end in columns
+        ]
+        proto = parts[0]
+        path = None
+        assert (
+            proto.startswith('raw')
+            or proto.startswith('tcp')
+            or proto.startswith('udp')
+        ), f"unknown protocol {proto}"
+        if len(parts) == 7:
+            path = parts[6]
+        return cls(
+            parts[0],
+            int(parts[1]),
+            parts[2],
+            parts[3],
+            parts[4],
+            int(parts[5]),
+            path,
+        )
+
+
+class Netstat:
+    cmd = ["netstat", "-ln"]
+    def __init__(self):
+        proc = run(self.cmd, check=True, capture_output=True, text=True)
+        self.inet_entries, self.unix_entries = self.parse_output(proc.stdout)
+
+    @classmethod
+    def parse_output(cls, output: str) -> tuple[list, list]:
+        section = None
+        columns = None
+        inet_entries = []
+        unix_entries = []
+        for line in output.splitlines():
+            if line.startswith(' ') or line.startswith('('):
+                continue # trash / comment lines
+            elif line.startswith('Active Internet connections'):
+                section = 'internet'
+                columns = None
+                continue
+            elif line.startswith('Active UNIX domain sockets'):
+                section = 'unix'
+                columns = None
+                continue
+
+            match (section, columns):
+                case ('internet', None):
+                    columns = cls.parse_header(line)
+                case ('unix', None):
+                    columns = cls.parse_header(line)
+                case ('internet', _):
+                    inet_entries.append(NetstatInternetEntry.parse(line, columns))
+                case ('unix', _):
+                    unix_entries.append(NetstatUnixEntry.parse(line, columns))
+
+        return inet_entries, unix_entries
+
+    @staticmethod
+    def parse_header(header_line):
+        return [(match.start(), match.end()) for match in re.finditer(r'\S+\s+', header_line)]
+
+    @classmethod
+    def ssh_reverse_socket(cls, local_addr='127.0.0.1:2222') -> NetstatInternetEntry | None:
+        for entry in cls().inet_entries:
+            if entry.state == 'LISTEN' and entry.proto == 'tcp' and entry.local_addr == local_addr:
+                return entry
+
+
+def clipboard_commands(remote=False) -> tuple[list[str], list[str]]:
     """Returns a tuple of the in and out commands"""
+    if remote:
+        if os.environ.get('SSH_CONNECTION') and (socket := Netstat.ssh_reverse_socket()):
+            return (
+                ['ssh', socket.local_addr, 'clip'],
+                ['ssh', socket.local_addr, 'clip'],
+            )
+        else:
+            raise Exception('No active SSH socket')
     if os.environ.get('WAYLAND_DISPLAY'):
         return ['wl-copy'], ['wl-paste']
     if os.environ.get('DISPLAY'):
@@ -44,7 +164,9 @@ def main():
         print(USAGE)
         exit(0)
 
-    in_cmd, out_cmd = clipboard_commands()
+    remote = '--ssh' in sys.argv or '-s' in sys.argv
+
+    in_cmd, out_cmd = clipboard_commands(remote=remote)
 
     if sys.stdin.isatty() or '-o' in sys.argv:
         # output not captured, passes through to stdout
@@ -56,6 +178,6 @@ def main():
 if __name__ == '__main__':
     try:
         main()
-    except SubprocessError as exc:
+    except Exception as exc:
         print(exc.stderr, file=sys.stderr)
         exit(1)

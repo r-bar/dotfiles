@@ -20,7 +20,9 @@ Options:
 
 def clipboard_commands() -> tuple[list[str], list[str]]:
     """Returns a tuple of the in and out commands"""
-    if shutil.which('xclip'):
+    if os.environ.get('WAYLAND_DISPLAY'):
+        return ['wl-copy'], ['wl-paste']
+    if os.environ.get('DISPLAY'):
         return (
             ['xclip', '-selection', 'clipboard', '-in'],
             ['xclip', '-selection', 'clipboard', '-out'],

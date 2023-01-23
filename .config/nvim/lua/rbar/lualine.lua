@@ -1,14 +1,39 @@
 local M = {}
 
 function M.packages(use)
-	use 'nvim-lualine/lualine.nvim'
-	use 'kyazdani42/nvim-web-devicons'
+  use 'nvim-lualine/lualine.nvim'
+  use 'kyazdani42/nvim-web-devicons'
 end
 
 function M.config()
-	require('lualine').setup{
-		options = { theme = 'tokyonight' }
-	}
+  require('lualine').setup{
+    options = { theme = 'auto' },
+    sections = {
+      lualine_a = {
+        { 'mode', fmt = function(str) return str:sub(1,1) end },
+      },
+      lualine_b = {'branch', 'diff'},
+
+      lualine_c = {'filename'},
+      lualine_x = {
+        'diagnostics',
+        'encoding',
+        'fileformat',
+        'filetype',
+      },
+      lualine_y = {'progress'},
+      lualine_z = {'location'},
+    },
+    inactive_sections = {
+      lualine_a = {},
+      lualine_b = {},
+      lualine_c = {'filename'},
+      lualine_x = {'location'},
+      lualine_y = {},
+      lualine_z = {},
+    },
+    extensions = {'fzf'},
+  }
 end
 
 return M

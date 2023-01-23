@@ -24,7 +24,7 @@ function M.packages(use)
   }
 
   use 'nvim-lua/plenary.nvim'
-	use {
+  use {
     'ThePrimeagen/harpoon',
     dependencies = {'nvim-lua/plenary.nvim'},
     config = function()

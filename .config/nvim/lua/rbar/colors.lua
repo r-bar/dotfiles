@@ -1,11 +1,30 @@
 local M = {}
 
 function M.packages(use)
-	use 'folke/tokyonight.nvim'
-end
+  use {
+    'folke/tokyonight.nvim',
+    enabled = false,
+    config = function()
+      vim.cmd[[colorscheme tokyonight-night]]
+    end,
+  }
 
-function M.config()
-	vim.cmd[[colorscheme tokyonight-night]]
+  use {
+    'shaunsingh/nord.nvim',
+    enabled = false,
+    config = function()
+      require('nord').set()
+    end,
+  }
+
+  use {
+    'EdenEast/nightfox.nvim',
+    enabled = true,
+    config = function()
+      require('nightfox').setup({})
+      vim.cmd[[colorscheme nightfox]]
+    end,
+  }
 end
 
 return M

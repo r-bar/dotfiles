@@ -5,6 +5,7 @@ import sys
 import string
 import random
 from argparse import ArgumentParser
+from contextlib import contextmanager
 from concurrent.futures import ThreadPoolExecutor
 from configparser import ConfigParser
 from functools import partial
@@ -24,8 +25,15 @@ class Cli(ArgumentParser):
         self.add_argument("--name", default=generate_name())
         self.add_argument("--bucket", default=os.environ["UPLOAD_BUCKET"])
         self.add_argument("--base-path", default=os.environ.get("UPLOAD_BASE_PATH", ""))
+        folder_strat = self.add_mutually_exclusive_group()
+        folder_strat.add_argument('--zip', const='zip', action='store_const', dest='index_strat')
+        folder_strat.add_argument('--index', const='index', action='store_const', dest='index_strat')
         self.add_argument("file", type=Path)
         self.args = self.parse_args(argv)
+
+    @property
+    def folder_strat(self) -> str:
+        return self.args.folder_strat or 'index'
 
     def base_target(self) -> str:
         path = PurePosixPath(self.args.bucket) / self.args.base_path / self.args.name
@@ -156,7 +164,11 @@ class IndexUploader:
                 upload(index_path, self.target, self.public)
             self.index_uploaded = True
 
-    def generate_index_link(self) -> str:
+    def upload(self) -> str:
+        self.upload_files()
+        self.upload_index()
+
+    def generate_link(self) -> str:
         if not self.index_uploaded:
             raise Exception("index.html has not been uploaded")
         if self.public:
@@ -204,27 +216,45 @@ def generate_download_url(target: str, expire: str = "1w") -> str:
     return proc.stdout.strip()
 
 
+@contextmanager
+def zip(target: str) -> str:
+    """Zip the target into a temporary directory. Delete the directory and the contained filed when the contextmanager exits"""
+    with TemporaryDirectory() as tmpdir:
+        zip_target = Path(tmpdir.name) / f"{target}.zip"
+        cmd = ["zip", "-r", zip_target, target]
+        run(cmd, check=True)
+        yield zip_target
+
+
 def main():
     cli = Cli()
-    if cli.args.file.is_dir():
-        uploader = IndexUploader(
-            cli.args.file,
-            cli.base_target(),
-            expire=cli.args.expire,
-            public=cli.args.public,
-        )
-        uploader.upload_files()
-        uploader.upload_index()
-        link = uploader.generate_index_link()
-    else:
-        uploader = FileUploader(
-            cli.args.file,
-            cli.base_target(),
-            expire=cli.args.expire,
-            public=cli.args.public,
-        )
-        uploader.upload()
-        link = uploader.generate_link()
+    match (cli.args.file.is_dir(), cli.folder_strat):
+        case (True, "index"):
+            uploader = IndexUploader(
+                cli.args.file,
+                cli.base_target(),
+                expire=cli.args.expire,
+                public=cli.args.public,
+            )
+            uploader.upload()
+        case (True, "zip"):
+            with zip(cli.args.file) as zip_file:
+                uploader = FileUploader(
+                    zip_file,
+                    cli.base_target(),
+                    expire=cli.args.expire,
+                    public=cli.args.public,
+                )
+                uploader.upload()
+        case (False, _):
+            uploader = FileUploader(
+                cli.args.file,
+                cli.base_target(),
+                expire=cli.args.expire,
+                public=cli.args.public,
+            )
+            uploader.upload()
+    link = uploader.generate_link()
     print(link)
 
 

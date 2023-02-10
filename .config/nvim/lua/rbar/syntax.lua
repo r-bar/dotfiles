@@ -10,7 +10,8 @@ function M.packages(use)
   use { "https://github.com/cespare/vim-toml.git", ft = "toml" }
   use "https://github.com/chr4/nginx.vim.git"
   use {'https://github.com/digitaltoad/vim-pug.git', ft = 'pug'}
-  use "https://github.com/ollykel/v-vim.git"
+  ---- vlang
+  use {"https://github.com/ollykel/v-vim.git", ft = 'vlang', enabled = false}
 end
 
 return M

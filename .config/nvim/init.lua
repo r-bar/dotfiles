@@ -1,9 +1,10 @@
 local loader = require('loader')
 
+loader.lazy_use 'https://github.com/tpope/vim-abolish.git'
 loader.lazy_use 'https://github.com/MarcWeber/vim-addon-local-vimrc.git'
 loader.lazy_use 'https://github.com/michaeljsmith/vim-indent-object.git'
-loader.lazy_use 'https://github.com/tpope/vim-repeat.git'
-loader.lazy_use{'https://github.com/tpope/vim-surround.git', requires = 'https://github.com/tpope/vim-repeat.git'}
+--loader.lazy_use 'https://github.com/tpope/vim-repeat.git'
+loader.lazy_use{'https://github.com/tpope/vim-surround.git', dependencies = {'https://github.com/tpope/vim-repeat.git'}}
 loader.lazy_use 'https://github.com/wellle/targets.vim'
 loader.lazy_use 'danro/rename.vim'
 loader.lazy_use 'https://github.com/tmhedberg/matchit.git'

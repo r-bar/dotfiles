@@ -25,6 +25,7 @@ end
 function M.config()
   local lsp = require('lsp-zero')
   local luasnip = require('luasnip')
+  local lsputil = require('lspconfig.util')
 
   --lsp.preset('system-lsp')
   lsp.preset('recommended')
@@ -48,6 +49,21 @@ function M.config()
         diagnostics = { experimental = { enable = true } };
       };
     };
+  })
+  -- https://github.com/vlang/vls
+  lsp.configure("vls", {
+    cmd = {'v', 'ls'},
+    filetypes = {'vlang'},
+    root_dir = lsputil.find_git_ancestor,
+    docs = {
+      description = [[
+https://github.com/vlang/vls
+
+The V language server can be installed via `v ls --install`.
+
+The official V language server, written in V itself.
+]]
+    }
   })
   lsp.configure("pylsp", {
     -- https://github.com/python-lsp/python-lsp-server/blob/develop/CONFIGURATION.md

@@ -42,7 +42,7 @@ function M.config()
 
   -- text wrapping options
   vim.o.textwidth = 80
-  vim.o.formatoptions = 'jcroql'
+  vim.o.formatoptions = 'jcroqla'
 
   -- http://vim.wikia.com/wiki/Toggle_auto-wrap
   vim.cmd([[

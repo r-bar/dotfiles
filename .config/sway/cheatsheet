@@ -127,6 +127,7 @@ Return or Escape
    +8 workspace number 8
    +9 workspace number 9
    +0 workspace number 10
+   +backspace workspace back and forth
   # Move focused container to workspace:
    +Shift+1 move container to workspace number 1
    +Shift+2 move container to workspace number 2

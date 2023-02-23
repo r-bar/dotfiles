@@ -1,4 +1,4 @@
-if [ -d ~/.pyenv ]; then
+if false && [ -d ~/.pyenv ]; then
   export PYENV_ROOT="$HOME/.pyenv"
   export PATH="$PATH:$PYENV_ROOT/bin"
   export PYENV_VIRTUALENV_DISABLE_PROMPT=1

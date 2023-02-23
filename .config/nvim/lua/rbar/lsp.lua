@@ -88,6 +88,8 @@ The official V language server, written in V itself.
         plugins = {
           pylsp_mypy = { enabled = false },
           pycodestyle = { enabled = false },
+          pyflakes = { enabled = false },
+          black = { enabled = true },
         },
       },
     },

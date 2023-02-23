@@ -21,7 +21,11 @@ function M.packages(use)
     'EdenEast/nightfox.nvim',
     enabled = true,
     config = function()
-      require('nightfox').setup({})
+      require('nightfox').setup({
+        options = {
+          transparent = true,
+        },
+      })
       vim.cmd[[colorscheme nightfox]]
     end,
   }

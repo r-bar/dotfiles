@@ -1,6 +1,7 @@
 { config, pkgs, ... }:
 let
   unstable = import <nixpkgs-unstable> {};
+
   generalPkgs = with pkgs; [
     rclone
     tmux
@@ -28,20 +29,11 @@ let
     poetry
   ];
 
-  # https://github.com/NixOS/nixpkgs/blob/29647c9b582338b23577be9f9bddba4295e16111/doc/languages-frameworks/python.section.md#ad-hoc-temporary-python-environment-with-nix-shell-ad-hoc-temporary-python-environment-with-nix-shell
-  pythonEnv = pkgs.python310.withPackages (ps: [
-    ps.pynvim
-    ps.ipython
-    ps.pip
-    ps.black
-    ps.python-lsp-server
-    ps.flake8
-  ]);
-
   devtoolsPkgs = with pkgs; [
     universal-ctags
     postgresql
     sqlite
+    (import ./python-packages.nix { inherit pkgs; })
     python310Packages.j2cli
     git
     watchexec

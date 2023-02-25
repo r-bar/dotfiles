@@ -14,5 +14,9 @@ else
   alias lt='ls -ltFh'   # long list,sorted by date,show type,human readable
   alias ll='ls -l' # long list
 fi
-alias dc='docker compose'
+if hash docker-compose 2> /dev/null; then
+  alias dc=docker-compose
+else
+  alias dc='docker compose'
+fi
 alias pubssh='ssh -o "UserKnownHostsFile=/dev/null" -o "StrictHostKeyChecking=no"'

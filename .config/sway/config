@@ -23,7 +23,12 @@ include /etc/sway/inputs/*.conf
 include /etc/sway/modes/*.conf
 
 # Additional configs
-include /etc/sway/config.d/*.conf
+#include /etc/sway/config.d/*.conf
+# Manually select system configs instead of sourcing all of them
+include /etc/sway/config.d/50-systemd-user.conf
+include /etc/sway/config.d/96-waybar.conf
+include /etc/sway/config.d/98-applications-defaults.conf
+#include /etc/sway/config.d/99-autostart-applications.conf
 
 # User config
 include $HOME/.config/sway/config.d/*.conf

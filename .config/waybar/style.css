@@ -1,0 +1,8 @@
+@import "/etc/xdg/xdg-ubuntusway/waybar/style.css";
+
+#backlight {
+    padding: 0 0.5em;
+    margin: 4px 3px;
+    background: @theme_selected_bg_color;
+    color: @theme_selected_fg_color;
+}

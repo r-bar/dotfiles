@@ -1,0 +1,49 @@
+{
+  "include": [
+    "/etc/xdg/xdg-ubuntusway/waybar/config.jsonrc"
+  ],
+
+  "pulseaudio": {
+    "format": "{icon}  {volume}% {format_source}",
+    "format-bluetooth": "{icon} {volume}%",
+    "format-muted": " {format_source}",
+    "format-source": "  {volume}%",
+    "format-source-muted": "",
+    "format-icons": {
+      "headphone": "",
+      "default": ["", "", ""]
+    },
+    "tooltip-format": "{icon}  {volume}% {format_source}",
+    //"on-click": "swaymsg exec \\$pulseaudio",
+    "on-click": "swaymsg exec pavucontrol",
+    "on-click-middle": "swaymsg exec \\$volume_mute",
+    //"on-click-right": "swaymsg exec pavucontrol",
+    "on-scroll-up": "swaymsg exec \\$volume_up",
+    "on-scroll-down": "swaymsg exec \\$volume_down"
+  },
+
+  "backlight": {
+    "format": "☀{percent}%",
+    "on-scroll-up": "swaymsg exec $backlight_up",
+    "on-scroll-down": "swaymsg exec $backlight_down",
+  },
+
+  "modules-right": [
+    "tray",
+    "custom/wf-recorder",
+    "custom/weather",
+    "custom/playerctl",
+    "idle_inhibitor",
+    //"sway/language",
+    "custom/clipboard",
+    //"cpu",
+    //"memory",
+    "backlight",
+    "battery",
+    "network",
+    "pulseaudio",
+    "clock",
+    "custom/power"
+  ],
+
+}

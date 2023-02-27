@@ -1,5 +1,4 @@
 # initialize zsh completions
-#autoload -Uz compinit promptinit
 
 zcachedir=${zcachedir:-$HOME/.cache/zsh/}
 [[ -d "$zcachedir" ]] || mkdir -p "$zcachedir"
@@ -22,7 +21,7 @@ _update_zcomp() {
   # if zcompdump exists (and is non-zero), and is older than the .zwc file,
   # then regenerate
   if [[ -s "$zcompf" && (! -s "${zcompf}.zwc" || "$zcompf" -nt "${zcompf}.zwc") ]]; then
-    echo Recompile completions
+    echo Recompiled completions
     # since file is mapped, it might be mapped right now (current shells), so
     # rename it then make a new one
     [[ -e "$zcompf.zwc" ]] && mv -f "$zcompf.zwc" "$zcompf.zwc.old"

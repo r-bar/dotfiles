@@ -3,6 +3,7 @@ let
   unstable = import <nixpkgs-unstable> {};
 
   generalPkgs = with pkgs; [
+    alacritty
     rclone
     tmux
     bat
@@ -27,6 +28,7 @@ let
     nodejs
     yarn
     poetry
+    opam
   ];
 
   devtoolsPkgs = with pkgs; [
@@ -47,6 +49,7 @@ let
     neovim
     autoconf
     gcc
+    gnumake
   ];
 
   opsPkgs = with pkgs; [

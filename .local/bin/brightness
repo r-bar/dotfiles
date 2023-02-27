@@ -1,0 +1,163 @@
+#!/usr/bin/env python3
+
+import sys
+from pathlib import Path
+from typing import Literal
+
+
+Units = Literal['pt'] | Literal['raw']
+
+STATE_PATH = Path.home() / '.local' / 'state' / 'brightness'
+SYSPATH = "/sys/class/backlight/intel_backlight/brightness"
+MAX_SYSPATH = "/sys/class/backlight/intel_backlight/max_brightness"
+DEFAULT_UNITS = 'pt'
+DEFAULT_STEP = '10'
+USAGE = """\
+Display brightness control utility
+
+Usage:
+    # print this help message
+    brightness --help
+
+    # get the max brightness value in raw units
+    brightness max
+
+    # get the current brightness value
+    brightness get <value> [units]
+
+    # set the current brightness value
+    brightness set <value> [units]
+
+    # increase the brightness by the given amount
+    brightness incr <value> [units]
+
+    # decrease the brightness by the given amount
+    brightness decr <value> [units]
+
+    # save the current brightness level
+    brighghtness save
+
+    # restore a previously saved brightness level
+    brightness restore
+
+Arguments:
+    value: an integer value
+    units: use either pt (percent) or raw values
+"""
+
+
+def get_brightness(units: Units = 'pt') -> int:
+    with open(SYSPATH) as f:
+        absolute = int(f.read())
+    match units:
+        case 'pt':
+            max_brightness = get_max_brightness()
+            return absolute * 100 // max_brightness
+        case 'abs':
+            return absolute
+        case _:
+            raise ValueError(f"invalid units: {units}")
+
+
+def set_brightness(value: int, units: Units = 'pt'):
+    max_brightness = get_max_brightness()
+    if units == 'pt':
+        value = max_brightness * value // 100
+    if value < 0:
+        value = 0
+    elif max_brightness < value:
+        value = max_brightness
+    with open(SYSPATH, 'w') as f:
+        f.write(str(value))
+
+
+def get_max_brightness() -> int:
+    with open(MAX_SYSPATH) as f:
+        return int(f.read())
+
+
+def parse_units(units: str) -> Units:
+    if units not in ['pt', 'abs']:
+        raise ValueError(f'invalid units: {units}')
+    return units
+
+
+def parse_value(value: str) -> int:
+    return int(value)
+
+
+def get_command(units: str = DEFAULT_UNITS):
+    units = parse_units(units)
+    print(get_brightness(units))
+
+
+def set_command(value: str, units: str = DEFAULT_UNITS):
+    value = parse_value(value)
+    units = parse_units(units)
+    set_brightness(value, units)
+
+
+def incr_command(value: str = DEFAULT_STEP, units: str = DEFAULT_UNITS):
+    value = parse_value(value)
+    units = parse_units(units)
+    current = get_brightness(units)
+    set_brightness(current + value, units)
+
+
+def decr_command(value: str = DEFAULT_STEP, units: str = DEFAULT_UNITS):
+    value = parse_value(value)
+    units = parse_units(units)
+    current = get_brightness(units)
+    set_brightness(current - value, units)
+
+
+def max_command():
+    print(get_max_brightness())
+
+def save_command(filename: str = STATE_PATH):
+    Path(filename).parent.mkdir(parents=True, exist_ok=True)
+    with open(filename, 'w') as f:
+        f.write(str(get_brightness('abs')))
+
+def restore_command(filename: str = STATE_PATH):
+    with open(filename) as f:
+        value = int(f.read().strip())
+        set_brightness(value, 'abs')
+
+
+def run(args):
+    match args:
+        case ["get", *get_args]:
+            get_command(*get_args)
+        case ["set", *set_args]:
+            set_command(*set_args)
+        case ["up", *incr_args] | ["incr", *incr_args]:
+            incr_command(*incr_args)
+        case ["down", *decr_args] | ["decr", *decr_args]:
+            decr_command(*decr_args)
+        case ["max"]:
+            max_command()
+        case ["save"]:
+            save_command()
+        case ["restore"]:
+            restore_command()
+        case _ if {"help", "--help"} & set(args):
+            print(USAGE)
+        case _:
+            raise ValueError("invalid command")
+
+
+def main():
+    try:
+        run(sys.argv[1:])
+    except ValueError as e:
+        print(USAGE)
+        print("error:", e, file=sys.stderr)
+        exit(1)
+    except Exception as e:
+        print("error:", e, file=sys.stderr)
+        exit(1)
+
+
+if __name__ == "__main__":
+    main()

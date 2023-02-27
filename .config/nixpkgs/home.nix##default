@@ -102,7 +102,7 @@ in
   ];
 
   home.file = {
-    ".zshrc.d/60-fzf.nix.zsh".text = ''
+    ".zshrc.d/50-fzf.nix.zsh".text = ''
       if [[ $options[zle] = on ]]; then
         . ${config.programs.fzf.package}/share/fzf/completion.zsh
         . ${config.programs.fzf.package}/share/fzf/key-bindings.zsh

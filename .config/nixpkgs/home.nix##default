@@ -21,6 +21,7 @@ let
     lima
     aws-mfa
     fd
+    httpie
   ];
 
   languagePkgs = with pkgs; [
@@ -31,11 +32,12 @@ let
     opam
   ];
 
+  customPython = import ./python-packages.nix { inherit pkgs; };
   devtoolsPkgs = with pkgs; [
     universal-ctags
     postgresql
     sqlite
-    (import ./python-packages.nix { inherit pkgs; })
+    customPython
     python310Packages.j2cli
     git
     watchexec
@@ -50,6 +52,9 @@ let
     autoconf
     gcc
     gnumake
+    go
+    zig
+    pre-commit
   ];
 
   opsPkgs = with pkgs; [
@@ -101,12 +106,16 @@ in
     opsPkgs
   ];
 
+  # nix.zsh files are in yadm's .gitignores
   home.file = {
     ".zshrc.d/50-fzf.nix.zsh".text = ''
       if [[ $options[zle] = on ]]; then
         . ${config.programs.fzf.package}/share/fzf/completion.zsh
         . ${config.programs.fzf.package}/share/fzf/key-bindings.zsh
       fi
+    '';
+    ".zshenv.d/40-nvim-python.nix.zsh".text = ''
+      export NVIM_PYTHON=${customPython}/bin/python3
     '';
   };
 }

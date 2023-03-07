@@ -1,6 +1,6 @@
 { pkgs }:
 
-pkgs.python311.withPackages (p: with p; [
+pkgs.python310.withPackages (p: with p; [
   httpx # async HTTP
   beautifulsoup4 # web scraping
   folium # maps
@@ -20,4 +20,7 @@ pkgs.python311.withPackages (p: with p; [
   pip
   python-lsp-server
   black
+  pynvim
+  rope
+  flake8
 ])

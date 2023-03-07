@@ -28,7 +28,7 @@ swaymsg -q \
   workspace 7 \; move workspace to $right \; workspace 7 output $right \; \
   workspace 8 \; move workspace to $right \; workspace 8 output $right \; \
   workspace 9 \; move workspace to $right \; workspace 9 output $right \; \
-  workspace 0 \; move workspace to $right \; workspace 0 output $right \; \
+  workspace 10 \; move workspace to $right \; workspace 0 output $right \; \
   ;
 
 swaymsg -q workspace 1 \; workspace 4 \; workspace 7

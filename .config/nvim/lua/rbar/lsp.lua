@@ -27,6 +27,30 @@ function M.mason_config()
   -- order is important. these mason setup calls must be done before lspconfig
   -- servers are configured
   require('mason').setup{
+    ensure_installed = {
+      "ansiblels",
+      "bashls",
+      "cssls",
+      "docker_compose_language_service",
+      "dockerls",
+      "html",
+      "jq",
+      "jsonls",
+      "jsonnet_ls",
+      "lua_ls",
+      "marksman",
+      "nil_ls", -- nix
+      "ocamllsp",
+      "ocamlformat",
+      "rnix", -- nix
+      "ruff_lsp", -- python
+      "rust_analyzer",
+      "rustfmt",
+      "sqlls",
+      "tailwindcss",
+      "vimls",
+      "yamlls",
+    },
     automatic_installation = false,
   }
   require('mason-lspconfig').setup()

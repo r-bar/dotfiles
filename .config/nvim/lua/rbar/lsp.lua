@@ -59,14 +59,69 @@ end
 local function has_words_before()
   unpack = unpack or table.unpack
   local line, col = unpack(vim.api.nvim_win_get_cursor(0))
-  return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match("%s") == nil
+  local line_text = vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]
+  return col ~= 0 and line_text:sub(col, col):match("%s") == nil
+end
+
+local function is_whitespace()
+    -- returns true if the character under the cursor is whitespace.
+    local col = vim.fn.col('.') - 1
+    local line = vim.fn.getline('.')
+    local char_under_cursor = string.sub(line, col, col)
+
+    return col == 0 or string.match(char_under_cursor, '%s')
 end
 
 function M.nvim_cmp_config()
   local cmp = require('cmp')
   local luasnip = require('luasnip')
 
+  local mappings = {
+    ['<C-b>'] = cmp.mapping.scroll_docs(-4),
+    ['<C-f>'] = cmp.mapping.scroll_docs(4),
+    ['<C-n>'] = cmp.mapping.select_next_item(),
+    ['<C-p>'] = cmp.mapping.select_prev_item(),
+    ['<C-Space>'] = cmp.mapping.complete(),
+    ['<C-e>'] = cmp.mapping.abort(),
+    ['<C-c>'] = cmp.mapping.abort(),
+    -- Accept currently selected item. Set `select` to `false` to only confirm
+    -- explicitly selected items.
+    ['<CR>'] = cmp.mapping.confirm({ select = false }),
+
+    --["<Tab>"] = cmp.mapping.select_next_item{ behavior = cmp.SelectBehavior.Select },
+    --["<S-Tab>"] = cmp.mapping.select_prev_item{ behavior = cmp.SelectBehavior.Select },
+
+    -- manual supertab like completion from the nvim-cmp wiki
+    ["<Tab>"] = cmp.mapping(function(fallback)
+      if cmp.visible() then
+        cmp.select_next_item{ behavior = cmp.SelectBehavior.Select }
+        -- You could replace the expand_or_jumpable() calls with expand_or_locally_jumpable() 
+        -- they way you will only jump inside the snippet region
+      --elseif luasnip.expand_or_jumpable() then
+      --  luasnip.expand_or_jump()
+      elseif has_words_before() then
+        cmp.complete()
+      else
+        fallback()
+      end
+    end, { "i", "s" }),
+
+    ["<S-Tab>"] = cmp.mapping(function(fallback)
+      if cmp.visible() then
+        cmp.select_prev_item{ behavior = cmp.SelectBehavior.Select }
+      --elseif luasnip.jumpable(-1) then
+      --  luasnip.jump(-1)
+      else
+        fallback()
+      end
+    end, { "i", "s" }),
+  }
+
   cmp.setup({
+    --enabled = function() return not is_whitespace() end,
+    --completion = {
+    --  keyword_length = 2,
+    --},
     snippet = {
       -- REQUIRED - you must specify a snippet engine
       expand = function(args)
@@ -77,40 +132,7 @@ function M.nvim_cmp_config()
       -- completion = cmp.config.window.bordered(),
       documentation = cmp.config.window.bordered(),
     },
-    mapping = cmp.mapping.preset.insert({
-      ['<C-b>'] = cmp.mapping.scroll_docs(-4),
-      ['<C-f>'] = cmp.mapping.scroll_docs(4),
-      ['<C-Space>'] = cmp.mapping.complete(),
-      ['<C-e>'] = cmp.mapping.abort(),
-      ['<C-c>'] = cmp.mapping.abort(),
-      -- Accept currently selected item. Set `select` to `false` to only confirm
-      -- explicitly selected items.
-      ['<CR>'] = cmp.mapping.confirm({ select = false }),
-
-      ["<Tab>"] = cmp.mapping(function(fallback)
-        if cmp.visible() then
-          cmp.select_next_item()
-          -- You could replace the expand_or_jumpable() calls with expand_or_locally_jumpable() 
-          -- they way you will only jump inside the snippet region
-        --elseif luasnip.expand_or_jumpable() then
-        --  luasnip.expand_or_jump()
-        elseif has_words_before() then
-          cmp.complete()
-        else
-          fallback()
-        end
-      end, { "i", "s" }),
-
-      ["<S-Tab>"] = cmp.mapping(function(fallback)
-        if cmp.visible() then
-          cmp.select_prev_item()
-        --elseif luasnip.jumpable(-1) then
-        --  luasnip.jump(-1)
-        else
-          fallback()
-        end
-      end, { "i", "s" }),
-    }),
+    mapping = cmp.mapping.preset.insert(mappings),
     sources = cmp.config.sources({
       { name = 'nvim_lsp' },
       { name = 'luasnip' },
@@ -119,30 +141,22 @@ function M.nvim_cmp_config()
     }),
   })
 
-  -- Set configuration for specific filetype.
-  cmp.setup.filetype('gitcommit', {
-    sources = cmp.config.sources({
-      { name = 'buffer' },
-    }, {
-    }),
-  })
-
-  -- Use buffer source for `/` and `?` (if you enabled `native_menu`, this won't work anymore).
+  ---- Use buffer source for `/` and `?` (if you enabled `native_menu`, this won't work anymore).
   cmp.setup.cmdline({ '/', '?' }, {
-    mapping = cmp.mapping.preset.cmdline(),
+    mapping = cmp.mapping.preset.cmdline(mappings),
     sources = {
       { name = 'buffer' },
     },
   })
 
-  -- Use cmdline & path source for ':' (if you enabled `native_menu`, this won't work anymore).
-  cmp.setup.cmdline(':', {
-    mapping = cmp.mapping.preset.cmdline(),
-    sources = cmp.config.sources({
-      { name = 'path' },
-      { name = 'cmdline' },
-    }),
-  })
+  ---- Use cmdline & path source for ':' (if you enabled `native_menu`, this won't work anymore).
+  --cmp.setup.cmdline(':', {
+  --  mapping = cmp.mapping.preset.cmdline(mappings),
+  --  sources = cmp.config.sources({
+  --    { name = 'path' },
+  --    { name = 'cmdline' },
+  --  }),
+  --})
 
   -- Set up lspconfig.
 end
@@ -172,7 +186,7 @@ function M.on_attach(client, bufnr)
   vim.keymap.set('n', 'K', vim.lsp.buf.hover, bufopts)
   vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, bufopts)
   vim.keymap.set('n', '<leader>k', vim.lsp.buf.signature_help, bufopts)
-  vim.keymap.set('n', '<C-k>', vim.lsp.buf.signature_help, bufopts)
+  vim.keymap.set('i', '<C-k>', vim.lsp.buf.signature_help, bufopts)
   vim.keymap.set('n', '<leader>wa', vim.lsp.buf.add_workspace_folder, bufopts)
   vim.keymap.set('n', '<leader>wr', vim.lsp.buf.remove_workspace_folder, bufopts)
   vim.keymap.set('n', '<leader>wl', function()

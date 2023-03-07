@@ -2,7 +2,7 @@ local M = {}
 
 function M.packages(use)
   use 'nvim-lualine/lualine.nvim'
-  use 'kyazdani42/nvim-web-devicons'
+  use 'nvim-tree/nvim-web-devicons'
 end
 
 function M.config()
@@ -12,7 +12,7 @@ function M.config()
       lualine_a = {
         { 'mode', fmt = function(str) return str:sub(1,1) end },
       },
-      lualine_b = {'branch', 'diff'},
+      lualine_b = {'diff'},
 
       lualine_c = {{'filename', path = 1}},
       lualine_x = {
@@ -27,7 +27,7 @@ function M.config()
     inactive_sections = {
       lualine_a = {},
       lualine_b = {},
-      lualine_c = {'filename'},
+      lualine_c = {{'filename', path = 1}},
       lualine_x = {'location'},
       lualine_y = {},
       lualine_z = {},

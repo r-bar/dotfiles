@@ -2,25 +2,21 @@ M = {}
 
 
 function M.packages(use)
-  use "junegunn/fzf"
   use {
-    "junegunn/fzf.vim",
-    dependencies = {"junegunn/fzf"},
+    'ibhagwan/fzf-lua',
+    enabled = true,
+    dependencies = {'nvim-tree/nvim-web-devicons'},
     config = function()
-      vim.g.fzf_action = {
-        ["ctrl-t"] = "tab split";
-        ["ctrl-x"] = "split";
-        ["ctrl-s"] = "split";
-        ["ctrl-v"] = "vsplit";
-      }
-      vim.keymap.set("n", "<Leader>t", ":Files<Enter>", { silent = true })
-      vim.keymap.set("n", "<Leader>b", ":Buffers<Enter>", { silent = true })
-      vim.keymap.set("n", "<Leader>h", ":History<Enter>", { silent = true })
-      vim.keymap.set("n", "<leader>j", ":BTags<Enter>", { silent = true })
-      vim.keymap.set("n", "<leader>s", ":DocumentSymbols<Enter>", { silent = true })
-      vim.keymap.set("n", "<leader>a", ":CodeActions<Enter>", { silent = true })
-      vim.keymap.set("v", "<leader>a", ":RangeCodeActions<Enter>", { silent = true })
-    end,
+      local fzf = require("fzf-lua")
+      vim.keymap.set("n", "<Leader>t", ":FzfLua files<Enter>", { silent = true })
+      vim.keymap.set("n", "<Leader>b", ":FzfLua buffers<Enter>", { silent = true })
+      vim.keymap.set("n", "<Leader>h", ":FzfLua command_history<Enter>", { silent = true })
+      vim.keymap.set("n", "<leader>j", ":FzfLua btags<Enter>", { silent = true })
+      vim.keymap.set("n", "<leader>s", ":FzfLua lsp_document_symbols<Enter>", { silent = true })
+      vim.keymap.set("n", "<leader>a", ":FzfLua lsp_code_actions<Enter>", { silent = true })
+      vim.keymap.set("v", "<leader>a", ":FzfLua lsp_code_actions<Enter>", { silent = true })
+      vim.api.nvim_create_user_command("Help", function() fzf.help_tags() end, {})
+    end
   }
 
   use 'nvim-lua/plenary.nvim'

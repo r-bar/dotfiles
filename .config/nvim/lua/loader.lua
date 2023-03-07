@@ -45,10 +45,11 @@ function M.packer_init()
   end
 
   for module_name, config in pairs(M.global_configs) do
-    local success, err = pcall(config)
-    if not success then
-      print(string.format("Error running config in %s: %s", module_name, e))
-    end
+    config()
+    --local success, err = pcall(config)
+    --if not success then
+    --  print(string.format("Error running config in %s: %s", module_name, e))
+    --end
   end
 end
 
@@ -63,10 +64,11 @@ function M.lazy_init()
   lazy.setup(M.global_uses, opts)
 
   for module_name, config in pairs(M.global_configs) do
-    local success, err = pcall(config)
-    if not success then
-      print(string.format("Error running config in %s: %s", module_name, e))
-    end
+    config()
+    --local success, err = pcall(config)
+    --if not success then
+    --  print(string.format("Error running config in %s: %s", module_name, e))
+    --end
   end
 end
 
@@ -131,12 +133,12 @@ end
 function M.load(module_name)
   M.global_modules[module_name] = true
 
-  local success, module = pcall(require, module_name)
-
-  if not success then
-    print(string.format("Error loading %s: %s", module_name, config))
-    return
-  end
+  local module = require(module_name)
+  --local success, module = pcall(require, module_name)
+  --if not success then
+  --  print(string.format("Error loading %s: %s", module_name, config))
+  --  return
+  --end
 
   if type(module.packages) == "function" then
     module.packages(M.lazy_use)

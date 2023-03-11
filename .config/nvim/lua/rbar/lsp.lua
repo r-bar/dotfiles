@@ -76,6 +76,8 @@ function M.nvim_cmp_config()
   local cmp = require('cmp')
   local luasnip = require('luasnip')
 
+  vim.o.completeopt = 'menuone,noinsert,noselect,preview'
+
   local mappings = {
     ['<C-b>'] = cmp.mapping.scroll_docs(-4),
     ['<C-f>'] = cmp.mapping.scroll_docs(4),
@@ -94,7 +96,8 @@ function M.nvim_cmp_config()
     -- manual supertab like completion from the nvim-cmp wiki
     ["<Tab>"] = cmp.mapping(function(fallback)
       if cmp.visible() then
-        cmp.select_next_item{ behavior = cmp.SelectBehavior.Select }
+        --cmp.select_next_item{ behavior = cmp.SelectBehavior.Select }
+        cmp.select_next_item()
         -- You could replace the expand_or_jumpable() calls with expand_or_locally_jumpable() 
         -- they way you will only jump inside the snippet region
       --elseif luasnip.expand_or_jumpable() then
@@ -108,7 +111,8 @@ function M.nvim_cmp_config()
 
     ["<S-Tab>"] = cmp.mapping(function(fallback)
       if cmp.visible() then
-        cmp.select_prev_item{ behavior = cmp.SelectBehavior.Select }
+        --cmp.select_prev_item{ behavior = cmp.SelectBehavior.Select }
+        cmp.select_prev_item()
       --elseif luasnip.jumpable(-1) then
       --  luasnip.jump(-1)
       else

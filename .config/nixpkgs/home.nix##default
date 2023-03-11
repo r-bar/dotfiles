@@ -22,6 +22,8 @@ let
     aws-mfa
     fd
     httpie
+    yt-dlp
+    amazon-ecr-credential-helper
   ];
 
   languagePkgs = with pkgs; [
@@ -55,6 +57,8 @@ let
     go
     zig
     pre-commit
+    just
+    delta
   ];
 
   opsPkgs = with pkgs; [

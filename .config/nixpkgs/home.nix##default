@@ -18,20 +18,20 @@ let
     rename
     gnupg
     htop
-    lima
     aws-mfa
     fd
     httpie
-    yt-dlp
+    unstable.yt-dlp
     amazon-ecr-credential-helper
+    unstable.quickemu
   ];
 
   languagePkgs = with pkgs; [
-    rustup
+    unstable.rustup
     nodejs
     yarn
-    poetry
-    opam
+    unstable.poetry
+    unstable.opam
   ];
 
   customPython = import ./python-packages.nix { inherit pkgs; };
@@ -44,18 +44,17 @@ let
     git
     watchexec
     exa
-    niv
-    kube3d
-    podman
-    podman-compose
-    buildah
+    unstable.kube3d
+    unstable.podman
+    unstable.podman-compose
+    unstable.buildah
     hexyl
-    neovim
+    unstable.neovim
     autoconf
     gcc
     gnumake
     go
-    zig
+    unstable.zig
     pre-commit
     just
     delta
@@ -65,11 +64,12 @@ let
     kubectl
     kubectx
     kubernetes-helm
-    #k3s # not supported for darwin
+    unstable.k3s # not supported for darwin
     ansible
     doctl
-    linode-cli
+    unstable.linode-cli
   ];
+
 in
 
 {

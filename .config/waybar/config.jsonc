@@ -25,7 +25,7 @@
   "backlight": {
     "format": "☀{percent}%",
     "on-scroll-up": "swaymsg exec $backlight_up",
-    "on-scroll-down": "swaymsg exec $backlight_down",
+    "on-scroll-down": "swaymsg exec $backlight_down"
   },
 
   "modules-right": [
@@ -44,6 +44,5 @@
     "pulseaudio",
     "clock",
     "custom/power"
-  ],
-
+  ]
 }

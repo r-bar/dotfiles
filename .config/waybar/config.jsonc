@@ -31,7 +31,6 @@
   "modules-right": [
     "tray",
     "custom/wf-recorder",
-    "custom/weather",
     "custom/playerctl",
     "idle_inhibitor",
     //"sway/language",
@@ -40,8 +39,9 @@
     //"memory",
     "backlight",
     "battery",
-    "network",
     "pulseaudio",
+    "network",
+    "custom/weather",
     "clock",
     "custom/power"
   ]

@@ -6,6 +6,10 @@ function proj() {
   else
     proj_name="$(fzf --filter $1 <<< "$projects" | head -n 1)"
   fi
+  if [ $? -ne 0 ]; then
+    echo No project selected
+    return $?
+  fi
   if [ -d $proj_dir/$proj_name ]; then
     tmux renamew $(basename $proj_name)
     cd $proj_dir/$proj_name

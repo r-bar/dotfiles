@@ -58,6 +58,8 @@ let
     pre-commit
     just
     delta
+    lua
+    silicon
   ];
 
   opsPkgs = with pkgs; [

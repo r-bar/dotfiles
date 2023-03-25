@@ -86,26 +86,9 @@ function M.packages(use)
   'mattn/emmet-vim',
   ft = {'html', 'liquid', 'eruby', 'typescript', 'javascript', 'reason', 'jinja.html'},
   config = function()
-    vim.cmd[[
-      " remap emmet trigger key to not interfere with ycm / deoplete
-      let g:user_emmet_install_global = 1
-      let g:user_emmet_leader_key='<C-e>'
-      "imap   <C-e><C-e>   <C-o>:<plug>(emmet-expand-abbr)<CR>
-      "imap   <C-e>;   <C-o>:<plug>(emmet-expand-word)<CR>
-      "imap   <C-e>u   <C-o>:<plug>(emmet-update-tag)<CR>
-      "imap   <C-e>d   <C-o>:<plug>(emmet-balance-tag-inward)<CR>
-      "imap   <C-e>D   <C-o>:<plug>(emmet-balance-tag-outward)<CR>
-      "imap   <C-e>n   <C-o>:<plug>(emmet-move-next)<CR>
-      "imap   <C-e>N   <C-o>:<plug>(emmet-move-prev)<CR>
-      "imap   <C-e>i   <C-o>:<plug>(emmet-image-size)<CR>
-      "imap   <C-e>/   <C-o>:<plug>(emmet-toggle-comment)<CR>
-      "imap   <C-e>j   <C-o>:<plug>(emmet-split-join-tag)<CR>
-      "imap   <C-e>k   <C-o>:<plug>(emmet-remove-tag)<CR>
-      "imap   <C-e>a   <C-o>:<plug>(emmet-anchorize-url)<CR>
-      "imap   <C-e>A   <C-o>:<plug>(emmet-anchorize-summary)<CR>
-      "imap   <C-e>m   <C-o>:<plug>(emmet-merge-lines)<CR>
-      "imap   <C-e>c   <C-o>:<plug>(emmet-code-pretty)<CR>
-      ]]
+    vim.g.user_emmet_install_global = 1
+    vim.g.user_emmet_leader_key = '<C-e>'
+    require('rbar/mappings').emmet()
   end,
 }
   use 'https://github.com/scrooloose/nerdcommenter.git'
@@ -113,8 +96,11 @@ function M.packages(use)
   use 'https://github.com/romainl/vim-qf.git'
   use 'https://github.com/yssl/QFEnter.git'
 
+end
 
-  
+local function toggle_list_chars()
+  vim.o.list = not vim.o.list
+  print(vim.o.listchars)
 end
 
 function M.config()
@@ -126,9 +112,9 @@ function M.config()
   vim.o.expandtab = true
 
   vim.o.listchars = 'space:.,nbsp:+,tab:⇥ ,extends:>,precedes:<,trail:~,'
-  vim.keymap.set('n', '<F8>', ':set list! | echo &listchars<CR>', { noremap = true })
-  vim.keymap.set('v', '<F8>', ':set list! | echo &listchars<CR>', { noremap = true })
-  vim.keymap.set('i', '<F8>', ':set list! | echo &listchars<CR>', { noremap = true })
+  vim.keymap.set('n', '<F8>', toggle_list_chars, { noremap = true })
+  vim.keymap.set('v', '<F8>', toggle_list_chars, { noremap = true })
+  vim.keymap.set('i', '<F8>', toggle_list_chars, { noremap = true })
 
   -- elimitnate escape sequence lag in vim (delay after leaving insert mode)
   vim.o.timeout = false
@@ -163,13 +149,13 @@ function M.config()
   -- http://vim.wikia.com/wiki/Toggle_auto-wrap
   vim.cmd([[
   function! AutoWrapToggle()
-  if &formatoptions =~ 't'
-  set fo-=t
-  echo "Auto wrap disabled"
-  else
-  set fo+=t
-  echo "Auto wrap enabled"
-  endif
+    if &formatoptions =~ 't'
+      set fo-=t
+      echo "Auto wrap disabled"
+    else
+      set fo+=t
+      echo "Auto wrap enabled"
+    endif
   endfunction
   "imap <C-B> :call AutoWrapToggle()<CR>
   command -nargs=0 ToggleAutoWrap :call AutoWrapToggle()
@@ -192,7 +178,7 @@ function M.config()
     vim.o.grepformat = [[%f:%l:%c:%m,%f:%l:%m]]
   end
   vim.cmd([[autocmd QuickFixCmdPost * nested cwindow 20 | redraw!]])
-  vim.keymap.set("n", "<leader>g", ':grep "<cword>"<CR>')
+  vim.keymap.set("n", "<leader>g", ':grep! "<cword>"<CR>')
 
   -- keep a couple lines between the cursor and the edge of the screen while
   -- scrolling

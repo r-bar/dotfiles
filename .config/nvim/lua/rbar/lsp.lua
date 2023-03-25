@@ -15,12 +15,17 @@ function M.packages(use)
   use 'hrsh7th/cmp-nvim-lua'
 
   -- Snippets
-  use 'L3MON4D3/LuaSnip'
+  use {'L3MON4D3/LuaSnip', config = M.luasnip_config}
   use 'rafamadriz/friendly-snippets'
   use 'honza/vim-snippets'
   use 'https://github.com/molleweide/LuaSnip-snippets.nvim.git'
 
   --use 'VonHeikemen/lsp-zero.nvim'
+  use {'github/copilot.vim', config = function()
+    vim.g.copilot_no_tab_map = true
+    vim.keymap.set("i", "<CR>", 'copilot#Accept("<CR>")', { silent = true, expr = true })
+    vim.keymap.set("n", "<CR>", 'copilot#Accept("<CR>")', { silent = true, expr = true })
+  end}
 end
 
 function M.mason_config()
@@ -72,9 +77,34 @@ local function is_whitespace()
     return col == 0 or string.match(char_under_cursor, '%s')
 end
 
+function M.tab_complete(fallback)
+  local cmp = require('cmp')
+  if cmp.visible() then
+    cmp.select_next_item()
+    -- You could replace the expand_or_jumpable() calls with expand_or_locally_jumpable() 
+    -- they way you will only jump inside the snippet region
+  --elseif luasnip.expand_or_jumpable() then
+  --  luasnip.expand_or_jump()
+  elseif has_words_before() then
+    cmp.complete()
+  else
+    fallback()
+  end
+end
+
+function M.stab_complete(fallback)
+  local cmp = require('cmp')
+  if cmp.visible() then
+    cmp.select_prev_item()
+  --elseif luasnip.jumpable(-1) then
+  --  luasnip.jump(-1)
+  else
+    fallback()
+  end
+end
+
 function M.nvim_cmp_config()
   local cmp = require('cmp')
-  local luasnip = require('luasnip')
 
   vim.o.completeopt = 'menuone,noinsert,noselect,preview'
 
@@ -90,50 +120,18 @@ function M.nvim_cmp_config()
     -- explicitly selected items.
     ['<CR>'] = cmp.mapping.confirm({ select = false }),
 
-    --["<Tab>"] = cmp.mapping.select_next_item{ behavior = cmp.SelectBehavior.Select },
-    --["<S-Tab>"] = cmp.mapping.select_prev_item{ behavior = cmp.SelectBehavior.Select },
-
     -- manual supertab like completion from the nvim-cmp wiki
-    ["<Tab>"] = cmp.mapping(function(fallback)
-      if cmp.visible() then
-        --cmp.select_next_item{ behavior = cmp.SelectBehavior.Select }
-        cmp.select_next_item()
-        -- You could replace the expand_or_jumpable() calls with expand_or_locally_jumpable() 
-        -- they way you will only jump inside the snippet region
-      --elseif luasnip.expand_or_jumpable() then
-      --  luasnip.expand_or_jump()
-      elseif has_words_before() then
-        cmp.complete()
-      else
-        fallback()
-      end
-    end, { "i", "s" }),
-
-    ["<S-Tab>"] = cmp.mapping(function(fallback)
-      if cmp.visible() then
-        --cmp.select_prev_item{ behavior = cmp.SelectBehavior.Select }
-        cmp.select_prev_item()
-      --elseif luasnip.jumpable(-1) then
-      --  luasnip.jump(-1)
-      else
-        fallback()
-      end
-    end, { "i", "s" }),
+    ["<Tab>"] = cmp.mapping(M.tab_complete, { "i", "s" }),
+    ["<S-Tab>"] = cmp.mapping(M.stab_complete, { "i", "s" }),
   }
 
   cmp.setup({
-    --enabled = function() return not is_whitespace() end,
-    --completion = {
-    --  keyword_length = 2,
-    --},
     snippet = {
-      -- REQUIRED - you must specify a snippet engine
       expand = function(args)
-         luasnip.lsp_expand(args.body) -- For `luasnip` users.
+         require('luasnip').lsp_expand(args.body)
       end,
     },
     window = {
-      -- completion = cmp.config.window.bordered(),
       documentation = cmp.config.window.bordered(),
     },
     mapping = cmp.mapping.preset.insert(mappings),
@@ -175,13 +173,9 @@ function M.luasnip_config()
   }
   require("luasnip.loaders.from_vscode").lazy_load()
   require("luasnip.loaders.from_snipmate").lazy_load()
-
 end
 
 function M.on_attach(client, bufnr)
-  -- Enable completion triggered by <c-x><c-o>
-  --vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
-
   -- Mappings.
   -- See `:help vim.lsp.*` for documentation on any of the below functions
   local bufopts = { noremap=true, silent=true, buffer=bufnr }
@@ -205,25 +199,6 @@ function M.on_attach(client, bufnr)
 end
 
 function M.global_bindings()
-  vim.cmd [[command Format :lua vim.lsp.buf.format{async = false}]]
-  vim.cmd [[command LspDiagnostics :lua vim.diagnostic.setqflist()]]
-  vim.api.nvim_create_user_command(
-    "LspRestart",
-    function()
-      vim.lsp.buf.clear_references()
-      vim.lsp.stop_client(vim.lsp.get_active_clients())
-      vim.cmd[[edit]]
-    end,
-    {}
-  )
-  --vim.cmd [[
-  --  function! LspRestart()
-  --    lua vim.lsp.buf.clear_references()
-  --    lua vim.lsp.stop_client(vim.lsp.get_active_clients())
-  --    edit
-  --  endfunc
-  --  command LspRestart :call LspRestart()
-  --]]
   local opts = { noremap=true, silent=true }
   vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float, opts)
   vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, opts)
@@ -329,6 +304,18 @@ function M.config()
   -- clear the lsp log before every session
   vim.fn.system("rm $HOME/.local/state/nvim/lsp.log")
   vim.lsp.set_log_level(vim.env.NVIM_LSP_LOG_LEVEL or "debug")
+
+  vim.api.nvim_create_user_command("Format", function() vim.lsp.buf.format{async = false} end, {})
+  vim.api.nvim_create_user_command("LspDiagnostics", function() vim.diagnostic.setqflist() end, {})
+  vim.api.nvim_create_user_command(
+    "LspRestart",
+    function()
+      vim.lsp.buf.clear_references()
+      vim.lsp.stop_client(vim.lsp.get_active_clients())
+      vim.cmd[[edit]]
+    end,
+    {}
+  )
 
   M.global_bindings()
 

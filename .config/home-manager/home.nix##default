@@ -60,11 +60,12 @@ let
     delta
     lua
     silicon
+    awscli2
   ];
 
   opsPkgs = with pkgs; [
     kubectl
-    kubectx
+    #kubectx
     kubernetes-helm
     unstable.k3s # not supported for darwin
     ansible

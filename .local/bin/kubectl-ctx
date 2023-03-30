@@ -1,0 +1,89 @@
+#!/usr/bin/env python3
+
+"""
+Uses a directory of individual kubeconfig files to manage the kubectl context. This is an alternative to setting multiple entries in your KUBECONFIG path since many tools do not support this configuration. Using this tool means the config in the your KUBECONFIG or the default location (~/.kube/config) will be overwritten by the configs stored in KUBECONFIGD (~/.kube/config.d by default). You should copy your config to the directory to ensure it is persisted as is and not overwritten.
+"""
+
+import os
+import sys
+from argparse import ArgumentParser
+from pathlib import Path
+from functools import lru_cache
+
+import yaml
+
+
+KUBECONFIGD = Path(os.environ.get("KUBECONFIGD", Path.home() / ".kube" / "config.d"))
+
+
+@lru_cache(1)
+def kubeconfig():
+    path = os.environ.get("KUBECONFIG", str(Path.home() / ".kube" / "config"))
+    first_path = path.split(":", maxsplit=1)[0]
+    return Path(first_path)
+
+
+class Cli(ArgumentParser):
+    def __init__(self, *, args=sys.argv[1:], **kwargs):
+        defaults = dict(
+            description=self.__module__.__doc__,
+        )
+        super().__init__(**kwargs)
+        self.add_argument("-n", "--namespace", help="Set the namespace used in the context")
+        self.add_argument("-l", "--list", action="store_true", default=False, help="List available contexts")
+        self.add_argument("context", nargs="?", help="Set the current context if specified")
+        self.args = self.parse_args(args)
+
+
+class ConfigManager:
+    __slots__ = "configs", "current_context"
+
+    def __init__(self):
+        self.configs = [conf for conf in KUBECONFIGD.glob("*.yaml")]
+        with open(kubeconfig()) as f:
+            k = yaml.safe_load(f)
+        self.current_context = k.get("current-context")
+
+    def set_context(self, context=None, namespace=None):
+        context = context or self.current_context
+        ctx_source = self.contexts()[context]
+        with open(ctx_source) as f:
+            ctx_data = yaml.safe_load(f)
+        ctx_data["current-context"] = context
+        if namespace:
+            for ctx in ctx_data["contexts"]:
+                if ctx["name"] == context:
+                    ctx["context"]["namespace"] = namespace
+                    break
+        with open(kubeconfig(), "w") as f:
+            yaml.dump(ctx_data, f)
+
+    def contexts(self):
+        contexts = {}
+        for config in self.configs:
+            with open(config) as f:
+                config_data = yaml.safe_load(f)
+                contexts.update({ctx["name"]: config for ctx in config_data["contexts"]})
+        return contexts
+
+
+def main():
+    cli = Cli()
+    manager = ConfigManager()
+    if cli.args.list:
+        for context in manager.contexts():
+            if context == manager.current_context:
+                marker = "*"
+            else:
+                marker = " "
+            print(marker, context)
+    elif cli.args.namespace:
+        manager.set_context(namespace=cli.args.namespace)
+    elif cli.args.context:
+        manager.set_context(context=cli.args.context, namespace=cli.args.namespace)
+    else:
+        print(manager.current_context)
+
+
+if __name__ == "__main__":
+    main()

@@ -23,8 +23,8 @@ function M.packages(use)
   --use 'VonHeikemen/lsp-zero.nvim'
   use {'github/copilot.vim', config = function()
     vim.g.copilot_no_tab_map = true
-    vim.keymap.set("i", "<CR>", 'copilot#Accept("<CR>")', { silent = true, expr = true })
-    vim.keymap.set("n", "<CR>", 'copilot#Accept("<CR>")', { silent = true, expr = true })
+    vim.keymap.set("i", "<c-cr>", 'copilot#Accept("<c-cr>")', { silent = true, expr = true })
+    vim.keymap.set("n", "<C-cr>", 'copilot#Accept("<c-cr>")', { silent = true, expr = true })
   end}
 end
 

@@ -31,10 +31,6 @@ class Cli(ArgumentParser):
         self.add_argument("file", type=Path)
         self.args = self.parse_args(argv)
 
-    @property
-    def folder_strat(self) -> str:
-        return self.args.folder_strat or 'index'
-
     def base_target(self) -> str:
         path = PurePosixPath(self.args.bucket) / self.args.base_path / self.args.name
         return f"{self.args.rclone_config}:{path}"
@@ -228,7 +224,7 @@ def zip(target: str) -> str:
 
 def main():
     cli = Cli()
-    match (cli.args.file.is_dir(), cli.folder_strat):
+    match (cli.args.file.is_dir(), cli.args.index_strat):
         case (True, "index"):
             uploader = IndexUploader(
                 cli.args.file,

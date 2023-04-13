@@ -1,9 +1,5 @@
 #!/usr/bin/env python3
 
-"""
-Uses a directory of individual kubeconfig files to manage the kubectl context. This is an alternative to setting multiple entries in your KUBECONFIG path since many tools do not support this configuration. Using this tool means the config in the your KUBECONFIG or the default location (~/.kube/config) will be overwritten by the configs stored in KUBECONFIGD (~/.kube/config.d by default). You should copy your config to the directory to ensure it is persisted as is and not overwritten.
-"""
-
 import os
 import sys
 from argparse import ArgumentParser
@@ -26,12 +22,30 @@ def kubeconfig():
 class Cli(ArgumentParser):
     def __init__(self, *, args=sys.argv[1:], **kwargs):
         defaults = dict(
-            description=self.__module__.__doc__,
+            description="""
+            Uses a directory of individual kubeconfig files to manage the kubectl context.
+            This is an alternative to setting multiple entries in your KUBECONFIG path since
+            many tools do not support this configuration. Using this tool means the config
+            in the your KUBECONFIG or the default location (~/.kube/config) will be
+            overwritten by the configs stored in KUBECONFIGD (~/.kube/config.d by default).
+            You should copy your config to the directory to ensure it is persisted as is and
+            not overwritten.
+            """
         )
-        super().__init__(**kwargs)
-        self.add_argument("-n", "--namespace", help="Set the namespace used in the context")
-        self.add_argument("-l", "--list", action="store_true", default=False, help="List available contexts")
-        self.add_argument("context", nargs="?", help="Set the current context if specified")
+        super().__init__(**(defaults | kwargs))
+        self.add_argument(
+            "-n", "--namespace", help="Set the namespace used in the context"
+        )
+        self.add_argument(
+            "-l",
+            "--list",
+            action="store_true",
+            default=False,
+            help="List available contexts",
+        )
+        self.add_argument(
+            "context", nargs="?", help="Set the current context if specified"
+        )
         self.args = self.parse_args(args)
 
 
@@ -44,7 +58,7 @@ class ConfigManager:
             k = yaml.safe_load(f)
         self.current_context = k.get("current-context")
 
-    def set_context(self, context=None, namespace=None):
+    def set_context(self, context: str | None = None, namespace: str | None = None):
         context = context or self.current_context
         ctx_source = self.contexts()[context]
         with open(ctx_source) as f:
@@ -58,25 +72,38 @@ class ConfigManager:
         with open(kubeconfig(), "w") as f:
             yaml.dump(ctx_data, f)
 
-    def contexts(self):
+    def contexts(self) -> dict[str, str]:
         contexts = {}
         for config in self.configs:
             with open(config) as f:
                 config_data = yaml.safe_load(f)
-                contexts.update({ctx["name"]: config for ctx in config_data["contexts"]})
+                contexts.update(
+                    {ctx["name"]: config for ctx in config_data["contexts"]}
+                )
         return contexts
+
+    def get_namespace(self, context: str) -> str:
+        contexts = self.contexts()
+        with open(contexts[context]) as f:
+            config = yaml.safe_load(config_file)
+        for ctx in config["contexts"]:
+            if context == ctx["name"]:
+                return ctx["context"]["namespace"]
 
 
 def main():
     cli = Cli()
     manager = ConfigManager()
     if cli.args.list:
-        for context in manager.contexts():
+        for name, config_file in manager.contexts():
             if context == manager.current_context:
                 marker = "*"
             else:
                 marker = " "
-            print(marker, context)
+            label = f"{name}/{context}"
+            print(
+                marker,
+            )
     elif cli.args.namespace:
         manager.set_context(namespace=cli.args.namespace)
     elif cli.args.context:

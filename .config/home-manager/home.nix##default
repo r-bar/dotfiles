@@ -2,6 +2,10 @@
 let
   unstable = import <nixpkgs-unstable> {};
 
+  libPkgs = with pkgs; [
+    openssl
+  ];
+
   generalPkgs = with pkgs; [
     alacritty
     rclone
@@ -24,6 +28,7 @@ let
     unstable.yt-dlp
     amazon-ecr-credential-helper
     unstable.quickemu
+    unstable.nix-init
   ];
 
   languagePkgs = with pkgs; [
@@ -61,6 +66,10 @@ let
     lua
     silicon
     awscli2
+    docker-compose
+    unstable.cargo-outdated
+    unstable.cargo-whatfeatures
+    unstable.wasm-pack
   ];
 
   opsPkgs = with pkgs; [
@@ -111,6 +120,7 @@ in
     languagePkgs
     devtoolsPkgs
     opsPkgs
+    libPkgs
   ];
 
   # nix.zsh files are in yadm's .gitignores

@@ -29,6 +29,7 @@ let
     amazon-ecr-credential-helper
     unstable.quickemu
     unstable.nix-init
+    unstable.mako
   ];
 
   languagePkgs = with pkgs; [

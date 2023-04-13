@@ -1,6 +1,6 @@
 function proj() {
   proj_dir="${PROJ_DIR:=$HOME/src}"
-  projects="$(/usr/bin/ls -1tr $proj_dir)"
+  projects="$(/usr/bin/ls -1t $proj_dir)"
   if [ -z "$1" ]; then
     proj_name="$(fzf --header 'Select a project' <<< "$projects")"
   else

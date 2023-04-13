@@ -152,13 +152,13 @@ function M.nvim_cmp_config()
   })
 
   ---- Use cmdline & path source for ':' (if you enabled `native_menu`, this won't work anymore).
-  --cmp.setup.cmdline(':', {
-  --  mapping = cmp.mapping.preset.cmdline(mappings),
-  --  sources = cmp.config.sources({
-  --    { name = 'path' },
-  --    { name = 'cmdline' },
-  --  }),
-  --})
+  cmp.setup.cmdline(':', {
+    mapping = cmp.mapping.preset.cmdline(mappings),
+    sources = cmp.config.sources({
+      { name = 'path' },
+      { name = 'cmdline' },
+    }),
+  })
 
   -- Set up lspconfig.
 end

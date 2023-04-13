@@ -28,6 +28,16 @@
     "on-scroll-down": "swaymsg exec $backlight_down"
   },
 
+  "notifications": {
+    "format": "{icon} {count}",
+    "format-icons": {
+      "default": ""
+    },
+    "on-click": "swaymsg exec \\$notification_toggle",
+    "on-scroll-up": "swaymsg exec \\$notification_prev",
+    "on-scroll-down": "swaymsg exec \\$notification_next"
+  },
+
   "modules-right": [
     "tray",
     "custom/wf-recorder",

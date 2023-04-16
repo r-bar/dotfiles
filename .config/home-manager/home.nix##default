@@ -30,6 +30,7 @@ let
     unstable.quickemu
     unstable.nix-init
     unstable.mako
+    unstable.xdragon
   ];
 
   languagePkgs = with pkgs; [
@@ -71,6 +72,7 @@ let
     unstable.cargo-outdated
     unstable.cargo-whatfeatures
     unstable.wasm-pack
+    cargo-watch
   ];
 
   opsPkgs = with pkgs; [

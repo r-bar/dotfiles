@@ -49,7 +49,6 @@ function M.mason_config()
       "ocamlformat",
       "rnix", -- nix
       "ruff_lsp", -- python
-      "rust_analyzer",
       "rustfmt",
       "sqlls",
       "tailwindcss",
@@ -81,7 +80,7 @@ function M.tab_complete(fallback)
   local cmp = require('cmp')
   if cmp.visible() then
     cmp.select_next_item()
-    -- You could replace the expand_or_jumpable() calls with expand_or_locally_jumpable() 
+    -- You could replace the expand_or_jumpable() calls with expand_or_locally_jumpable()
     -- they way you will only jump inside the snippet region
   --elseif luasnip.expand_or_jumpable() then
   --  luasnip.expand_or_jump()

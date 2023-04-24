@@ -1,6 +1,6 @@
 { pkgs }:
 
-pkgs.python310.withPackages (p: with p; [
+pkgs.python311.withPackages (p: with p; [
   httpx # async HTTP
   beautifulsoup4 # web scraping
   folium # maps

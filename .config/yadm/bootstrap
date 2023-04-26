@@ -31,5 +31,12 @@ init_kubeconfig() {
   fi
 }
 
+add_tmux_plugin_manager() {
+  if [ ! -d ~/.config/tmux/plugins/tpm ]; then
+    git clone https://github.com/tmux-plugins/tpm.git ~/.config/tmux/plugins/tpm
+  fi
+}
+
 init_kubeconfig
+add_tmux_plugin_manager
 yadm alt

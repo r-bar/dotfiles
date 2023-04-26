@@ -23,8 +23,10 @@ function M.packages(use)
   --use 'VonHeikemen/lsp-zero.nvim'
   use {'github/copilot.vim', config = function()
     vim.g.copilot_no_tab_map = true
-    vim.keymap.set("i", "<c-cr>", 'copilot#Accept("")', { silent = true, expr = true })
-    vim.keymap.set("n", "<C-cr>", 'copilot#Accept("")', { silent = true, expr = true })
+    --vim.keymap.set("i", "<c-cr>", 'copilot#Accept("")', { silent = true, expr = true })
+    --vim.keymap.set("n", "<C-cr>", 'copilot#Accept("")', { silent = true, expr = true })
+    vim.keymap.set("i", "<c-space>", 'copilot#Accept("")', { noremap = true, silent = true, expr = true, replace_keycodes = false })
+    vim.keymap.set("n", "<C-space>", 'copilot#Accept("")', { noremap = true, silent = true, expr = true, replace_keycodes = false })
   end}
 end
 
@@ -112,7 +114,7 @@ function M.nvim_cmp_config()
     ['<C-f>'] = cmp.mapping.scroll_docs(4),
     ['<C-n>'] = cmp.mapping.select_next_item(),
     ['<C-p>'] = cmp.mapping.select_prev_item(),
-    ['<C-Space>'] = cmp.mapping.complete(),
+    --['<C-Space>'] = cmp.mapping.complete(),
     ['<C-e>'] = cmp.mapping.abort(),
     ['<C-c>'] = cmp.mapping.abort(),
     -- Accept currently selected item. Set `select` to `false` to only confirm

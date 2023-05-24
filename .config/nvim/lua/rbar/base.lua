@@ -219,10 +219,10 @@ function M.config()
 
   -- pipe registers around more easily
   vim.cmd([[
-  command! 
-  \ -count=0 -nargs=? 
-  \ -complete=file 
-  \ DumpRegister 
+  command!
+  \ -count=0 -nargs=?
+  \ -complete=file
+  \ DumpRegister
   \ echo 'call writefile(getreg("<count>", 1, 1), empty(trim("<args>"))?tempname():trim("<args>"))'
 ]])
 

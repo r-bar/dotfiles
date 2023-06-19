@@ -31,6 +31,8 @@ let
     unstable.nix-init
     unstable.mako
     unstable.xdragon
+    nmap
+    libxml2
   ];
 
   languagePkgs = with pkgs; [

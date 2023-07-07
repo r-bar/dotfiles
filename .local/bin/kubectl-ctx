@@ -5,12 +5,21 @@ import sys
 from argparse import ArgumentParser
 from pathlib import Path
 from functools import lru_cache
+from typing import Optional
 
 import yaml
 
 
 KUBECONFIGD = Path(os.environ.get("KUBECONFIGD", Path.home() / ".kube" / "config.d"))
-
+KUBECONFIG_SKELETON = {
+    "apiVersion": "v1",
+    "kind": "Config",
+    "preferences": {},
+    "current-context": "",
+    "contexts": [],
+    "clusters": [],
+    "users": [],
+}
 
 @lru_cache(1)
 def kubeconfig():
@@ -44,72 +53,86 @@ class Cli(ArgumentParser):
             help="List available contexts",
         )
         self.add_argument(
+            "-r", "--rename", help="Rename a context", action="store_true", default=False
+        )
+        self.add_argument(
             "context", nargs="?", help="Set the current context if specified"
         )
         self.args = self.parse_args(args)
 
+    def command(self):
+        if self.args.rename:
+            return "rename"
+        elif self.args.list:
+            return "list"
+        elif self.args.context or self.args.namespace:
+            return "set"
+        else:
+            return "show"
+
+
 
 class ConfigManager:
-    __slots__ = "configs", "current_context"
+    __slots__ = "contexts", "current_context", "context_files"
 
     def __init__(self):
-        self.configs = [conf for conf in KUBECONFIGD.glob("*.yaml")]
+        configs = [conf for conf in KUBECONFIGD.glob("*.yaml")]
         with open(kubeconfig()) as f:
             k = yaml.safe_load(f)
         self.current_context = k.get("current-context")
-
-    def set_context(self, context: str | None = None, namespace: str | None = None):
-        context = context or self.current_context
-        ctx_source = self.contexts()[context]
-        with open(ctx_source) as f:
-            ctx_data = yaml.safe_load(f)
-        ctx_data["current-context"] = context
-        if namespace:
-            for ctx in ctx_data["contexts"]:
-                if ctx["name"] == context:
-                    ctx["context"]["namespace"] = namespace
-                    break
-        with open(kubeconfig(), "w") as f:
-            yaml.dump(ctx_data, f)
-
-    def contexts(self) -> dict[str, str]:
-        contexts = {}
-        for config in self.configs:
+        self.context_files = {}
+        self.contexts = {}
+        for config in configs:
             with open(config) as f:
                 config_data = yaml.safe_load(f)
-                contexts.update(
-                    {ctx["name"]: config for ctx in config_data["contexts"]}
+                self.context_files.update({ctx['name']: config for ctx in config_data["contexts"]})
+                self.contexts.update(
+                    {ctx["name"]: ctx for ctx in config_data["contexts"]}
                 )
-        return contexts
 
-    def get_namespace(self, context: str) -> str:
-        contexts = self.contexts()
-        with open(contexts[context]) as f:
-            config = yaml.safe_load(config_file)
-        for ctx in config["contexts"]:
-            if context == ctx["name"]:
-                return ctx["context"]["namespace"]
+    def get_context(self, name: str) -> dict:
+        with open(self.context_files[name]) as f:
+            return yaml.safe_load(f)
+
+    def set_context(self, context_name: str | None = None, *, namespace: str | None = None):
+        context_name = context_name or self.current_context
+        ctx_source = self.contexts[context_name]
+        ctx_data = self.get_context(context_name)
+        ctx_data["current-context"] = context_name
+        if namespace:
+            for ctx in ctx_data["contexts"]:
+                if ctx["name"] == context_name:
+                    ctx["context"]["namespace"] = namespace
+                    break
+        with open(self.context_files[context_name], 'w') as f:
+            f.write(yaml.dump(ctx_data))
+        with open(kubeconfig(), "w") as f:
+            f.write(yaml.dump(ctx_data))
+
+    def get_namespace(self, context_name: str) -> str:
+        return self.contexts[context_name]["context"].get("namespace", "default")
 
 
 def main():
     cli = Cli()
     manager = ConfigManager()
-    if cli.args.list:
-        for name, config_file in manager.contexts():
-            if context == manager.current_context:
-                marker = "*"
-            else:
-                marker = " "
-            label = f"{name}/{context}"
-            print(
-                marker,
-            )
-    elif cli.args.namespace:
-        manager.set_context(namespace=cli.args.namespace)
-    elif cli.args.context:
-        manager.set_context(context=cli.args.context, namespace=cli.args.namespace)
-    else:
-        print(manager.current_context)
+    match cli.command():
+        case "set":
+            context_name = cli.args.context or manager.current_context
+            manager.set_context(context_name=context_name, namespace=cli.args.namespace)
+            print(f"Set context to {context_name}")
+        case "list":
+            for name, config_file in manager.contexts.items():
+                if name == manager.current_context:
+                    marker = "*"
+                else:
+                    marker = " "
+                label = f"{name}/{manager.get_namespace(name)}"
+                print(marker, label)
+        case "rename":
+            raise NotImplementedError("Rename not implemented yet")
+        case "show":
+            print("Current context:", manager.current_context)
 
 
 if __name__ == "__main__":

@@ -1,34 +1,12 @@
-# Default config for sway
-#
-# Copy this to ~/.config/sway/config and edit it to your liking.
+# Initial Setup 
+# exec ~/set_once.sh
+
+# Config for sway
 #
 # Read `man 5 sway` for a complete reference.
 
-# Styles
-set $theme /usr/share/themes/yaru-sway
+# user config directory
+include $HOME/.config/sway/config.d/*
 
-# theme variables
-include $theme/variables
-
-# Global variables
-include /etc/sway/variables
-
-# User variables
-include $HOME/.config/sway/variables.d/*.conf
-
-include /etc/sway/outputs/*.conf
-include /etc/sway/inputs/*.conf
-
-# include modes
-include /etc/sway/modes/*.conf
-
-# Additional configs
-#include /etc/sway/config.d/*.conf
-# Manually select system configs instead of sourcing all of them
-include /etc/sway/config.d/50-systemd-user.conf
-include /etc/sway/config.d/96-waybar.conf
-include /etc/sway/config.d/98-applications-defaults.conf
-#include /etc/sway/config.d/99-autostart-applications.conf
-
-# User config
-include $HOME/.config/sway/config.d/*.conf
+# only enable this if every app you use is compatible with wayland
+# xwayland disable

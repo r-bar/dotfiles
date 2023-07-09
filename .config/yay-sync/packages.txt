@@ -17,6 +17,7 @@ lua
 neovim
 nmap
 pv
+python-pynvim
 quickemu
 rclone
 ripgrep

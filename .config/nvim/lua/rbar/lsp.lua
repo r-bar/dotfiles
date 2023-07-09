@@ -49,6 +49,7 @@ function M.mason_config()
       "nil_ls", -- nix
       "ocamllsp",
       "ocamlformat",
+      "pylsp",
       "rnix", -- nix
       "ruff_lsp", -- python
       "rustfmt",

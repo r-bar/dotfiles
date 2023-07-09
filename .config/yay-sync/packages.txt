@@ -4,9 +4,11 @@ bat
 docker-compose
 exa
 fd
+flatpak
 fzf
 git
 git-crypt
+git-delta
 hexyl
 httpie
 jq

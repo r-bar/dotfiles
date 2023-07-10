@@ -1,6 +1,10 @@
 asdf-vm
+aur/amazon-ecr-credential-helper
 awscli2
 bat
+cargo-outdated
+cargo-watch
+direnv
 docker-compose
 exa
 fd
@@ -16,7 +20,10 @@ just
 lua
 neovim
 nmap
+perl-rename
 pv
+python-black
+python-poetry
 python-pynvim
 quickemu
 rclone
@@ -27,4 +34,5 @@ watchexec
 yadm
 yq
 yt-dlp
+zig
 zsh

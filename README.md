@@ -16,7 +16,7 @@ base64 -d base64.txt | yadm git-crypt unlock -
 
 Bootstrap without an authorized ssh key:
 ```
-yadm clone git@github.com:r-bar/dotfiles.git
+yadm clone --recursive https://github.com/r-bar/dotfiles.git
 base64 -d base64.txt | yadm git-crypt unlock -
 git remote set-url origin git@github.com:r-bar/dotfiles.git
 ```

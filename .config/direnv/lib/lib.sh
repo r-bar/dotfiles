@@ -21,24 +21,6 @@ use_pyenv() {
   load_prefix $python_root
 }
 
-# Use executables installed via asdf. Not all plugins are supported.
-# Requires an associated layout_ function from direnv to work.
-# usage: `use asdf <plugin> <version>`
-use_asdf() {
-  local plugin="$1"
-  local version="$2"
-  local exe="${3:-$plugin}"
-  local asdf_install="${ASDF_DATA_DIR:-$HOME/.asdf}/installs/$plugin/$version"
-  load_prefix $asdf_install
-  local bin="$asdf_install/bin/$plugin"
-  if [[ -x $bin ]]; then
-    layout $plugin $bin
-  else
-    echo "Error: $bin cannot be executed."
-    exit 1
-  fi
-}
-
 use_virtualenv() {
   local venv_path="${1:-`pwd`/venv}"
   if [ ! -d "$venv_path" ]; then
@@ -94,3 +76,7 @@ use_nix_shell() {
   direnv_load nix-shell "$drvfile" --run "$(join_args "$direnv" dump)"
   watch_file "$shellfile"
 }
+
+#use_asdf() {
+#  source_env "\$(asdf direnv envrc "\$@")"
+#}

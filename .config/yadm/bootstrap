@@ -31,12 +31,8 @@ init_kubeconfig() {
   fi
 }
 
-add_tmux_plugin_manager() {
-  if [ ! -d ~/.config/tmux/plugins/tpm ]; then
-    git clone https://github.com/tmux-plugins/tpm.git ~/.config/tmux/plugins/tpm
-  fi
-}
-
+yadm submodule update --init --recursive
 init_kubeconfig
-add_tmux_plugin_manager
 yadm alt
+~/.config/tmux/plugins/tpm/bin/install_plugins
+yay-sync

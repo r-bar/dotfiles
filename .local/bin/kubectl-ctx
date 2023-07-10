@@ -24,8 +24,11 @@ KUBECONFIG_SKELETON = {
 @lru_cache(1)
 def kubeconfig():
     path = os.environ.get("KUBECONFIG", str(Path.home() / ".kube" / "config"))
-    first_path = path.split(":", maxsplit=1)[0]
-    return Path(first_path)
+    filename = Path(path.split(":", maxsplit=1)[0])
+    if not filename.exists():
+        with open(filename, 'w') as f:
+            f.write(yaml.dump(KUBECONFIG_SKELETON))
+    return filename
 
 
 class Cli(ArgumentParser):

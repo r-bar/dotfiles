@@ -1,5 +1,7 @@
 asdf-vm
 aur/amazon-ecr-credential-helper
+aur/python-aws-mfa
+aws-cli
 awscli2
 bat
 cargo-outdated
@@ -17,6 +19,7 @@ hexyl
 httpie
 jq
 just
+kubectl
 lua
 neovim
 nmap

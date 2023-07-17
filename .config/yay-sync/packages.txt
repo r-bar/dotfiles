@@ -16,6 +16,7 @@ git
 git-crypt
 git-delta
 hexyl
+htop
 httpie
 jq
 just
@@ -33,6 +34,7 @@ rclone
 ripgrep
 rustup
 silicon
+tmux
 watchexec
 yadm
 yq

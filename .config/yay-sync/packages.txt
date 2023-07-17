@@ -1,7 +1,9 @@
+ansible
 asdf-vm
 aur/amazon-ecr-credential-helper
 aur/python-aws-mfa
 aws-cli
+aws-mfa
 awscli2
 bat
 cargo-outdated
@@ -11,6 +13,7 @@ docker-compose
 exa
 fd
 flatpak
+flatseal
 fzf
 git
 git-crypt
@@ -23,6 +26,7 @@ just
 kubectl
 lua
 neovim
+netbird-bin
 nmap
 perl-rename
 pv

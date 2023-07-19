@@ -19,3 +19,4 @@
 .config/linode-cli filter=git-crypt diff=git-crypt
 .ngrok2/** filter=git-crypt diff=git-crypt
 .config/mkcert filter=git-crypt diff=git-crypt
+.config/github-copilot/** filter=git-crypt diff=git-crypt

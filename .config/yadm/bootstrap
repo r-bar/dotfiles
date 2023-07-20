@@ -2,37 +2,7 @@
 
 # PROCEDURES IN THIS BOOTSTRAP SCRIPT SHOULD BE ABLE TO BE RERUN!
 
-
-# Initialize stub kubeconfig to enable switching between contexts from configs
-# in ~/.kube/config.d
-init_kubeconfig() {
-  if [ -f ~/.kube/config ]; then
-    echo "Existing kubeconfig found. Current contents:"
-    echo
-    cat ~/.kube/config
-    echo
-    echo
-    echo -n "Would you like to overwrite it with the skeleton kubeconfig? (Y/n) "
-    read response
-    case "$response" in
-      n*|N*)
-        echo "No changes made to kubeconfig"
-        ;;
-      y*|Y*|"")
-        cp ~/.kube/config.skeleton ~/.kube/config
-        ;;
-      *)
-        echo "Invalid response"
-        init_kubeconfig
-        ;;
-    esac
-  else
-    cp ~/.kube/config.skeleton ~/.kube/config
-  fi
-}
-
 yadm submodule update --init --recursive
-init_kubeconfig
 yadm alt
-~/.config/tmux/plugins/tpm/bin/install_plugins
-yay-sync
+~/.config/tmux/tpm/bin/install_plugins
+yas sync

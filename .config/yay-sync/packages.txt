@@ -9,6 +9,7 @@ bat
 cargo-outdated
 cargo-watch
 direnv
+docker
 docker-compose
 exa
 fd
@@ -29,6 +30,7 @@ neovim
 netbird-bin
 nmap
 perl-rename
+postgresql
 pv
 python-black
 python-poetry
@@ -36,10 +38,13 @@ python-pynvim
 quickemu
 rclone
 ripgrep
+rsync
 rustup
 silicon
 tmux
 watchexec
+wayland-utils
+wl-clipboard
 yadm
 yq
 yt-dlp

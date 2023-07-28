@@ -29,6 +29,7 @@ lua
 neovim
 netbird-bin
 nmap
+nodejs
 perl-rename
 postgresql
 pv

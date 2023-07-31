@@ -184,6 +184,9 @@ function M.config()
   -- scrolling
   vim.o.scrolloff = 3
 
+  -- map local leader key used for filetype specific mappings
+  vim.g.maplocalleader = ','
+
   -- resize splits automatically when vim is resized
   vim.cmd([[autocmd VimResized * wincmd =]])
 

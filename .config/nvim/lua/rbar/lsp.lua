@@ -47,7 +47,7 @@ function M.mason_config()
       "lua_ls",
       "marksman",
       "nil_ls", -- nix
-      "ocamllsp",
+      "ocaml-lsp",
       "ocamlformat",
       "pylsp",
       "rnix", -- nix
@@ -224,7 +224,6 @@ function M.server_settings()
   local lsputil = require('lspconfig.util')
 
   local settings = {}
-  -- the below servers tend to need to be installed globally to work correctly
 
   settings['lua_ls'] = vim.tbl_extend("force", M.default_server_settings(), {
     settings = {
@@ -234,6 +233,12 @@ function M.server_settings()
         },
       },
     },
+  })
+
+  settings['ocamllsp'] = vim.tbl_extend("force", M.default_server_settings(), {
+    settings = {
+
+    }
   })
 
   settings['pylsp'] = vim.tbl_extend("force", M.default_server_settings(), {

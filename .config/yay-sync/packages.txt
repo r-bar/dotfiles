@@ -42,6 +42,7 @@ ripgrep
 rsync
 rustup
 silicon
+stern
 tmux
 watchexec
 wayland-utils

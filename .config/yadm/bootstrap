@@ -4,5 +4,5 @@
 
 yadm submodule update --init --recursive
 yadm alt
-~/.config/tmux/tpm/bin/install_plugins
+~/.config/tmux/plugins/tpm/bin/install_plugins
 yas sync

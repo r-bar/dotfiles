@@ -30,10 +30,12 @@ neovim
 netbird-bin
 nmap
 nodejs
+openbsd-netcat
 perl-rename
 postgresql
 pv
 python-black
+python-pipx
 python-poetry
 python-pynvim
 quickemu
@@ -47,6 +49,7 @@ tmux
 watchexec
 wayland-utils
 wl-clipboard
+wrk
 yadm
 yq
 yt-dlp

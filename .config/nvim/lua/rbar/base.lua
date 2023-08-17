@@ -12,85 +12,98 @@ function M.packages(use)
   use 'https://github.com/Valloric/MatchTagAlways.git'
   use 'https://github.com/kana/vim-textobj-user.git'
   use {
-  'glts/vim-textobj-comment',
-  dependencies = {'https://github.com/kana/vim-textobj-user.git'},
-}
-  use{'https://github.com/AndrewRadev/splitjoin.vim.git', branch = 'main'}
-  use{
-  'https://github.com/Yggdroot/indentLine.git';
-  config = function()
-    vim.g.indentLine_char = "¦"
-    vim.g.indentLine_fileType = {'yaml', 'lua', 'helm'}
-  end;
-};
-  use{
-  'https://github.com/NarutoXY/silicon.lua.git',
-  config = function()
-    local silicon = require('silicon')
-    require('silicon').setup{
-      theme = 'OneHalfDark',
-      font = 'Fira Code',
-    }
-    vim.api.nvim_create_user_command(
-      'Screenshot',
-      function(info)
-        if vim.fn.executable('silicon') then
-          local args = {}
-          if string.match(info.args, 'clip') then
-            args.to_clip = true
-          end
-          if string.match(info.args, 'buf') then
-            args.show_buf = true
-          end
-          silicon.visualise_api(args)
-        else
-          print('Executable silicon must be installed to take screenshots')
-        end
-      end,
-      { range = '%', nargs = '*' }
-    )
-  end,
-}
-  use{
-  'https://github.com/windwp/nvim-autopairs.git',
-  config = function()
-    require("nvim-autopairs").setup{
-      check_ts = true,
-      ts_config = {
-        lua = {'string'},-- it will not add a pair on that treesitter node
-        javascript = {'template_string'},
-        java = false,-- don't check treesitter on java
+    'glts/vim-textobj-comment',
+    dependencies = {'https://github.com/kana/vim-textobj-user.git'},
+  }
+  use {'https://github.com/AndrewRadev/splitjoin.vim.git', branch = 'main'}
+  use {
+    'https://github.com/Yggdroot/indentLine.git';
+    config = function()
+      vim.g.indentLine_char = "¦"
+      vim.g.indentLine_fileType = {'yaml', 'lua', 'helm'}
+    end;
+  };
+  use {
+    'https://github.com/NarutoXY/silicon.lua.git',
+    config = function()
+      local silicon = require('silicon')
+      require('silicon').setup{
+        theme = 'OneHalfDark',
+        font = 'Fira Code',
       }
-    }
-  end,
-}
-  use{
-  "https://github.com/mbbill/undotree.git",
-  config = function()
-    vim.keymap.set('n', '<leader>u', ':UndotreeToggle<CR>')
-    vim.cmd [[
-    if has("persistent_undo")
-      let target_path = expand('~/.undodir')
-      " create the directory and any parent directories
-      " if the location does not exist.
-      if !isdirectory(target_path)
-        call mkdir(target_path, "p", 0700)
+      vim.api.nvim_create_user_command(
+        'Screenshot',
+        function(info)
+          if vim.fn.executable('silicon') then
+            local args = {}
+            if string.match(info.args, 'clip') then
+              args.to_clip = true
+            end
+            if string.match(info.args, 'buf') then
+              args.show_buf = true
+            end
+            silicon.visualise_api(args)
+          else
+            print('Executable silicon must be installed to take screenshots')
+          end
+        end,
+        { range = '%', nargs = '*' }
+      )
+    end,
+  }
+  use {
+    'https://github.com/windwp/nvim-autopairs.git',
+    config = function()
+      local npairs = require('nvim-autopairs')
+      local Rule = require('nvim-autopairs.rule')
+      local cond = require('nvim-autopairs.conds')
+      npairs.setup{
+        check_ts = true,
+        ts_config = {
+          lua = {'string'},-- it will not add a pair on that treesitter node
+          javascript = {'template_string'},
+          java = false,-- don't check treesitter on java
+        }
+      }
+      npairs.add_rules({
+        Rule("`", "`")
+          :with_pair(cond.not_filetypes({"ocaml", "rust"})),
+        Rule("'", "'")
+          :with_pair(cond.not_filetypes({"ocaml", "rust"})),
+        --Rule("(" , ")", "-ocaml"),
+        Rule("(*", "*", "ocaml")
+          :with_move(cond.none()),
+        --Rule("(" , ")", "ocaml"),
+      })
+    end,
+  }
+  use {
+    "https://github.com/mbbill/undotree.git",
+    config = function()
+      vim.keymap.set('n', '<leader>u', ':UndotreeToggle<CR>')
+      vim.cmd [[
+      if has("persistent_undo")
+        let target_path = expand('~/.undodir')
+        " create the directory and any parent directories
+        " if the location does not exist.
+        if !isdirectory(target_path)
+          call mkdir(target_path, "p", 0700)
+        endif
+        let &undodir=target_path
+        set undofile
       endif
-      let &undodir=target_path
-      set undofile
-    endif
-    ]]
-  end,
-}
-  use{
-  'mattn/emmet-vim',
-  ft = {'html', 'liquid', 'eruby', 'typescript', 'javascript', 'reason', 'jinja.html'},
-  config = function()
-    vim.g.user_emmet_install_global = 1
-    vim.g.user_emmet_leader_key = '<C-e>'
-    require('rbar/mappings').emmet()
-  end,
-}
+      ]]
+    end,
+  }
+  use {
+    'mattn/emmet-vim',
+    ft = {'html', 'liquid', 'eruby', 'typescript', 'javascript', 'reason', 'jinja.html'},
+    config = function()
+      vim.g.user_emmet_install_global = 1
+      vim.g.user_emmet_leader_key = '<C-e>'
+      require('rbar/mappings').emmet()
+    end,
+  }
   use 'https://github.com/scrooloose/nerdcommenter.git'
   use 'https://github.com/tpope/vim-fugitive.git'
   use 'https://github.com/romainl/vim-qf.git'

@@ -4,4 +4,3 @@ for file in $HOME/.zshrc.d/*.zsh; do
   #stop=$(date +%s.%N)
   #echo $file"\t"$(($stop - $start))
 done
-source "${XDG_CONFIG_HOME:-$HOME/.config}/asdf-direnv/zshrc"

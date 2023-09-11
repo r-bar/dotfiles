@@ -5,5 +5,6 @@ vim.filetype.add{
   filename = {
     ['.envrc'] = 'sh',
     ['v.mod'] = 'vlang',
+    ['*.tf'] = 'terraform',
   },
 }

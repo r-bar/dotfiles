@@ -30,11 +30,10 @@ function M.packages(use)
   end}
 end
 
+-- order is important. these mason setup calls must be done before lspconfig
+-- servers are configured
 function M.mason_config()
-  -- order is important. these mason setup calls must be done before lspconfig
-  -- servers are configured
-  require('mason').setup{
-    ensure_installed = {
+  local ensure_installed = {
       "ansiblels",
       "bashls",
       "cssls",
@@ -46,21 +45,26 @@ function M.mason_config()
       "jsonnet_ls",
       "lua_ls",
       "marksman",
-      "nil_ls", -- nix
       "ocaml-lsp",
       "ocamlformat",
       "pylsp",
-      "rnix", -- nix
       "ruff_lsp", -- python
-      "rustfmt",
       "sqlls",
       "tailwindcss",
       "vimls",
       "yamlls",
-    },
-    automatic_installation = false,
   }
-  require('mason-lspconfig').setup()
+
+  if vim.fn.executable("nix") == 1 then
+    table.insert(ensure_installed, "nil_ls")
+    table.insert(ensure_installed, "rnix")
+  end
+
+  require('mason').setup{}
+  require('mason-lspconfig').setup({
+    automatic_installation = true,
+    ensure_installed = ensure_installed,
+  })
 end
 
 local function has_words_before()
@@ -331,7 +335,7 @@ function M.config()
     -- and will be called for each installed server that doesn't have
     -- a dedicated handler.
     function (server_name) -- default handler (optional)
-      require("lspconfig")[server_name].setup(M.default_server_settings())
+      lspconfig[server_name].setup(M.default_server_settings())
     end,
   }
   for name, settings in pairs(M.server_settings()) do

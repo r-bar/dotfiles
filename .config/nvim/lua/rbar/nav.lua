@@ -38,7 +38,7 @@ function M.packages(use)
       vim.keymap.set("n", "<leader>3", function() ui.nav_file(3) end, {noremap = true})
       vim.keymap.set("n", "<leader>4", function() ui.nav_file(4) end, {noremap = true})
 
-      require("harpoon").setup({
+      require("harpoon").setup{
         -- sets the marks upon calling `toggle` on the ui, instead of require `:w`.
         save_on_toggle = true,
 
@@ -56,10 +56,14 @@ function M.packages(use)
 
         -- set marks specific to each git branch inside git repository
         mark_branch = false,
-      })
+      }
     end,
   }
   use "christoomey/vim-tmux-navigator"
+  use {
+    "nvim-treesitter/nvim-treesitter-context",
+    config = function() require("treesitter-context").setup() end,
+  }
 end
 
 function M.config()

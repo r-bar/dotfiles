@@ -1,1 +1,2 @@
 export NVIM_PYTHON=$HOME/.config/nvim/venv/bin/python
+export DOCKER_CONTEXT=colima

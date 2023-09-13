@@ -1,4 +1,4 @@
-.ssh/** filter=git-crypt diff=git-crypt
+/.ssh/** filter=git-crypt diff=git-crypt
 /.ngrok2/ngrok.yaml filter=git-crypt diff=git-crypt
 /.config/syncthing/cert.pem* filter=git-crypt diff=git-crypt
 /.config/syncthing/https-key.pem* filter=git-crypt diff=git-crypt
@@ -15,9 +15,10 @@
 .rclone.conf filter=git-crypt diff=git-crypt
 .flyrc filter=git-crypt diff=git-crypt
 /.config/syncthing/* filter=git-crypt diff=git-crypt
-.kube/** filter=git-crypt diff=git-crypt
-.config/linode-cli filter=git-crypt diff=git-crypt
-.ngrok2/** filter=git-crypt diff=git-crypt
-.config/mkcert filter=git-crypt diff=git-crypt
-.config/github-copilot/** filter=git-crypt diff=git-crypt
-.config/linode filter=git-crypt diff=git-crypt
+/.kube/** filter=git-crypt diff=git-crypt
+/.config/linode-cli filter=git-crypt diff=git-crypt
+/.ngrok2/** filter=git-crypt diff=git-crypt
+/.config/mkcert filter=git-crypt diff=git-crypt
+/.config/github-copilot/** filter=git-crypt diff=git-crypt
+/.config/linode filter=git-crypt diff=git-crypt
+/.config/pia/auth.txt filter=git-crypt diff=git-crypt

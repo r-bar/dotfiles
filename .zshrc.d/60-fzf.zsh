@@ -9,6 +9,7 @@ fi
 COMPLETION=(
   $HOME/.fzf/shell/completion.zsh
   /usr/share/fzf/completion.zsh
+  /opt/homebrew/opt/fzf/shell/completion.zsh
 )
 for file in $COMPLETION[@]; do
   if [[ $- == *i* ]] && [[ -f $file ]]; then
@@ -23,6 +24,7 @@ done
 KEY_BINDINGS=(
   "$HOME/.fzf/shell/key-bindings.zsh"
   /usr/share/fzf/key-bindings.zsh
+  /opt/homebrew/opt/fzf/shell/key-bindings.zsh
 )
 for file in $KEY_BINDINGS[@]; do
   if [ -f $file ]; then

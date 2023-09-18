@@ -6,7 +6,7 @@
 /.config/syncthing/csrftokens.txt* filter=git-crypt diff=git-crypt
 /.kube/config.d/* filter=git-crypt diff=git-crypt
 /.aws/credentials filter=git-crypt diff=git-crypt
-/.docker/config.json filter=git-crypt diff=git-crypt
+/.docker/** filter=git-crypt diff=git-crypt
 .smbcredentials filter=git-crypt diff=git-crypt
 .gist filter=git-crypt diff=git-crypt
 .gnupg filter=git-crypt diff=git-crypt

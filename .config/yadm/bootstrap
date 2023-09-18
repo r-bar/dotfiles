@@ -2,7 +2,12 @@
 
 # PROCEDURES IN THIS BOOTSTRAP SCRIPT SHOULD BE ABLE TO BE RERUN!
 
+build_docker_config() {
+  jq -s add ~/.docker/config.d/*.json > ~/.docker/config.json
+}
+
 yadm submodule update --init --recursive
 yadm alt
 ~/.config/tmux/tpm/bin/install_plugins
 yas sync
+build_docker_config

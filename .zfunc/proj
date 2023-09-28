@@ -1,9 +1,10 @@
 function proj() {
   proj_dir="${PROJ_DIR:=$HOME/src}"
 
-  folder_projects="$(/bin/ls -1t $proj_dir)"
   git_projects="$(fd '^\.git$' -H $proj_dir | while read git_dir; do dirname $git_dir; done | sed "s#^$proj_dir/##")"
-  projects="$(cat <(echo -e "$folder_projects") <(echo -e "$git_projects") | sort -u)"
+  #folder_projects="$(/bin/ls -1t $proj_dir)"
+  #projects="$(cat <(echo -e "$folder_projects") <(echo -e "$git_projects") | sort -u)"
+  projects="$git_projects"
 
   if [ -z "$1" ]; then
     proj_name="$(fzf --header 'Select a project' <<< "$projects")"

@@ -24,6 +24,10 @@ if [ -z "$HOMEBREW_NO_EXTRA_ENV" ]; then
     export LDFLAGS="-L$HOMEBREW_PREFIX/opt/libxml2/lib $LDFLAGS"
     export CPPFLAGS="-I$HOMEBREW_PREFIX/opt/libxml2/include $CPPFLAGS"
   fi
+  if [ -d $HOMEBREW_PREFIX/opt/libyaml ]; then
+    export LDFLAGS="-L$HOMEBREW_PREFIX/opt/libyaml/lib $LDFLAGS"
+    export CPPFLAGS="-I$HOMEBREW_PREFIX/opt/libyaml/include $CPPFLAGS"
+  fi
   if [ -d "$HOMEBREW_PREFIX/opt/openssl@1.1" ]; then
     export PATH="$HOMEBREW_PREFIX/opt/openssl@1.1/bin:$PATH"
     export LDFLAGS="-L$HOMEBREW_PREFIX/opt/openssl@1.1/lib $LDFLAGS"

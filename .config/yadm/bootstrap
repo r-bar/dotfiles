@@ -3,11 +3,18 @@
 # PROCEDURES IN THIS BOOTSTRAP SCRIPT SHOULD BE ABLE TO BE RERUN!
 
 build_docker_config() {
+  echo "Building docker config"
   jq -s add ~/.docker/config.d/*.json > ~/.docker/config.json
+}
+
+install_custom_firefox_profile_mods() {
+  echo "Installing custom firefox profile mods"
+  rsync -r ~/.mozilla/firefox/custom/ ~/.mozilla/firefox/*.default-release/
 }
 
 yadm submodule update --init --recursive
 yadm alt
+hash yay 2>/dev/null && yas sync
 ~/.config/tmux/tpm/bin/install_plugins
-yas sync
 build_docker_config
+install_custom_firefox_profile_mods

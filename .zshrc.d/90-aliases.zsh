@@ -1,11 +1,11 @@
 alias tmux='tmux -2'
-if hash exa 2> /dev/null; then
-  alias ls=exa
-  alias l=exa
-  alias ll='exa -l --group'
-  alias lla='exa -la'
-  alias la='exa -a'
-  alias tree='exa --tree'
+if hash eza 2> /dev/null; then
+  alias ls=eza
+  alias l=eza
+  alias ll='eza -l --group'
+  alias lla='eza -la'
+  alias la='eza -a'
+  alias tree='eza --tree'
 else
   alias ls='ls --color'
   alias l='ls -lFh'

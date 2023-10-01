@@ -1,0 +1,3 @@
+# See $HOME/.zshenv.d/10-macos-path_helper.zsh for more details
+
+set GLOBALS_RCS

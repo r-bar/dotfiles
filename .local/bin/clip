@@ -56,7 +56,7 @@ class NetstatUnixEntry(NamedTuple):
     type: str
     state: str
     inode: int
-    path: str | None
+    path: Optional[str]
 
     def parse(cls, line: str, columns: list[tuple[int, int]]) -> 'NetstatUnixEntry':
         parts = [
@@ -107,24 +107,23 @@ class Netstat:
                 columns = None
                 continue
 
-            match (section, columns):
-                case ('internet', None):
-                    columns = cls.parse_header(line)
-                case ('unix', None):
-                    columns = cls.parse_header(line)
-                case ('internet', _):
-                    inet_entries.append(NetstatInternetEntry.parse(line, columns))
-                case ('unix', _):
-                    unix_entries.append(NetstatUnixEntry.parse(line, columns))
+            if section == 'intenet' and columns is None:
+                columns = cls.parse_header(line)
+            elif section == 'unix' and columns is None:
+                columns = cls.parse_header(line)
+            elif section == 'internet':
+                inet_entries.append(NetstatInternetEntry.parse(line, columns))
+            elif section == 'unix':
+                unix_entries.append(NetstatUnixEntry.parse(line, columns))
 
         return inet_entries, unix_entries
 
     @staticmethod
     def parse_header(header_line):
-        return [(match.start(), match.end()) for match in re.finditer(r'\S+\s+', header_line)]
+        return [(m.start(), m.end()) for m in re.finditer(r'\S+\s+', header_line)]
 
     @classmethod
-    def ssh_reverse_socket(cls, local_addr='127.0.0.1:2222') -> NetstatInternetEntry | None:
+    def ssh_reverse_socket(cls, local_addr='127.0.0.1:2222') -> Optional[NetstatInternetEntry]:
         for entry in cls().inet_entries:
             if entry.state == 'LISTEN' and entry.proto == 'tcp' and entry.local_addr == local_addr:
                 return entry

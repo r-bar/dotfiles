@@ -12,9 +12,9 @@ function proj() {
     proj_name="$(fzf --filter $1 <<< "$projects" | head -n 1)"
   fi
 
-  if [ $? -ne 0 ]; then
+  if [ -z "$proj_name" ]; then
     echo No project selected
-    return $?
+    return 1
   fi
 
   if [ -d $proj_dir/$proj_name ]; then

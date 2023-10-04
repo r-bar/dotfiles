@@ -20,3 +20,6 @@ else
   alias dc='docker compose'
 fi
 alias pubssh='ssh -o "UserKnownHostsFile=/dev/null" -o "StrictHostKeyChecking=no"'
+if hash zellij 2> /dev/null; then
+  alias zel='zellij'
+fi

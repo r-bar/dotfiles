@@ -104,7 +104,11 @@ function M.packages(use)
       require('rbar/mappings').emmet()
     end,
   }
-  use 'https://github.com/scrooloose/nerdcommenter.git'
+  use {'https://github.com/scrooloose/nerdcommenter.git', config = function()
+    vim.g.NERDCustomDelimiters = {
+      kdl = { left = '//', leftAlt = '/*', rightAlt = '*/'},
+    }
+  end}
   use 'https://github.com/tpope/vim-fugitive.git'
   use 'https://github.com/romainl/vim-qf.git'
   use 'https://github.com/yssl/QFEnter.git'

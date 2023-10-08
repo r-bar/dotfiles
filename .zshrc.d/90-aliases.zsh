@@ -23,3 +23,6 @@ alias pubssh='ssh -o "UserKnownHostsFile=/dev/null" -o "StrictHostKeyChecking=no
 if hash zellij 2> /dev/null; then
   alias zel='zellij'
 fi
+if hash zypper 2> /dev/null; then
+  alias znr='zypper --no-refresh'
+fi

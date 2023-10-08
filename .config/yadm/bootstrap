@@ -14,7 +14,7 @@ install_custom_firefox_profile_mods() {
 
 yadm submodule update --init --recursive
 yadm alt
-hash yay 2>/dev/null && yas sync
+#hash yay 2>/dev/null && yas sync
 ~/.config/tmux/tpm/bin/install_plugins
 build_docker_config
 install_custom_firefox_profile_mods

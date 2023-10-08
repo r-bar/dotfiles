@@ -69,3 +69,8 @@
   navigate = true
   light = false
   zero-type = dim syntax
+[filter "lfs"]
+	process = git-lfs filter-process
+	required = true
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f

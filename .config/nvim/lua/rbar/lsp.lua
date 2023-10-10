@@ -40,13 +40,10 @@ function M.mason_config()
       "docker_compose_language_service",
       "dockerls",
       "html",
-      "jq",
       "jsonls",
       "jsonnet_ls",
       "lua_ls",
       "marksman",
-      "ocaml-lsp",
-      "ocamlformat",
       "pylsp",
       "ruff_lsp", -- python
       "sqlls",
@@ -202,6 +199,9 @@ function M.on_attach(client, bufnr)
   vim.keymap.set('n', '<leader>a', vim.lsp.buf.code_action, bufopts)
   vim.keymap.set('n', 'gr', vim.lsp.buf.references, bufopts)
   vim.keymap.set('n', '<leader>f', function() vim.lsp.buf.format { async = true } end, bufopts)
+
+  -- disable semantic token highlighting
+  client.server_capabilities.semanticTokensProvider = nil
 end
 
 function M.global_bindings()
@@ -301,6 +301,20 @@ https://github.com/vlang/vls
 The V language server can be installed via `v ls --install`.
 
 The official V language server, written in V itself.
+]]
+    },
+  })
+
+
+  settings['zls'] = vim.tbl_extend("force", M.default_server_settings(), {
+    cmd = {'zls'},
+    filetypes = {'zig'},
+    root_dir = lsputil.find_git_ancestor,
+    docs = {
+      description = [[
+[ZLS](https://github.com/zigtools/zls)
+
+[Configuration Options](https://github.com/zigtools/zls#configuration-options)
 ]]
     },
   })

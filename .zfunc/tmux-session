@@ -1,0 +1,11 @@
+tmux-session() {
+  if [ -z "$1" ]; then
+    echo "Usage: tmux-session <session-name>"
+    return 1
+  elif [ -f "$session_dir/$1.sh" ]; then
+    session_dir=${XDG_CONFIG_DIR:-$HOME/.config}/tmux/session-scripts
+    source "$session_dir/$1.sh"
+  else
+    echo "No $1 session defined"
+  fi
+}

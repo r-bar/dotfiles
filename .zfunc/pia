@@ -1,0 +1,4 @@
+function pia() {
+  region=${1:-ca_vancouver}
+  sudo openvpn --config $HOME/.config/pia/$region.ovpn
+}

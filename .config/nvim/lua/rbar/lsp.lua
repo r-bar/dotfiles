@@ -147,21 +147,21 @@ function M.nvim_cmp_config()
   })
 
   ---- Use buffer source for `/` and `?` (if you enabled `native_menu`, this won't work anymore).
-  cmp.setup.cmdline({ '/', '?' }, {
-    mapping = cmp.mapping.preset.cmdline(mappings),
-    sources = {
-      { name = 'buffer' },
-    },
-  })
+  --cmp.setup.cmdline({ '/', '?' }, {
+  --  mapping = cmp.mapping.preset.cmdline(mappings),
+  --  sources = {
+  --    { name = 'buffer' },
+  --  },
+  --})
 
   ---- Use cmdline & path source for ':' (if you enabled `native_menu`, this won't work anymore).
-  --cmp.setup.cmdline(':', {
-  --  mapping = cmp.mapping.preset.cmdline(mappings),
-  --  sources = cmp.config.sources({
-  --    { name = 'path' },
-  --    { name = 'cmdline' },
-  --  }),
-  --})
+  cmp.setup.cmdline(':', {
+    --mapping = cmp.mapping.preset.cmdline(mappings),
+    sources = cmp.config.sources({
+      --{ name = 'path' },
+      { name = 'cmdline' },
+    }),
+  })
 
   -- Set up lspconfig.
 end
@@ -316,6 +316,12 @@ The official V language server, written in V itself.
 
 [Configuration Options](https://github.com/zigtools/zls#configuration-options)
 ]]
+    },
+    -- https://github.com/zigtools/zls#configuration-options
+    settings = {
+      zls = {
+        enable_autofix = false,
+      },
     },
   })
 

@@ -64,6 +64,7 @@ function M.packages(use)
     "nvim-treesitter/nvim-treesitter-context",
     config = function() require("treesitter-context").setup() end,
   }
+  use "farmergreg/vim-lastplace"
 end
 
 function M.config()

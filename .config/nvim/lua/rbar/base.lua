@@ -5,7 +5,7 @@ function M.packages(use)
   use 'https://github.com/tpope/vim-abolish.git'
   use 'https://github.com/MarcWeber/vim-addon-local-vimrc.git'
   use 'https://github.com/michaeljsmith/vim-indent-object.git'
-  use{'https://github.com/tpope/vim-surround.git', dependencies = {'https://github.com/tpope/vim-repeat.git'}}
+  use {'https://github.com/tpope/vim-surround.git', dependencies = {'https://github.com/tpope/vim-repeat.git'}}
   use 'https://github.com/wellle/targets.vim'
   use 'danro/rename.vim'
   use 'https://github.com/tmhedberg/matchit.git'

@@ -38,6 +38,11 @@ function M.packages(use)
       vim.keymap.set("n", "<leader>3", function() ui.nav_file(3) end, {noremap = true})
       vim.keymap.set("n", "<leader>4", function() ui.nav_file(4) end, {noremap = true})
 
+      vim.keymap.set("n", "<C-1>", function() ui.nav_file(1) end, {noremap = true})
+      vim.keymap.set("n", "<C-2>", function() ui.nav_file(2) end, {noremap = true})
+      vim.keymap.set("n", "<C-3>", function() ui.nav_file(3) end, {noremap = true})
+      vim.keymap.set("n", "<C-4>", function() ui.nav_file(4) end, {noremap = true})
+
       require("harpoon").setup{
         -- sets the marks upon calling `toggle` on the ui, instead of require `:w`.
         save_on_toggle = true,

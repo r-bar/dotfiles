@@ -255,7 +255,7 @@ function M.server_settings()
     settings = {
       pylsp = {
         configurationSources = {
-          --'pycodestyle',
+          'pycodestyle',
           'pydocstyle',
           'rope',
           'mccabe',
@@ -266,12 +266,13 @@ function M.server_settings()
           'pylsp_rope',
         },
         plugins = {
-          pylsp_mypy = { enabled = false },
-          pycodestyle = { enabled = false },
-          pyflakes = { enabled = false },
           black = { enabled = true },
           rope = { enabled = true },
-          flake8 = { enabled = true },
+          pylsp_mypy = { enabled = false },
+          -- lints generally covered by black and ruff while being less configurable
+          pyflakes = { enabled = false },
+          flake8 = { enabled = false },
+          pycodestyle = { enabled = false },
         },
       },
     },

@@ -1,0 +1,6 @@
+function tmux-ssh-agent() {
+  eval `ssh-agent`
+  tmux setenv SSH_AUTH_SOCK $SSH_AUTH_SOCK
+  tmux setenv SSH_AGENT_PID $SSH_AGENT_PID
+  ssh-add
+}

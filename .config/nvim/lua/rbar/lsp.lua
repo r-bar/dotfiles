@@ -84,6 +84,7 @@ function M.tab_complete(fallback)
   local cmp = require('cmp')
   if cmp.visible() then
     cmp.select_next_item()
+    --cmp.select_next_item({ behavior = cmp.SelectBehavior.Select })
     -- You could replace the expand_or_jumpable() calls with expand_or_locally_jumpable()
     -- they way you will only jump inside the snippet region
   --elseif luasnip.expand_or_jumpable() then
@@ -99,6 +100,7 @@ function M.stab_complete(fallback)
   local cmp = require('cmp')
   if cmp.visible() then
     cmp.select_prev_item()
+    --cmp.select_prev_item({ behavior = cmp.SelectBehavior.Select })
   --elseif luasnip.jumpable(-1) then
   --  luasnip.jump(-1)
   else
@@ -129,6 +131,9 @@ function M.nvim_cmp_config()
   }
 
   cmp.setup({
+    completion = {
+      completeopt = vim.o.completeopt,
+    },
     snippet = {
       expand = function(args)
          require('luasnip').lsp_expand(args.body)

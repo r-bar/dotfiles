@@ -1,8 +1,8 @@
 function proj() {
-  proj_dir="${PROJ_DIR:=$HOME/src}"
+  PROJ_DIR="${PROJ_DIR:=$HOME/src}"
 
-  git_projects="$(fd '^\.git$' -H $proj_dir | while read git_dir; do dirname $git_dir; done | sed "s#^$proj_dir/##")"
-  #folder_projects="$(/bin/ls -1t $proj_dir)"
+  git_projects="$(fd '^\.git$' -HI $PROJ_DIR | while read git_dir; do dirname $git_dir; done | sed "s#^$PROJ_DIR/##")"
+  #folder_projects="$(/bin/ls -1t $PROJ_DIR)"
   #projects="$(cat <(echo -e "$folder_projects") <(echo -e "$git_projects") | sort -u)"
   projects="$git_projects"
 
@@ -17,9 +17,9 @@ function proj() {
     return 1
   fi
 
-  if [ -d $proj_dir/$proj_name ]; then
+  if [ -d $PROJ_DIR/$proj_name ]; then
     tmux renamew $(basename $proj_name)
-    cd $proj_dir/$proj_name
+    cd $PROJ_DIR/$proj_name
   else
     echo Invalid project
     return 1

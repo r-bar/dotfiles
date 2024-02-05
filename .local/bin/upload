@@ -16,24 +16,25 @@ from textwrap import dedent
 from collections.abc import Iterable, Iterator
 
 
-class Cli(ArgumentParser):
+class Cli:
     def __init__(self, argv=sys.argv[1:]):
-        super().__init__("upload", description="upload and host files on linode")
-        self.add_argument("--rclone-config", default=os.environ["UPLOAD_RCLONE_CONFIG"])
-        self.add_argument("--public", action="store_true")
-        self.add_argument("--expire", default="1w")
-        self.add_argument("--name", default=generate_name())
-        self.add_argument("--bucket", default=os.environ["UPLOAD_BUCKET"])
-        self.add_argument("--base-path", default=os.environ.get("UPLOAD_BASE_PATH", ""))
-        folder_strat = self.add_mutually_exclusive_group()
+        self.parser = p = ArgumentParser("upload", description="upload and host files on linode")
+        p.add_argument("--rclone-config", default=os.environ["UPLOAD_RCLONE_CONFIG"])
+        p.add_argument("--public", action="store_true")
+        p.add_argument("--expire", default="1w")
+        p.add_argument("--name", default=generate_name())
+        p.add_argument("--bucket", default=os.environ["UPLOAD_BUCKET"])
+        p.add_argument("--base-path", default=os.environ.get("UPLOAD_BASE_PATH", ""))
+        folder_strat = p.add_mutually_exclusive_group()
+        folder_strat.add_argument('--index', const='index', action='store_const', dest='index_strat', default='index')
         folder_strat.add_argument('--zip', const='zip', action='store_const', dest='index_strat')
-        folder_strat.add_argument('--index', const='index', action='store_const', dest='index_strat')
-        self.add_argument("file", type=Path)
-        self.args = self.parse_args(argv)
+        p.add_argument("file", type=Path)
+        self.args = p.parse_args(argv)
+        self.__dict__.update(self.args.__dict__)
 
     def base_target(self) -> str:
-        path = PurePosixPath(self.args.bucket) / self.args.base_path / self.args.name
-        return f"{self.args.rclone_config}:{path}"
+        path = PurePosixPath(self.bucket) / self.base_path / self.name
+        return f"{self.rclone_config}:{path}"
 
     def in_base_target(self, item: str):
         return str(PurePosixPath(self.base_target()) / item)
@@ -224,30 +225,30 @@ def zip(target: str) -> str:
 
 def main():
     cli = Cli()
-    match (cli.args.file.is_dir(), cli.args.index_strat):
+    match (cli.file.is_dir(), cli.index_strat):
         case (True, "index"):
             uploader = IndexUploader(
-                cli.args.file,
+                cli.file,
                 cli.base_target(),
-                expire=cli.args.expire,
-                public=cli.args.public,
+                expire=cli.expire,
+                public=cli.public,
             )
             uploader.upload()
         case (True, "zip"):
-            with zip(cli.args.file) as zip_file:
+            with zip(cli.file) as zip_file:
                 uploader = FileUploader(
                     zip_file,
                     cli.base_target(),
-                    expire=cli.args.expire,
-                    public=cli.args.public,
+                    expire=cli.expire,
+                    public=cli.public,
                 )
                 uploader.upload()
         case (False, _):
             uploader = FileUploader(
-                cli.args.file,
+                cli.file,
                 cli.base_target(),
-                expire=cli.args.expire,
-                public=cli.args.public,
+                expire=cli.expire,
+                public=cli.public,
             )
             uploader.upload()
     link = uploader.generate_link()

@@ -5,6 +5,8 @@ function M.packages(use)
   use 'neovim/nvim-lspconfig'
   use 'williamboman/mason.nvim'
   use {'williamboman/mason-lspconfig.nvim', config = M.mason_config}
+  use {'j-hui/fidget.nvim', opts = {}}
+  use 'folke/neodev.nvim'
 
   -- Autocompletion
   use {'hrsh7th/nvim-cmp', config = M.nvim_cmp_config}

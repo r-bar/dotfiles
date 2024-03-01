@@ -23,7 +23,7 @@ function M.packages(use)
     config = function()
       require('nightfox').setup({
         options = {
-          transparent = true,
+          transparent = false,
         },
       })
       vim.cmd[[colorscheme nightfox]]

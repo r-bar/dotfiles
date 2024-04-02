@@ -3,7 +3,25 @@ local M = {}
 
 function M.packages(use)
   use 'https://github.com/tpope/vim-abolish.git'
-  use 'https://github.com/MarcWeber/vim-addon-local-vimrc.git'
+  use {
+    "klen/nvim-config-local",
+    config = function()
+      require('config-local').setup {
+        -- Default options (optional)
+
+        -- Config file patterns to load (lua supported)
+        config_files = { ".nvim.lua" },
+
+        -- Where the plugin keeps files data
+        hashfile = vim.fn.stdpath("data") .. "/config-local",
+
+        autocommands_create = true, -- Create autocommands (VimEnter, DirectoryChanged)
+        commands_create = true,     -- Create commands (ConfigLocalSource, ConfigLocalEdit, ConfigLocalTrust, ConfigLocalIgnore)
+        silent = false,             -- Disable plugin messages (Config loaded/ignored)
+        lookup_parents = true,      -- Lookup config files in parent directories
+      }
+    end
+  }
   use 'https://github.com/michaeljsmith/vim-indent-object.git'
   use {'https://github.com/tpope/vim-surround.git', dependencies = {'https://github.com/tpope/vim-repeat.git'}}
   use 'https://github.com/wellle/targets.vim'

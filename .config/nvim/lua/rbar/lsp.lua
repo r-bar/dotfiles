@@ -266,20 +266,32 @@ function M.server_settings()
           'pydocstyle',
           'rope',
           'mccabe',
-          'black',
+          --'black',
           'flake8',
           'pylint',
           'isort',
           'pylsp_rope',
         },
         plugins = {
-          black = { enabled = true },
+          black = { enabled = false },
           rope = { enabled = true },
           pylsp_mypy = { enabled = false },
           -- lints generally covered by black and ruff while being less configurable
           pyflakes = { enabled = false },
           flake8 = { enabled = false },
           pycodestyle = { enabled = false },
+          ruff = {
+            enabled = true,  -- Enable the plugin
+            formatEnabled = true,  -- Enable formatting using ruffs formatter
+            format = { "I" },  -- Rules that are marked as fixable by ruff that should be fixed when running textDocument/formatting
+            unsafeFixes = false,  -- Whether or not to offer unsafe fixes as code actions. Ignored with the "Fix All" action
+
+            -- Rules that are ignored when a pyproject.toml or ruff.toml is present:
+            lineLength = 88,  -- Line length to pass to ruff checking and formatting
+            perFileIgnores = { ["__init__.py"] = "CPY001" },  -- Rules that should be ignored for specific files
+            preview = false,  -- Whether to enable the preview style linting and formatting.
+            targetVersion = "py310",  -- The minimum python version to target (applies for both lint and format)
+          }
         },
       },
     },

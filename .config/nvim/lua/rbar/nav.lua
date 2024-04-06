@@ -18,7 +18,13 @@ function M.packages(use)
       vim.api.nvim_create_user_command("Help", function() fzf.help_tags() end, {})
     end
   }
-
+  use {
+    'ggandor/leap.nvim',
+    config = function()
+      vim.keymap.set({'n', 'x', 'o'}, 's', '<Plug>(leap)')
+      vim.keymap.set('n', 'gs', '<Plug>(leap-from-window)')
+    end,
+  }
   use 'nvim-lua/plenary.nvim'
   use {
     'ThePrimeagen/harpoon',

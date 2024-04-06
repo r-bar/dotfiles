@@ -2,7 +2,6 @@ local M = {}
 
 function M.packages(use)
   use 'LnL7/vim-nix'
-  use 'IndianBoy42/tree-sitter-just'
   use "https://github.com/coddingtonbear/confluencewiki.vim"
   use "https://github.com/towolf/vim-helm.git"
   use "https://github.com/google/vim-jsonnet.git"

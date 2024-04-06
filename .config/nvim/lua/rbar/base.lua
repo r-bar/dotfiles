@@ -36,11 +36,29 @@ function M.packages(use)
   use {'https://github.com/AndrewRadev/splitjoin.vim.git', branch = 'main'}
   use {
     'https://github.com/Yggdroot/indentLine.git';
+    enabled = false,
     config = function()
       vim.g.indentLine_char = "¦"
       vim.g.indentLine_fileType = {'yaml', 'lua', 'helm'}
     end;
-  };
+  }
+  use {
+    'echasnovski/mini.indentscope',
+    version = '*',
+    config = function()
+      local scope = require('mini.indentscope')
+      scope.setup({
+        draw = {
+          delay = 200,
+          animation = scope.gen_animation.quadratic({
+            duration = 200,
+            easing = 'in',
+            unit = 'total',
+          }),
+        },
+      })
+    end,
+  }
   use {
     'https://github.com/NarutoXY/silicon.lua.git',
     config = function()

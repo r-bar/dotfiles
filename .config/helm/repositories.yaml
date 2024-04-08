@@ -172,3 +172,12 @@ repositories:
   password: ""
   url: https://open-telemetry.github.io/opentelemetry-helm-charts
   username: ""
+- caFile: ""
+  certFile: ""
+  insecure_skip_tls_verify: false
+  keyFile: ""
+  name: uptime-kuma
+  pass_credentials_all: false
+  password: ""
+  url: https://dirsigler.github.io/uptime-kuma-helm
+  username: ""

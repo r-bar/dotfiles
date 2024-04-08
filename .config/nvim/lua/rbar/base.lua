@@ -23,7 +23,7 @@ function M.packages(use)
     end
   }
   use 'https://github.com/michaeljsmith/vim-indent-object.git'
-  use {'https://github.com/tpope/vim-surround.git', dependencies = {'https://github.com/tpope/vim-repeat.git'}}
+  use { 'https://github.com/tpope/vim-surround.git', dependencies = { 'https://github.com/tpope/vim-repeat.git' } }
   use 'https://github.com/wellle/targets.vim'
   use 'danro/rename.vim'
   use 'https://github.com/tmhedberg/matchit.git'
@@ -31,16 +31,16 @@ function M.packages(use)
   use 'https://github.com/kana/vim-textobj-user.git'
   use {
     'glts/vim-textobj-comment',
-    dependencies = {'https://github.com/kana/vim-textobj-user.git'},
+    dependencies = { 'https://github.com/kana/vim-textobj-user.git' },
   }
-  use {'https://github.com/AndrewRadev/splitjoin.vim.git', branch = 'main'}
+  use { 'https://github.com/AndrewRadev/splitjoin.vim.git', branch = 'main' }
   use {
-    'https://github.com/Yggdroot/indentLine.git';
+    'https://github.com/Yggdroot/indentLine.git',
     enabled = false,
     config = function()
       vim.g.indentLine_char = "¦"
-      vim.g.indentLine_fileType = {'yaml', 'lua', 'helm'}
-    end;
+      vim.g.indentLine_fileType = { 'yaml', 'lua', 'helm' }
+    end,
   }
   use {
     'echasnovski/mini.indentscope',
@@ -63,7 +63,7 @@ function M.packages(use)
     'https://github.com/NarutoXY/silicon.lua.git',
     config = function()
       local silicon = require('silicon')
-      require('silicon').setup{
+      require('silicon').setup {
         theme = 'OneHalfDark',
         font = 'Fira Code',
       }
@@ -93,22 +93,22 @@ function M.packages(use)
       local npairs = require('nvim-autopairs')
       local Rule = require('nvim-autopairs.rule')
       local cond = require('nvim-autopairs.conds')
-      npairs.setup{
+      npairs.setup {
         check_ts = true,
         ts_config = {
-          lua = {'string'},-- it will not add a pair on that treesitter node
-          javascript = {'template_string'},
-          java = false,-- don't check treesitter on java
+          lua = { 'string' }, -- it will not add a pair on that treesitter node
+          javascript = { 'template_string' },
+          java = false,     -- don't check treesitter on java
         }
       }
       npairs.add_rules({
         Rule("`", "`")
-          :with_pair(cond.not_filetypes({"ocaml", "rust"})),
+            :with_pair(cond.not_filetypes({ "ocaml", "rust" })),
         Rule("'", "'")
-          :with_pair(cond.not_filetypes({"ocaml", "rust"})),
+            :with_pair(cond.not_filetypes({ "ocaml", "rust" })),
         --Rule("(" , ")", "-ocaml"),
         Rule("(*", "*", "ocaml")
-          :with_move(cond.none()),
+            :with_move(cond.none()),
         --Rule("(" , ")", "ocaml"),
       })
     end,
@@ -133,22 +133,21 @@ function M.packages(use)
   }
   use {
     'mattn/emmet-vim',
-    ft = {'html', 'liquid', 'eruby', 'typescript', 'javascript', 'reason', 'jinja.html'},
+    ft = { 'html', 'liquid', 'eruby', 'typescript', 'javascript', 'reason', 'jinja.html' },
     config = function()
       vim.g.user_emmet_install_global = 1
       vim.g.user_emmet_leader_key = '<C-e>'
       require('rbar/mappings').emmet()
     end,
   }
-  use {'https://github.com/scrooloose/nerdcommenter.git', config = function()
+  use { 'https://github.com/scrooloose/nerdcommenter.git', config = function()
     vim.g.NERDCustomDelimiters = {
-      kdl = { left = '//', leftAlt = '/*', rightAlt = '*/'},
+      kdl = { left = '//', leftAlt = '/*', rightAlt = '*/' },
     }
-  end}
+  end }
   use 'https://github.com/tpope/vim-fugitive.git'
   use 'https://github.com/romainl/vim-qf.git'
   use 'https://github.com/yssl/QFEnter.git'
-
 end
 
 local function toggle_list_chars()
@@ -295,7 +294,7 @@ function M.config()
     local random = math.random
     local template = "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
     return string.gsub(template, "x", function()
-      local v = random(0, 0xf)  -- v is a decimal number 0 to 15
+      local v = random(0, 0xf)      -- v is a decimal number 0 to 15
       return string.format("%x", v) --formatted as a hex number
     end)
   end

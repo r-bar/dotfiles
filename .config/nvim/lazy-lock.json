@@ -4,6 +4,7 @@
   "MatchTagAlways": { "branch": "master", "commit": "352eb479a4ad1608e0880b79ab2357aac2cf4bed" },
   "QFEnter": { "branch": "master", "commit": "426c04312ae67ac28dce38ccc5fafdd1ed4a3d9f" },
   "Vim-Jinja2-Syntax": { "branch": "master", "commit": "2c17843b074b06a835f88587e1023ceff7e2c7d1" },
+  "ansible-vim": { "branch": "master", "commit": "afc739e505053a6143a1fc6cedac6fb4d7a1d4db" },
   "cmp-buffer": { "branch": "main", "commit": "3022dbc9166796b644a841a02de8dd1cc1d311fa" },
   "cmp-nvim-lsp": { "branch": "main", "commit": "44b16d11215dce86f253ce0c30949813c0a90765" },
   "cmp-nvim-lua": { "branch": "main", "commit": "f12408bdb54c39c23e67cab726264c10db33ada8" },

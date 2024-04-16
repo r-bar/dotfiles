@@ -148,6 +148,13 @@ function M.packages(use)
   use 'https://github.com/tpope/vim-fugitive.git'
   use 'https://github.com/romainl/vim-qf.git'
   use 'https://github.com/yssl/QFEnter.git'
+  use {
+    'https://github.com/junegunn/vim-easy-align.git',
+    config = function()
+      vim.keymap.set('n', 'ga', '<Plug>(EasyAlign)', { noremap = false })
+      vim.keymap.set('x', 'ga', '<Plug>(EasyAlign)', { noremap = false })
+    end,
+  }
 end
 
 local function toggle_list_chars()

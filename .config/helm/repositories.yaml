@@ -68,15 +68,6 @@ repositories:
   certFile: ""
   insecure_skip_tls_verify: false
   keyFile: ""
-  name: traefik
-  pass_credentials_all: false
-  password: ""
-  url: https://helm.traefik.io/traefik
-  username: ""
-- caFile: ""
-  certFile: ""
-  insecure_skip_tls_verify: false
-  keyFile: ""
   name: rook
   pass_credentials_all: false
   password: ""
@@ -180,4 +171,13 @@ repositories:
   pass_credentials_all: false
   password: ""
   url: https://dirsigler.github.io/uptime-kuma-helm
+  username: ""
+- caFile: ""
+  certFile: ""
+  insecure_skip_tls_verify: false
+  keyFile: ""
+  name: traefik
+  pass_credentials_all: false
+  password: ""
+  url: https://traefik.github.io/charts
   username: ""

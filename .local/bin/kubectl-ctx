@@ -237,10 +237,9 @@ def main():
             headers = ["  ", "Name", "Namespace", "File"]
             data = [headers]
             for context in contexts:
+                marker = ""
                 if context.key == manager.current_context:
                     marker = "->"
-                else:
-                    marker = "  "
                 data.append(
                     [marker, context.name, context.namespace, context.file.name]
                 )

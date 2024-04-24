@@ -199,3 +199,12 @@ repositories:
   password: ""
   url: https://rke2-charts.rancher.io
   username: ""
+- caFile: ""
+  certFile: ""
+  insecure_skip_tls_verify: false
+  keyFile: ""
+  name: dagster
+  pass_credentials_all: false
+  password: ""
+  url: https://dagster-io.github.io/helm
+  username: ""

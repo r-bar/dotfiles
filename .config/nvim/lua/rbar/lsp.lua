@@ -4,12 +4,12 @@ M.lsp_flags = {}
 function M.packages(use)
   use 'neovim/nvim-lspconfig'
   use 'williamboman/mason.nvim'
-  use {'williamboman/mason-lspconfig.nvim', config = M.mason_config}
-  use {'j-hui/fidget.nvim', opts = {}}
+  use { 'williamboman/mason-lspconfig.nvim', config = M.mason_config }
+  use { 'j-hui/fidget.nvim', opts = {} }
   use 'folke/neodev.nvim'
 
   -- Autocompletion
-  use {'hrsh7th/nvim-cmp', config = M.nvim_cmp_config}
+  use { 'hrsh7th/nvim-cmp', config = M.nvim_cmp_config }
   use 'hrsh7th/cmp-buffer'
   use 'hrsh7th/cmp-path'
   use 'saadparwaiz1/cmp_luasnip'
@@ -17,41 +17,43 @@ function M.packages(use)
   use 'hrsh7th/cmp-nvim-lua'
 
   -- Snippets
-  use {'L3MON4D3/LuaSnip', config = M.luasnip_config}
+  use { 'L3MON4D3/LuaSnip', config = M.luasnip_config }
   use 'rafamadriz/friendly-snippets'
   use 'honza/vim-snippets'
   use 'https://github.com/molleweide/LuaSnip-snippets.nvim.git'
 
   --use 'VonHeikemen/lsp-zero.nvim'
-  use {'github/copilot.vim', config = function()
+  use { 'github/copilot.vim', config = function()
     vim.g.copilot_no_tab_map = true
     --vim.keymap.set("i", "<c-cr>", 'copilot#Accept("")', { silent = true, expr = true })
     --vim.keymap.set("n", "<C-cr>", 'copilot#Accept("")', { silent = true, expr = true })
-    vim.keymap.set("i", "<c-space>", 'copilot#Accept("")', { noremap = true, silent = true, expr = true, replace_keycodes = false })
-    vim.keymap.set("n", "<C-space>", 'copilot#Accept("")', { noremap = true, silent = true, expr = true, replace_keycodes = false })
-  end}
+    vim.keymap.set("i", "<c-space>", 'copilot#Accept("")',
+      { noremap = true, silent = true, expr = true, replace_keycodes = false })
+    vim.keymap.set("n", "<C-space>", 'copilot#Accept("")',
+      { noremap = true, silent = true, expr = true, replace_keycodes = false })
+  end }
 end
 
 -- order is important. these mason setup calls must be done before lspconfig
 -- servers are configured
 function M.mason_config()
   local ensure_installed = {
-      "ansiblels",
-      "bashls",
-      "cssls",
-      "docker_compose_language_service",
-      "dockerls",
-      "html",
-      "jsonls",
-      "jsonnet_ls",
-      "lua_ls",
-      "marksman",
-      "pylsp",
-      "ruff_lsp", -- python
-      "sqlls",
-      "tailwindcss",
-      "vimls",
-      "yamlls",
+    "ansiblels",
+    "bashls",
+    "cssls",
+    "docker_compose_language_service",
+    "dockerls",
+    "html",
+    "jsonls",
+    "jsonnet_ls",
+    "lua_ls",
+    "marksman",
+    "pylsp",
+    "ruff_lsp",   -- python
+    "sqlls",
+    "tailwindcss",
+    "vimls",
+    "yamlls",
   }
 
   if vim.fn.executable("nix") == 1 then
@@ -59,7 +61,7 @@ function M.mason_config()
     table.insert(ensure_installed, "rnix")
   end
 
-  require('mason').setup{}
+  require('mason').setup { PATH = "append" }
   require('mason-lspconfig').setup({
     automatic_installation = true,
     ensure_installed = ensure_installed,
@@ -74,12 +76,12 @@ local function has_words_before()
 end
 
 local function is_whitespace()
-    -- returns true if the character under the cursor is whitespace.
-    local col = vim.fn.col('.') - 1
-    local line = vim.fn.getline('.')
-    local char_under_cursor = string.sub(line, col, col)
+  -- returns true if the character under the cursor is whitespace.
+  local col = vim.fn.col('.') - 1
+  local line = vim.fn.getline('.')
+  local char_under_cursor = string.sub(line, col, col)
 
-    return col == 0 or string.match(char_under_cursor, '%s')
+  return col == 0 or string.match(char_under_cursor, '%s')
 end
 
 function M.tab_complete(fallback)
@@ -89,8 +91,8 @@ function M.tab_complete(fallback)
     --cmp.select_next_item({ behavior = cmp.SelectBehavior.Select })
     -- You could replace the expand_or_jumpable() calls with expand_or_locally_jumpable()
     -- they way you will only jump inside the snippet region
-  --elseif luasnip.expand_or_jumpable() then
-  --  luasnip.expand_or_jump()
+    --elseif luasnip.expand_or_jumpable() then
+    --  luasnip.expand_or_jump()
   elseif has_words_before() then
     cmp.complete()
   else
@@ -103,8 +105,8 @@ function M.stab_complete(fallback)
   if cmp.visible() then
     cmp.select_prev_item()
     --cmp.select_prev_item({ behavior = cmp.SelectBehavior.Select })
-  --elseif luasnip.jumpable(-1) then
-  --  luasnip.jump(-1)
+    --elseif luasnip.jumpable(-1) then
+    --  luasnip.jump(-1)
   else
     fallback()
   end
@@ -138,7 +140,7 @@ function M.nvim_cmp_config()
     },
     snippet = {
       expand = function(args)
-         require('luasnip').lsp_expand(args.body)
+        require('luasnip').lsp_expand(args.body)
       end,
     },
     window = {
@@ -175,11 +177,11 @@ end
 
 function M.luasnip_config()
   local luasnip = require('luasnip')
-  luasnip.config.setup{
+  luasnip.config.setup {
     -- When false you cannot jump back into a snippet once it is complete.
     -- Turning it off lets the snippet function exit after you are done.
     -- This prevents the plugin or keybinds from conflicting.
-    history = false;
+    history = false,
   }
   require("luasnip.loaders.from_vscode").lazy_load()
   require("luasnip.loaders.from_snipmate").lazy_load()
@@ -188,7 +190,7 @@ end
 function M.on_attach(client, bufnr)
   -- Mappings.
   -- See `:help vim.lsp.*` for documentation on any of the below functions
-  local bufopts = { noremap=true, silent=true, buffer=bufnr }
+  local bufopts = { noremap = true, silent = true, buffer = bufnr }
   vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, bufopts)
   vim.keymap.set('n', 'gd', vim.lsp.buf.definition, bufopts)
   vim.keymap.set('n', 'K', vim.lsp.buf.hover, bufopts)
@@ -212,7 +214,7 @@ function M.on_attach(client, bufnr)
 end
 
 function M.global_bindings()
-  local opts = { noremap=true, silent=true }
+  local opts = { noremap = true, silent = true }
   vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float, opts)
   vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, opts)
   vim.keymap.set('n', ']d', vim.diagnostic.goto_next, opts)
@@ -240,7 +242,7 @@ function M.server_settings()
     settings = {
       Lua = {
         diagnostics = {
-          globals = {'vim'},
+          globals = { 'vim' },
         },
       },
     },
@@ -281,21 +283,24 @@ function M.server_settings()
           flake8 = { enabled = false },
           pycodestyle = { enabled = false },
           ruff = {
-            enabled = true,  -- Enable the plugin
-            formatEnabled = true,  -- Enable formatting using ruffs formatter
-            format = { "I" },  -- Rules that are marked as fixable by ruff that should be fixed when running textDocument/formatting
+            enabled = true,       -- Enable the plugin
+            formatEnabled = true, -- Enable formatting using ruffs formatter
+            format = { "I" },     -- Rules that are marked as fixable by ruff that should be fixed when running textDocument/formatting
             unsafeFixes = false,  -- Whether or not to offer unsafe fixes as code actions. Ignored with the "Fix All" action
 
             -- Rules that are ignored when a pyproject.toml or ruff.toml is present:
-            lineLength = 88,  -- Line length to pass to ruff checking and formatting
-            perFileIgnores = { ["__init__.py"] = "CPY001" },  -- Rules that should be ignored for specific files
-            preview = false,  -- Whether to enable the preview style linting and formatting.
-            targetVersion = "py310",  -- The minimum python version to target (applies for both lint and format)
+            lineLength = 88,                                 -- Line length to pass to ruff checking and formatting
+            perFileIgnores = { ["__init__.py"] = "CPY001" }, -- Rules that should be ignored for specific files
+            preview = false,                                 -- Whether to enable the preview style linting and formatting.
+            targetVersion = "py310",                         -- The minimum python version to target (applies for both lint and format)
           }
         },
       },
     },
   })
+  if vim.fn.executable("pylsp") == 1  then
+    settings.pylsp.cmd = { "pylsp" }
+  end
 
   settings['rust_analyzer'] = vim.tbl_extend("force", M.default_server_settings(), {
     settings = {
@@ -311,8 +316,8 @@ function M.server_settings()
 
   -- https://github.com/vlang/vls
   settings['vls'] = vim.tbl_extend("force", M.default_server_settings(), {
-    cmd = {'v', 'ls'},
-    filetypes = {'vlang'},
+    cmd = { 'v', 'ls' },
+    filetypes = { 'vlang' },
     root_dir = lsputil.find_git_ancestor,
     docs = {
       description = [[
@@ -327,8 +332,8 @@ The official V language server, written in V itself.
 
 
   settings['zls'] = vim.tbl_extend("force", M.default_server_settings(), {
-    cmd = {'zls'},
-    filetypes = {'zig'},
+    cmd = { 'zls' },
+    filetypes = { 'zig' },
     root_dir = lsputil.find_git_ancestor,
     docs = {
       description = [[
@@ -356,14 +361,14 @@ function M.config()
   vim.fn.system("rm $HOME/.local/state/nvim/lsp.log")
   vim.lsp.set_log_level(vim.env.NVIM_LSP_LOG_LEVEL or "debug")
 
-  vim.api.nvim_create_user_command("Format", function() vim.lsp.buf.format{async = false} end, {})
+  vim.api.nvim_create_user_command("Format", function() vim.lsp.buf.format { async = false } end, {})
   vim.api.nvim_create_user_command("LspDiagnostics", function() vim.diagnostic.setqflist() end, {})
   vim.api.nvim_create_user_command(
     "LspRestart",
     function()
       vim.lsp.buf.clear_references()
       vim.lsp.stop_client(vim.lsp.get_active_clients())
-      vim.cmd[[edit]]
+      vim.cmd [[edit]]
     end,
     {}
   )
@@ -374,7 +379,7 @@ function M.config()
     -- The first entry (without a key) will be the default handler
     -- and will be called for each installed server that doesn't have
     -- a dedicated handler.
-    function (server_name) -- default handler (optional)
+    function(server_name)  -- default handler (optional)
       lspconfig[server_name].setup(M.default_server_settings())
     end,
   }

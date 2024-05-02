@@ -138,6 +138,7 @@ function M.nvim_cmp_config()
     completion = {
       completeopt = vim.o.completeopt,
     },
+    preselect = cmp.PreselectMode.None,
     snippet = {
       expand = function(args)
         require('luasnip').lsp_expand(args.body)

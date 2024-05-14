@@ -12,6 +12,7 @@ function M.packages(use)
   use { "https://github.com/ollykel/v-vim.git", ft = 'vlang', enabled = false }
   use { "https://github.com/IndianBoy42/tree-sitter-just.git", ft = 'just', config = true }
   use "https://github.com/pearofducks/ansible-vim.git"
+  use { "czheo/mojo.vim", ft = 'mojo' }
 end
 
 return M

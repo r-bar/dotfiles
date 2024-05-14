@@ -143,6 +143,7 @@ function M.packages(use)
   use { 'https://github.com/scrooloose/nerdcommenter.git', config = function()
     vim.g.NERDCustomDelimiters = {
       kdl = { left = '//', leftAlt = '/*', rightAlt = '*/' },
+      mojo = { left = '# ' }
     }
   end }
   use 'https://github.com/tpope/vim-fugitive.git'

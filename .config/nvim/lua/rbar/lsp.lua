@@ -173,6 +173,13 @@ function M.nvim_cmp_config()
     }),
   })
 
+  cmp.setup.filetype({ "sql" }, {
+    sources = {
+      { name = "vim-dadbod-completion" },
+      { name = "buffer" },
+    }
+  })
+
   -- Set up lspconfig.
 end
 

@@ -53,22 +53,20 @@
   excludesfile = ~/.gitignore
 [mergetool "nvimfugitive"]
   cmd = nvim -f -c \"Gdiffsplit!\" \"$MERGED\"
-#[delta]
-#  line-numbers = true
-#  side-by-side = true
-#  syntax-theme = Nord
 [init]
 	defaultBranch = master
 [include]
   path = .gitconfig.local
+	path = .themes.gitconfig
 [interactive]
   diffFilter = delta --color-only
 [add.interactive]
   useBuiltin = false # required for git 2.37
 [delta]
   navigate = true
-  light = false
-  zero-type = dim syntax
+  dark = true
+  #zero-type = dim syntax
+  #map-styles = bold purple => dim syntax red, bold cyan => syntax green
 [filter "lfs"]
 	process = git-lfs filter-process
 	required = true

@@ -338,6 +338,7 @@ The official V language server, written in V itself.
     },
   })
 
+  settings['mojo'] = vim.tbl_extend("force", M.default_server_settings(), {})
 
   settings['zls'] = vim.tbl_extend("force", M.default_server_settings(), {
     cmd = { 'zls' },

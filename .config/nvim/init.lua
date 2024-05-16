@@ -8,6 +8,7 @@ loader.load 'rbar/lsp'
 loader.load 'rbar/syntax'
 loader.load 'rbar/nav'
 loader.load 'rbar/ft_python'
+loader.load 'rbar/dadbod'
 
 vim.g.python3_host_prog = vim.env.NVIM_PYTHON or '/usr/bin/python3'
 

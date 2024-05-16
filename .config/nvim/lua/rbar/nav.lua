@@ -22,7 +22,7 @@ function M.packages(use)
     config = function()
       vim.keymap.set({ 'n', 'x', 'o' }, '<space>', '<Plug>(leap-forward)')
       vim.keymap.set({ 'n', 'x', 'o' }, '<S-space>', '<Plug>(leap-backward)')
-      vim.keymap.set({ 'n', 'x', 'o' }, '<tab>', '<Plug>(leap)')
+      vim.keymap.set({ 'n', 'x', 'o' }, '<leader><space>', '<Plug>(leap)')
       vim.keymap.set('n', 'g<space>', '<Plug>(leap-from-window)')
     end,
   }
@@ -77,6 +77,17 @@ function M.packages(use)
     config = function() require("treesitter-context").setup() end,
   }
   use "farmergreg/vim-lastplace"
+  use {
+    "stevearc/oil.nvim",
+    config = function()
+      require("oil").setup {
+        default_file_explorer = true,
+        columns = { "icon", "permissions", "mtime", "size" },
+        view_options = { show_hidden = true },
+      }
+      vim.keymap.set("n", "<C-e>", "<cmd>Oil<CR>", { noremap = true, desc = "Open parent directory" })
+    end,
+  }
 end
 
 function M.config()

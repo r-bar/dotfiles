@@ -82,7 +82,7 @@ function M.packages(use)
     config = function()
       require("oil").setup {
         default_file_explorer = true,
-        columns = { "icon", "permissions", "mtime", "size" },
+        columns = { "permissions", "mtime", "size", "icon" },
         view_options = { show_hidden = true },
       }
       vim.keymap.set("n", "<C-e>", "<cmd>Oil<CR>", { noremap = true, desc = "Open parent directory" })

@@ -18,4 +18,13 @@ export PATH="$HOME/.local/bin:$PATH"
 
 unsetopt nomatch
 
-for file in $HOME/.zshenv.d/*.zsh; do source $file; done
+ZSHENV_BENCHMARK=0
+
+for file in $HOME/.zshenv.d/*.zsh; do
+  if [ $ZSHENV_BENCHMARK -eq 1 ]; then start=$(date +%s.%N); fi
+  source $file
+  if [ $ZSHENV_BENCHMARK -eq 1 ]; then
+    stop=$(date +%s.%N)
+    echo "$(($stop - $start))\t$file"
+  fi
+done

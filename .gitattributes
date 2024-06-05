@@ -22,3 +22,4 @@
 /.config/github-copilot/** filter=git-crypt diff=git-crypt
 /.config/linode filter=git-crypt diff=git-crypt
 /.config/pia/auth.txt filter=git-crypt diff=git-crypt
+/.config/pia-wg/*.conf filter=git-crypt diff=git-crypt

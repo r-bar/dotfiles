@@ -246,6 +246,8 @@ function M.server_settings()
 
   local settings = {}
 
+  settings['gleam'] = vim.tbl_extend("force", M.default_server_settings(), {})
+
   settings['lua_ls'] = vim.tbl_extend("force", M.default_server_settings(), {
     settings = {
       Lua = {

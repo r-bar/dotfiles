@@ -45,10 +45,10 @@ function M.packages(use)
       vim.keymap.set("n", "<leader>3", function() ui.nav_file(3) end, { noremap = true })
       vim.keymap.set("n", "<leader>4", function() ui.nav_file(4) end, { noremap = true })
 
-      vim.keymap.set("n", "<C-1>", function() ui.nav_file(1) end, { noremap = true })
-      vim.keymap.set("n", "<C-2>", function() ui.nav_file(2) end, { noremap = true })
-      vim.keymap.set("n", "<C-3>", function() ui.nav_file(3) end, { noremap = true })
-      vim.keymap.set("n", "<C-4>", function() ui.nav_file(4) end, { noremap = true })
+      vim.keymap.set("n", "<A-1>", function() ui.nav_file(1) end, { noremap = true })
+      vim.keymap.set("n", "<A-2>", function() ui.nav_file(2) end, { noremap = true })
+      vim.keymap.set("n", "<A-3>", function() ui.nav_file(3) end, { noremap = true })
+      vim.keymap.set("n", "<A-4>", function() ui.nav_file(4) end, { noremap = true })
 
       require("harpoon").setup {
         -- sets the marks upon calling `toggle` on the ui, instead of require `:w`.
@@ -81,11 +81,27 @@ function M.packages(use)
     "stevearc/oil.nvim",
     config = function()
       require("oil").setup {
-        default_file_explorer = true,
         columns = { "permissions", "mtime", "size", "icon" },
+        constrain_cursor = "name",
+        default_file_explorer = true,
+        keymaps = {
+          ["!"] = "actions.open_terminal",
+        },
         view_options = { show_hidden = true },
       }
       vim.keymap.set("n", "<C-e>", "<cmd>Oil<CR>", { noremap = true, desc = "Open parent directory" })
+    end,
+  }
+  use {
+    "numToStr/FTerm.nvim",
+    config = function()
+      require("FTerm").setup {
+        border = "double",
+      }
+      vim.keymap.set(
+        "n", "gt", require('FTerm').toggle,
+        { noremap = true, desc = "Open a terminal in the current directory" }
+      )
     end,
   }
 end

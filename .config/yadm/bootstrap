@@ -12,9 +12,16 @@ install_custom_firefox_profile_mods() {
   rsync -r ~/.mozilla/firefox/custom/ ~/.mozilla/firefox/*.default-release/
 }
 
+install_pia_wg_config() {
+  echo "Installing PIA Wireguard config"
+  sudo mkdir -p /etc/pia-wg
+  sudo cp ~/.config/pia-wg/pia-wg.conf /etc/pia-wg/pia-wg.conf
+}
+
 yadm submodule update --init --recursive
 yadm alt
 #hash yay 2>/dev/null && yas sync
 ~/.config/tmux/tpm/bin/install_plugins
 build_docker_config
 install_custom_firefox_profile_mods
+install_pia_wg_config

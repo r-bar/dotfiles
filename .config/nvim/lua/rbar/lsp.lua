@@ -312,6 +312,8 @@ function M.server_settings()
     settings.pylsp.cmd = { "pylsp" }
   end
 
+  settings['roc_ls'] = vim.tbl_extend("force", M.default_server_settings(), {})
+
   settings['rust_analyzer'] = vim.tbl_extend("force", M.default_server_settings(), {
     settings = {
       ["rust-analyzer"] = {

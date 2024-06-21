@@ -22,6 +22,7 @@ yadm submodule update --init --recursive
 yadm alt
 #hash yay 2>/dev/null && yas sync
 ~/.config/tmux/tpm/bin/install_plugins
+activate-global-python-argcomplete --user
 build_docker_config
 install_custom_firefox_profile_mods
 install_pia_wg_config

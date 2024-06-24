@@ -20,7 +20,7 @@ packages:
     apt: false
     yay: false
     flatpak: org.blender.Blender
-  bluez-utils:
+  bluez-utils: {}
   btop: {}
   chromium:
     apt: false

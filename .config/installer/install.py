@@ -50,7 +50,7 @@ class Cli:
             "-v", "--verbose", action="store_true", help="Enable verbose output"
         )
         sub = p.add_subparsers(dest="command")
-        cmd_sync = sub.add_parser("sync", help="Install all packages in the packages file")
+        cmd_sync = sub.add_parser("sync", help=command_sync.__doc__)
         cmd_sync.add_argument(
             "--reinstall", action="store_true", help="Reinstall all tracked packages"
         )
@@ -60,7 +60,10 @@ class Cli:
             dest="update_cache",
             help="Do not update the package cache",
         )
-        cmd_add = sub.add_parser("add", help="Add a package to the packages file")
+        cmd_sync.add_argument(
+            "--dry-run", action="store_true", help="Do not install packages"
+        )
+        cmd_add = sub.add_parser("add", help=command_add.__doc__)
         cmd_add.add_argument("package", help="Package to add")
         cmd_add.add_argument(
             "-s",
@@ -76,12 +79,24 @@ class Cli:
             help="Add a tag to the package. Can be specified multiple times.",
         )
         cmd_add.add_argument("-d", "--description", help="Description of the package")
-        cmd_add.add_argument("-a", "--apt", help="APT package name", metavar="PKG", type=package_str)
         cmd_add.add_argument(
-            "-y", "--yay", help="Archlinux / AUR package name", metavar="PKG", type=package_str
+            "-a", "--apt", help="APT package name", metavar="PKG", type=package_str
         )
-        cmd_add.add_argument("-f", "--flatpak", help="Flatpak package name", metavar="PKG", type=package_str)
-        cmd_list = sub.add_parser("list", help="List packages in the packages file")  # noqa
+        cmd_add.add_argument(
+            "-y",
+            "--yay",
+            help="Archlinux / AUR package name",
+            metavar="PKG",
+            type=package_str,
+        )
+        cmd_add.add_argument(
+            "-f",
+            "--flatpak",
+            help="Flatpak package name",
+            metavar="PKG",
+            type=package_str,
+        )
+        cmd_list = sub.add_parser("list", help=command_list.__doc__)  # noqa
         cmd_list.add_argument(
             "-n",
             "--no-show-package-def",
@@ -89,8 +104,8 @@ class Cli:
             action="store_false",
             help="Do not show package definitions",
         )
-        cmd_fmt = sub.add_parser("fmt", help="Format the packages file")  # noqa
-        cmd_remove = sub.add_parser("remove")
+        cmd_fmt = sub.add_parser("fmt", help=command_format.__doc__)  # noqa
+        cmd_remove = sub.add_parser("remove", help=command_remove.__doc__)
         cmd_remove.add_argument("package", help="Package to remove")
         cmd_remove.add_argument(
             "-u",
@@ -98,25 +113,22 @@ class Cli:
             action="store_true",
             help="Uninstall the package after removing it from the package list",
         )
-        cmd_tag = sub.add_parser("tag")
-        tag_sub = cmd_tag.add_subparsers(dest="subcommand")
-        sub_tag_add = tag_sub.add_parser("add", help="Add a tag to the current machine")
+        sub_tag_add = sub.add_parser("tag-add", help=command_tag_add.__doc__)
         sub_tag_add.add_argument("tag", help="The tag to add")
         sub_tag_add.add_argument(
             "-i", "--install", action="store_true", help="Install packages for this tag"
         )
-        sub_tag_remove = tag_sub.add_parser("remove")
+        sub_tag_remove = sub.add_parser("tag-remove", help=command_tag_remove.__doc__)
         sub_tag_remove.add_argument("tag", help="The tag to remove")
         sub_tag_remove.add_argument(
             "-i", "--install", action="store_true", help="Install packages for this tag"
         )
-        sub_tag_list = tag_sub.add_parser("list")  # noqa
+        sub_tag_list = sub.add_parser("tag-list", help=command_tag_list.__doc__)  # noqa
 
         self.parser = p
         self.args = p.parse_args(argv)
 
         self.command = None
-        self.subcommand = None
         for k, v in vars(self.args).items():
             setattr(self, k, v)
 
@@ -193,17 +205,18 @@ class PackageRegistry:
             raise ValueError("Cannot specify both machine_tags and for_tag")
         machine_tags = set() if machine_tags is None else set(machine_tags)
         for package, package_def in self.data["packages"].items():
+            package_def = PackageDef(name=package, **package_def)
             selected = True
-            if machine_tags:
-                selected = selected and any(
-                    set(tags) & machine_tags for tags in package_def.get("tags")
-                )
-            elif for_tag:
-                selected = selected and for_tag in package_def.get("tags")
+            if machine_tags and package_def.tags:
+                selected = selected and any(t in machine_tags for t in package_def.tags)
+            elif for_tag and package_def.tags:
+                selected = selected and for_tag in package_def.tags
+            elif for_tag and not package_def.tags:
+                selected = False
             if installer:
-                selected = selected and package_def.get(installer) is not False
+                selected = selected and getattr(package_def, installer) is not False
             if selected:
-                yield PackageDef(name=package, **package_def)
+                yield package_def
 
     def machine_tags(self, machine: str) -> list[str]:
         return self.data["machine_tags"].get(machine, [])
@@ -240,12 +253,14 @@ class PackageManager(ABC):
 
     @classmethod
     def package_name(cls, package_def: PackageDef) -> str | None:
-        explicit = package_def.get(cls.key)
+        explicit = getattr(package_def, cls.key)
         if explicit is False:
             return None
-        return package_def.get(cls.key, package_def["name"])
+        return getattr(package_def, cls.key) or package_def.name
 
-    def resolve_package_names(self, packages: list[PackageDef], reinstall=False) -> list[str]:
+    def resolve_package_names(
+        self, packages: list[PackageDef], reinstall=False
+    ) -> list[str]:
         package_names = []
         for package in packages:
             if package_name := self.package_name(package):
@@ -262,7 +277,9 @@ class PackageManager(ABC):
         raise NotImplementedError
 
     @abstractmethod
-    def install(self, package: list[str], update_cache=True, reinstall=False, dry_run=False) -> None:
+    def install(
+        self, package: list[str], update_cache=True, reinstall=False, dry_run=False
+    ) -> None:
         raise NotImplementedError
 
     @abstractmethod
@@ -282,7 +299,13 @@ class PackageManager(ABC):
 class Yay(PackageManager):
     key = "yay"
 
-    def install(self, packages: list[PackageDef], update_cache=True, reinstall=False, dry_run=False) -> None:
+    def install(
+        self,
+        packages: list[PackageDef],
+        update_cache=True,
+        reinstall=False,
+        dry_run=False,
+    ) -> None:
         package_names = self.resolve_package_names(packages, reinstall)
         sub = "-Sy" if update_cache else "-S"
         cmd = ["yay", sub, "--noconfirm", *package_names]
@@ -306,7 +329,13 @@ class Yay(PackageManager):
 class Flatpak(PackageManager):
     key = "flatpak"
 
-    def install(self, packages: list[PackageDef], update_cache=True, reinstall=False, dry_run=False) -> None:
+    def install(
+        self,
+        packages: list[PackageDef],
+        update_cache=True,
+        reinstall=False,
+        dry_run=False,
+    ) -> None:
         package_names = self.resolve_package_names(packages, reinstall)
         cmd = ["flatpak", "install", "-y", *package_names]
         if dry_run:
@@ -317,7 +346,12 @@ class Flatpak(PackageManager):
         run(["flatpak", "uninstall", *packages], check=True)
 
     def list(self) -> list[str]:
-        proc = run(["flatpak", "list", "--app", "--columns=application"], check=True, capture_output=True, text=True)
+        proc = run(
+            ["flatpak", "list", "--app", "--columns=application"],
+            check=True,
+            capture_output=True,
+            text=True,
+        )
         lines = proc.stdout.splitlines()
         return [line.strip() for line in lines[1:]]
 
@@ -344,6 +378,7 @@ def command_sync(
     packages: list[PackageDef] | None = None,
     dry_run: bool = False,
 ) -> None:
+    """Install all packages in the packages file"""
     registry = registry or PackageRegistry(PACKAGES_FILE)
     pms = pms or PackageManager.all_usable()
     machine_tags = registry.machine_tags(hostname())
@@ -352,14 +387,12 @@ def command_sync(
         pm_packages = (pm.package_name(p) for p in packages)
         pm_packages = [p for p in pm_packages if p is not None]
         pm.install(
-            pm_packages,
-            update_cache=update_cache,
-            reinstall=reinstall,
-            dry_run=dry_run
+            pm_packages, update_cache=update_cache, reinstall=reinstall, dry_run=dry_run
         )
 
 
-def command_add(package_def: PackageDef, install=False):
+def command_add(package_def: PackageDef, install=False) -> None:
+    """Add a package to the packages file"""
     package_def = package_def or {}
     registry = PackageRegistry(PACKAGES_FILE)
     registry.add_package(package_def)
@@ -370,7 +403,8 @@ def command_add(package_def: PackageDef, install=False):
 
 def command_remove(
     package: str, uninstall: bool = True, pm: PackageManager | None = None
-):
+) -> None:
+    """Remove a package from the packages file"""
     registry = PackageRegistry(PACKAGES_FILE)
     registry.remove_package(package)
     registry.save()
@@ -384,6 +418,7 @@ def command_list(
     registry: PackageRegistry | None = None,
     pms: list[PackageManager] | None = None,
 ):
+    """List all packages in the packages file"""
     registry = registry or PackageRegistry(PACKAGES_FILE)
     for package_def in registry.packages():
         print(package_def["name"])
@@ -395,12 +430,14 @@ def command_list(
 
 
 def command_format():
+    """Format the packages file"""
     registry = PackageRegistry(PACKAGES_FILE)
     registry.changed = True
     registry.save()
 
 
 def command_tag_add(hostname: str, tag: str, install: bool = False):
+    """Add a tag to the current machine"""
     registry = PackageRegistry(PACKAGES_FILE)
     registry.add_tag(hostname, tag)
     registry.save()
@@ -411,6 +448,7 @@ def command_tag_add(hostname: str, tag: str, install: bool = False):
 def command_tag_remove(
     hostname: str, tag: str, uninstall: bool = False, pm: PackageManager | None = None
 ):
+    """Remove a tag from the current machine"""
     registry = PackageRegistry(PACKAGES_FILE)
     registry.remove_tag(hostname, tag)
     registry.save()
@@ -421,6 +459,7 @@ def command_tag_remove(
 
 
 def command_tag_list(cli: Cli):
+    """List machine tags for the current machine"""
     registry = PackageRegistry(PACKAGES_FILE)
     tags = registry.machine_tags(hostname())
     for tag in tags:
@@ -468,30 +507,29 @@ def bootstrap(relaunched: bool) -> None:
 def main():
     cli = Cli()
     bootstrap(cli.relaunched)
-    match (cli.command, cli.subcommand):
-        case ("install", None):
-            command_sync(update_cache=cli.update_cache, reinstall=cli.reinstall)
-        case ("add", None):
-            command_add(cli.package_def(), cli.sync)
-        case ("remove", None):
-            command_remove(cli.package, uninstall=cli.uninstall)
-        case ("list", None):
-            command_list(show_package_def=cli.show_package_def)
-        case ("fmt", None):
-            command_format()
-        case ("tag", "add"):
-            command_tag_add(cli)
-        case ("tag", "remove"):
-            command_tag_remove(cli)
-        case ("tag", "list"):
-            command_tag_list(cli)
-        case (_, None):
-            print(f"Undefined command `{cli.command}`", file=sys.stderr)
-            exit(1)
-        case (_, _):
-            print(
-                f"Undefined command `{cli.command} {cli.subcommand}`", file=sys.stderr
+    match cli.command:
+        case "sync":
+            command_sync(
+                update_cache=cli.update_cache,
+                reinstall=cli.reinstall,
+                dry_run=cli.dry_run,
             )
+        case "add":
+            command_add(cli.package_def(), cli.sync)
+        case "remove":
+            command_remove(cli.package, uninstall=cli.uninstall)
+        case "list":
+            command_list(show_package_def=cli.show_package_def)
+        case "fmt":
+            command_format()
+        case "tag-add":
+            command_tag_add(cli)
+        case "tag-remove":
+            command_tag_remove(cli)
+        case "tag-list":
+            command_tag_list(cli)
+        case _:
+            print(f"Undefined command `{cli.command}`", file=sys.stderr)
             exit(1)
 
 

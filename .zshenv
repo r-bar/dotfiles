@@ -1,3 +1,5 @@
+#echo "TOP OF ZSHENV\n$PATH"
+
 export HISTFILE=~/.histfile
 export HISTSIZE=1000
 export SAVEHIST=10000
@@ -10,13 +12,45 @@ export VIRTUAL_ENV_DISABLE_PROMPT=1
 export SHARE_HISTORY=1
 export ZSH_AUTOSUGGEST_USE_ASYNC=1
 
-export PATH="$HOME/.local/bin:$PATH"
-#if !grep $HOME/.local/bin <<< "$PATH" 1>&2 2> /dev/null; then
-#  echo hit
-#  export PATH="$HOME/.local/bin:$PATH"
-#fi
-
 unsetopt nomatch
+
+
+# Usage: PATH_add <path> [<path> ...]
+#
+# Prepends the expanded <path> to the PATH environment variable, in order.
+# It prevents a common mistake where PATH is replaced by only the new <path>,
+# or where a trailing colon is left in PATH, resulting in the current directory
+# being considered in the PATH.  Supports adding multiple directories at once.
+#
+# Example:
+#
+#    pwd
+#    # output: /my/project
+#    PATH_add bin
+#    echo $PATH
+#    # output: /my/project/bin:/usr/bin:/bin
+#    PATH_add bam boum
+#    echo $PATH
+#    # output: /my/project/bam:/my/project/boum:/my/project/bin:/usr/bin:/bin
+#
+PATH_add() {
+  for arg in $@; do
+    if [[ ":$PATH:" != *":$arg:"* ]]; then
+      path+=($arg)
+    fi
+  done
+}
+
+
+# Usage: pathprepend <varname> <path> [<path> ...]
+#
+# Works like PATH_add except that it's for an arbitrary <varname>.
+add_path_element() {
+    local tmp="${1//:${2}:/:}"
+    tmp="${tmp/#${2}:/}"
+    tmp="${tmp/%:${2}/}"
+    echo -n "${tmp}:${2}"
+}
 
 ZSHENV_BENCHMARK=0
 
@@ -27,8 +61,7 @@ for file in $HOME/.zshenv.d/*.zsh; do
     stop=$(date +%s.%N)
     echo "$(($stop - $start))\t$file"
   fi
+  #echo "AFTER $file\n$PATH"
 done
-
-# Begin added by argcomplete
-fpath=( /usr/lib/python3.12/site-packages/argcomplete/bash_completion.d "${fpath[@]}" )
-# End added by argcomplete
+#echo "BOTTOM OF ZSHENV\n$PATH"
+export PATH

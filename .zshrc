@@ -1,3 +1,4 @@
+#echo "TOP OF ZSHRC\n$PATH"
 ZSHRC_BENCHMARK=0
 
 for file in $HOME/.zshrc.d/*.zsh; do 

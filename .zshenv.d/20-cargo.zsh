@@ -1,1 +1,1 @@
-[ -d ~/.cargo ] && export PATH="$HOME/.cargo/bin:$PATH"
+[ -d ~/.cargo ] && PATH_add "$HOME/.cargo/bin"

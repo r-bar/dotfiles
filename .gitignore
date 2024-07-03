@@ -8,3 +8,5 @@ shrinkwrap.yaml
 __pycache__
 node_modules
 .direnv
+.mise.local.toml
+mise.local.toml

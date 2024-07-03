@@ -21,7 +21,8 @@ function M.packages(use)
     'ggandor/leap.nvim',
     config = function()
       vim.keymap.set({ 'n', 'x', 'o' }, '<space>', '<Plug>(leap-forward)')
-      vim.keymap.set({ 'n', 'x', 'o' }, '<S-space>', '<Plug>(leap-backward)')
+      -- broken because terminals don't support <S-space>
+      --vim.keymap.set({ 'n', 'x', 'o' }, '<S-space>', '<Plug>(leap-backward)')
       vim.keymap.set({ 'n', 'x', 'o' }, '<leader><space>', '<Plug>(leap)')
       vim.keymap.set('n', 'g<space>', '<Plug>(leap-from-window)')
     end,

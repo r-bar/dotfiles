@@ -31,7 +31,7 @@
   ca = commit -a
   cm = commit -m
   co = checkout
-  cem = commit --allow-empty -m
+  amend = commit --no-edit --amend -a
   cam = commit -am
   l = log --pretty=format:"%h%x09%an%x09%ad%x09%s" -n 20
   lg = log --oneline --graph --decorate --all

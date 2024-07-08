@@ -7,7 +7,7 @@ if [ -x $HOMEBREW_PREFIX/bin/brew ]; then
   if [ -z "$HOMEBREW_NO_EXTRA_ENV" ]; then
     if [ -d $HOMEBREW_PREFIX/opt/coreutils ]; then
       PATH_add "$HOMEBREW_PREFIX/opt/coreutils/libexec/gnubin"
-      path_add MANPATH "$HOMEBREW_PREFIX/opt/coreutils/libexec/gnuman"
+      PATH_add MANPATH "$HOMEBREW_PREFIX/opt/coreutils/libexec/gnuman"
     fi
 
     if [ -d $HOMEBREW_PREFIX/opt/libpq ]; then
@@ -18,7 +18,7 @@ if [ -x $HOMEBREW_PREFIX/bin/brew ]; then
 
     if [ -d $HOMEBREW_PREFIX/opt/gnu-tar ]; then
       PATH_add "$HOMEBREW_PREFIX/opt/gnu-tar/libexec/gnubin"
-      path_add MANPATH "$HOMEBREW_PREFIX/opt/gnu-tar/libexec/gnuman"
+      PATH_add MANPATH "$HOMEBREW_PREFIX/opt/gnu-tar/libexec/gnuman"
     fi
 
     if [ -d $HOMEBREW_PREFIX/opt/libxml2 ]; then

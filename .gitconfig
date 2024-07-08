@@ -33,8 +33,8 @@
   co = checkout
   cem = commit --allow-empty -m
   cam = commit -am
-  l = "!git log --date='format:%Y-%m-%d %H:%M' --pretty=format:'%ad|%h|%an|%s' -10 $* | while IFS='|' read date hash author message; do printf '%s  %s  %-20s %s\n' \"$date\" \"$hash\" \"$author\" \"$message\"; done"
-  lg = log --oneline --graph --decorate
+  l = log --pretty=format:"%h%x09%an%x09%ad%x09%s" -n 20
+  lg = log --oneline --graph --decorate --all
   f = fetch
   s = status
   sb = status -s -b

@@ -23,13 +23,17 @@ function M.packages(use)
   use 'https://github.com/molleweide/LuaSnip-snippets.nvim.git'
 
   --use 'VonHeikemen/lsp-zero.nvim'
-  use { 'github/copilot.vim', config = function()
-    vim.g.copilot_no_tab_map = true
-    vim.keymap.set("i", "<c-space>", 'copilot#Accept("")',
-      { noremap = true, silent = true, expr = true, replace_keycodes = false })
-    vim.keymap.set("n", "<C-space>", 'copilot#Accept("")',
-      { noremap = true, silent = true, expr = true, replace_keycodes = false })
-  end }
+  use {
+    'github/copilot.vim',
+    enabled = vim.env.DISABLE_COPILOT == nil,
+    config = function()
+      vim.g.copilot_no_tab_map = true
+      vim.keymap.set("i", "<c-space>", 'copilot#Accept("")',
+        { noremap = true, silent = true, expr = true, replace_keycodes = false })
+      vim.keymap.set("n", "<C-space>", 'copilot#Accept("")',
+        { noremap = true, silent = true, expr = true, replace_keycodes = false })
+    end
+  }
 end
 
 -- order is important. these mason setup calls must be done before lspconfig

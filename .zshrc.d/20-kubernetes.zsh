@@ -25,5 +25,6 @@ alias k='kubectl'
 alias kc='kubectl --context'
 alias kall='kubectl api-resources --verbs=list --namespaced -o name \
   | xargs -n 1 kubectl get --show-kind --ignore-not-found'
+alias kns='kubectl config set-context --current --namespace'
 #alias kcd='kubectx'
 #alias kns='kubens'

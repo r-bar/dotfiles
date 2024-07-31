@@ -1,15 +1,18 @@
--- Activity Manager --
-awakeTimer = nil
+local hyper     = {"ctrl", "alt", "cmd"}
+local lesshyper = {"ctrl", "alt"}
 
-function sleep(n)
+-- Activity Manager --
+local awakeTimer = nil
+
+local function sleep(n)
     os.execute('sleep ' .. tonumber(n))
 end
 
-hs.hotkey.bind({"cmd", "alt", "ctrl"}, "W", function()
+hs.hotkey.bind(hyper, "W", function()
   hs.alert.show("Hello World!")
 end)
 
-hs.hotkey.bind({"cmd", "alt", "ctrl"}, "A", function()
+hs.hotkey.bind(hyper, "A", function()
   if awakeTimer == nil then
     hs.alert.show("Keeping you active!")
   else
@@ -33,13 +36,11 @@ hs.hotkey.bind({"cmd", "alt", "ctrl"}, "A", function()
 end)
 
 -- Global Mute Hotkeys --
-local hyper     = {"ctrl", "alt", "cmd"}
-local lesshyper = {"ctrl", "alt"}
 hs.loadSpoon("GlobalMute")
 spoon.GlobalMute:bindHotkeys({
   unmute = {lesshyper, "u"},
   mute   = {lesshyper, "m"},
-  toggle = {hyper, "space"}
+  toggle = {hyper, "t"},
 })
 spoon.GlobalMute:configure({
   unmute_background = 'file:///Library/Desktop%20Pictures/Solid%20Colors/Red%20Orange.png',

@@ -1,4 +1,5 @@
 function pia() {
   region=${1:-ca_vancouver}
+  echo "Connecting to $region"
   sudo openvpn --config $HOME/.config/pia/$region.ovpn
 }

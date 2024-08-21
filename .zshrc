@@ -9,3 +9,4 @@ for file in $HOME/.zshrc.d/*.zsh; do
     echo "$(($stop - $start))\t$file"
   fi
 done
+export LD_LIBRARY_PATH=/home/ryan/.local/lib/arch-mojo:$LD_LIBRARY_PATH

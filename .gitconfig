@@ -54,10 +54,10 @@
 [mergetool "nvimfugitive"]
   cmd = nvim -f -c \"Gdiffsplit!\" \"$MERGED\"
 [init]
-	defaultBranch = master
+  defaultBranch = master
 [include]
   path = .gitconfig.local
-	path = .themes.gitconfig
+  path = .themes.gitconfig
 [interactive]
   diffFilter = delta --color-only
 [add.interactive]
@@ -68,9 +68,9 @@
   #zero-type = dim syntax
   #map-styles = bold purple => dim syntax red, bold cyan => syntax green
 [filter "lfs"]
-	process = git-lfs filter-process
-	required = true
-	clean = git-lfs clean -- %f
-	smudge = git-lfs smudge -- %f
+  process = git-lfs filter-process
+  required = true
+  clean = git-lfs clean -- %f
+  smudge = git-lfs smudge -- %f
 [commit]
-	gpgsign = true
+  gpgsign = true

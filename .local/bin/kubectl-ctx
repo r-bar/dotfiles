@@ -83,15 +83,15 @@ class Cli(ArgumentParser):
             "-l",
             "--list",
             action="store_true",
-            default=False,
             help="List available contexts",
+            default=False,
         )
         self.add_argument(
             "-r",
             "--rename",
             help="Rename the current context",
-            action="store_true",
-            default=False,
+            default=None,
+            metavar="NEW_NAME",
         )
         self.add_argument(
             "context", nargs="?", help="Set the current context if specified"
@@ -232,7 +232,6 @@ def main():
             manager.set_context(context)
             print(f"Set context to {context.key}/{context.namespace}")
         case "list":
-            column_spacing = 2
             contexts = manager.contexts.values()
             headers = ["  ", "Name", "Namespace", "File"]
             data = [headers]
@@ -246,7 +245,7 @@ def main():
             print_table(data, col_sep=" | ", header_sep="-")
         case "rename":
             old_name = manager.contexts[manager.current_context].name
-            context = manager.rename(manager.current_context, cli.args.context)
+            context = manager.rename(cli.args.context, cli.args.rename)
             print(f"Renamed context {old_name} to {context.name} in {context.file}")
         case "show":
             print("Current context:", manager.current_context)

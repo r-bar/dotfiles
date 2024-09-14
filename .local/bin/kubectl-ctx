@@ -244,8 +244,11 @@ def main():
                 )
             print_table(data, col_sep=" | ", header_sep="-")
         case "rename":
-            old_name = manager.contexts[manager.current_context].name
-            context = manager.rename(cli.args.context, cli.args.rename)
+            if cli.args.context:
+                old_name = cli.args.context
+            else:
+                old_name = manager.contexts[manager.current_context].name
+            context = manager.rename(old_name, cli.args.rename)
             print(f"Renamed context {old_name} to {context.name} in {context.file}")
         case "show":
             print("Current context:", manager.current_context)

@@ -10,3 +10,5 @@ node_modules
 .direnv
 .mise.local.toml
 mise.local.toml
+venv
+.venv

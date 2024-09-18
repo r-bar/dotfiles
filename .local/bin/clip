@@ -107,12 +107,14 @@ class X11Clipboard(SystemClipboard):
 
 
 class XselClipboard(SystemClipboard):
-    def executable(self) -> str | None:
+    @staticmethod
+    def executable() -> str | None:
         """Determine if the xsel program is available."""
         return shutil.which('xsel')
 
-    def available(self) -> bool:
-        return self.executable() is not None
+    @classmethod
+    def available(cls) -> bool:
+        return cls.executable() is not None
 
     def in_cmd(self) -> CompletedProcess:
         return run(['xsel', '-b'], check=True)
@@ -122,7 +124,8 @@ class XselClipboard(SystemClipboard):
 
 
 class MacosClipboard(SystemClipboard):
-    def available(self) -> bool:
+    @staticmethod
+    def available() -> bool:
         return shutil.which('pbcopy') is not None
 
     def in_cmd(self) -> CompletedProcess:

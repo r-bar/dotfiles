@@ -1,182 +1,195 @@
 #!/usr/bin/env python3
+import enum
 import os
-import re
 import sys
 import shutil
-from typing import NamedTuple, Optional
-from subprocess import run, SubprocessError
+import socket
+from abc import ABC, abstractmethod
+from typing import Optional, Callable
+from subprocess import run, SubprocessError, CompletedProcess
+from argparse import ArgumentParser
 
 
 OSTYPE = os.environ.get('OSTYPE')
-USAGE = """
-Usage: clip [OPTIONS]
-
-Inserts into the system clipboard from stdin or prints the clipboard contents
-to stdout.
-
-Options:
-    -s, --ssh   Send over connecting ssh socket
-    -h, --help  This help message.
-    -o          Force printing to stdout
-"""
+CompletedProcess = Callable[[], CompletedProcess]
 
 
-class NetstatInternetEntry(NamedTuple):
-    proto: str
-    recvq: int
-    sendq: int
-    local_addr: str
-    remote_addr: str
-    state: Optional[str]
+class Mode(enum.StrEnum):
+    IN = 'in'
+    OUT = 'out'
 
-    def parse(cls, line: str, columns: list[tuple[int, int]]) -> 'NetstatInternetEntry':
-        parts = [
-            line[start:end].strip() or None
-            for start, end in columns
-        ]
-        proto = parts[0]
-        state = None
-        assert proto == 'unix', f'unknown protocol {proto}'
-        if len(parts) == 6:
-            state = parts[5]
-        return cls(
-            parts[0],
-            int(parts[1]),
-            int(parts[2]),
-            parts[3],
-            parts[4],
-            state,
-        )
+class Cli:
+    remote: Optional[int]
+    stdout: bool
 
-
-class NetstatUnixEntry(NamedTuple):
-    proto: str
-    refcnt: int
-    flags: str
-    type: str
-    state: str
-    inode: int
-    path: Optional[str]
-
-    def parse(cls, line: str, columns: list[tuple[int, int]]) -> 'NetstatUnixEntry':
-        parts = [
-            line[start:end].strip() or None
-            for start, end in columns
-        ]
-        proto = parts[0]
-        path = None
-        assert (
-            proto.startswith('raw')
-            or proto.startswith('tcp')
-            or proto.startswith('udp')
-        ), f"unknown protocol {proto}"
-        if len(parts) == 7:
-            path = parts[6]
-        return cls(
-            parts[0],
-            int(parts[1]),
-            parts[2],
-            parts[3],
-            parts[4],
-            int(parts[5]),
-            path,
-        )
-
-
-class Netstat:
-    cmd = ["netstat", "-ln"]
     def __init__(self):
-        proc = run(self.cmd, check=True, capture_output=True, text=True)
-        self.inet_entries, self.unix_entries = self.parse_output(proc.stdout)
+        p = ArgumentParser(description='Inserts into the system clipboard from stdin or prints the clipboard contents to stdout.')
+        self.parser = p
+        p.add_argument('-r', '--remote', default=None, type=int, help='Send to a remote network socket')
+        p.add_argument('-o', '--stdout', action='store_true', help='Force printing to stdout')
+        self.args = p.parse_args()
+        for name, value in vars(self.args).items():
+            setattr(self, name, value)
 
-    @classmethod
-    def parse_output(cls, output: str) -> tuple[list, list]:
-        section = None
-        columns = None
-        inet_entries = []
-        unix_entries = []
-        for line in output.splitlines():
-            if line.startswith(' ') or line.startswith('('):
-                continue # trash / comment lines
-            elif line.startswith('Active Internet connections'):
-                section = 'internet'
-                columns = None
-                continue
-            elif line.startswith('Active UNIX domain sockets'):
-                section = 'unix'
-                columns = None
-                continue
-
-            if section == 'intenet' and columns is None:
-                columns = cls.parse_header(line)
-            elif section == 'unix' and columns is None:
-                columns = cls.parse_header(line)
-            elif section == 'internet':
-                inet_entries.append(NetstatInternetEntry.parse(line, columns))
-            elif section == 'unix':
-                unix_entries.append(NetstatUnixEntry.parse(line, columns))
-
-        return inet_entries, unix_entries
-
-    @staticmethod
-    def parse_header(header_line):
-        return [(m.start(), m.end()) for m in re.finditer(r'\S+\s+', header_line)]
-
-    @classmethod
-    def ssh_reverse_socket(cls, local_addr='127.0.0.1:2222') -> Optional[NetstatInternetEntry]:
-        for entry in cls().inet_entries:
-            if entry.state == 'LISTEN' and entry.proto == 'tcp' and entry.local_addr == local_addr:
-                return entry
-
-
-def clipboard_commands(remote=False) -> tuple[list[str], list[str]]:
-    """Returns a tuple of the in and out commands"""
-    if remote:
-        if os.environ.get('SSH_CONNECTION') and (socket := Netstat.ssh_reverse_socket()):
-            return (
-                ['ssh', socket.local_addr, 'clip'],
-                ['ssh', socket.local_addr, 'clip'],
-            )
+    def mode(self) -> Mode:
+        if self.stdout or sys.stdin.isatty():
+            return Mode.OUT
         else:
-            raise Exception('No active SSH socket')
-    if os.environ.get('WAYLAND_DISPLAY'):
-        return ['wl-copy'], ['wl-paste']
-    if os.environ.get('DISPLAY'):
-        return (
-            ['xclip', '-selection', 'clipboard', '-in'],
-            ['xclip', '-selection', 'clipboard', '-out'],
-        )
-    if shutil.which('xsel'):
-        return ['xsel', '-b'], ['xsel', '-b']
-    if OSTYPE.startswith('darwin'):
-        return ['pbcopy'], ['pbpaste']
-    if OSTYPE.startswith('cygwin') or OSTYPE == 'msys':
-        return ['tee', '/dev/clipboard'], ['cat', '/dev/clipboard']
-    # WSL
-    if OSTYPE.startswith('linux'):
-        return ['clip.exe'], ['powershell.exe', '-Command', 'Get-Clipboard']
-    raise RuntimeError('No clipboard program for the current platform')
+            return Mode.IN
 
 
-def main():
-    if '-h' in sys.argv or '--help' in sys.argv:
-        print(USAGE)
-        exit(0)
+class SystemClipboard(ABC):
+    AVAILABLE_INTERFACES: list['SystemClipboard'] = []
 
-    remote = '--ssh' in sys.argv or '-s' in sys.argv
+    def __init_subclass__(cls, **kwargs):
+        super().__init_subclass__(**kwargs)
+        cls.AVAILABLE_INTERFACES.append(cls)
 
-    in_cmd, out_cmd = clipboard_commands(remote=remote)
+    @classmethod
+    @abstractmethod
+    def available(cls) -> bool:
+        """Determine if the clipboard interface is available."""
+        raise NotImplementedError
 
-    if sys.stdin.isatty() or '-o' in sys.argv:
-        # output not captured, passes through to stdout
-        run(out_cmd, check=True)
-    else:
-        run(in_cmd, stdin=sys.stdin, check=True)
+    @abstractmethod
+    def in_cmd(self) -> CompletedProcess:
+        """Return the command to write to the clipboard."""
+        raise NotImplementedError
+
+    @abstractmethod
+    def out_cmd(self) -> CompletedProcess:
+        """Return the command to read from the clipboard."""
+        raise NotImplementedError
+
+    @classmethod
+    def select_clipboard_interface(cls):
+        for interface in cls.AVAILABLE_INTERFACES:
+            if interface.available():
+                return interface()
+        raise RuntimeError('No known clipboard interface for the current platform')
+
+
+class WaylandClipboard(SystemClipboard):
+    @staticmethod
+    def socket() -> str | None:
+        """Determine if the system is running a Wayland display server."""
+        return os.environ.get('WAYLAND_DISPLAY')
+
+    @classmethod
+    def available(cls) -> bool:
+        return cls.socket() is not None
+
+    def in_cmd(self) -> CompletedProcess:
+        """Return the command to write to the Wayland clipboard."""
+        return run(['wl-copy'], check=True)
+
+    def out_cmd(self) -> CompletedProcess:
+        """Return the command to read from the Wayland clipboard."""
+        proc = run(['wl-paste'])
+        return proc
+
+
+class X11Clipboard(SystemClipboard):
+    @staticmethod
+    def socket() -> str | None:
+        """Determine if the system is running an X display server."""
+        return os.environ.get('DISPLAY')
+
+    @classmethod
+    def available(cls) -> bool:
+        return cls.socket() is not None
+
+    def in_cmd(self) -> CompletedProcess:
+        return run(['xclip', '-selection', 'clipboard', '-in'], check=True)
+
+    def out_cmd(self) -> CompletedProcess:
+        return run(['xclip', '-selection', 'clipboard', '-out'])
+
+
+class XselClipboard(SystemClipboard):
+    def executable(self) -> str | None:
+        """Determine if the xsel program is available."""
+        return shutil.which('xsel')
+
+    def available(self) -> bool:
+        return self.executable() is not None
+
+    def in_cmd(self) -> CompletedProcess:
+        return run(['xsel', '-b'], check=True)
+
+    def out_cmd(self) -> CompletedProcess:
+        return run(['xsel', '-b'])
+
+
+class MacosClipboard(SystemClipboard):
+    def available(self) -> bool:
+        return shutil.which('pbcopy') is not None
+
+    def in_cmd(self) -> CompletedProcess:
+        return run(['pbcopy'], check=True)
+
+    def out_cmd(self) -> CompletedProcess:
+        return run(['pbpaste'])
+
+
+class CygwinClipboard(SystemClipboard):
+    def available(self) -> bool:
+        return OSTYPE.startswith('cygwin') or OSTYPE == 'msys'
+
+    def in_cmd(self) -> CompletedProcess:
+        return run(['tee', '/dev/clipboard'], check=True)
+
+    def out_cmd(self) -> CompletedProcess:
+        return run(['cat', '/dev/clipboard'])
+
+class WslClipboard(SystemClipboard):
+    def wsl(self) -> bool:
+        """Determine if the system is running Windows Subsystem for Linux."""
+        return OSTYPE.startswith('linux')
+
+    def in_cmd(self) -> CompletedProcess:
+        return run(['clip.exe'], check=True)
+
+    def out_cmd(self) -> CompletedProcess:
+        return run(['powershell.exe', '-Command', 'Get-Clipboard'])
+
+
+class RemoteClipboard:
+    def __init__(self, host: str = '127.0.0.1', port: int = 8377):
+        self.port = port
+
+    def daemon_cmd(self) -> CompletedProcess:
+        return run(['nc', '-l', str(self.port)])
+
+    def in_cmd(self) -> CompletedProcess:
+        return run(['nc', 'localhost', str(self.port)])
+
+    def out_cmd(self) -> CompletedProcess:
+        return run(['nc', '-l', str(self.port)])
+
+
+def main() -> int:
+    cli = Cli()
+    clipboard = SystemClipboard.select_clipboard_interface()
+
+    if cli.remote:
+        raise NotImplementedError('Remote clipboard not implemented yet')
+        remote_clipboard = RemoteClipboard(port=cli.remote)
+
+    match cli.mode():
+        case Mode.OUT:
+            return clipboard.out_cmd().returncode
+        case Mode.IN:
+            return clipboard.in_cmd().returncode
+        case _:
+            raise RuntimeError("Unreachable")
 
 
 if __name__ == '__main__':
     try:
-        main()
+        return_code = main()
     except SubprocessError as exc:
         print(exc.stderr, file=sys.stderr)
         exit(1)
+    else:
+        exit(return_code)

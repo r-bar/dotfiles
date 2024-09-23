@@ -4,12 +4,15 @@ import os
 import sys
 import shutil
 import socket
+import logging
+from tempfile import SpooledTemporaryFile
 from abc import ABC, abstractmethod
 from typing import Optional, Callable
 from subprocess import run, SubprocessError, CompletedProcess
 from argparse import ArgumentParser
 
 
+DEFAULT_PORT = 8377
 OSTYPE = os.environ.get('OSTYPE')
 CompletedProcess = Callable[[], CompletedProcess]
 
@@ -18,6 +21,16 @@ class Mode(enum.StrEnum):
     IN = 'in'
     OUT = 'out'
 
+
+def netloc(arg_str: str) -> tuple[str, int]:
+    match arg_str.split(':'):
+        case [host]:
+            return host, DEFAULT_PORT
+        case [host, port]:
+            return host, int(port)
+        case _:
+            raise ValueError(f'Invalid network location: {arg_str}')
+
 class Cli:
     remote: Optional[int]
     stdout: bool
@@ -25,8 +38,36 @@ class Cli:
     def __init__(self):
         p = ArgumentParser(description='Inserts into the system clipboard from stdin or prints the clipboard contents to stdout.')
         self.parser = p
-        p.add_argument('-r', '--remote', default=None, type=int, help='Send to a remote network socket')
-        p.add_argument('-o', '--stdout', action='store_true', help='Force printing to stdout')
+        p.add_argument(
+            '-l',
+            '--listen',
+            default=None,
+            const=f"0.0.0.0:{DEFAULT_PORT}",
+            action="store",
+            nargs="?",
+            dest="listen",
+            type=netloc,
+            help='listen on a remote network socket for clipboard data',
+        )
+        p.add_argument(
+            '-r',
+            '--remote',
+            default=None,
+            type=netloc,
+            help='send to a remote network socket',
+        )
+        p.add_argument(
+            '-o',
+            '--stdout',
+            action='store_true',
+            help='force printing to stdout',
+        )
+        p.add_argument(
+            '-v',
+            '--verbose',
+            action='store_true',
+            help='enable debug logging',
+        )
         self.args = p.parse_args()
         for name, value in vars(self.args).items():
             setattr(self, name, value)
@@ -72,38 +113,34 @@ class SystemClipboard(ABC):
 class WaylandClipboard(SystemClipboard):
     @staticmethod
     def socket() -> str | None:
-        """Determine if the system is running a Wayland display server."""
         return os.environ.get('WAYLAND_DISPLAY')
 
     @classmethod
     def available(cls) -> bool:
         return cls.socket() is not None
 
-    def in_cmd(self) -> CompletedProcess:
-        """Return the command to write to the Wayland clipboard."""
-        return run(['wl-copy'], check=True)
+    def in_cmd(self, **kwargs) -> CompletedProcess:
+        return run(['wl-copy'], check=True, **kwargs)
 
-    def out_cmd(self) -> CompletedProcess:
-        """Return the command to read from the Wayland clipboard."""
-        proc = run(['wl-paste'])
+    def out_cmd(self, **kwargs) -> CompletedProcess:
+        proc = run(['wl-paste'], **kwargs)
         return proc
 
 
 class X11Clipboard(SystemClipboard):
     @staticmethod
     def socket() -> str | None:
-        """Determine if the system is running an X display server."""
         return os.environ.get('DISPLAY')
 
     @classmethod
     def available(cls) -> bool:
         return cls.socket() is not None
 
-    def in_cmd(self) -> CompletedProcess:
-        return run(['xclip', '-selection', 'clipboard', '-in'], check=True)
+    def in_cmd(self, **kwargs) -> CompletedProcess:
+        return run(['xclip', '-selection', 'clipboard', '-in'], check=True, **kwargs)
 
-    def out_cmd(self) -> CompletedProcess:
-        return run(['xclip', '-selection', 'clipboard', '-out'])
+    def out_cmd(self, **kwargs) -> CompletedProcess:
+        return run(['xclip', '-selection', 'clipboard', '-out'], **kwargs)
 
 
 class XselClipboard(SystemClipboard):
@@ -116,11 +153,11 @@ class XselClipboard(SystemClipboard):
     def available(cls) -> bool:
         return cls.executable() is not None
 
-    def in_cmd(self) -> CompletedProcess:
-        return run(['xsel', '-b'], check=True)
+    def in_cmd(self, **kwargs) -> CompletedProcess:
+        return run(['xsel', '-b'], check=True, **kwargs)
 
-    def out_cmd(self) -> CompletedProcess:
-        return run(['xsel', '-b'])
+    def out_cmd(self, **kwargs) -> CompletedProcess:
+        return run(['xsel', '-b'], **kwargs)
 
 
 class MacosClipboard(SystemClipboard):
@@ -128,64 +165,111 @@ class MacosClipboard(SystemClipboard):
     def available() -> bool:
         return shutil.which('pbcopy') is not None
 
-    def in_cmd(self) -> CompletedProcess:
-        return run(['pbcopy'], check=True)
+    def in_cmd(self, **kwargs) -> CompletedProcess:
+        return run(['pbcopy'], check=True, **kwargs)
 
-    def out_cmd(self) -> CompletedProcess:
-        return run(['pbpaste'])
+    def out_cmd(self, **kwargs) -> CompletedProcess:
+        return run(['pbpaste'], **kwargs)
 
 
 class CygwinClipboard(SystemClipboard):
     def available(self) -> bool:
         return OSTYPE.startswith('cygwin') or OSTYPE == 'msys'
 
-    def in_cmd(self) -> CompletedProcess:
-        return run(['tee', '/dev/clipboard'], check=True)
+    def in_cmd(self, **kwargs) -> CompletedProcess:
+        return run(['tee', '/dev/clipboard'], check=True, **kwargs)
 
-    def out_cmd(self) -> CompletedProcess:
-        return run(['cat', '/dev/clipboard'])
+    def out_cmd(self, **kwargs) -> CompletedProcess:
+        return run(['cat', '/dev/clipboard'], **kwargs)
 
 class WslClipboard(SystemClipboard):
     def wsl(self) -> bool:
         """Determine if the system is running Windows Subsystem for Linux."""
         return OSTYPE.startswith('linux')
 
-    def in_cmd(self) -> CompletedProcess:
-        return run(['clip.exe'], check=True)
+    def in_cmd(self, **kwargs) -> CompletedProcess:
+        return run(['clip.exe'], check=True, **kwargs)
 
-    def out_cmd(self) -> CompletedProcess:
-        return run(['powershell.exe', '-Command', 'Get-Clipboard'])
+    def out_cmd(self, **kwargs) -> CompletedProcess:
+        return run(['powershell.exe', '-Command', 'Get-Clipboard'], **kwargs)
 
 
 class RemoteClipboard:
-    def __init__(self, host: str = '127.0.0.1', port: int = 8377):
+    def __init__(self, local_clipboard: SystemClipboard, host: str = '127.0.0.1', port: int = 8377):
+        self.local_clipboard = local_clipboard
+        self.host = host
         self.port = port
+        self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
-    def daemon_cmd(self) -> CompletedProcess:
-        return run(['nc', '-l', str(self.port)])
+    def _server(self, client, addr):
+        try:
+            tmpfile = SpooledTemporaryFile(mode="w+b")
+            length = 0
+            while data := client.recv(1024):
+                logging.debug(f"< {repr(data)}")
+                tmpfile.write(data)
+                length += len(data)
+            logging.debug('> "OK"')
+            client.send(b'OK')
+            tmpfile.seek(0)
+            self.local_clipboard.in_cmd(input=tmpfile.read())
+            logging.info(f"Received {length} bytes from {addr}")
+        except Exception:
+            logging.exception(f"Error receiving clipboard data from {addr}")
+        finally:
+            client.close()
 
-    def in_cmd(self) -> CompletedProcess:
-        return run(['nc', 'localhost', str(self.port)])
 
-    def out_cmd(self) -> CompletedProcess:
-        return run(['nc', '-l', str(self.port)])
+    def recv_cmd(self) -> None:
+        self.socket.bind((self.host, self.port))
+        self.socket.listen(5)
+        logging.info(f"Listening on {self.host}:{self.port} for clipboard data.")
+        try:
+            while True:
+                self._server(*self.socket.accept())
+        except KeyboardInterrupt:
+            pass
+        finally:
+            self.socket.close()
+
+    def send_cmd(self, data: bytes) -> int:
+        self.socket.connect((self.host, self.port))
+        self.socket.sendall(data)
+        self.socket.close()
+        return len(data)
 
 
 def main() -> int:
     cli = Cli()
+    log_level = logging.DEBUG if cli.verbose else logging.INFO
+    logging.basicConfig(level=log_level, stream=sys.stderr)
     clipboard = SystemClipboard.select_clipboard_interface()
+    logging.debug(f"Selected clipboard interface: {clipboard.__class__.__name__}")
 
-    if cli.remote:
-        raise NotImplementedError('Remote clipboard not implemented yet')
-        remote_clipboard = RemoteClipboard(port=cli.remote)
+    if cli.listen:
+        (host, port) = cli.listen
+        remote_clipboard = RemoteClipboard(local_clipboard=clipboard, host=host, port=port)
+        remote_clipboard.recv_cmd()
+        return 0
 
-    match cli.mode():
-        case Mode.OUT:
+    match cli.remote, cli.mode():
+        case None, Mode.OUT:
             return clipboard.out_cmd().returncode
-        case Mode.IN:
+        case None, Mode.IN:
             return clipboard.in_cmd().returncode
+        case (host, port), Mode.OUT:
+            remote_clipboard = RemoteClipboard(local_clipboard=clipboard, host=host, port=port)
+            data = clipboard.out_cmd(capture_output=True).stdout
+            logging.info(f"Sending {len(data)} bytes to {host}:{port}")
+            remote_clipboard.send_cmd(data)
+        case (host, port), Mode.IN:
+            remote_clipboard = RemoteClipboard(local_clipboard=clipboard, host=host, port=port)
+            data = sys.stdin.buffer.read()
+            logging.info(f"Sending {len(data)} bytes to {host}:{port}")
+            remote_clipboard.send_cmd(data)
         case _:
             raise RuntimeError("Unreachable")
+    return 0
 
 
 if __name__ == '__main__':

@@ -195,7 +195,7 @@ class WslClipboard(SystemClipboard):
 
 
 class RemoteClipboard:
-    def __init__(self, local_clipboard: SystemClipboard, host: str = '127.0.0.1', port: int = 8377):
+    def __init__(self, local_clipboard: SystemClipboard, host: str = '127.0.0.1', port: int = DEFAULT_PORT):
         self.local_clipboard = local_clipboard
         self.host = host
         self.port = port

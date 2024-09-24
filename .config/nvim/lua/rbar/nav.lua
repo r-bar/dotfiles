@@ -96,13 +96,18 @@ function M.packages(use)
   use {
     "numToStr/FTerm.nvim",
     config = function()
-      require("FTerm").setup {
+      local fterm = require("FTerm")
+      fterm.setup {
         border = "double",
       }
-      vim.keymap.set(
-        "n", "gt", require('FTerm').toggle,
-        { noremap = true, desc = "Open a terminal in the current directory" }
-      )
+      vim.api.nvim_create_user_command('FTermOpen', fterm.open, { bang = true })
+      vim.api.nvim_create_user_command('FTermClose', require('FTerm').close, { bang = true })
+      vim.api.nvim_create_user_command('FTermToggle', require('FTerm').toggle, { bang = true })
+      -- FIXME: conflicts with :tabnext binding
+      --vim.keymap.set(
+      --  "n", "gt", require('FTerm').toggle,
+      --  { noremap = true, desc = "Open a terminal in the current directory" }
+      --)
     end,
   }
 end

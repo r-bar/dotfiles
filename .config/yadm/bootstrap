@@ -13,6 +13,11 @@ install_custom_firefox_profile_mods() {
 }
 
 install_pia_wg_config() {
+  response=$(read -p "Do you want to install the PIA Wireguard config? [y/N] " -n 1 -r)
+  if [[ ! $response =~ ^[Yy]$ ]]; then
+    echo "Skipping PIA Wireguard config install"
+    return
+  fi
   echo "Installing PIA Wireguard config"
   sudo mkdir -p /etc/pia-wg
   sudo cp ~/.config/pia-wg/pia-wg.conf /etc/pia-wg/pia-wg.conf

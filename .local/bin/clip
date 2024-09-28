@@ -5,6 +5,7 @@ import sys
 import shutil
 import socket
 import logging
+from dataclasses import dataclass, field
 from tempfile import SpooledTemporaryFile
 from abc import ABC, abstractmethod
 from typing import Optional, Callable
@@ -195,12 +196,12 @@ class WslClipboard(SystemClipboard):
         return run(['powershell.exe', '-Command', 'Get-Clipboard'], **kwargs)
 
 
+@dataclass
 class RemoteClipboard:
-    def __init__(self, local_clipboard: SystemClipboard, host: str = '127.0.0.1', port: int = DEFAULT_PORT):
-        self.local_clipboard = local_clipboard
-        self.host = host
-        self.port = port
-        self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    local_clipboard: SystemClipboard
+    host: str = '127.0.0.1'
+    port: str = DEFAULT_PORT
+    _socket: socket.socket = field(default_factory=lambda: socket.socket(socket.AF_INET, socket.SOCK_STREAM))
 
     def _server(self, client: socket.socket, addr: tuple[str, int]):
         try:
@@ -222,21 +223,22 @@ class RemoteClipboard:
             client.close()
 
     def recv_cmd(self) -> None:
-        self.socket.bind((self.host, self.port))
-        self.socket.listen(5)
+        self._socket.bind((self.host, self.port))
+        self._socket.listen(5)
         logging.info(f"Listening on {self.host}:{self.port} for clipboard data.")
         try:
             while True:
-                self._server(*self.socket.accept())
+                self._server(*self._socket.accept())
         except KeyboardInterrupt:
             pass
         finally:
-            self.socket.close()
+            self._socket.close()
 
     def send_cmd(self, data: bytes) -> int:
-        self.socket.connect((self.host, self.port))
-        self.socket.sendall(data)
-        self.socket.close()
+        ip = socket.gethostbyname(self.host)
+        self._socket.connect((ip, self.port))
+        self._socket.sendall(data)
+        self._socket.close()
         return len(data)
 
 

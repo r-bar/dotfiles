@@ -13,6 +13,7 @@ from argparse import ArgumentParser
 
 
 DEFAULT_PORT = 8377
+MAX_CLIPBOARD_MEMORY = 10 * 1024 * 1024
 OSTYPE = os.environ.get('OSTYPE')
 CompletedProcess = Callable[[], CompletedProcess]
 
@@ -42,7 +43,7 @@ class Cli:
             '-l',
             '--listen',
             default=None,
-            const=f"0.0.0.0:{DEFAULT_PORT}",
+            const=f"127.0.0.1:{DEFAULT_PORT}",
             action="store",
             nargs="?",
             dest="listen",
@@ -201,9 +202,10 @@ class RemoteClipboard:
         self.port = port
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
-    def _server(self, client, addr):
+    def _server(self, client: socket.socket, addr: tuple[str, int]):
         try:
-            tmpfile = SpooledTemporaryFile(mode="w+b")
+            client_host, client_port = addr
+            tmpfile = SpooledTemporaryFile(max_size=MAX_CLIPBOARD_MEMORY, mode="w+b")
             length = 0
             while data := client.recv(1024):
                 logging.debug(f"< {repr(data)}")
@@ -213,12 +215,11 @@ class RemoteClipboard:
             client.send(b'OK')
             tmpfile.seek(0)
             self.local_clipboard.in_cmd(input=tmpfile.read())
-            logging.info(f"Received {length} bytes from {addr}")
+            logging.info(f"Received {length} bytes from {client_host}:{client_port}")
         except Exception:
-            logging.exception(f"Error receiving clipboard data from {addr}")
+            logging.exception(f"Error receiving clipboard data from {client_host}:{client_port}")
         finally:
             client.close()
-
 
     def recv_cmd(self) -> None:
         self.socket.bind((self.host, self.port))

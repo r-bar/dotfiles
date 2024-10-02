@@ -5,6 +5,7 @@ import sys
 import shutil
 import socket
 import logging
+from dataclasses import dataclass, field
 from tempfile import SpooledTemporaryFile
 from abc import ABC, abstractmethod
 from typing import Optional, Callable
@@ -13,6 +14,7 @@ from argparse import ArgumentParser
 
 
 DEFAULT_PORT = 8377
+MAX_CLIPBOARD_MEMORY = 10 * 1024 * 1024
 OSTYPE = os.environ.get('OSTYPE')
 CompletedProcess = Callable[[], CompletedProcess]
 
@@ -42,7 +44,7 @@ class Cli:
             '-l',
             '--listen',
             default=None,
-            const=f"0.0.0.0:{DEFAULT_PORT}",
+            const=f"127.0.0.1:{DEFAULT_PORT}",
             action="store",
             nargs="?",
             dest="listen",
@@ -194,16 +196,17 @@ class WslClipboard(SystemClipboard):
         return run(['powershell.exe', '-Command', 'Get-Clipboard'], **kwargs)
 
 
+@dataclass
 class RemoteClipboard:
-    def __init__(self, local_clipboard: SystemClipboard, host: str = '127.0.0.1', port: int = 8377):
-        self.local_clipboard = local_clipboard
-        self.host = host
-        self.port = port
-        self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    local_clipboard: SystemClipboard
+    host: str = '127.0.0.1'
+    port: str = DEFAULT_PORT
+    _socket: socket.socket = field(default_factory=lambda: socket.socket(socket.AF_INET, socket.SOCK_STREAM))
 
-    def _server(self, client, addr):
+    def _server(self, client: socket.socket, addr: tuple[str, int]):
         try:
-            tmpfile = SpooledTemporaryFile(mode="w+b")
+            client_host, client_port = addr
+            tmpfile = SpooledTemporaryFile(max_size=MAX_CLIPBOARD_MEMORY, mode="w+b")
             length = 0
             while data := client.recv(1024):
                 logging.debug(f"< {repr(data)}")
@@ -213,29 +216,29 @@ class RemoteClipboard:
             client.send(b'OK')
             tmpfile.seek(0)
             self.local_clipboard.in_cmd(input=tmpfile.read())
-            logging.info(f"Received {length} bytes from {addr}")
+            logging.info(f"Received {length} bytes from {client_host}:{client_port}")
         except Exception:
-            logging.exception(f"Error receiving clipboard data from {addr}")
+            logging.exception(f"Error receiving clipboard data from {client_host}:{client_port}")
         finally:
             client.close()
 
-
     def recv_cmd(self) -> None:
-        self.socket.bind((self.host, self.port))
-        self.socket.listen(5)
+        self._socket.bind((self.host, self.port))
+        self._socket.listen(5)
         logging.info(f"Listening on {self.host}:{self.port} for clipboard data.")
         try:
             while True:
-                self._server(*self.socket.accept())
+                self._server(*self._socket.accept())
         except KeyboardInterrupt:
             pass
         finally:
-            self.socket.close()
+            self._socket.close()
 
     def send_cmd(self, data: bytes) -> int:
-        self.socket.connect((self.host, self.port))
-        self.socket.sendall(data)
-        self.socket.close()
+        ip = socket.gethostbyname(self.host)
+        self._socket.connect((ip, self.port))
+        self._socket.sendall(data)
+        self._socket.close()
         return len(data)
 
 

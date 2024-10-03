@@ -23,21 +23,26 @@ function M.packages(use)
     end
   }
   use 'https://github.com/michaeljsmith/vim-indent-object.git'
+  use 'https://github.com/tpope/vim-repeat.git'
   use {
-    'https://github.com/tpope/vim-surround.git',
-    dependencies = { 'https://github.com/tpope/vim-repeat.git' },
+    "kylechui/nvim-surround",
+    version = "*", -- Use for stability; omit to use `main` branch for the latest features
+    --event = "VeryLazy",
     config = function()
-      -- override the default mappings to not conflict with leap.nvim
-      vim.keymap.set('n', 'gsd',   '<Plug>Dsurround')
-      vim.keymap.set('n', 'gsr',   '<Plug>Csurround')
-      vim.keymap.set('n', 'gSr',   '<Plug>CSurround')
-      vim.keymap.set('n', 'gs',    '<Plug>Ysurround')
-      vim.keymap.set('n', 'gsgs',  '<Plug>Yssurround')
-      vim.keymap.set('n', 'gS',    '<Plug>YSurround')
-      vim.keymap.set('n', 'gSgS',  '<Plug>YSsurround')
-      vim.keymap.set('n', 'gSgs',  '<Plug>YSsurround')
-      vim.keymap.set('x', 'gs',    '<Plug>VSurround')
-      vim.keymap.set('x', 'gS',    '<Plug>VgSurround')
+      require("nvim-surround").setup({
+        keymaps = {
+          insert          = '<C-g>s',
+          insert_line     = 'gC-ggS',
+          normal          = 'gs',
+          normal_cur      = 'gS',
+          normal_line     = 'gsgs',
+          normal_cur_line = 'gSgS',
+          visual          = 'gs',
+          visual_line     = 'gS',
+          delete          = 'gsd',
+          change          = 'gsc',
+        }
+      })
     end,
   }
   use 'https://github.com/wellle/targets.vim'

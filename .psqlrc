@@ -1,5 +1,9 @@
+\set QUIET on
+
 -- \pset format csv
 -- \pset pager on
+
+\q
 
 \x auto
 

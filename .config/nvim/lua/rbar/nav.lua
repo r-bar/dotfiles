@@ -109,6 +109,12 @@ function M.packages(use)
       --)
     end,
   }
+  use {
+    'Mathijs-Bakker/zoom-vim',
+    config = function()
+      vim.keymap.set("n", "<C-w>z", "<Plug>Zoom", { noremap = true })
+    end,
+  }
 end
 
 function M.config()

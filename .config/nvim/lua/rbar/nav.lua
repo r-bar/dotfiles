@@ -20,10 +20,14 @@ function M.packages(use)
   use {
     'ggandor/leap.nvim',
     config = function()
-      vim.keymap.set({ 'n', 'x', 'o' }, '<tab>', '<Plug>(leap-forward)')
-      vim.keymap.set({ 'n', 'x', 'o' }, '<S-tab>', '<Plug>(leap-backward)')
-      vim.keymap.set({ 'n', 'x', 'o' }, '<leader><tab>', '<Plug>(leap)')
-      vim.keymap.set('n', 'g<tab>', '<Plug>(leap-from-window)')
+      require('leap').create_default_mappings()
+      --Calling require('leap').create_default_mappings() is equivalent to:
+      --vim.keymap.set({'n', 'x', 'o'}, 's',  '<Plug>(leap-forward)')
+      --vim.keymap.set({'n', 'x', 'o'}, 'S',  '<Plug>(leap-backward)')
+      --vim.keymap.set({'n', 'x', 'o'}, 'gs', '<Plug>(leap-from-window)')
+
+      -- don't even try to use <tab>, it overrides <C-i> because of the terminal
+      vim.keymap.set({ 'n', 'x', 'o' }, '<space>', '<Plug>(leap)')
     end,
   }
   use 'nvim-lua/plenary.nvim'

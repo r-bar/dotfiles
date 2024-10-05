@@ -8,27 +8,33 @@ function M.packages(use)
     dependencies = { 'nvim-tree/nvim-web-devicons' },
     config = function()
       local fzf = require("fzf-lua")
-      vim.keymap.set("n", "<Leader>t", ":FzfLua files<Enter>", { silent = true })
-      vim.keymap.set("n", "<Leader>b", ":FzfLua buffers<Enter>", { silent = true })
-      vim.keymap.set("n", "<Leader>h", ":FzfLua command_history<Enter>", { silent = true })
-      vim.keymap.set("n", "<leader>j", ":FzfLua btags<Enter>", { silent = true })
-      vim.keymap.set("n", "<leader>s", ":FzfLua lsp_document_symbols<Enter>", { silent = true })
-      vim.keymap.set({ "n", "v" }, "<leader>a", ":FzfLua lsp_code_actions<Enter>", { silent = true })
-      vim.api.nvim_create_user_command("Help", function() fzf.help_tags() end, {})
+      vim.keymap.set("n", "<Leader>t", fzf.files, { silent = true })
+      vim.keymap.set("n", "<Leader>b", fzf.buffers, { silent = true })
+      vim.keymap.set("n", "<leader>s", fzf.lsp_document_symbols, { silent = true })
+      vim.keymap.set("n", "<Leader>fc", fzf.command_history, { silent = true })
+      vim.keymap.set("n", "<leader>fj", fzf.btags, { silent = true })
+      vim.keymap.set("n", "<leader>fk", fzf.keymaps, { silent = true })
+      vim.keymap.set("n", "<leader>fh", fzf.help_tags, { silent = true })
+      vim.keymap.set({ "n", "v" }, "<leader>a", fzf.lsp_code_actions, { silent = true })
+      vim.api.nvim_create_user_command("Help", fzf.help_tags, {})
     end
   }
   use {
     'ggandor/leap.nvim',
-    config = function()
-      require('leap').create_default_mappings()
-      --Calling require('leap').create_default_mappings() is equivalent to:
-      --vim.keymap.set({'n', 'x', 'o'}, 's',  '<Plug>(leap-forward)')
-      --vim.keymap.set({'n', 'x', 'o'}, 'S',  '<Plug>(leap-backward)')
-      --vim.keymap.set({'n', 'x', 'o'}, 'gs', '<Plug>(leap-from-window)')
-
-      -- don't even try to use <tab>, it overrides <C-i> because of the terminal
-      vim.keymap.set({ 'n', 'x', 'o' }, '<space>', '<Plug>(leap)')
-    end,
+    keys = {
+      {'s',       '<Plug>(leap-forward)',     mode = 'n', desc = 'Leap forward',     noremap = true},
+      {'S',       '<Plug>(leap-backward)',    mode = 'n', desc = 'Leap backward',    noremap = true},
+      {'gs',      '<Plug>(leap-from-window)', mode = 'n', desc = 'Leap from window', noremap = true},
+      {'<space>', '<Plug>(leap)',             mode = 'n', desc = 'Leap in buffer',   noremap = true},
+      {'s',       '<Plug>(leap-forward)',     mode = 'x', desc = 'Leap forward',     noremap = true},
+      {'S',       '<Plug>(leap-backward)',    mode = 'x', desc = 'Leap backward',    noremap = true},
+      {'gs',      '<Plug>(leap-from-window)', mode = 'x', desc = 'Leap from window', noremap = true},
+      {'<space>', '<Plug>(leap)',             mode = 'x', desc = 'Leap in buffer',   noremap = true},
+      {'s',       '<Plug>(leap-forward)',     mode = 'o', desc = 'Leap forward',     noremap = true},
+      {'S',       '<Plug>(leap-backward)',    mode = 'o', desc = 'Leap backward',    noremap = true},
+      {'gs',      '<Plug>(leap-from-window)', mode = 'o', desc = 'Leap from window', noremap = true},
+      {'<space>', '<Plug>(leap)',             mode = 'o', desc = 'Leap in buffer',   noremap = true},
+    },
   }
   use 'nvim-lua/plenary.nvim'
   use {
@@ -83,41 +89,38 @@ function M.packages(use)
   use "farmergreg/vim-lastplace"
   use {
     "stevearc/oil.nvim",
-    config = function()
-      require("oil").setup {
-        columns = { "permissions", "mtime", "size", "icon" },
-        constrain_cursor = "name",
-        default_file_explorer = true,
-        keymaps = {
-          ["!"] = "actions.open_terminal",
-        },
-        view_options = { show_hidden = true },
-      }
-      vim.keymap.set("n", "<C-e>", "<cmd>Oil<CR>", { noremap = true, desc = "Open parent directory" })
-    end,
+    cmd = "Oil",
+    keys = {
+      {"<C-e>", "<cmd>Oil<CR>", mode = "n", noremap = true, desc = "Open parent directory"},
+    },
+    opts = {
+      columns = { "permissions", "mtime", "size", "icon" },
+      constrain_cursor = "name",
+      default_file_explorer = true,
+      keymaps = {
+        ["!"] = "actions.open_terminal",
+      },
+      view_options = { show_hidden = true },
+    },
   }
   use {
     "numToStr/FTerm.nvim",
+    cmd = { "FTermOpen", "FTermClose", "FTermToggle" },
     config = function()
       local fterm = require("FTerm")
       fterm.setup {
         border = "double",
       }
       vim.api.nvim_create_user_command('FTermOpen', fterm.open, { bang = true })
-      vim.api.nvim_create_user_command('FTermClose', require('FTerm').close, { bang = true })
-      vim.api.nvim_create_user_command('FTermToggle', require('FTerm').toggle, { bang = true })
-      -- FIXME: conflicts with :tabnext binding
-      --vim.keymap.set(
-      --  "n", "gt", require('FTerm').toggle,
-      --  { noremap = true, desc = "Open a terminal in the current directory" }
-      --)
+      vim.api.nvim_create_user_command('FTermClose', fterm.close, { bang = true })
+      vim.api.nvim_create_user_command('FTermToggle', fterm.toggle, { bang = true })
     end,
   }
   use {
     'Mathijs-Bakker/zoom-vim',
-    config = function()
-      vim.keymap.set("n", "<C-w>z", "<Plug>Zoom", { noremap = true })
-    end,
+    keys = {
+      {'<C-w>z', '<Plug>Zoom', mode = 'n', desc = 'Zoom window', noremap = true},
+    },
   }
 end
 

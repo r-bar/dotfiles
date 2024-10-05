@@ -2,7 +2,14 @@
 local M = {}
 
 function M.packages(use)
-  use 'https://github.com/tpope/vim-abolish.git'
+  use {
+    'https://github.com/tpope/vim-abolish.git',
+    cmd = {
+      'Abolish',
+      'Subvert',
+      'S',
+    }
+  }
   use {
     "klen/nvim-config-local",
     config = function()
@@ -27,26 +34,23 @@ function M.packages(use)
   use {
     "kylechui/nvim-surround",
     version = "*", -- Use for stability; omit to use `main` branch for the latest features
-    --event = "VeryLazy",
-    config = function()
-      require("nvim-surround").setup({
-        keymaps = {
-          insert          = '<C-g>s',
-          insert_line     = 'gC-ggS',
-          normal          = 'gs',
-          normal_cur      = 'gS',
-          normal_line     = 'gsgs',
-          normal_cur_line = 'gSgS',
-          visual          = 'gs',
-          visual_line     = 'gS',
-          delete          = 'gsd',
-          change          = 'gsc',
-        }
-      })
-    end,
+    opts = {
+      keymaps = {
+        insert          = '<C-g>z',
+        insert_line     = '<C-g>Z',
+        normal          = 'gz',
+        normal_cur      = 'gZ',
+        normal_line     = 'gzgz',
+        normal_cur_line = 'gZgZ',
+        visual          = 'gz',
+        visual_line     = 'gZ',
+        delete          = 'gzd',
+        change          = 'gzc',
+      }
+    },
   }
   use 'https://github.com/wellle/targets.vim'
-  use 'danro/rename.vim'
+  use {'danro/rename.vim', cmd = "Rename"}
   use 'https://github.com/tmhedberg/matchit.git'
   use 'https://github.com/Valloric/MatchTagAlways.git'
   use 'https://github.com/kana/vim-textobj-user.git'
@@ -54,7 +58,15 @@ function M.packages(use)
     'glts/vim-textobj-comment',
     dependencies = { 'https://github.com/kana/vim-textobj-user.git' },
   }
-  use { 'https://github.com/AndrewRadev/splitjoin.vim.git', branch = 'main' }
+  use {
+    'https://github.com/bennypowers/splitjoin.nvim',
+    branch = 'main',
+    config = function()
+      local splitjoin = require('splitjoin')
+      vim.keymap.set('n', 'gj', splitjoin.split, { noremap = true, desc = 'Split the object under the cursor' })
+      vim.keymap.set('n', 'gJ', splitjoin.join, { noremap = true, desc = 'Split the object under the cursor' })
+    end,
+  }
   use {
     'https://github.com/Yggdroot/indentLine.git',
     enabled = false,
@@ -82,12 +94,12 @@ function M.packages(use)
   }
   use {
     'https://github.com/NarutoXY/silicon.lua.git',
+    opts = {
+      theme = 'OneHalfDark',
+      font = 'Fira Code',
+    },
+cmd = 'Screenshot',
     config = function()
-      local silicon = require('silicon')
-      require('silicon').setup {
-        theme = 'OneHalfDark',
-        font = 'Fira Code',
-      }
       vim.api.nvim_create_user_command(
         'Screenshot',
         function(info)
@@ -99,7 +111,7 @@ function M.packages(use)
             if string.match(info.args, 'buf') then
               args.show_buf = true
             end
-            silicon.visualise_api(args)
+            require('silicon').visualise_api(args)
           else
             print('Executable silicon must be installed to take screenshots')
           end
@@ -119,7 +131,7 @@ function M.packages(use)
         ts_config = {
           lua = { 'string' }, -- it will not add a pair on that treesitter node
           javascript = { 'template_string' },
-          java = false,     -- don't check treesitter on java
+          java = false,       -- don't check treesitter on java
         }
       }
       npairs.add_rules({
@@ -136,8 +148,17 @@ function M.packages(use)
   }
   use {
     "https://github.com/mbbill/undotree.git",
+    cmd = {
+      "UndotreeToggle",
+      "UndotreeShow",
+      "UndotreeHide",
+      "UndotreeFocus",
+      "UndotreePersistUndo",
+    },
+    keys = {
+      {'n', '<leader>u', ':UndotreeToggle<CR>'},
+    },
     config = function()
-      vim.keymap.set('n', '<leader>u', ':UndotreeToggle<CR>')
       vim.cmd [[
       if has("persistent_undo")
         let target_path = expand('~/.undodir')
@@ -155,27 +176,111 @@ function M.packages(use)
   use {
     'mattn/emmet-vim',
     ft = { 'html', 'liquid', 'eruby', 'typescript', 'javascript', 'reason', 'jinja.html' },
+    keys = {
+      {'<C-e><C-e>', '<plug>(emmet-expand-abbr)',         mode = 'i', noremap = true},
+      {'<C-e>;',     '<plug>(emmet-expand-word)',         mode = 'i', noremap = true},
+      {'<C-e>u',     '<plug>(emmet-update-tag)',          mode = 'i', noremap = true},
+      {'<C-e>d',     '<plug>(emmet-balance-tag-inward)',  mode = 'i', noremap = true},
+      {'<C-e>D',     '<plug>(emmet-balance-tag-outward)', mode = 'i', noremap = true},
+      {'<C-e>n',     '<plug>(emmet-move-next)',           mode = 'i', noremap = true},
+      {'<C-e>N',     '<plug>(emmet-move-prev)',           mode = 'i', noremap = true},
+      {'<C-e>i',     '<plug>(emmet-image-size)',          mode = 'i', noremap = true},
+      {'<C-e>/',     '<plug>(emmet-toggle-comment)',      mode = 'i', noremap = true},
+      {'<C-e>j',     '<plug>(emmet-split-join-tag)',      mode = 'i', noremap = true},
+      {'<C-e>k',     '<plug>(emmet-remove-tag)',          mode = 'i', noremap = true},
+      {'<C-e>a',     '<plug>(emmet-anchorize-url)',       mode = 'i', noremap = true},
+      {'<C-e>A',     '<plug>(emmet-anchorize-summary)',   mode = 'i', noremap = true},
+      {'<C-e>m',     '<plug>(emmet-merge-lines)',         mode = 'i', noremap = true},
+      {'<C-e>c',     '<plug>(emmet-code-pretty)',         mode = 'i', noremap = true},
+    },
     config = function()
       vim.g.user_emmet_install_global = 1
       vim.g.user_emmet_leader_key = '<C-e>'
-      require('rbar/mappings').emmet()
     end,
   }
-  use { 'https://github.com/scrooloose/nerdcommenter.git', config = function()
-    vim.g.NERDCustomDelimiters = {
-      kdl = { left = '//', leftAlt = '/*', rightAlt = '*/' },
-      mojo = { left = '# ' }
-    }
-  end }
-  use 'https://github.com/tpope/vim-fugitive.git'
+  use { 'https://github.com/scrooloose/nerdcommenter.git',
+    keys = {
+      {'<leader>cc',       '<Plug>NERDCommenterComment',   mode = {'n', 'v'}, noremap = true},
+      {'<leader>cc',       '<Plug>NERDCommenterComment',   mode = {'n', 'v'}, noremap = true},
+      {'<leader>c',        '<Plug>NERDCommenterToEOL',     mode = {'n', 'v'}, noremap = true},
+      {'<leader>c<space>', '<Plug>NERDCommenterToggle',    mode = {'n', 'v'}, noremap = true},
+      {'<leader>cA',       '<Plug>NERDCommenterAppend',    mode = {'n', 'v'}, noremap = true},
+      {'<leader>ca',       '<Plug>NERDCommenterAltDelims', mode = {'n', 'v'}, noremap = true},
+      {'<leader>cb',       '<Plug>NERDCommenterAlignBoth', mode = {'n', 'v'}, noremap = true},
+      {'<leader>ci',       '<Plug>NERDCommenterInvert',    mode = {'n', 'v'}, noremap = true},
+      {'<leader>cl',       '<Plug>NERDCommenterAlignLeft', mode = {'n', 'v'}, noremap = true},
+      {'<leader>cm',       '<Plug>NERDCommenterMinimal',   mode = {'n', 'v'}, noremap = true},
+      {'<leader>cn',       '<Plug>NERDCommenterNested',    mode = {'n', 'v'}, noremap = true},
+      {'<leader>cs',       '<Plug>NERDCommenterSexy',      mode = {'n', 'v'}, noremap = true},
+      {'<leader>cu',       '<Plug>NERDCommenterUncomment', mode = {'n', 'v'}, noremap = true},
+      {'<leader>cy',       '<Plug>NERDCommenterYank',      mode = {'n', 'v'}, noremap = true},
+      {'<leader>c<space>', '<Plug>NERDCommenterToggle',    mode = {'n', 'v'}, noremap = true},
+      {'<leader>cb',       '<Plug>NERDCommenterAlignBoth', mode = {'n', 'v'}, noremap = true},
+      {'<leader>ci',       '<Plug>NERDCommenterInvert',    mode = {'n', 'v'}, noremap = true},
+      {'<leader>cl',       '<Plug>NERDCommenterAlignLeft', mode = {'n', 'v'}, noremap = true},
+      {'<leader>cm',       '<Plug>NERDCommenterMinimal',   mode = {'n', 'v'}, noremap = true},
+      {'<leader>cn',       '<Plug>NERDCommenterNested',    mode = {'n', 'v'}, noremap = true},
+      {'<leader>cs',       '<Plug>NERDCommenterSexy',      mode = {'n', 'v'}, noremap = true},
+      {'<leader>cu',       '<Plug>NERDCommenterUncomment', mode = {'n', 'v'}, noremap = true},
+      {'<leader>cy',       '<Plug>NERDCommenterYank',      mode = {'n', 'v'}, noremap = true},
+    },
+    config = function()
+      vim.g.NERDCustomDelimiters = {
+        kdl = { left = '//', leftAlt = '/*', rightAlt = '*/' },
+        mojo = { left = '# ' }
+      }
+    end
+  }
+  use {
+    'https://github.com/tpope/vim-fugitive.git',
+    cmd = {
+      'G',
+      'GBrowse',
+      'GDelete',
+      'GMove',
+      'GRemove',
+      'GRename',
+      'GUnlink',
+      'Gbrowse',
+      'GcLog',
+      'Gcd',
+      'Gclog',
+      'Gdelete',
+      'Gdiffsplit',
+      'Gdrop',
+      'Ge',
+      'Gedit',
+      'Ggrep',
+      'Ghdiffsplit',
+      'Git',
+      'Gitsigns',
+      'GlLog',
+      'Glcd',
+      'Glgrep',
+      'Gllog',
+      'Gmove',
+      'Gpedit',
+      'Gr',
+      'Gread',
+      'Gremove',
+      'Grename',
+      'Gsplit',
+      'Gtabedit',
+      'Gvdiffsplit',
+      'Gvsplit',
+      'Gw',
+      'Gwq',
+      'Gwrite',
+    },
+  }
   use 'https://github.com/romainl/vim-qf.git'
   use 'https://github.com/yssl/QFEnter.git'
   use {
     'https://github.com/junegunn/vim-easy-align.git',
-    config = function()
-      vim.keymap.set('n', 'ga', '<Plug>(EasyAlign)', { noremap = false })
-      vim.keymap.set('x', 'ga', '<Plug>(EasyAlign)', { noremap = false })
-    end,
+    keys = {
+      {'ga', '<Plug>(EasyAlign)', mode = 'n', noremap = false, desc = "Align text by delimiters"},
+      {'ga', '<Plug>(EasyAlign)', mode = 'x', noremap = false, desc = "Align text by delimiters"},
+    },
   }
 end
 
@@ -193,9 +298,9 @@ function M.config()
   vim.o.expandtab = true
 
   vim.o.listchars = 'space:.,nbsp:+,tab:⇥ ,extends:>,precedes:<,trail:~,'
-  vim.keymap.set('n', '<F8>', toggle_list_chars, { noremap = true })
-  vim.keymap.set('v', '<F8>', toggle_list_chars, { noremap = true })
-  vim.keymap.set('i', '<F8>', toggle_list_chars, { noremap = true })
+  --vim.keymap.set('n', '<F8>', toggle_list_chars, { noremap = true })
+  --vim.keymap.set('v', '<F8>', toggle_list_chars, { noremap = true })
+  --vim.keymap.set('i', '<F8>', toggle_list_chars, { noremap = true })
 
   -- elimitnate escape sequence lag in vim (delay after leaving insert mode)
   vim.o.timeout = false
@@ -259,7 +364,7 @@ function M.config()
     vim.o.grepformat = [[%f:%l:%c:%m,%f:%l:%m]]
   end
   vim.cmd([[autocmd QuickFixCmdPost * nested cwindow 20 | redraw!]])
-  vim.keymap.set("n", "<leader>g", ':grep! "<cword>"<CR>')
+  vim.keymap.set("n", "<leader>g", ':grep! "<cword>"<CR>', { noremap = true, desc = 'Grep for the word under the cursor' })
 
   -- keep a couple lines between the cursor and the edge of the screen while
   -- scrolling
@@ -276,15 +381,15 @@ function M.config()
   vim.cmd([[nn <F7> :setlocal spell! spell?<CR>]])
 
   -- shortcut to jump to last buffer
-  vim.keymap.set('n', '<Backspace>', ':b#<Enter>', { noremap = true })
+  vim.keymap.set('n', '<Backspace>', ':b#<Enter>', { noremap = true, desc = 'Jump to the previous active buffer' })
 
   -- map insert blank line below and above to enter and shift-enter
-  vim.keymap.set('n', '<Enter>', 'i<Enter><ESC>', { noremap = true })
+  vim.keymap.set('n', '<Enter>', 'i<Enter><ESC>', { noremap = true, desc = 'Insert a newline at the cursor, return to normal mode' })
   --vim.api.nvim_set_keymap('n', '<Shift-Enter>', 'O<ESC>', {noremap = true})
 
   -- allow easier copy and pasting into the X clipboard
-  vim.keymap.set('v', '<C-c>', '"+y', { noremap = true })
-  vim.keymap.set('n', '<leader>y', ':w ! xclip -selection clipboard<CR>', { noremap = true })
+  vim.keymap.set('v', '<C-c>', '"+y', { noremap = true, desc = 'Yank for Windows users' })
+  vim.keymap.set('n', '<leader>y', ':w ! clip -r localhost', { noremap = true, desc = 'Yank full buffer to system clipboard' })
 
   -- Q mode sucks, never enter Q mode
   vim.keymap.set('n', 'Q', "<nop>")

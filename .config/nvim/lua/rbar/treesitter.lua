@@ -2,7 +2,10 @@ local M = {}
 
 function M.packages(use)
   use {"nvim-treesitter/nvim-treesitter", run = ":TSUpdate" }
-  use "nvim-treesitter/playground"
+  use {
+    "nvim-treesitter/playground",
+    cmd = "TSPlaygroundToggle",
+  }
 end
 
 function M.config()

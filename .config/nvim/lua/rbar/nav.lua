@@ -125,13 +125,6 @@ function M.packages(use)
 end
 
 function M.config()
-  -- Shortcuts for navigating between windows
-  --vim.keymap.set('n', '<C-h>', '<C-w>h', { noremap = true })
-  --vim.keymap.set('n', '<C-j>', '<C-w>j', { noremap = true })
-  -- lsp-zero attempts to map <C-k> to show signature, overwritten here
-  --vim.keymap.set('n', '<C-k>', '<C-w>k', { noremap = true })
-  --vim.keymap.set('n', '<C-l>', '<C-w>l', { noremap = true })
-
   vim.keymap.set('n', '+', '<C-w>+', { noremap = true })
   vim.keymap.set('n', '-', '<C-w>-', { noremap = true })
 end

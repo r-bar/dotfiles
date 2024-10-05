@@ -156,7 +156,7 @@ cmd = 'Screenshot',
       "UndotreePersistUndo",
     },
     keys = {
-      {'n', '<leader>u', ':UndotreeToggle<CR>'},
+      {'<leader>u', ':UndotreeToggle<CR>'},
     },
     config = function()
       vim.cmd [[

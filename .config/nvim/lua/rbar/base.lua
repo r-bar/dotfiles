@@ -44,8 +44,8 @@ function M.packages(use)
         normal_cur_line = 'gZgZ',
         visual          = 'gz',
         visual_line     = 'gZ',
-        delete          = 'gzd',
-        change          = 'gzc',
+        delete         = 'dgz',
+        change         = 'cgz',
       }
     },
   }

@@ -8,3 +8,4 @@ WantedBy=default.target
 Type=simple
 WorkingDirectory=%h
 ExecStart=bash -c '%h/.local/bin/clip -l 127.0.0.1'
+Restart=on-failure

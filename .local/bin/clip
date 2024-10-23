@@ -270,6 +270,7 @@ class RemoteClipboard:
 
     def recv_cmd(self) -> None:
         server = HTTPServer((self.host, self.port), self._handler)
+        logging.info(f"Starting clipboard server on {self.host}:{self.port}")
         server.serve_forever()
 
     def send_cmd(self, data: bytes) -> int:
@@ -319,7 +320,6 @@ def main() -> int:
                 local_clipboard=clipboard, host=host, port=port
             )
             data = sys.stdin.buffer.read()
-            logging.info(f"Sending {len(data)} bytes to {host}:{port}")
             return remote_clipboard.send_cmd(data)
         case _:
             raise RuntimeError("Unreachable")

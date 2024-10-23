@@ -1,74 +1,79 @@
 #!/usr/bin/env python3
 import enum
+import logging
 import os
-import sys
 import shutil
 import socket
-import logging
-from dataclasses import dataclass, field
-from tempfile import SpooledTemporaryFile
+import socketserver
+import sys
 from abc import ABC, abstractmethod
-from typing import Optional, Callable
-from subprocess import run, SubprocessError, CompletedProcess
 from argparse import ArgumentParser
-
+from dataclasses import dataclass
+from http.client import HTTPConnection
+from http.server import BaseHTTPRequestHandler, HTTPServer, HTTPStatus
+from subprocess import CompletedProcess, SubprocessError, run
+from tempfile import SpooledTemporaryFile
+from typing import Callable, Optional
 
 DEFAULT_PORT = 8377
 MAX_CLIPBOARD_MEMORY = 10 * 1024 * 1024
-OSTYPE = os.environ.get('OSTYPE')
+OSTYPE = os.environ.get("OSTYPE")
 CompletedProcess = Callable[[], CompletedProcess]
 
 
 class Mode(enum.StrEnum):
-    IN = 'in'
-    OUT = 'out'
+    IN = "in"
+    OUT = "out"
 
 
 def netloc(arg_str: str) -> tuple[str, int]:
-    match arg_str.split(':'):
+    match arg_str.split(":"):
         case [host]:
             return host, DEFAULT_PORT
         case [host, port]:
             return host, int(port)
         case _:
-            raise ValueError(f'Invalid network location: {arg_str}')
+            raise ValueError(f"Invalid network location: {arg_str}")
+
 
 class Cli:
     remote: Optional[int]
     stdout: bool
 
     def __init__(self):
-        p = ArgumentParser(description='Inserts into the system clipboard from stdin or prints the clipboard contents to stdout.')
+        p = ArgumentParser(
+            description="Inserts into the system clipboard from stdin or prints the clipboard contents to stdout."
+        )
         self.parser = p
         p.add_argument(
-            '-l',
-            '--listen',
+            "-l",
+            "--listen",
             default=None,
             const=f"127.0.0.1:{DEFAULT_PORT}",
             action="store",
             nargs="?",
             dest="listen",
             type=netloc,
-            help='listen on a remote network socket for clipboard data',
+            help="listen on a remote network socket for clipboard data",
         )
         p.add_argument(
-            '-r',
-            '--remote',
+            "-r",
+            "--remote",
             default=None,
             type=netloc,
-            help='send to a remote network socket',
+            help="send to a remote network socket",
         )
         p.add_argument(
-            '-o',
-            '--stdout',
-            action='store_true',
-            help='force printing to stdout',
+            "-o",
+            "--stdout",
+            action="store_true",
+            help="force printing to stdout",
         )
         p.add_argument(
-            '-v',
-            '--verbose',
-            action='store_true',
-            help='enable debug logging',
+            "-v",
+            "--verbose",
+            action="store_true",
+            help="enable debug logging",
         )
         self.args = p.parse_args()
         for name, value in vars(self.args).items():
@@ -82,7 +87,7 @@ class Cli:
 
 
 class SystemClipboard(ABC):
-    AVAILABLE_INTERFACES: list['SystemClipboard'] = []
+    AVAILABLE_INTERFACES: list["SystemClipboard"] = []
 
     def __init_subclass__(cls, **kwargs):
         super().__init_subclass__(**kwargs)
@@ -109,99 +114,128 @@ class SystemClipboard(ABC):
         for interface in cls.AVAILABLE_INTERFACES:
             if interface.available():
                 return interface()
-        raise RuntimeError('No known clipboard interface for the current platform')
+        raise RuntimeError("No known clipboard interface for the current platform")
 
 
 class WaylandClipboard(SystemClipboard):
     @staticmethod
     def socket() -> str | None:
-        return os.environ.get('WAYLAND_DISPLAY')
+        return os.environ.get("WAYLAND_DISPLAY")
 
     @classmethod
     def available(cls) -> bool:
         return cls.socket() is not None
 
     def in_cmd(self, **kwargs) -> CompletedProcess:
-        return run(['wl-copy'], check=True, **kwargs)
+        return run(["wl-copy"], check=True, **kwargs)
 
     def out_cmd(self, **kwargs) -> CompletedProcess:
-        proc = run(['wl-paste'], **kwargs)
+        proc = run(["wl-paste"], **kwargs)
         return proc
 
 
 class X11Clipboard(SystemClipboard):
     @staticmethod
     def socket() -> str | None:
-        return os.environ.get('DISPLAY')
+        return os.environ.get("DISPLAY")
 
     @classmethod
     def available(cls) -> bool:
         return cls.socket() is not None
 
     def in_cmd(self, **kwargs) -> CompletedProcess:
-        return run(['xclip', '-selection', 'clipboard', '-in'], check=True, **kwargs)
+        return run(["xclip", "-selection", "clipboard", "-in"], check=True, **kwargs)
 
     def out_cmd(self, **kwargs) -> CompletedProcess:
-        return run(['xclip', '-selection', 'clipboard', '-out'], **kwargs)
+        return run(["xclip", "-selection", "clipboard", "-out"], **kwargs)
 
 
 class XselClipboard(SystemClipboard):
     @staticmethod
     def executable() -> str | None:
         """Determine if the xsel program is available."""
-        return shutil.which('xsel')
+        return shutil.which("xsel")
 
     @classmethod
     def available(cls) -> bool:
         return cls.executable() is not None
 
     def in_cmd(self, **kwargs) -> CompletedProcess:
-        return run(['xsel', '-b'], check=True, **kwargs)
+        return run(["xsel", "-b"], check=True, **kwargs)
 
     def out_cmd(self, **kwargs) -> CompletedProcess:
-        return run(['xsel', '-b'], **kwargs)
+        return run(["xsel", "-b"], **kwargs)
 
 
 class MacosClipboard(SystemClipboard):
     @staticmethod
     def available() -> bool:
-        return shutil.which('pbcopy') is not None
+        return shutil.which("pbcopy") is not None
 
     def in_cmd(self, **kwargs) -> CompletedProcess:
-        return run(['pbcopy'], check=True, **kwargs)
+        return run(["pbcopy"], check=True, **kwargs)
 
     def out_cmd(self, **kwargs) -> CompletedProcess:
-        return run(['pbpaste'], **kwargs)
+        return run(["pbpaste"], **kwargs)
 
 
 class CygwinClipboard(SystemClipboard):
-    def available(self) -> bool:
-        return OSTYPE.startswith('cygwin') or OSTYPE == 'msys'
+    @staticmethod
+    def available() -> bool:
+        return OSTYPE.startswith("cygwin") or OSTYPE == "msys"
 
     def in_cmd(self, **kwargs) -> CompletedProcess:
-        return run(['tee', '/dev/clipboard'], check=True, **kwargs)
+        return run(["tee", "/dev/clipboard"], check=True, **kwargs)
 
     def out_cmd(self, **kwargs) -> CompletedProcess:
-        return run(['cat', '/dev/clipboard'], **kwargs)
+        return run(["cat", "/dev/clipboard"], **kwargs)
+
 
 class WslClipboard(SystemClipboard):
-    def wsl(self) -> bool:
+    @staticmethod
+    def available() -> bool:
         """Determine if the system is running Windows Subsystem for Linux."""
-        return OSTYPE.startswith('linux')
+        return shutil.which("clip.exe") and OSTYPE.startswith("linux")
 
     def in_cmd(self, **kwargs) -> CompletedProcess:
-        return run(['clip.exe'], check=True, **kwargs)
+        return run(["clip.exe"], check=True, **kwargs)
 
     def out_cmd(self, **kwargs) -> CompletedProcess:
-        return run(['powershell.exe', '-Command', 'Get-Clipboard'], **kwargs)
+        return run(["powershell.exe", "-Command", "Get-Clipboard"], **kwargs)
+
+
+class RemoteClipboardHandler(BaseHTTPRequestHandler):
+    def __init__(
+        self,
+        clipboard: SystemClipboard,
+        request: bytes,
+        client_address: tuple[str, int],
+        server: socketserver.BaseServer,
+    ):
+        self.clipboard = clipboard
+        super().__init__(request, client_address, server)
+
+    def do_POST(self):
+        length = int(self.headers["Content-Length"])
+        data = self.rfile.read(length)
+        logging.info(
+            f"Received {length} bytes from {self.client_address[0]}:{self.client_address[1]}"
+        )
+        try:
+            self.clipboard.in_cmd(input=data)
+        except Exception:
+            logging.exception("Error receiving clipboard data")
+            self.send_response(HTTPStatus.INTERNAL_SERVER_ERROR)
+        else:
+            self.send_response(HTTPStatus.OK)
+        self.end_headers()
 
 
 @dataclass
 class RemoteClipboard:
     local_clipboard: SystemClipboard
-    host: str = '127.0.0.1'
+    host: str = "127.0.0.1"
     port: str = DEFAULT_PORT
-    _socket: socket.socket = field(default_factory=lambda: socket.socket(socket.AF_INET, socket.SOCK_STREAM))
 
     def _server(self, client: socket.socket, addr: tuple[str, int]):
         try:
@@ -213,33 +247,45 @@ class RemoteClipboard:
                 tmpfile.write(data)
                 length += len(data)
             logging.debug('> "OK"')
-            client.send(b'OK')
+            client.send(b"OK")
             tmpfile.seek(0)
             self.local_clipboard.in_cmd(input=tmpfile.read())
             logging.info(f"Received {length} bytes from {client_host}:{client_port}")
         except Exception:
-            logging.exception(f"Error receiving clipboard data from {client_host}:{client_port}")
+            logging.exception(
+                f"Error receiving clipboard data from {client_host}:{client_port}"
+            )
         finally:
             client.close()
 
+    def _handler(
+        self,
+        request: bytes,
+        client_address: tuple[str, int],
+        server: socketserver.BaseServer,
+    ):
+        return RemoteClipboardHandler(
+            self.local_clipboard, request, client_address, server
+        )
+
     def recv_cmd(self) -> None:
-        self._socket.bind((self.host, self.port))
-        self._socket.listen(5)
-        logging.info(f"Listening on {self.host}:{self.port} for clipboard data.")
-        try:
-            while True:
-                self._server(*self._socket.accept())
-        except KeyboardInterrupt:
-            pass
-        finally:
-            self._socket.close()
+        server = HTTPServer((self.host, self.port), self._handler)
+        server.serve_forever()
 
     def send_cmd(self, data: bytes) -> int:
-        ip = socket.gethostbyname(self.host)
-        self._socket.connect((ip, self.port))
-        self._socket.sendall(data)
-        self._socket.close()
-        return len(data)
+        conn = HTTPConnection(self.host, self.port)
+        headers = {
+            "Content-Type": "application/octet-stream",
+            "Content-Length": str(len(data)),
+        }
+        conn.request("POST", "/", body=data, headers=headers)
+        response = conn.getresponse()
+        if response.status == HTTPStatus.OK:
+            logging.info(f"Sent {len(data)} bytes to {self.host}:{self.port}")
+            return 0
+        else:
+            logging.error(f"Failed to send clipboard data to {self.host}:{self.port}")
+            return 1
 
 
 def main() -> int:
@@ -251,7 +297,9 @@ def main() -> int:
 
     if cli.listen:
         (host, port) = cli.listen
-        remote_clipboard = RemoteClipboard(local_clipboard=clipboard, host=host, port=port)
+        remote_clipboard = RemoteClipboard(
+            local_clipboard=clipboard, host=host, port=port
+        )
         remote_clipboard.recv_cmd()
         return 0
 
@@ -261,21 +309,24 @@ def main() -> int:
         case None, Mode.IN:
             return clipboard.in_cmd().returncode
         case (host, port), Mode.OUT:
-            remote_clipboard = RemoteClipboard(local_clipboard=clipboard, host=host, port=port)
+            remote_clipboard = RemoteClipboard(
+                local_clipboard=clipboard, host=host, port=port
+            )
             data = clipboard.out_cmd(capture_output=True).stdout
-            logging.info(f"Sending {len(data)} bytes to {host}:{port}")
-            remote_clipboard.send_cmd(data)
+            return remote_clipboard.send_cmd(data)
         case (host, port), Mode.IN:
-            remote_clipboard = RemoteClipboard(local_clipboard=clipboard, host=host, port=port)
+            remote_clipboard = RemoteClipboard(
+                local_clipboard=clipboard, host=host, port=port
+            )
             data = sys.stdin.buffer.read()
             logging.info(f"Sending {len(data)} bytes to {host}:{port}")
-            remote_clipboard.send_cmd(data)
+            return remote_clipboard.send_cmd(data)
         case _:
             raise RuntimeError("Unreachable")
     return 0
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     try:
         return_code = main()
     except SubprocessError as exc:

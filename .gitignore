@@ -8,7 +8,10 @@ shrinkwrap.yaml
 __pycache__
 node_modules
 .direnv
+.mise.toml
+.mise
 .mise.local.toml
 mise.local.toml
 venv
 .venv
+.nvim.lua

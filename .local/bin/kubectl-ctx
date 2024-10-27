@@ -4,13 +4,12 @@ import os
 import sys
 from argparse import ArgumentParser
 from dataclasses import dataclass
+from functools import cache
 from itertools import product
 from pathlib import Path
-from functools import cache
 from typing import Optional
 
 import yaml
-
 
 KUBECONFIGD = Path(os.environ.get("KUBECONFIGD", Path.home() / ".kube" / "config.d"))
 KUBECONFIG_SKELETON = {
@@ -149,13 +148,13 @@ class Context:
 
 
 class ConfigManager:
-    __slots__ = "contexts", "current_context", "context_files"
+    __slots__ = "contexts", "current_context_key", "context_files"
 
     def __init__(self):
         config_files = [conf for conf in KUBECONFIGD.glob("*.yaml")]
         with open(kubeconfig()) as f:
             k = yaml.safe_load(f)
-        self.current_context = k.get("current-context")
+        self.current_context_key = k.get("current-context")
         self.contexts = {}
         for config_file in config_files:
             with open(config_file) as f:
@@ -164,6 +163,10 @@ class ConfigManager:
                 for ctx_data in file_contexts:
                     ctx = Context.load(config_file, ctx_data)
                     self.contexts[ctx.key] = ctx
+
+    @property
+    def current_context(self) -> Context:
+        return self.contexts[self.current_context_key]
 
     def fuzzy_match(self, needle: str) -> Context:
         min_score = float("inf")
@@ -182,7 +185,7 @@ class ConfigManager:
     ) -> Context:
         if isinstance(context, str):
             context = self.contexts[context]
-        self.current_context = context.key
+        self.current_context_key = context.key
         ctx_data = context.config_data()
         ctx_data["current-context"] = context.key
         ctx_data["contexts"] = [context.render()]
@@ -202,7 +205,7 @@ class ConfigManager:
         with open(context.file, "w") as f:
             f.write(yaml.dump(config_data))
         context.name = new_name
-        if key == self.current_context:
+        if key == self.current_context_key:
             self.set_context(context)
         return context
 
@@ -223,7 +226,7 @@ def main():
     manager = ConfigManager()
     match cli.command():
         case "set":
-            context_name = manager.current_context
+            context_name = manager.current_context_key
             if cli.args.context:
                 context_name = manager.fuzzy_match(cli.args.context).key
             context = manager.contexts[context_name]
@@ -233,11 +236,11 @@ def main():
             print(f"Set context to {context.key}/{context.namespace}")
         case "list":
             contexts = manager.contexts.values()
-            headers = ["  ", "Name", "Namespace", "File"]
+            headers = ["  ", "Context", "Namespace", "File"]
             data = [headers]
             for context in contexts:
                 marker = ""
-                if context.key == manager.current_context:
+                if context.key == manager.current_context_key:
                     marker = "->"
                 data.append(
                     [marker, context.name, context.namespace, context.file.name]
@@ -245,13 +248,14 @@ def main():
             print_table(data, col_sep=" | ", header_sep="-")
         case "rename":
             if cli.args.context:
-                old_name = cli.args.context
+                context = manager.fuzzy_match(cli.args.context)
             else:
-                old_name = manager.contexts[manager.current_context].name
-            context = manager.rename(old_name, cli.args.rename)
+                context = manager.current_context
+            old_name = context.name
+            context = manager.rename(context.key, cli.args.rename)
             print(f"Renamed context {old_name} to {context.name} in {context.file}")
         case "show":
-            print("Current context:", manager.current_context)
+            print("Current context:", manager.current_context_key)
 
 
 if __name__ == "__main__":

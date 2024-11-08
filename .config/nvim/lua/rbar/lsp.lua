@@ -51,7 +51,6 @@ function M.mason_config()
     "lua_ls",
     "marksman",
     "pylsp",
-    "ruff_lsp",   -- python
     "sqlls",
     "tailwindcss",
     "vimls",

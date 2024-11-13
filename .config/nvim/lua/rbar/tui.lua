@@ -33,9 +33,9 @@ function M.packages(use)
       'ibhagwan/fzf-lua',
       'nvim-tree/nvim-web-devicons',
     },
-    config = function()
-      require('octo').setup()
-    end
+    opts = {
+      picker = "fzf-lua",
+    }
   }
   use {
     'Vigemus/iron.nvim',

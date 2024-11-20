@@ -71,3 +71,13 @@ function switchaus1(){
     gcloud container clusters get-credentials appomni-aus1 --zone=australia-southeast1;
     kubectl config set-context --current --namespace=$NAMESPACE;
 }
+
+function ao-prs() {
+    gh pr list --repo appomni/appomni --search 'is:pr is:open review-requested:@me' $@
+    gh pr list --repo appomni/ao_request_flow $@
+    gh pr list --repo appomni/ao_saas_connector_catalog $@
+    gh pr list --repo appomni/gsync_experimental $@
+    gh pr list --repo appomni/ao_gsync_client $@
+    gh pr list --repo appomni/appomni-looker-etl $@
+    gh pr list --repo appomni/gsyncms $@
+}

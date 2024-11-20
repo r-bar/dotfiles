@@ -97,8 +97,10 @@ function M.packages(use)
       columns = { "permissions", "mtime", "size", "icon" },
       constrain_cursor = "name",
       default_file_explorer = true,
+      skip_confirm_for_simple_edits = true,
       keymaps = {
         ["!"] = "actions.open_terminal",
+        ["<F5>"] = "actions.refresh",
       },
       view_options = { show_hidden = true },
     },

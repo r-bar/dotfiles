@@ -10,6 +10,7 @@ build_docker_config() {
 install_custom_firefox_profile_mods() {
   echo "Installing custom firefox profile mods"
   rsync -r ~/.mozilla/firefox/custom/ ~/.mozilla/firefox/*.default-release/
+  rsync -r ~/.mozilla/firefox/custom/ ~/.mozilla/firefox/*.default/
 }
 
 install_pia_wg_config() {

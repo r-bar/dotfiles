@@ -80,4 +80,5 @@ function ao-prs() {
     gh pr list --repo appomni/ao_gsync_client $@
     gh pr list --repo appomni/appomni-looker-etl $@
     gh pr list --repo appomni/gsyncms $@
+    gh status
 }

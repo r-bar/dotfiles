@@ -84,7 +84,8 @@ function M.packages(use)
   use "christoomey/vim-tmux-navigator"
   use {
     "nvim-treesitter/nvim-treesitter-context",
-    config = function() require("treesitter-context").setup() end,
+    opts = true,
+    --config = function() require("treesitter-context").setup() end,
   }
   use "farmergreg/vim-lastplace"
   use {

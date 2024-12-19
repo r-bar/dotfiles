@@ -290,7 +290,7 @@ function M.packages(use)
           'snippet_forward',
           'fallback',
         },
-        ['<S-Tab>'] = { 'select_next', 'snippet_backward', 'fallback' },
+        ['<S-Tab>'] = { 'select_prev', 'snippet_backward', 'fallback' },
       },
 
       completion = {

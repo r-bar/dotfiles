@@ -216,7 +216,7 @@ function M.on_attach(client, bufnr)
   vim.keymap.set('n', '<F2>', vim.lsp.buf.rename, bufopts)
   vim.keymap.set('n', '<leader>a', vim.lsp.buf.code_action, bufopts)
   vim.keymap.set('n', 'gr', vim.lsp.buf.references, bufopts)
-  vim.keymap.set('n', '<leader>f', function() vim.lsp.buf.format { async = true } end, bufopts)
+  vim.keymap.set('n', '<leader>ff', function() vim.lsp.buf.format { async = true } end, bufopts)
 
   -- disable semantic token highlighting
   client.server_capabilities.semanticTokensProvider = nil
@@ -309,7 +309,7 @@ function M.server_settings()
       },
     },
   })
-  if vim.fn.executable("pylsp") == 1  then
+  if vim.fn.executable("pylsp") == 1 then
     settings.pylsp.cmd = { "pylsp" }
   end
 
@@ -393,7 +393,7 @@ function M.config()
     -- The first entry (without a key) will be the default handler
     -- and will be called for each installed server that doesn't have
     -- a dedicated handler.
-    function(server_name)  -- default handler (optional)
+    function(server_name) -- default handler (optional)
       lspconfig[server_name].setup(M.default_server_settings())
     end,
   }

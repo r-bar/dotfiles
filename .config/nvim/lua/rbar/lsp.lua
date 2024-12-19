@@ -437,19 +437,43 @@ function M.packages(use)
         use_nvim_cmp_as_default = true,
         -- Set to 'mono' for 'Nerd Font Mono' or 'normal' for 'Nerd Font'
         -- Adjusts spacing to ensure icons are aligned
-        nerd_font_variant = 'mono'
+        nerd_font_variant = 'mono',
+        kind_icons = {
+          Copilot = "",
+        },
       },
 
       -- default list of enabled providers defined so that you can extend it
       -- elsewhere in your config, without redefining it, via `opts_extend`
       sources = {
-        default = { "lsp", "path", "snippets", "buffer", "lazydev" },
+        -- note default and enabled_providers are the same. The default is the
+        -- key used on the nightly branch.
+        default = { "lsp", "path", "snippets", "buffer", "copilot", "lazydev", "dadbod" },
+        completion = {
+          enabled_providers = { "copilot", "lsp", "path", "snippets", "buffer", "lazydev", "dadbod" },
+        },
         -- optionally disable cmdline completions
         -- cmdline = {},
         providers = {
           -- dont show LuaLS require statements when lazydev has items
           lsp = { fallbacks = { "lazydev" } },
           lazydev = { name = "LazyDev", module = "lazydev.integrations.blink" },
+          dadbod = { name = "Dadbod", module = "vim_dadbod_completion.blink" },
+          copilot = {
+            name = "Copilot",
+            module = "blink-cmp-copilot",
+            score_offset = 100,
+            async = true,
+            transform_items = function(_, items)
+              local CompletionItemKind = require("blink.cmp.types").CompletionItemKind
+              local kind_idx = #CompletionItemKind + 1
+              CompletionItemKind[kind_idx] = "Copilot"
+              for _, item in ipairs(items) do
+                item.kind = kind_idx
+              end
+              return items
+            end,
+          },
         },
       },
 
@@ -459,6 +483,8 @@ function M.packages(use)
     opts_extend = { "sources.default" },
     dependencies = {
       "folke/lazydev.nvim",
+      "giuxtaposition/blink-cmp-copilot",
+      "zbirenbaum/copilot.lua",
     }
   }
 
@@ -481,22 +507,15 @@ function M.packages(use)
   use 'https://github.com/molleweide/LuaSnip-snippets.nvim.git'
 
   use {
-    'github/copilot.vim',
-    enabled = vim.env.DISABLE_COPILOT == nil,
-    config = function()
-      vim.g.copilot_no_tab_map = true
-      vim.keymap.set("i", "<c-space>", 'copilot#Accept("")',
-        {
-          noremap = true,
-          silent = true,
-          expr = true,
-          replace_keycodes = false,
-          desc = "Copilot accept",
-        }
-      )
-      --vim.keymap.set("n", "<C-space>", 'copilot#Accept("")',
-      --  { noremap = true, silent = true, expr = true, replace_keycodes = false })
-    end
+    "zbirenbaum/copilot.lua",
+    opts = {
+      suggestion = {
+        enabled = false,
+        auto_trigger = true,
+        trigger_characters = { ".", ":", " ", "\t" },
+      },
+      panel = { enabled = true },
+    }
   }
 end
 

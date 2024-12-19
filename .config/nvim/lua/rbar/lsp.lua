@@ -35,121 +35,6 @@ local function mason_config()
   })
 end
 
-local function has_words_before()
-  unpack = unpack or table.unpack
-  local line, col = unpack(vim.api.nvim_win_get_cursor(0))
-  local line_text = vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]
-  return col ~= 0 and line_text:sub(col, col):match("%s") == nil
-end
-
-local function is_whitespace()
-  -- returns true if the character under the cursor is whitespace.
-  local col = vim.fn.col('.') - 1
-  local line = vim.fn.getline('.')
-  local char_under_cursor = string.sub(line, col, col)
-
-  return col == 0 or string.match(char_under_cursor, '%s')
-end
-
-local function tab_complete(fallback)
-  local cmp = require('cmp')
-  if cmp.visible() then
-    cmp.select_next_item()
-    --cmp.select_next_item({ behavior = cmp.SelectBehavior.Select })
-    -- You could replace the expand_or_jumpable() calls with expand_or_locally_jumpable()
-    -- they way you will only jump inside the snippet region
-    --elseif luasnip.expand_or_jumpable() then
-    --  luasnip.expand_or_jump()
-  elseif has_words_before() then
-    cmp.complete()
-  else
-    fallback()
-  end
-end
-
-local function stab_complete(fallback)
-  local cmp = require('cmp')
-  if cmp.visible() then
-    cmp.select_prev_item()
-    --cmp.select_prev_item({ behavior = cmp.SelectBehavior.Select })
-    --elseif luasnip.jumpable(-1) then
-    --  luasnip.jump(-1)
-  else
-    fallback()
-  end
-end
-
-local function nvim_cmp_config()
-  local cmp = require('cmp')
-
-  vim.o.completeopt = 'menuone,noinsert,noselect,preview'
-
-  local mappings = {
-    ['<C-b>'] = cmp.mapping.scroll_docs(-4),
-    ['<C-f>'] = cmp.mapping.scroll_docs(4),
-    ['<C-n>'] = cmp.mapping.select_next_item(),
-    ['<C-p>'] = cmp.mapping.select_prev_item(),
-    --['<C-Space>'] = cmp.mapping.complete(),
-    ['<C-e>'] = cmp.mapping.abort(),
-    ['<C-c>'] = cmp.mapping.abort(),
-    -- Accept currently selected item. Set `select` to `false` to only confirm
-    -- explicitly selected items.
-    ['<CR>'] = cmp.mapping.confirm({ select = false }),
-
-    -- manual supertab like completion from the nvim-cmp wiki
-    ["<Tab>"] = cmp.mapping(tab_complete, { "i", "s" }),
-    ["<S-Tab>"] = cmp.mapping(stab_complete, { "i", "s" }),
-  }
-
-  cmp.setup({
-    completion = {
-      completeopt = vim.o.completeopt,
-    },
-    preselect = cmp.PreselectMode.None,
-    snippet = {
-      expand = function(args)
-        require('luasnip').lsp_expand(args.body)
-      end,
-    },
-    window = {
-      documentation = cmp.config.window.bordered(),
-    },
-    mapping = cmp.mapping.preset.insert(mappings),
-    sources = cmp.config.sources({
-      { name = 'nvim_lsp' },
-      { name = 'luasnip' },
-    }, {
-      { name = 'buffer' },
-    }),
-  })
-
-  ---- Use buffer source for `/` and `?` (if you enabled `native_menu`, this won't work anymore).
-  --cmp.setup.cmdline({ '/', '?' }, {
-  --  mapping = cmp.mapping.preset.cmdline(mappings),
-  --  sources = {
-  --    { name = 'buffer' },
-  --  },
-  --})
-
-  ---- Use cmdline & path source for ':' (if you enabled `native_menu`, this won't work anymore).
-  cmp.setup.cmdline(':', {
-    --mapping = cmp.mapping.preset.cmdline(mappings),
-    sources = cmp.config.sources({
-      --{ name = 'path' },
-      { name = 'cmdline' },
-    }),
-  })
-
-  cmp.setup.filetype({ "sql" }, {
-    sources = {
-      { name = "vim-dadbod-completion" },
-      { name = "buffer" },
-    }
-  })
-
-  -- Set up lspconfig.
-end
-
 function M.luasnip_config()
   local luasnip = require('luasnip')
   luasnip.config.setup {
@@ -372,24 +257,10 @@ function M.packages(use)
   use 'neovim/nvim-lspconfig'
   use 'williamboman/mason.nvim'
   use { 'williamboman/mason-lspconfig.nvim', config = mason_config }
+  -- gives a nice live lsp status message in the bottom right corner
   use { 'j-hui/fidget.nvim', opts = {} }
 
   -- Autocompletion
-
-  -- All these are used for the nvim-cmp completion plugin
-  use {
-    'hrsh7th/nvim-cmp',
-    enabled = false,
-    config = nvim_cmp_config,
-    dependencies = {
-      'hrsh7th/cmp-nvim-lsp',
-      'hrsh7th/cmp-buffer',
-      'hrsh7th/cmp-path',
-      'saadparwaiz1/cmp_luasnip',
-      'hrsh7th/cmp-nvim-lua',
-    },
-  }
-
   use { -- optional blink completion source for require statements and module annotations
     "saghen/blink.cmp",
     version = "v0.*",
@@ -434,7 +305,7 @@ function M.packages(use)
         -- Sets the fallback highlight groups to nvim-cmp's highlight groups
         -- Useful for when your theme doesn't support blink.cmp
         -- will be removed in a future release
-        use_nvim_cmp_as_default = true,
+        --use_nvim_cmp_as_default = true,
         -- Set to 'mono' for 'Nerd Font Mono' or 'normal' for 'Nerd Font'
         -- Adjusts spacing to ensure icons are aligned
         nerd_font_variant = 'mono',
@@ -508,6 +379,7 @@ function M.packages(use)
 
   use {
     "zbirenbaum/copilot.lua",
+    enabled = vim.env.DISABLE_COPILOT == nil,
     opts = {
       suggestion = {
         enabled = false,

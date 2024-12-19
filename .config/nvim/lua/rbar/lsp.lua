@@ -1,49 +1,14 @@
 local M = {}
-M.lsp_flags = {}
-
-function M.packages(use)
-  use 'neovim/nvim-lspconfig'
-  use 'williamboman/mason.nvim'
-  use { 'williamboman/mason-lspconfig.nvim', config = M.mason_config }
-  use { 'j-hui/fidget.nvim', opts = {} }
-  use 'folke/neodev.nvim'
-
-  -- Autocompletion
-  use { 'hrsh7th/nvim-cmp', config = M.nvim_cmp_config }
-  use 'hrsh7th/cmp-buffer'
-  use 'hrsh7th/cmp-path'
-  use 'saadparwaiz1/cmp_luasnip'
-  use 'hrsh7th/cmp-nvim-lsp'
-  use 'hrsh7th/cmp-nvim-lua'
-
-  -- Snippets
-  use { 'L3MON4D3/LuaSnip', config = M.luasnip_config }
-  use 'rafamadriz/friendly-snippets'
-  use 'honza/vim-snippets'
-  use 'https://github.com/molleweide/LuaSnip-snippets.nvim.git'
-
-  --use 'VonHeikemen/lsp-zero.nvim'
-  use {
-    'github/copilot.vim',
-    enabled = vim.env.DISABLE_COPILOT == nil,
-    config = function()
-      vim.g.copilot_no_tab_map = true
-      vim.keymap.set("i", "<c-space>", 'copilot#Accept("")',
-        { noremap = true, silent = true, expr = true, replace_keycodes = false })
-      vim.keymap.set("n", "<C-space>", 'copilot#Accept("")',
-        { noremap = true, silent = true, expr = true, replace_keycodes = false })
-    end
-  }
-end
+local lsp_flags = {}
 
 -- order is important. these mason setup calls must be done before lspconfig
 -- servers are configured
-function M.mason_config()
+local function mason_config()
   local ensure_installed = {
     "ansiblels",
     "bashls",
-    "cssls",
     "docker_compose_language_service",
+    "cssls",
     "dockerls",
     "html",
     "jsonls",
@@ -52,6 +17,7 @@ function M.mason_config()
     "marksman",
     "pylsp",
     "sqlls",
+    "ts_ls",
     "tailwindcss",
     "vimls",
     "yamlls",
@@ -85,7 +51,7 @@ local function is_whitespace()
   return col == 0 or string.match(char_under_cursor, '%s')
 end
 
-function M.tab_complete(fallback)
+local function tab_complete(fallback)
   local cmp = require('cmp')
   if cmp.visible() then
     cmp.select_next_item()
@@ -101,7 +67,7 @@ function M.tab_complete(fallback)
   end
 end
 
-function M.stab_complete(fallback)
+local function stab_complete(fallback)
   local cmp = require('cmp')
   if cmp.visible() then
     cmp.select_prev_item()
@@ -113,7 +79,7 @@ function M.stab_complete(fallback)
   end
 end
 
-function M.nvim_cmp_config()
+local function nvim_cmp_config()
   local cmp = require('cmp')
 
   vim.o.completeopt = 'menuone,noinsert,noselect,preview'
@@ -131,8 +97,8 @@ function M.nvim_cmp_config()
     ['<CR>'] = cmp.mapping.confirm({ select = false }),
 
     -- manual supertab like completion from the nvim-cmp wiki
-    ["<Tab>"] = cmp.mapping(M.tab_complete, { "i", "s" }),
-    ["<S-Tab>"] = cmp.mapping(M.stab_complete, { "i", "s" }),
+    ["<Tab>"] = cmp.mapping(tab_complete, { "i", "s" }),
+    ["<S-Tab>"] = cmp.mapping(stab_complete, { "i", "s" }),
   }
 
   cmp.setup({
@@ -196,27 +162,33 @@ function M.luasnip_config()
   require("luasnip.loaders.from_snipmate").lazy_load()
 end
 
-function M.on_attach(client, bufnr)
+local function on_attach(client, bufnr)
   -- Mappings.
   -- See `:help vim.lsp.*` for documentation on any of the below functions
-  local bufopts = { noremap = true, silent = true, buffer = bufnr }
-  vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, bufopts)
-  vim.keymap.set('n', 'gd', vim.lsp.buf.definition, bufopts)
-  vim.keymap.set('n', 'K', vim.lsp.buf.hover, bufopts)
-  vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, bufopts)
-  vim.keymap.set('n', '<leader>k', vim.lsp.buf.signature_help, bufopts)
-  vim.keymap.set('i', '<C-k>', vim.lsp.buf.signature_help, bufopts)
-  vim.keymap.set('n', '<leader>wa', vim.lsp.buf.add_workspace_folder, bufopts)
-  vim.keymap.set('n', '<leader>wr', vim.lsp.buf.remove_workspace_folder, bufopts)
+  local function bufopts(kwargs)
+    local opts = { noremap = true, silent = true, buffer = bufnr }
+    if kwargs then
+      vim.tbl_extend("force", opts, kwargs)
+    end
+    return opts
+  end
+  vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, bufopts{ desc = "Go to declaration" })
+  vim.keymap.set('n', 'gd', vim.lsp.buf.definition, bufopts{})
+  vim.keymap.set('n', 'K', vim.lsp.buf.hover, bufopts{})
+  vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, bufopts{})
+  vim.keymap.set('n', '<leader>k', vim.lsp.buf.signature_help, bufopts{})
+  vim.keymap.set('i', '<C-k>', vim.lsp.buf.signature_help, bufopts{})
+  vim.keymap.set('n', '<leader>wa', vim.lsp.buf.add_workspace_folder, bufopts{})
+  vim.keymap.set('n', '<leader>wr', vim.lsp.buf.remove_workspace_folder, bufopts{})
   vim.keymap.set('n', '<leader>wl', function()
     print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
-  end, bufopts)
-  vim.keymap.set('n', '<leader>D', vim.lsp.buf.type_definition, bufopts)
-  vim.keymap.set('n', '<leader>r', vim.lsp.buf.rename, bufopts)
-  vim.keymap.set('n', '<F2>', vim.lsp.buf.rename, bufopts)
-  vim.keymap.set('n', '<leader>a', vim.lsp.buf.code_action, bufopts)
-  vim.keymap.set('n', 'gr', vim.lsp.buf.references, bufopts)
-  vim.keymap.set('n', '<leader>f', function() vim.lsp.buf.format { async = true } end, bufopts)
+  end, bufopts{})
+  vim.keymap.set('n', '<leader>D', vim.lsp.buf.type_definition, bufopts{})
+  vim.keymap.set('n', '<leader>r', vim.lsp.buf.rename, bufopts{})
+  vim.keymap.set('n', '<F2>', vim.lsp.buf.rename, bufopts{})
+  vim.keymap.set('n', '<leader>a', vim.lsp.buf.code_action, bufopts{})
+  vim.keymap.set('n', 'gr', vim.lsp.buf.references, bufopts{})
+  --vim.keymap.set('n', '<leader>f', function() vim.lsp.buf.format { async = true } end, bufopts{})
 
   -- disable semantic token highlighting
   client.server_capabilities.semanticTokensProvider = nil
@@ -230,26 +202,55 @@ function M.global_bindings()
   vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, opts)
 end
 
-function M.capabilities()
-  return require('cmp_nvim_lsp').default_capabilities()
-end
-
-function M.default_server_settings()
+local function capabilities()
+  -- originally from require('cmp_nvim_lsp').default_capabilities()
   return {
-    capabilities = M.capabilities(),
-    on_attach = M.on_attach,
-    flags = M.lsp_flags,
+    textDocument = {
+      completion = {
+        completionItem = {
+          commitCharactersSupport = true,
+          deprecatedSupport = true,
+          insertReplaceSupport = true,
+          insertTextModeSupport = {
+            valueSet = { 1, 2 }
+          },
+          labelDetailsSupport = true,
+          preselectSupport = true,
+          resolveSupport = {
+            properties = { "documentation", "additionalTextEdits", "insertTextFormat", "insertTextMode", "command" }
+          },
+          snippetSupport = true,
+          tagSupport = {
+            valueSet = { 1 }
+          }
+        },
+        completionList = {
+          itemDefaults = { "commitCharacters", "editRange", "insertTextFormat", "insertTextMode", "data" }
+        },
+        contextSupport = true,
+        dynamicRegistration = false,
+        insertTextMode = 1
+      }
+    }
   }
 end
 
-function M.server_settings()
+local function default_server_settings()
+  return {
+    capabilities = capabilities(),
+    on_attach = on_attach,
+    flags = lsp_flags,
+  }
+end
+
+local function server_settings()
   local lsputil = require('lspconfig.util')
 
   local settings = {}
 
-  settings['gleam'] = vim.tbl_extend("force", M.default_server_settings(), {})
+  settings['gleam'] = vim.tbl_extend("force", default_server_settings(), {})
 
-  settings['lua_ls'] = vim.tbl_extend("force", M.default_server_settings(), {
+  settings['lua_ls'] = vim.tbl_extend("force", default_server_settings(), {
     settings = {
       Lua = {
         diagnostics = {
@@ -259,13 +260,13 @@ function M.server_settings()
     },
   })
 
-  settings['ocamllsp'] = vim.tbl_extend("force", M.default_server_settings(), {
+  settings['ocamllsp'] = vim.tbl_extend("force", default_server_settings(), {
     settings = {
 
     }
   })
 
-  settings['pylsp'] = vim.tbl_extend("force", M.default_server_settings(), {
+  settings['pylsp'] = vim.tbl_extend("force", default_server_settings(), {
     -- https://github.com/python-lsp/python-lsp-server/blob/develop/CONFIGURATION.md
     --on_attach = function(client, bufnr)
     --  -- https://neovim.discourse.group/t/preserve-internal-formatting-when-using-gq-motion/3159/2
@@ -309,13 +310,13 @@ function M.server_settings()
       },
     },
   })
-  if vim.fn.executable("pylsp") == 1  then
+  if vim.fn.executable("pylsp") == 1 then
     settings.pylsp.cmd = { "pylsp" }
   end
 
-  settings['roc_ls'] = vim.tbl_extend("force", M.default_server_settings(), {})
+  settings['roc_ls'] = vim.tbl_extend("force", default_server_settings(), {})
 
-  settings['rust_analyzer'] = vim.tbl_extend("force", M.default_server_settings(), {
+  settings['rust_analyzer'] = vim.tbl_extend("force", default_server_settings(), {
     settings = {
       ["rust-analyzer"] = {
         cargo = { loadOutDirsFromCheck = true },
@@ -328,7 +329,7 @@ function M.server_settings()
   })
 
   -- https://github.com/vlang/vls
-  settings['vls'] = vim.tbl_extend("force", M.default_server_settings(), {
+  settings['vls'] = vim.tbl_extend("force", default_server_settings(), {
     cmd = { 'v', 'ls' },
     filetypes = { 'vlang' },
     root_dir = lsputil.find_git_ancestor,
@@ -343,9 +344,9 @@ The official V language server, written in V itself.
     },
   })
 
-  settings['mojo'] = vim.tbl_extend("force", M.default_server_settings(), {})
+  settings['mojo'] = vim.tbl_extend("force", default_server_settings(), {})
 
-  settings['zls'] = vim.tbl_extend("force", M.default_server_settings(), {
+  settings['zls'] = vim.tbl_extend("force", default_server_settings(), {
     cmd = { 'zls' },
     filetypes = { 'zig' },
     root_dir = lsputil.find_git_ancestor,
@@ -365,6 +366,138 @@ The official V language server, written in V itself.
   })
 
   return settings
+end
+
+function M.packages(use)
+  use 'neovim/nvim-lspconfig'
+  use 'williamboman/mason.nvim'
+  use { 'williamboman/mason-lspconfig.nvim', config = mason_config }
+  use { 'j-hui/fidget.nvim', opts = {} }
+
+  -- Autocompletion
+
+  -- All these are used for the nvim-cmp completion plugin
+  use {
+    'hrsh7th/nvim-cmp',
+    enabled = false,
+    config = nvim_cmp_config,
+    dependencies = {
+      'hrsh7th/cmp-nvim-lsp',
+      'hrsh7th/cmp-buffer',
+      'hrsh7th/cmp-path',
+      'saadparwaiz1/cmp_luasnip',
+      'hrsh7th/cmp-nvim-lua',
+    },
+  }
+
+  use { -- optional blink completion source for require statements and module annotations
+    "saghen/blink.cmp",
+    version = "v0.*",
+    enabled = true,
+    ---@module 'blink.cmp'
+    ---@type blink.cmp.Config
+    opts = {
+      -- 'default' for mappings similar to built-in completion
+      -- 'super-tab' for mappings similar to vscode (tab to accept, arrow keys to navigate)
+      -- 'enter' for mappings similar to 'super-tab' but with 'enter' to accept
+      -- see the "default configuration" section below for full documentation on how to define
+      -- your own keymap.
+      keymap = {
+        preset = nil,
+        ['<C-e>'] = { 'hide' },
+        ['<C-y>'] = { 'select_and_accept' },
+        ['<C-p>'] = { 'select_prev', 'fallback' },
+        ['<C-n>'] = { 'select_next', 'fallback' },
+        ['<C-b>'] = { 'scroll_documentation_up', 'fallback' },
+        ['<C-f>'] = { 'scroll_documentation_down', 'fallback' },
+        ['<Tab>'] = {
+          --function(cmp)
+          --  if cmp.snippet_active() then return cmp.accept()
+          --  else return cmp.select_and_accept() end
+          --end,
+          'select_next',
+          'snippet_forward',
+          'fallback',
+        },
+        ['<S-Tab>'] = { 'select_next', 'snippet_backward', 'fallback' },
+      },
+
+      completion = {
+        documentation = {
+          auto_show = true,
+          auto_show_delay_ms = 0,
+        },
+        list = { selection = 'auto_insert' },
+      },
+
+      appearance = {
+        -- Sets the fallback highlight groups to nvim-cmp's highlight groups
+        -- Useful for when your theme doesn't support blink.cmp
+        -- will be removed in a future release
+        use_nvim_cmp_as_default = true,
+        -- Set to 'mono' for 'Nerd Font Mono' or 'normal' for 'Nerd Font'
+        -- Adjusts spacing to ensure icons are aligned
+        nerd_font_variant = 'mono'
+      },
+
+      -- default list of enabled providers defined so that you can extend it
+      -- elsewhere in your config, without redefining it, via `opts_extend`
+      sources = {
+        default = { "lsp", "path", "snippets", "buffer", "lazydev" },
+        -- optionally disable cmdline completions
+        -- cmdline = {},
+        providers = {
+          -- dont show LuaLS require statements when lazydev has items
+          lsp = { fallbacks = { "lazydev" } },
+          lazydev = { name = "LazyDev", module = "lazydev.integrations.blink" },
+        },
+      },
+
+      -- experimental signature help support
+      signature = { enabled = true },
+    },
+    opts_extend = { "sources.default" },
+    dependencies = {
+      "folke/lazydev.nvim",
+    }
+  }
+
+  use {
+    "folke/lazydev.nvim",
+    ft = "lua", -- only load on lua files
+    opts = {
+      library = {
+        -- See the configuration section for more details
+        -- Load luvit types when the `vim.uv` word is found
+        { path = "${3rd}/luv/library", words = { "vim%.uv" } },
+      },
+    },
+  }
+
+  -- Snippets
+  use { 'L3MON4D3/LuaSnip', version = "v2.*", config = M.luasnip_config }
+  use 'rafamadriz/friendly-snippets'
+  use 'honza/vim-snippets'
+  use 'https://github.com/molleweide/LuaSnip-snippets.nvim.git'
+
+  use {
+    'github/copilot.vim',
+    enabled = vim.env.DISABLE_COPILOT == nil,
+    config = function()
+      vim.g.copilot_no_tab_map = true
+      vim.keymap.set("i", "<c-space>", 'copilot#Accept("")',
+        {
+          noremap = true,
+          silent = true,
+          expr = true,
+          replace_keycodes = false,
+          desc = "Copilot accept",
+        }
+      )
+      --vim.keymap.set("n", "<C-space>", 'copilot#Accept("")',
+      --  { noremap = true, silent = true, expr = true, replace_keycodes = false })
+    end
+  }
 end
 
 function M.config()
@@ -393,11 +526,11 @@ function M.config()
     -- The first entry (without a key) will be the default handler
     -- and will be called for each installed server that doesn't have
     -- a dedicated handler.
-    function(server_name)  -- default handler (optional)
-      lspconfig[server_name].setup(M.default_server_settings())
+    function(server_name) -- default handler (optional)
+      lspconfig[server_name].setup(default_server_settings())
     end,
   }
-  for name, settings in pairs(M.server_settings()) do
+  for name, settings in pairs(server_settings()) do
     lspconfig[name].setup(settings)
   end
 end

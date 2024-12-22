@@ -1,5 +1,5 @@
+---@type ConfigPkg
 M = {}
-
 
 function M.packages(use)
   use {

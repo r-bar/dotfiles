@@ -1,3 +1,4 @@
+---@type ConfigPkg
 local M = {}
 
 function M.on_attach(bufnr)

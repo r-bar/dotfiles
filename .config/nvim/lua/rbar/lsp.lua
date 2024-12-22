@@ -1,3 +1,4 @@
+---@type ConfigPkg
 local M = {}
 local lsp_flags = {}
 
@@ -279,12 +280,12 @@ function M.packages(use)
           --  else return cmp.select_and_accept() end
           --end,
           'select_next',
-          --'snippet_forward',
+          'snippet_forward',
           'fallback',
         },
         ['<S-Tab>'] = {
           'select_prev',
-          --'snippet_backward',
+          'snippet_backward',
           'fallback',
         },
       },

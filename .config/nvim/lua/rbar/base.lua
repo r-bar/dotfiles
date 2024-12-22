@@ -1,4 +1,5 @@
 -- Config declarations that require NO PLUGINS
+---@type ConfigPkg
 local M = {}
 
 function M.packages(use)

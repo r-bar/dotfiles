@@ -256,8 +256,12 @@ function M.packages(use)
   -- Autocompletion
   use { -- optional blink completion source for require statements and module annotations
     "saghen/blink.cmp",
-    version = "v0.*",
-    enabled = true,
+    --version = "v0.*",
+    version = "*",
+    --init = function()
+    --  vim.fn.stdpath('data') .. "/lazy/blink.cmp"
+    --  vim.fn.system("cargo build --release")
+    --end,
     ---@module 'blink.cmp'
     ---@type blink.cmp.Config
     opts = {
@@ -314,18 +318,14 @@ function M.packages(use)
       -- default list of enabled providers defined so that you can extend it
       -- elsewhere in your config, without redefining it, via `opts_extend`
       sources = {
-        -- note default and enabled_providers are the same. The default is the
-        -- key used on the nightly branch.
-        completion = {
-          enabled_providers = {
-            "copilot",
-            "lsp",
-            "path",
-            "snippets",
-            "buffer",
-            "lazydev",
-            "dadbod",
-          },
+        default = {
+          "copilot",
+          "lsp",
+          "path",
+          "snippets",
+          "buffer",
+          "lazydev",
+          "dadbod",
         },
         -- optionally disable cmdline completions
         -- cmdline = {},

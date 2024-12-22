@@ -12,22 +12,20 @@ function M.packages(use)
   }
   use {
     "klen/nvim-config-local",
-    config = function()
-      require('config-local').setup {
-        -- Default options (optional)
+    opts = {
+      -- Default options (optional)
 
-        -- Config file patterns to load (lua supported)
-        config_files = { ".nvim.lua" },
+      -- Config file patterns to load (lua supported)
+      config_files = { ".nvim.lua" },
 
-        -- Where the plugin keeps files data
-        hashfile = vim.fn.stdpath("data") .. "/config-local",
+      -- Where the plugin keeps files data
+      hashfile = vim.fn.stdpath("data") .. "/config-local",
 
-        autocommands_create = true, -- Create autocommands (VimEnter, DirectoryChanged)
-        commands_create = true,     -- Create commands (ConfigLocalSource, ConfigLocalEdit, ConfigLocalTrust, ConfigLocalIgnore)
-        silent = false,             -- Disable plugin messages (Config loaded/ignored)
-        lookup_parents = true,      -- Lookup config files in parent directories
-      }
-    end
+      autocommands_create = true, -- Create autocommands (VimEnter, DirectoryChanged)
+      commands_create = true,     -- Create commands (ConfigLocalSource, ConfigLocalEdit, ConfigLocalTrust, ConfigLocalIgnore)
+      silent = false,             -- Disable plugin messages (Config loaded/ignored)
+      lookup_parents = true,      -- Lookup config files in parent directories
+    },
   }
   use 'https://github.com/michaeljsmith/vim-indent-object.git'
   use 'https://github.com/tpope/vim-repeat.git'
@@ -68,14 +66,6 @@ function M.packages(use)
     end,
   }
   use {
-    'https://github.com/Yggdroot/indentLine.git',
-    enabled = false,
-    config = function()
-      vim.g.indentLine_char = "¦"
-      vim.g.indentLine_fileType = { 'yaml', 'lua', 'helm' }
-    end,
-  }
-  use {
     'echasnovski/mini.indentscope',
     version = '*',
     config = function()
@@ -98,7 +88,7 @@ function M.packages(use)
       theme = 'OneHalfDark',
       font = 'Fira Code',
     },
-cmd = 'Screenshot',
+    cmd = 'Screenshot',
     config = function()
       vim.api.nvim_create_user_command(
         'Screenshot',
@@ -113,7 +103,7 @@ cmd = 'Screenshot',
             end
             require('silicon').visualise_api(args)
           else
-            print('Executable silicon must be installed to take screenshots')
+            print('Executable `silicon` must be installed to take screenshots')
           end
         end,
         { range = '%', nargs = '*' }
@@ -122,27 +112,34 @@ cmd = 'Screenshot',
   }
   use {
     'https://github.com/windwp/nvim-autopairs.git',
+    enabled = true;
+    --opts = {
+    --  check_ts = true,
+    --  ts_config = {
+    --    lua = { 'string' }, -- it will not add a pair on that treesitter node
+    --    javascript = { 'template_string' },
+    --    java = false,       -- don't check treesitter on java
+    --  },
+    --},
     config = function()
       local npairs = require('nvim-autopairs')
       local Rule = require('nvim-autopairs.rule')
       local cond = require('nvim-autopairs.conds')
-      npairs.setup {
+      npairs.setup{
         check_ts = true,
         ts_config = {
           lua = { 'string' }, -- it will not add a pair on that treesitter node
           javascript = { 'template_string' },
           java = false,       -- don't check treesitter on java
-        }
+        },
       }
       npairs.add_rules({
         Rule("`", "`")
             :with_pair(cond.not_filetypes({ "ocaml", "rust" })),
         Rule("'", "'")
             :with_pair(cond.not_filetypes({ "ocaml", "rust" })),
-        --Rule("(" , ")", "-ocaml"),
         Rule("(*", "*", "ocaml")
             :with_move(cond.none()),
-        --Rule("(" , ")", "ocaml"),
       })
     end,
   }
@@ -234,43 +231,11 @@ cmd = 'Screenshot',
   use {
     'https://github.com/tpope/vim-fugitive.git',
     cmd = {
-      'G',
-      'GBrowse',
-      'GDelete',
-      'GMove',
-      'GRemove',
-      'GRename',
-      'GUnlink',
-      'Gbrowse',
-      'GcLog',
-      'Gcd',
-      'Gclog',
-      'Gdelete',
-      'Gdiffsplit',
-      'Gdrop',
-      'Ge',
-      'Gedit',
-      'Ggrep',
-      'Ghdiffsplit',
-      'Git',
-      'Gitsigns',
-      'GlLog',
-      'Glcd',
-      'Glgrep',
-      'Gllog',
-      'Gmove',
-      'Gpedit',
-      'Gr',
-      'Gread',
-      'Gremove',
-      'Grename',
-      'Gsplit',
-      'Gtabedit',
-      'Gvdiffsplit',
-      'Gvsplit',
-      'Gw',
-      'Gwq',
-      'Gwrite',
+      'G', 'GBrowse', 'GDelete', 'GMove', 'GRemove', 'GRename', 'GUnlink',
+      'Gbrowse', 'GcLog', 'Gcd', 'Gclog', 'Gdelete', 'Gdiffsplit', 'Gdrop',
+      'Ge', 'Gedit', 'Ggrep', 'Ghdiffsplit', 'Git', 'Gitsigns', 'GlLog', 'Glcd',
+      'Glgrep', 'Gllog', 'Gmove', 'Gpedit', 'Gr', 'Gread', 'Gremove', 'Grename',
+      'Gsplit', 'Gtabedit', 'Gvdiffsplit', 'Gvsplit', 'Gw', 'Gwq', 'Gwrite',
     },
   }
   use 'https://github.com/romainl/vim-qf.git'
@@ -282,11 +247,10 @@ cmd = 'Screenshot',
       {'ga', '<Plug>(EasyAlign)', mode = 'x', noremap = false, desc = "Align text by delimiters"},
     },
   }
-end
-
-local function toggle_list_chars()
-  vim.o.list = not vim.o.list
-  print(vim.o.listchars)
+  use {
+    "andrewferrier/debugprint.nvim",
+    opts = true,
+  }
 end
 
 function M.config()
@@ -423,7 +387,7 @@ function M.config()
   \ echo 'call system("<args>", getreg("r", 1, 1) + (getregtype("r") isnot# "v" ? [""] : []))'
 ]])
 
-  local generate_uuid = function()
+  local function generate_uuid()
     math.randomseed(os.time())
     local random = math.random
     local template = "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
@@ -434,7 +398,7 @@ function M.config()
   end
 
   --[[ Generate a uuid and place it at current cursor position --]]
-  local insert_uuid = function()
+  local function insert_uuid()
     -- Get row and column cursor,
     -- use unpack because it's a tuple.
     local row, col = unpack(vim.api.nvim_win_get_cursor(0))
@@ -449,7 +413,7 @@ function M.config()
   -- Finally we map this somewhere to the key and mode we want.
   -- i stands for insert mode next set the insert_uuid without invoking it.
   -- For the last parameter see `:help map-arguments`  and adjust accordingly.
-  vim.keymap.set('i', '<C-u>', insert_uuid, { noremap = true, silent = true })
+  vim.keymap.set('i', 'gu', insert_uuid, { noremap = true, silent = true })
 end
 
 return M

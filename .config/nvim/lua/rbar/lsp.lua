@@ -35,18 +35,6 @@ local function mason_config()
   })
 end
 
-function M.luasnip_config()
-  local luasnip = require('luasnip')
-  luasnip.config.setup {
-    -- When false you cannot jump back into a snippet once it is complete.
-    -- Turning it off lets the snippet function exit after you are done.
-    -- This prevents the plugin or keybinds from conflicting.
-    history = false,
-  }
-  require("luasnip.loaders.from_vscode").lazy_load()
-  require("luasnip.loaders.from_snipmate").lazy_load()
-end
-
 local function on_attach(client, bufnr)
   -- Mappings.
   -- See `:help vim.lsp.*` for documentation on any of the below functions
@@ -128,14 +116,21 @@ local function default_server_settings()
   }
 end
 
+local function with_defaults(custom)
+  if custom == nil then
+    return default_server_settings()
+  end
+  return vim.tbl_extend("force", default_server_settings(), custom)
+end
+
 local function server_settings()
   local lsputil = require('lspconfig.util')
 
   local settings = {}
 
-  settings['gleam'] = vim.tbl_extend("force", default_server_settings(), {})
+  settings['gleam'] = with_defaults()
 
-  settings['lua_ls'] = vim.tbl_extend("force", default_server_settings(), {
+  settings['lua_ls'] = with_defaults({
     settings = {
       Lua = {
         diagnostics = {
@@ -145,13 +140,9 @@ local function server_settings()
     },
   })
 
-  settings['ocamllsp'] = vim.tbl_extend("force", default_server_settings(), {
-    settings = {
+  settings['ocamllsp'] = with_defaults()
 
-    }
-  })
-
-  settings['pylsp'] = vim.tbl_extend("force", default_server_settings(), {
+  settings['pylsp'] = with_defaults({
     -- https://github.com/python-lsp/python-lsp-server/blob/develop/CONFIGURATION.md
     --on_attach = function(client, bufnr)
     --  -- https://neovim.discourse.group/t/preserve-internal-formatting-when-using-gq-motion/3159/2
@@ -195,13 +186,14 @@ local function server_settings()
       },
     },
   })
+
   if vim.fn.executable("pylsp") == 1 then
     settings.pylsp.cmd = { "pylsp" }
   end
 
-  settings['roc_ls'] = vim.tbl_extend("force", default_server_settings(), {})
+  settings['roc_ls'] = with_defaults()
 
-  settings['rust_analyzer'] = vim.tbl_extend("force", default_server_settings(), {
+  settings['rust_analyzer'] = with_defaults({
     settings = {
       ["rust-analyzer"] = {
         cargo = { loadOutDirsFromCheck = true },
@@ -214,7 +206,7 @@ local function server_settings()
   })
 
   -- https://github.com/vlang/vls
-  settings['vls'] = vim.tbl_extend("force", default_server_settings(), {
+  settings['vls'] = with_defaults({
     cmd = { 'v', 'ls' },
     filetypes = { 'vlang' },
     root_dir = lsputil.find_git_ancestor,
@@ -229,9 +221,9 @@ The official V language server, written in V itself.
     },
   })
 
-  settings['mojo'] = vim.tbl_extend("force", default_server_settings(), {})
+  settings['mojo'] = with_defaults()
 
-  settings['zls'] = vim.tbl_extend("force", default_server_settings(), {
+  settings['zls'] = with_defaults({
     cmd = { 'zls' },
     filetypes = { 'zig' },
     root_dir = lsputil.find_git_ancestor,
@@ -287,10 +279,14 @@ function M.packages(use)
           --  else return cmp.select_and_accept() end
           --end,
           'select_next',
-          'snippet_forward',
+          --'snippet_forward',
           'fallback',
         },
-        ['<S-Tab>'] = { 'select_prev', 'snippet_backward', 'fallback' },
+        ['<S-Tab>'] = {
+          'select_prev',
+          --'snippet_backward',
+          'fallback',
+        },
       },
 
       completion = {
@@ -319,9 +315,16 @@ function M.packages(use)
       sources = {
         -- note default and enabled_providers are the same. The default is the
         -- key used on the nightly branch.
-        default = { "lsp", "path", "snippets", "buffer", "copilot", "lazydev", "dadbod" },
         completion = {
-          enabled_providers = { "copilot", "lsp", "path", "snippets", "buffer", "lazydev", "dadbod" },
+          enabled_providers = {
+            "copilot",
+            "lsp",
+            "path",
+            "snippets",
+            "buffer",
+            "lazydev",
+            "dadbod",
+          },
         },
         -- optionally disable cmdline completions
         -- cmdline = {},
@@ -372,10 +375,25 @@ function M.packages(use)
   }
 
   -- Snippets
-  use { 'L3MON4D3/LuaSnip', version = "v2.*", config = M.luasnip_config }
-  use 'rafamadriz/friendly-snippets'
-  use 'honza/vim-snippets'
-  use 'https://github.com/molleweide/LuaSnip-snippets.nvim.git'
+  use {
+    'L3MON4D3/LuaSnip',
+    version = "v2.*",
+    opts = {
+      -- When false you cannot jump back into a snippet once it is complete.
+      -- Turning it off lets the snippet function exit after you are done.
+      -- This prevents the plugin or keybinds from conflicting.
+      history = false,
+    },
+    config = function()
+      require("luasnip.loaders.from_vscode").lazy_load()
+      require("luasnip.loaders.from_snipmate").lazy_load()
+    end,
+    dependencies = {
+      'rafamadriz/friendly-snippets',
+      'honza/vim-snippets',
+      'https://github.com/molleweide/LuaSnip-snippets.nvim.git',
+    },
+  }
 
   use {
     "zbirenbaum/copilot.lua",

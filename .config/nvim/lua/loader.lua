@@ -13,6 +13,12 @@ local M = {
   global_modules = {},
 }
 
+
+---@alias usefn fun(spec: string | LazySpec): nil
+---@class ConfigPkg
+---@field packages? fun(use: usefn): nil
+---@field config? fun(): nil
+
 -- Runs the full initialization declared in any config modules. Performs the
 -- following steps in order:
 --
@@ -68,8 +74,8 @@ function M.ensure_package_manager()
 end
 
 -- Adds use() arguments to a global registry to be loaded later during M.init()
-function M.lazy_use(arg)
-  M.global_uses[#M.global_uses+1] = arg
+function M.lazy_use(spec)
+  M.global_uses[#M.global_uses+1] = spec
 end
 
 -- Add a config module name. Can be thought of like require() with extra

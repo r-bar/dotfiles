@@ -1,5 +1,5 @@
+---@type ConfigPkg
 M = {}
-
 
 function M.packages(use)
   use {
@@ -40,6 +40,25 @@ function M.packages(use)
   use {
     'ThePrimeagen/harpoon',
     dependencies = { 'nvim-lua/plenary.nvim' },
+    opts = {
+      -- sets the marks upon calling `toggle` on the ui, instead of require `:w`.
+      save_on_toggle = true,
+
+      -- saves the harpoon file upon every change. disabling is unrecommended.
+      save_on_change = true,
+
+      -- sets harpoon to run the command immediately as it's passed to the terminal when calling `sendCommand`.
+      enter_on_sendcmd = false,
+
+      -- closes any tmux windows harpoon that harpoon creates when you close Neovim.
+      tmux_autoclose_windows = false,
+
+      -- filetypes that you want to prevent from adding to the harpoon list menu.
+      excluded_filetypes = { "harpoon" },
+
+      -- set marks specific to each git branch inside git repository
+      mark_branch = false,
+    },
     config = function()
       local mark = require("harpoon.mark")
       local ui   = require("harpoon.ui")
@@ -59,33 +78,12 @@ function M.packages(use)
       vim.keymap.set("n", "<A-2>", function() ui.nav_file(2) end, { noremap = true })
       vim.keymap.set("n", "<A-3>", function() ui.nav_file(3) end, { noremap = true })
       vim.keymap.set("n", "<A-4>", function() ui.nav_file(4) end, { noremap = true })
-
-      require("harpoon").setup {
-        -- sets the marks upon calling `toggle` on the ui, instead of require `:w`.
-        save_on_toggle = true,
-
-        -- saves the harpoon file upon every change. disabling is unrecommended.
-        save_on_change = true,
-
-        -- sets harpoon to run the command immediately as it's passed to the terminal when calling `sendCommand`.
-        enter_on_sendcmd = false,
-
-        -- closes any tmux windows harpoon that harpoon creates when you close Neovim.
-        tmux_autoclose_windows = false,
-
-        -- filetypes that you want to prevent from adding to the harpoon list menu.
-        excluded_filetypes = { "harpoon" },
-
-        -- set marks specific to each git branch inside git repository
-        mark_branch = false,
-      }
     end,
   }
   use "christoomey/vim-tmux-navigator"
   use {
     "nvim-treesitter/nvim-treesitter-context",
     opts = true,
-    --config = function() require("treesitter-context").setup() end,
   }
   use "farmergreg/vim-lastplace"
   use {
@@ -109,11 +107,11 @@ function M.packages(use)
   use {
     "numToStr/FTerm.nvim",
     cmd = { "FTermOpen", "FTermClose", "FTermToggle" },
+    opts = {
+      border = "double",
+    },
     config = function()
       local fterm = require("FTerm")
-      fterm.setup {
-        border = "double",
-      }
       vim.api.nvim_create_user_command('FTermOpen', fterm.open, { bang = true })
       vim.api.nvim_create_user_command('FTermClose', fterm.close, { bang = true })
       vim.api.nvim_create_user_command('FTermToggle', fterm.toggle, { bang = true })

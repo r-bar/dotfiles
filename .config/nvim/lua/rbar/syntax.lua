@@ -30,11 +30,11 @@ function M.packages(use)
   use { "https://github.com/cespare/vim-toml.git", ft = "toml" }
   use "https://github.com/chr4/nginx.vim.git"
   use { 'https://github.com/digitaltoad/vim-pug.git', ft = 'pug' }
-  use { "https://github.com/ollykel/v-vim.git", ft = 'vlang', enabled = false }
+  use { "https://github.com/ollykel/v-vim.git", ft = 'vlang' }
   use { "https://github.com/IndianBoy42/tree-sitter-just.git", ft = 'just', config = true }
   use "https://github.com/pearofducks/ansible-vim.git"
   use { "czheo/mojo.vim", ft = 'mojo' }
-  use {'https://github.com/Vimjas/vim-python-pep8-indent.git', enabled = false, ft = "python"}
+  use {'https://github.com/Vimjas/vim-python-pep8-indent.git', ft = "python"}
   use 'Glench/Vim-Jinja2-Syntax'
 end
 

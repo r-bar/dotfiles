@@ -50,8 +50,8 @@ function M.packages(use)
   }
   use 'https://github.com/wellle/targets.vim'
   use {'danro/rename.vim', cmd = "Rename"}
-  use 'https://github.com/tmhedberg/matchit.git'
-  use 'https://github.com/Valloric/MatchTagAlways.git'
+  use { 'https://github.com/Valloric/MatchTagAlways.git', enabled = false }
+  use { 'https://github.com/andymass/vim-matchup' }
   use 'https://github.com/kana/vim-textobj-user.git'
   use {
     'glts/vim-textobj-comment',

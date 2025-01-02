@@ -52,7 +52,7 @@
   pager = delta
   excludesfile = ~/.gitignore
 [mergetool "nvimfugitive"]
-  cmd = nvim -f -c \"Gdiffsplit!\" \"$MERGED\"
+  cmd = nvim -f -c "\"Gdiffsplit!\" \"$MERGED\""
 [init]
   defaultBranch = master
 [include]

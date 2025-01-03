@@ -41,6 +41,14 @@ PATH_add() {
   done
 }
 
+PATH_prepend() {
+  for arg in $@; do
+    if [[ ":$PATH:" != *":$arg:"* ]]; then
+      path=($arg $path)
+    fi
+  done
+}
+
 
 # Usage: pathprepend <varname> <path> [<path> ...]
 #

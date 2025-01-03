@@ -1,5 +1,3 @@
 [user]
   name = Ryan Barth
   email = ryan@barth.tech
-[gpg]
-  program = /usr/bin/gpg

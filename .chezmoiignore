@@ -2,4 +2,6 @@
 .ssh/id_rsa.pub__*
 .config/fish/fish_variables
 README.md
-**/*##*
+**/*__default*
+**/*__h.*
+**/*__os.*

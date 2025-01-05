@@ -27,6 +27,11 @@ function M.packages(use)
     end
   }
   use {
+    'tpope/vim-dadbod',
+    cmd = {'DB'},
+    dependencies = {'kristijanhusak/vim-dadbod-completion'},
+  }
+  use {
     'https://github.com/pwntester/octo.nvim.git',
     cmd = 'Octo',
     dependencies = {

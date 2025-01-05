@@ -1,0 +1,8 @@
+{{- $hostFile := printf "id_rsa.pub__h.%s" .chezmoi.hostname -}}
+{{- $hostPath := joinPath .chezmoi.sourceDir "private_dot_ssh" $hostFile -}}
+{{- $defaultPath := joinPath .chezmoi.sourceDir "private_dot_ssh" "id_rsa.pub__default" -}}
+{{- if (lstat $hostPath) }}
+{{ include $hostPath }}
+{{- else -}}
+{{ include $defaultPath }}
+{{- end }}

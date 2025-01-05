@@ -6,6 +6,7 @@
 # But this can cause corruption of the terminal session. `zig build` is the
 # biggest offender.
 #set -g default-terminal "screen-256color"
+set -g default-shell /bin/fish
 set -sa terminal-overrides ",xterm*:Tc"
 
 set -g set-titles on

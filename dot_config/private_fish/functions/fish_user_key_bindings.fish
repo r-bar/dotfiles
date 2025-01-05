@@ -37,6 +37,7 @@ end
 
 function fish_user_key_bindings
   fish_vi_key_bindings
+  fzf_configure_bindings --directory=\ct
   bind -M insert ! bind_bang
   bind -M insert '$' bind_dollar
   # somewhere along the way ctrl-f gets unbound. Add it back.

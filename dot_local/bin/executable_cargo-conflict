@@ -1,0 +1,34 @@
+#!/usr/bin/env python3
+
+import json
+import subprocess
+from collections import defaultdict
+
+
+def main():
+    deps = defaultdict(list)
+    reverse = defaultdict(list)
+
+    metadata = json.loads(subprocess.check_output(
+        ['cargo', 'metadata', '--format-version', '1']
+    ))
+
+    for pkg in metadata['resolve']['nodes']:
+        name, version, _address = pkg['id'].split(' ')
+        deps[name].append(version)
+
+        for trans in pkg['dependencies']:
+            trans_name, trans_version, _trans_addr = trans.split(' ')
+            reverse[trans_name].append((name, version, trans_version))
+
+    for name, versions in sorted(deps.items()):
+        if len(versions) > 1:
+            print('{} has multiple versions: {}'.format(name, versions))
+            for requirer, requirer_version, required_version in reverse[name]:
+                print(f'{requirer} ({required_version}) requires'
+                      f' {required_version}')
+            print()
+
+
+if __name__ == '__main__':
+    main()

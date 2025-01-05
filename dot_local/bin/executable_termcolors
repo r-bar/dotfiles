@@ -1,0 +1,55 @@
+#!/usr/bin/python
+# https://stackoverflow.com/questions/4842424/list-of-ansi-color-escape-sequences
+
+COLOR_LINE = "\033[{i}m\\033[{i}m\033[0m\t\t\033[{b}m\\033[{b}m\033[0m"
+COLOR_LINE_256 = "\033[48;5;{i}m{i: =4}\033[0m"
+
+print("\\033[XXm - Set text style")
+print("\033[1m\\033[1m - Bold\033[0m")
+print("\033[3m\\033[3m - Italic\033[0m")
+print("\033[4m\\033[4m - Underline\033[0m")
+print("\033[5m\\033[5m - Slow blink\033[0m")
+print("\033[6m\\033[6m - Fast blink\033[0m")
+
+print("\nForeground colors:")
+print("Normal\t\t\tBright")
+for i in range(30,37+1):
+    b = i + 60
+    print(COLOR_LINE.format(i=i, b=b))
+print("\033[0m", end="")
+
+print("\nBackground colors:")
+print("Normal\t\t\tBright")
+for i in range(40,47+1):
+    b = i + 60
+    print(COLOR_LINE.format(i=i, b=b))
+print("\033[0m", end="")
+
+print("\n256 color mode:")
+print("\\033[38;5;<FG COLOR>m - Set 256 forground color")
+print("\\033[48;5;<BG COLOR>m - Set 256 background color")
+for i in range(256):
+    if i == 0:
+        print('\nStandard colors')
+    elif i == 8:
+        print('\n\nHigh intensity')
+    elif i == 16:
+        print('\n\n216 color palette')
+    elif i == 232:
+        print('\nGreyscale')
+    end = '' if i < 16 or (i + 9) % 12 else '\n'
+    print(COLOR_LINE_256.format(i=i), end=end)
+
+print()
+
+print("\\033[0m - Reset colour")
+print("\\033[2K - Clear Line")
+print("\\033[<L>;<C>H OR \\033[<L>;<C>f - puts the cursor at line L and column C.")
+print("\\033[<N>A - Move the cursor up N lines")
+print("\\033[<N>B - Move the cursor down N lines")
+print("\\033[<N>C - Move the cursor forward N columns")
+print("\\033[<N>D - Move the cursor backward N columns")
+print("\\033[2J - Clear the screen, move to (0,0)")
+print("\\033[K - Erase to end of line")
+print("\\033[s - Save cursor position")
+print("\\033[u - Restore cursor position")

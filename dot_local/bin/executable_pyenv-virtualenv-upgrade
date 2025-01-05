@@ -1,0 +1,29 @@
+#!/bin/bash
+
+eval "$(pyenv init -)"
+
+VENV=${1:?'need to specify virtualenv to upgrade'}
+PYTHON_VERSION=${2:-$(pyenv version-name)}
+
+pyenv shell $VENV
+
+VENV_VERSION="$(python --version | awk '{print $2}')"
+
+if [ $PYTHON_VERSION == $VENV_VERSION ]; then
+  echo $VENV is already using python version $VENV_VERSION
+  exit 0
+fi
+
+echo Taking snapshot of $VENV packages...
+VENV_PACKAGES="$(pip freeze)"
+
+echo Recreating virtual environment...
+pyenv shell $PYTHON_VERSION
+pyenv virtualenv-delete -f $VENV
+pyenv virtualenv $PYTHON_VERSION $VENV
+
+echo Reinstalling packages...
+pyenv shell $VENV
+pip install -r /dev/stdin <<< "$VENV_PACKAGES"
+
+echo Done!

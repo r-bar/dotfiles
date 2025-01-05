@@ -1,0 +1,13 @@
+\set QUIET on
+
+-- \pset format csv
+-- \pset pager on
+
+\q
+
+\x auto
+
+--\set ECHO_HIDDEN true
+\pset linestyle 'unicode'
+
+\setenv EDITOR nvim

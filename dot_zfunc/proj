@@ -1,0 +1,53 @@
+function proj() {
+  PROJ_DIR="${PROJ_DIR:=$HOME/src}"
+  PROJ_DEPTH="${PROJ_DEPTH:=3}"
+
+  opterr() { echo >&2 "proj: Unknown option '$1'" }
+  usage() { echo "Usage: proj [-h|--help] [-s|--session <session>] [--] [<filter>]" }
+
+  local positional=()
+  local session=0
+
+  while (( $# )); do
+    case $1 in
+      --) shift; positional+=("${@[@]}"); break ;;
+      -h|--help) usage; return 0 ;;
+      -s|--session) session=1; shift ;;
+      -*) opterr $1; return 2 ;;
+      *) positional+=("${@[@]}"); break ;;
+    esac
+  done
+
+  local git_projects="$(fd '^\.git$' -d $PROJ_DEPTH -HI $PROJ_DIR | while read git_dir; do dirname $git_dir; done | sed "s#^$PROJ_DIR/##")"
+  local projects="$git_projects"
+  if [ -z "${positional}" ]; then
+    local proj_name="$(fzf --header 'Select a project' <<< "$projects")"
+  else
+    local proj_name="$(fzf --filter "$positional" <<< "$projects" | head -n 1)"
+  fi
+
+  if [ -z "$proj_name" ]; then
+    echo No project selected
+    return 1
+  fi
+  if [ ! -d $PROJ_DIR/$proj_name ]; then
+    echo Invalid project
+    return 1
+  fi
+
+  if [ $session -eq 1 ] || [ -z "$TMUX" ]; then
+    tmux has-session -t $(basename $proj_name) 2>/dev/null
+    if [ $? -eq 1 ]; then
+      tmux new-session -d -s $(basename $proj_name) -c $PROJ_DIR/$proj_name
+    fi
+    if [ -z "$TMUX" ]; then
+      tmux attach-session -t $(basename $proj_name)
+    else
+      tmux switch-client -t $(basename $proj_name)
+    fi
+  else
+    tmux renamew $(basename $proj_name)
+    cd $PROJ_DIR/$proj_name
+  fi
+  return 0
+}

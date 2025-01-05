@@ -1,0 +1,10 @@
+encryption = "age"
+
+[age]
+identity = "{{ .chezmoi.homeDir }}/.config/key.txt"
+recipient = "age17ugsq89gda58z5gqzc7lele5kyycymc4ljhzs9795u0udlygm5zqrcdppn"
+
+[[textconv]]
+pattern = "**/.config/fish/fish_variables"
+command = "awk"
+args = ["!/SETUVAR _.*/{print}"]

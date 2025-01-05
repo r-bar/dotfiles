@@ -1,0 +1,35 @@
+#!/usr/bin/env python3
+
+import sys
+from pathlib import Path
+from textwrap import dedent
+
+
+def rtouch(path: str | Path):
+    path = Path(path)
+    if not path.exists():
+        path.parent.mkdir(parents=True, exist_ok=True)
+    path.touch(exist_ok=True)
+
+
+def usage():
+    print(dedent(
+        """
+        USAGE: rtouch <PATH> [PATH] ...
+
+        Touch the file and recursively create any required directories in the
+        path.
+        """
+    ))
+
+
+def main(paths=sys.argv[1:]):
+    if not paths or '--help' in paths:
+        usage()
+        exit(1)
+    for path in paths:
+        rtouch(path)
+
+
+if __name__ == '__main__':
+    main()

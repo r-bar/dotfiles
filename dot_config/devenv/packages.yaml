@@ -1,0 +1,83 @@
+hosts: all
+vars:
+  github_token: "{{ lookup('env', 'GITHUB_TOKEN')}}"
+  go_arches:
+    x86_64: amd64
+
+tasks:
+  - name: ensure github access
+    when: github_token == ""
+    block:
+      - debug: msg=set GITHUB_TOKEN environment variable to continue
+      - meta: end_play
+
+  - set_fact:
+      go_arch: "{{ go_arches.get(ansible_architecture, ansible_architecture) }}"
+
+  - name: install quickemu (ubuntu)
+    when: ansible_distribution == "Ubuntu"
+    block:
+      - apt:
+          state: latest
+          name:
+            - qemu
+            - bash
+            - coreutils
+            - ovmf
+            - grep
+            - jq
+            - lsb-base
+            - procps
+            - python3
+            - genisoimage
+            - usbutils
+            - util-linux
+            - sed
+            - spice-client-gtk
+            - libtss2-tcti-swtpm0
+            - wget
+            - xdg-user-dirs
+            - zsync
+            - unzip
+      - apt_repository:
+          repo: ppa:flexiondotorg/quickemu
+      - apt:
+          name: quickemu
+          state: latest
+  - name: install quickemu (other)
+    when: ansible_distribution != "Ubuntu"
+    block:
+      - shell: "git clone --filter=blob:none https://github.com/wimpysworld/quickemu /usr/local/share/quickemu"
+      - file:
+          path: /usr/local/bin/quickemu
+          state: link
+          src: ../share/quickemu/quickemu
+      - file:
+          path: /usr/local/bin/quickget
+          state: link
+          src: ../share/quickemu/quickget
+
+  - name: install pup
+    block:
+      - shell: >-
+          curl https://api.github.com/repos/ericchiang/pup/releases/latest 
+            -H "Accept: application/vnd.github+json"
+            -H "Authorization: Bearer {{ github_token }}"
+            -sL
+          | jq '.assets[].browser_download_url'
+          | grep {{ ansible_system.lower() }}
+          | grep {{ go_arch }}
+        register: pup_release_url
+      - set_fact:
+          filename: "{{ pup_release_url.split('/')[-1] }}"
+      - get_url:
+          url: "{{ pup_release_url.stdout }}"
+          dest: "/tmp/{{ filename }}"
+      - shell: "unzip /tmp/{{ filename }} -d /usr/local/bin"
+        become: true
+      
+  - name: install asdf
+    shell:
+      cmd: "git clone https://github.com/asdf-vm/asdf.git ~/.asdf"
+      creates: "~/.asdf"
+    when: ansible_os_family in ["Debian", "Suse"]

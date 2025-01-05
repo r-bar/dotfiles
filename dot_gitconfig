@@ -1,0 +1,76 @@
+[push]
+  default = simple
+[pull]
+  rebase = false
+[diff]
+  colorMoved = default
+[merge]
+  conflictstyle = diff3
+  tool = nvimfugitive
+[branch]
+  sort = authordate
+[color "branch"]
+  current = yellow bold
+  local = green bold
+  remote = cyan bold
+[color "diff"]
+  meta = yellow bold
+  frag = magenta bold
+  old = red bold
+  new = green bold
+  whitespace = red reverse
+[color "status"]
+  added = green bold
+  changed = yellow bold
+  untracked = red bold
+[alias]
+  aliases = !git config --get-regexp 'alias.*' | colrm 1 6 | sed 's/[ ]/ = /' | sort
+  a = add --all
+  d = diff
+  c = commit
+  ca = commit -a
+  cm = commit -m
+  co = checkout
+  amend = commit --no-edit --amend -a
+  cam = commit -am
+  l = log --pretty=format:"%h%x09%an%x09%ad%x09%s" -n 20
+  lg = log --oneline --graph --decorate --all
+  f = fetch
+  s = status
+  sb = status -s -b
+  whois = "!sh -c 'git log -i -1 --pretty=\"format:%an <%ae>\n\" --author=\"$1\"' -"
+  whatis = show -s --pretty='tformat:%h (%s, %ad)' --date=short
+  flat = clone --depth 1
+  human = name-rev --name-only --refs=refs/heads/*
+  exec = "!exec "
+  root = !pwd
+  release = "!export TAG=$1; git tag $TAG && git push origin $TAG"
+  # show the differences made since $2 was forked from $1
+  changed = "!bash -c \"git diff $(git merge-base $1 $2) $2\""
+  #po = "git push --set-upstream origin $(git branch | awk '/^\* / { print $2 }')"
+[core]
+  pager = delta
+  excludesfile = ~/.gitignore
+[mergetool "nvimfugitive"]
+  cmd = nvim -f -c "\"Gdiffsplit!\" \"$MERGED\""
+[init]
+  defaultBranch = master
+[include]
+  path = .gitconfig.local
+  path = .themes.gitconfig
+[interactive]
+  diffFilter = delta --color-only
+[add.interactive]
+  useBuiltin = false # required for git 2.37
+[delta]
+  navigate = true
+  dark = true
+  #zero-type = dim syntax
+  #map-styles = bold purple => dim syntax red, bold cyan => syntax green
+[filter "lfs"]
+  process = git-lfs filter-process
+  required = true
+  clean = git-lfs clean -- %f
+  smudge = git-lfs smudge -- %f
+[commit]
+  gpgsign = true

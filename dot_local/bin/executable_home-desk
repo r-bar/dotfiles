@@ -1,0 +1,34 @@
+#!/bin/sh
+
+cmd="swaymsg -q"
+
+right=DP-3
+left=DP-4
+laptop=eDP-1
+
+swaymsg -q \
+  output $laptop position 304 1440 mode '2256x1504@59.999Hz' scale 1 \; \
+  output $right position 2560 720 mode '2560x1440@119.881Hz' \; \
+  output $left position 0 0 mode '2560x1440@119.881Hz' \; \
+  ;
+
+swaymsg -q \
+  workspace 1 \; move workspace to $laptop \; workspace 1 output $laptop \; \
+  workspace 2 \; move workspace to $laptop \; workspace 2 output $laptop \; \
+  workspace 3 \; move workspace to $laptop \; workspace 3 output $laptop \; \
+  ;
+
+swaymsg -q \
+  workspace 4 \; move workspace to $left \; workspace 4 output $left \; \
+  workspace 5 \; move workspace to $left \; workspace 5 output $left \; \
+  workspace 6 \; move workspace to $left \; workspace 6 output $left \; \
+  ;
+
+swaymsg -q \
+  workspace 7 \; move workspace to $right \; workspace 7 output $right \; \
+  workspace 8 \; move workspace to $right \; workspace 8 output $right \; \
+  workspace 9 \; move workspace to $right \; workspace 9 output $right \; \
+  workspace 10 \; move workspace to $right \; workspace 0 output $right \; \
+  ;
+
+swaymsg -q workspace 1 \; workspace 4 \; workspace 7

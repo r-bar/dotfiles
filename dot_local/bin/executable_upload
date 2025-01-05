@@ -1,0 +1,259 @@
+#!/usr/bin/env python3
+
+import os
+import sys
+import string
+import random
+from argparse import ArgumentParser
+from contextlib import contextmanager
+from concurrent.futures import ThreadPoolExecutor
+from configparser import ConfigParser
+from functools import partial
+from pathlib import Path, PurePosixPath
+from subprocess import run
+from tempfile import TemporaryDirectory
+from textwrap import dedent
+from collections.abc import Iterable, Iterator
+
+
+class Cli:
+    def __init__(self, argv=sys.argv[1:]):
+        self.parser = p = ArgumentParser("upload", description="upload and host files on linode")
+        p.add_argument("--rclone-config", default=os.environ["UPLOAD_RCLONE_CONFIG"])
+        p.add_argument("--public", action="store_true")
+        p.add_argument("--expire", default="1w")
+        p.add_argument("--name", default=generate_name())
+        p.add_argument("--bucket", default=os.environ["UPLOAD_BUCKET"])
+        p.add_argument("--base-path", default=os.environ.get("UPLOAD_BASE_PATH", ""))
+        folder_strat = p.add_mutually_exclusive_group()
+        folder_strat.add_argument('--index', const='index', action='store_const', dest='index_strat', default='index')
+        folder_strat.add_argument('--zip', const='zip', action='store_const', dest='index_strat')
+        p.add_argument("file", type=Path)
+        self.args = p.parse_args(argv)
+        self.__dict__.update(self.args.__dict__)
+
+    def base_target(self) -> str:
+        path = PurePosixPath(self.bucket) / self.base_path / self.name
+        return f"{self.rclone_config}:{path}"
+
+    def in_base_target(self, item: str):
+        return str(PurePosixPath(self.base_target()) / item)
+
+
+class FileUploader:
+    def __init__(
+        self,
+        file: str | Path,
+        target: str,
+        expire="1w",
+        public=False,
+    ):
+        self.file = Path(file)
+        self.target = target
+        self.public = public
+        self.expire = expire
+        self.uploaded = False
+
+    def upload(self):
+        if not self.uploaded:
+            upload(str(self.file), self.target, self.public)
+            self.uploaded = True
+
+    def generate_link(self):
+        if not self.uploaded:
+            raise Exception(f"{self.file} must be uploaded first")
+        if self.public:
+            link = public_url(self.file_target())
+        else:
+            link = generate_download_url(self.file_target(), expire=self.expire)
+        return link
+
+    def file_target(self):
+        return str(PurePosixPath(self.target) / self.file.name)
+
+
+class IndexUploader:
+    def __init__(
+        self, dir: Path | str, target: str, expire: str = "1w", public: bool = False
+    ):
+        self.dir = Path(dir)
+        if not self.dir.is_dir():
+            raise ValueError(f"{dir} is not a directory")
+        self.exec = ThreadPoolExecutor()
+        self.tempdir = TemporaryDirectory()
+        self.target = target
+        self.expire = expire
+        self.public = public
+        self.files_uploaded = False
+        self.index_uploaded = False
+
+    def index_target(self) -> str:
+        return str(PurePosixPath(self.target) / "index.html")
+
+    def files(self) -> Iterator[Path]:
+        for file in self.dir.rglob("**/*"):
+            if file.is_file():
+                yield file
+
+    def upload_files(self):
+        if not self.files_uploaded:
+            upload(str(self.dir), self.target, self.public)
+            self.files_uploaded = True
+
+    @staticmethod
+    def generate_index(files: list[str], links: list[str]) -> str:
+        content = dedent(
+            """
+        <!DOCTYPE html>
+        <html>
+          <head>
+            <meta charset="utf-8">
+            <meta name="viewport" content="width=device-width">
+            <title>File Index</title>
+          </head>
+          <body>
+            <h1>Files:</h1>
+            <ul>
+        """
+        )
+        for filename, link in zip(files, links):
+            content += f'      <li><a href="{link}">{filename}</a></li>\n'
+        content += dedent(
+            """
+            </ul>
+          </body>
+        </html>
+        """
+        )
+        return content
+
+    def targets(self) -> Iterator[str]:
+        for file in self.files():
+            file_target = PurePosixPath(self.target) / file.relative_to(self.dir)
+            yield str(file_target)
+
+    def generate_file_links(self) -> Iterator[str]:
+        if not self.files_uploaded:
+            raise Exception("Files must be uploaded before links can be created")
+
+        with ThreadPoolExecutor() as e:
+            if self.public:
+                out = e.map(public_url, self.targets())
+            else:
+                out = e.map(
+                    partial(generate_download_url, expire=self.expire), self.targets()
+                )
+
+        return out
+
+    def upload_index(self):
+        if not self.index_uploaded:
+            filenames = [str(f.relative_to(self.dir)) for f in self.files()]
+            with TemporaryDirectory() as tmpdir:
+                index_path = Path(tmpdir) / "index.html"
+                with open(index_path, "w") as f:
+                    f.write(
+                        self.generate_index(
+                            filenames,
+                            self.generate_file_links(),
+                        )
+                    )
+                upload(index_path, self.target, self.public)
+            self.index_uploaded = True
+
+    def upload(self) -> str:
+        self.upload_files()
+        self.upload_index()
+
+    def generate_link(self) -> str:
+        if not self.index_uploaded:
+            raise Exception("index.html has not been uploaded")
+        if self.public:
+            return public_url(self.index_target())
+        else:
+            return generate_download_url(self.index_target(), expire=self.expire)
+
+
+def generate_name(length=5) -> str:
+    return "".join(random.choice(string.ascii_letters) for _ in range(length))
+
+
+def upload(file, target: str, public: bool = False):
+    """
+    :param file: path to a local file to upload
+    :param target: an rclone target to copy to
+    :param public: set the file to be publicly readable
+    """
+    upload_cmd = ["rclone", "copy", "-P"]
+    if public:
+        upload_cmd += ["--s3-acl", "public-read"]
+    upload_cmd += [str(file), str(target)]
+    run(upload_cmd, check=True)
+
+
+def public_url(target: str) -> str:
+    config = ConfigParser()
+    fs, bucket_path = target.split(":", maxsplit=1)
+    proc = run(
+        ("rclone", "config", "show", fs), check=True, capture_output=True, text=True
+    )
+    config.read_string(proc.stdout)
+    endpoint = config.get(fs, "endpoint")
+    return f"https://{endpoint}/{bucket_path}"
+
+
+def generate_download_url(target: str, expire: str = "1w") -> str:
+    """
+    :param target: an rclone target to generate a download url for. Can be private.
+    :param expire: the length of time before the generated link expires
+    :returns: a private download url
+    """
+    link_cmd = ["rclone", "link", "--expire", expire, target]
+    proc = run(link_cmd, check=True, capture_output=True, text=True)
+    return proc.stdout.strip()
+
+
+@contextmanager
+def zip(target: str) -> str:
+    """Zip the target into a temporary directory. Delete the directory and the contained filed when the contextmanager exits"""
+    with TemporaryDirectory() as tmpdir:
+        zip_target = Path(tmpdir.name) / f"{target}.zip"
+        cmd = ["zip", "-r", zip_target, target]
+        run(cmd, check=True)
+        yield zip_target
+
+
+def main():
+    cli = Cli()
+    match (cli.file.is_dir(), cli.index_strat):
+        case (True, "index"):
+            uploader = IndexUploader(
+                cli.file,
+                cli.base_target(),
+                expire=cli.expire,
+                public=cli.public,
+            )
+            uploader.upload()
+        case (True, "zip"):
+            with zip(cli.file) as zip_file:
+                uploader = FileUploader(
+                    zip_file,
+                    cli.base_target(),
+                    expire=cli.expire,
+                    public=cli.public,
+                )
+                uploader.upload()
+        case (False, _):
+            uploader = FileUploader(
+                cli.file,
+                cli.base_target(),
+                expire=cli.expire,
+                public=cli.public,
+            )
+            uploader.upload()
+    link = uploader.generate_link()
+    print(link)
+
+
+if __name__ == "__main__":
+    main()

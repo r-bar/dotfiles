@@ -1,0 +1,166 @@
+machine_tags:
+  earth: [development, games]
+  venus: [development, appomni]
+packages:
+  alsa-utils: {}
+  ansible: {}
+  ansible-lint: {}
+  argocd:
+    tags: [development]
+  base-devel:
+    apt: build-essential
+  bat: {}
+  binaryen:
+    tags: [development]
+  bitwarden-desktop:
+    apt: false
+    yay: false
+    flatpak: com.bitwarden.desktop
+  blender:
+    apt: false
+    yay: false
+    flatpak: org.blender.Blender
+  bluez-utils: {}
+  btop: {}
+  chromium:
+    apt: false
+    yay: false
+    flatpak: org.chromium.Chromium
+  direnv:
+    tags: [development]
+  discord:
+    apt: false
+    yay: false
+    flatpak: com.discordapp.Discord
+    tags: [games]
+  docker: {}
+  docker-compose: {}
+  duf: {}
+  eza: {}
+  f3d:
+    apt: false
+    yay: false
+    flatpak: io.github.f3d_app.f3d
+  firefox: {}
+  flatpak: {}
+  flatseal:
+    apt: false
+    yay: false
+    flatpak: com.github.tchx84.Flatseal
+  fluxcd:
+    tags: [appomni]
+  gamescope:
+    tags:
+    description:
+    flatpak: org.freedesktop.Platform.VulkanLayer.gamescope
+  gimp:
+    apt: false
+    yay: false
+    flatpak: org.gimp.GIMP
+  git-crypt: {}
+  git-delta: {}
+  glances: {}
+  go: {}
+  go-yq:
+    tags: [development]
+  gron: {}
+  helm: {}
+  hexyl: {}
+  htop: {}
+  httpie: {}
+  hwinfo: {}
+  hyperfine: {}
+  inkscape:
+    apt: false
+    yay: false
+    flatpak: org.inkscape.Inkscape
+  jaq:
+    description: A faster, more correct jq
+    apt: jq
+    tags: [development]
+  just:
+    tags: [development]
+  kdenlive:
+    apt: false
+    yay: false
+    flatpak: org.kde.kdenlive
+    tags: [multimedia]
+  krita:
+    apt: false
+    yay: false
+    flatpak: org.kde.krita
+  kubectl:
+    tags: [development]
+  libreoffice:
+    apt: false
+    yay: false
+    flatpak: org.libreoffice.LibreOffice
+  lsb-release: {}
+  neovim: {}
+  nmap: {}
+  obs:
+    apt: false
+    yay: false
+    flatpak: com.obsproject.Studio
+  obsidian:
+    apt: false
+    yay: false
+    flatpak: md.obsidian.Obsidian
+  opam:
+    tags: [development]
+  openbsd-netcat: {}
+  path-of-building:
+    apt: false
+    yay: false
+    flatpak: community.pathofbuilding.PathOfBuilding
+  pavucontrol: {}
+  postgresql:
+    description: Development files for PostgreSQL
+    apt: postgresql-server-dev-all
+    tags: [development]
+  pre-commit:
+    tags: [development]
+  pv: {}
+  rclone: {}
+  ruff: {}
+  ruff-lsp: {}
+  signal:
+    apt: false
+    yay: false
+    flatpak: org.signal.Signal
+  skanlite: {}
+  skanpage:
+    apt: false
+    yay: false
+    flatpak: org.kde.skanpage
+  steam:
+    apt: false
+    yay: false
+    flatpak: com.valvesoftware.Steam
+  stremio:
+    apt: false
+    yay: false
+    flatpak: com.stremio.Stremio
+  syncthing: {}
+  syncthingy:
+    apt: false
+    yay: false
+    flatpak: com.github.zocker_160.SyncThingy
+  tailscale: {}
+  tldr: {}
+  tokei: {}
+  transmission:
+    apt: false
+    yay: false
+    flatpak: com.transmissionbt.Transmission
+  uv:
+    tags: [development]
+  wasmer:
+    tags: [development]
+  watchexec: {}
+  yadm: {}
+  yazi:
+    description: Terminal file manager
+  zig:
+    tags: [development]
+  zip: {}

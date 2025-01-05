@@ -1,0 +1,62 @@
+format = """\
+  $username\
+  $hostname\
+  $directory\
+  $git_branch\
+  $git_commit\
+  $git_state\
+  $git_status\
+  $kubernetes\
+  $cmd_duration\
+  $custom\
+  $line_break\
+  $jobs\
+  $battery\
+  $time\
+  $character\
+  """
+
+[cmd_duration]
+min_time = 2
+
+[directory]
+truncate_to_repo = false
+truncation_length = 0
+style = "bold blue"
+suffix = ""
+
+[git_branch]
+style = "green"
+prefix = ""
+
+[git_state]
+style = "bold red"
+
+[git_status]
+style = "bold yellow"
+
+[time]
+disabled = false
+#format = "%T"
+prefix = ""
+style = "dim white"
+
+[aws]
+prefix = ""
+
+[battery]
+disabled = false
+
+[battery.display]
+threshold = 100
+
+[username]
+format = "[$user]($style)@"
+
+[kubernetes]
+disabled = false
+symbol = "☸"
+format = "[$symbol$context(($namespace))]($style)"
+
+[hostname]
+format = "[$hostname]($style):"

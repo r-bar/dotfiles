@@ -1,0 +1,7 @@
+
+[submodule ".config/tmux/tpm"]
+	path = .config/tmux/tpm
+	url = https://github.com/tmux-plugins/tpm.git
+[submodule ".config/pia-wg/scripts"]
+	path = .config/pia-wg/scripts
+	url = https://github.com/triffid/pia-wg.git

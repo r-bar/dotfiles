@@ -1,0 +1,34 @@
+#!/bin/bash
+
+# PROCEDURES IN THIS BOOTSTRAP SCRIPT SHOULD BE ABLE TO BE RERUN!
+
+build_docker_config() {
+  echo "Building docker config"
+  jq -s add ~/.docker/config.d/*.json > ~/.docker/config.json
+}
+
+install_custom_firefox_profile_mods() {
+  echo "Installing custom firefox profile mods"
+  rsync -r ~/.mozilla/firefox/custom/ ~/.mozilla/firefox/*.default-release/
+  rsync -r ~/.mozilla/firefox/custom/ ~/.mozilla/firefox/*.default/
+}
+
+install_pia_wg_config() {
+  response=$(read -p "Do you want to install the PIA Wireguard config? [y/N] " -n 1 -r)
+  if [[ ! $response =~ ^[Yy]$ ]]; then
+    echo "Skipping PIA Wireguard config install"
+    return
+  fi
+  echo "Installing PIA Wireguard config"
+  sudo mkdir -p /etc/pia-wg
+  sudo cp ~/.config/pia-wg/pia-wg.conf /etc/pia-wg/pia-wg.conf
+}
+
+yadm submodule update --init --recursive
+yadm alt
+#hash yay 2>/dev/null && yas sync
+~/.config/tmux/tpm/bin/install_plugins
+activate-global-python-argcomplete --user
+build_docker_config
+install_custom_firefox_profile_mods
+install_pia_wg_config

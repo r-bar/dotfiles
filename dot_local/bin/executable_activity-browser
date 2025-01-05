@@ -1,0 +1,158 @@
+#!/usr/bin/env python3
+
+import atexit
+import json
+import shutil
+import sys
+import os
+from argparse import ArgumentParser
+from collections import defaultdict
+from pathlib import Path
+from subprocess import run, Popen
+
+
+APP_NAME = 'activity-browser'
+
+
+def default_profile(activity, program):
+    return Config().profile_map[activity].get(program)
+
+
+def get_activity_id():
+    cmd = [
+        'dbus-send', '--session', '--dest=org.kde.ActivityManager',
+        '--type=method_call', '--print-reply=literal',
+        '/ActivityManager/Activities',
+        'org.kde.ActivityManager.Activities.CurrentActivity',
+    ]
+    proc = run(cmd, check=True, capture_output=True, text=True)
+    return proc.stdout.strip()
+
+
+class Cmd:
+    PROGRAMS = {
+        'firefox': 'firefox',
+        'firefox-nightly': 'firefox',
+        'chromium': 'chromium',
+    }
+
+    @classmethod
+    def cmd(cls, program, profile, private=False, **kwargs):
+        fn = getattr(cls, cls.PROGRAMS[program])
+        return fn(program, profile, **kwargs)
+
+    @classmethod
+    def default_program(cls):
+        for prog in cls.PROGRAMS:
+            if shutil.which(prog):
+                return prog
+
+    @staticmethod
+    def firefox(program, profile, private=False, **kwargs):
+        cmd = [program]
+        if profile:
+            cmd += ['-P', profile]
+        if private:
+            cmd += ['--private-window']
+        return cmd
+
+
+class Config:
+    _instance = None
+
+    def __new__(cls):
+        if cls._instance:
+            return cls._instance
+        instance = super().__new__(cls)
+
+        file = cls.config_file()
+        if file.is_file():
+            with open(file) as fp:
+                instance.__dict__ = json.load(fp)
+            profile_map = instance.profile_map
+            instance.profile_map = defaultdict(dict)
+            instance.profile_map.update(profile_map)
+        else:
+            instance.profile_map = defaultdict(dict)
+            instance.default_program = Cmd.default_program()
+
+        atexit.register(instance.save)
+        cls._instance = instance
+
+        return instance
+
+    @staticmethod
+    def config_file(filename='config.json'):
+        config_dir = os.environ.get('XDG_CONFIG_DIR', Path.home() / '.config')
+        return Path(config_dir) / APP_NAME / filename
+
+    def save(self):
+        file = self.config_file()
+        file.parent.mkdir(parents=True, exist_ok=True)
+        with open(file, 'w') as fp:
+            fp.write(str(self))
+
+    def __str__(self):
+        return json.dumps(self.__dict__, indent=2)
+
+
+def cli() -> ArgumentParser:
+    p = ArgumentParser()
+    p.add_argument('--private', action='store_true')
+    p.add_argument('--program')
+    p.add_argument('--profile')
+    sub = p.add_subparsers(dest='command')
+    set_profile = sub.add_parser('set-profile')
+    set_profile.add_argument('program')
+    set_profile.add_argument('profile')
+    set_default_program = sub.add_parser('set-default-program')
+    set_default_program.add_argument('program')
+    sub.add_parser('show-config')
+    return p
+
+
+def command_set_profile(args):
+    activity = get_activity_id()
+    Config().profile_map[activity][args.program] = args.profile
+
+
+def command_set_default_program(args):
+    Config().default_program = args.program
+
+
+def command_show_config(args):
+    print(Config())
+
+
+def command_launch(args, browser_args):
+    program = args.program or Config().default_program
+    activity = get_activity_id()
+    try:
+        profile = args.profile or default_profile(activity, program)
+    except KeyError:
+        print('No profile set for this activity', file=sys.stderr)
+        exit(1)
+    try:
+        cmd = Cmd.cmd(program, profile, private=args.private)
+    except AttributeError:
+        print(f'{APP_NAME} does not know how to handle {program}',
+              file=sys.stderr)
+        exit(1)
+    print(cmd)
+    Popen(cmd + browser_args)
+
+
+def main():
+    args, browser_args = cli().parse_known_args()
+    commands = {
+        'set-default-program': command_set_default_program,
+        'set-profile': command_set_profile,
+        'show-config': command_show_config,
+    }
+    if args.command in commands:
+        return commands[args.command](args)
+    command_launch(args, browser_args)
+
+
+if __name__ == '__main__':
+    main()

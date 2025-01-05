@@ -1,0 +1,6 @@
+#!/bin/bash
+
+WIKI=${WIKI:-~/Documents/vimwiki}
+
+cd $WIKI
+make daily

@@ -1,0 +1,138 @@
+{ pkgs, config, ... }:
+
+let
+  unstable = import <nixpkgs-unstable> {};
+  macPkgs = with pkgs; [
+    #docker
+    #docker-machine
+    #docker-machine-hyperkit
+    hack-font
+    alacritty
+  ];
+
+  generalPkgs = with pkgs; [
+    coreutils
+    findutils
+    gnugrep # requires by direnv-nix on MacOs
+    rclone
+    tmux
+    bat
+    pv
+    curlie
+    ripgrep
+    jq
+    yq
+    remarshal
+    yadm
+    rename
+    gnupg
+    htop
+    transcrypt
+    lima
+    aws-mfa
+  ];
+
+  languagePkgs = with pkgs; [
+    rustup
+    nodejs
+    yarn
+  ];
+
+  # https://github.com/NixOS/nixpkgs/blob/29647c9b582338b23577be9f9bddba4295e16111/doc/languages-frameworks/python.section.md#ad-hoc-temporary-python-environment-with-nix-shell-ad-hoc-temporary-python-environment-with-nix-shell
+  pythonEnv = pkgs.python310.withPackages (ps: [
+    ps.pynvim
+    ps.ipython
+    ps.pip
+  ]);
+
+  pythonPkgs = with pkgs; [
+    pythonEnv
+    poetry
+  ];
+
+  devtoolsPkgs = with pkgs; [
+    universal-ctags
+    postgresql
+    sqlite
+    python310Packages.j2cli
+    git
+    #fd
+    watchexec
+    exa
+    #pyenv # does not exist
+    #python-language-server # not supported for darwin
+    nodePackages.yaml-language-server
+    nodePackages.bash-language-server
+    nodePackages.ocaml-language-server
+    #rust-analyzer
+    rust-analyzer-unwrapped
+    niv
+    kube3d
+    #podman # not supported for darwin
+    #fuse-overlayfs # not supported for darwin
+    #runc # not supported for darwin
+    #slirp4netns # not supported for darwin
+    #podman-compose # not supported for darwin
+    #buildah # not supported for darwin
+    hexyl
+    neovim
+    autoconf
+    git-crypt
+  ];
+
+  opsPkgs = with pkgs; [
+    kubectl
+    kubectx
+    kubernetes-helm
+    #k3s # not supported for darwin
+    ansible
+    doctl
+  ];
+
+in
+
+{
+  home.stateVersion = "22.11";
+  home.username = "ryanbarth";
+  home.homeDirectory = "/Users/ryanbarth";
+  programs.home-manager.enable = true;
+
+  programs.fzf = {
+    enable = true;
+    defaultCommand = "fd --type f";
+  };
+
+#  programs.neovim = {
+#    enable = true;
+#    viAlias = true;
+#    vimdiffAlias = true;
+#    withPython3 = true;
+#    withNodeJs = true;
+#  };
+
+  programs.direnv = {
+    enable = true;
+    nix-direnv.enable = true;
+  };
+
+  # extra packages without additional configuration
+  home.packages = builtins.concatLists [
+    generalPkgs
+    pythonPkgs
+    languagePkgs
+    macPkgs
+    devtoolsPkgs
+    opsPkgs
+  ];
+
+  home.file = {
+    ".zshrc.d/60-fzf.nix.zsh".text = ''
+      if [[ $options[zle] = on ]]; then
+        . ${config.programs.fzf.package}/share/fzf/completion.zsh
+        . ${config.programs.fzf.package}/share/fzf/key-bindings.zsh
+      fi
+    '';
+  };
+
+  # …
+}

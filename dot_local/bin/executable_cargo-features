@@ -1,0 +1,42 @@
+#!/bin/bash
+
+BASE_DOMAIN=https://crates.io
+BASE_URL=$BASE_DOMAIN/api/v1
+CRATE=$2
+VERSION=$3
+
+function usage() {
+  echo 'cargo features <CRATE> [VERSION]'
+  echo
+  echo Outputs a list of available features for the given crate.
+}
+
+if [ -z "$CRATE" ]; then
+  echo You must specify a crate name
+  usage
+  exit 255
+fi
+
+if [ -z "$VERSION" ]; then
+  CRATE_DATA="$(curl -sL $BASE_URL/crates/$CRATE)"
+  VERSION_DATA="$(jq '.versions[0]' <<< "$CRATE_DATA")"
+else
+  VERSION_DATA="$(curl -sL $BASE_URL/crates/$CRATE/$VERSION | jq -r .version)"
+fi
+
+DEPENDENCIES_URL="${BASE_DOMAIN}$(jq -r .links.dependencies <<< "$VERSION_DATA")"
+OPTIONAL_DEPENDENCIES="$(
+  curl -sL $DEPENDENCIES_URL \
+  | jq -r '.dependencies[] | select(.optional) | .crate_id'
+)"
+FEATURE_DEPENDENCIES="$(jq -r '.features[] | flatten | .[]' <<< "$VERSION_DATA")"
+
+echo 'FEATURES: '
+jq -r '.features | keys | .[]' <<< "$VERSION_DATA"
+
+echo
+echo OPTIONAL DEPENDENCIES:
+# show lines that are in $OPTIONAL_DEPENDENCIES but not in
+diff --new-line-format="" --unchanged-line-format="" \
+  <(sort <<< "$OPTIONAL_DEPENDENCIES") \
+  <(sort <<< "$FEATURE_DEPENDENCIES")

@@ -1,0 +1,8 @@
+[flake8]
+ignore =
+  # ignore long lines, black handles this
+  E501,
+  # https://gitlab.com/pycqa/flake8/-/issues/139
+  W503,
+  # See https://github.com/PyCQA/pycodestyle/issues/373
+  E203,

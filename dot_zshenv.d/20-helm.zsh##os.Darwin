@@ -1,0 +1,1 @@
+export HELM_CONFIG_HOME="$HOME/.config/helm"

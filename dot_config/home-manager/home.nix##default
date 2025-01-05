@@ -1,0 +1,143 @@
+{ config, pkgs, ... }:
+let
+  unstable = import <nixpkgs-unstable> {};
+
+  libPkgs = with pkgs; [
+    openssl
+  ];
+
+  generalPkgs = with pkgs; [
+    alacritty
+    rclone
+    tmux
+    bat
+    pv
+    curlie
+    ripgrep
+    jq
+    yq
+    remarshal
+    yadm
+    git-crypt
+    rename
+    gnupg
+    htop
+    aws-mfa
+    fd
+    httpie
+    unstable.yt-dlp
+    amazon-ecr-credential-helper
+    unstable.quickemu
+    unstable.nix-init
+    unstable.mako
+    unstable.xdragon
+    nmap
+    libxml2
+  ];
+
+  languagePkgs = with pkgs; [
+    unstable.rustup
+    nodejs
+    yarn
+    unstable.poetry
+    unstable.opam
+  ];
+
+  customPython = import ./python-packages.nix { inherit pkgs; };
+  devtoolsPkgs = with pkgs; [
+    universal-ctags
+    postgresql
+    sqlite
+    customPython
+    python310Packages.j2cli
+    git
+    watchexec
+    exa
+    unstable.kube3d
+    unstable.podman
+    unstable.podman-compose
+    unstable.buildah
+    hexyl
+    unstable.neovim
+    autoconf
+    gcc
+    gnumake
+    go
+    unstable.zig
+    pre-commit
+    just
+    delta
+    lua
+    silicon
+    awscli2
+    docker-compose
+    unstable.cargo-outdated
+    unstable.cargo-whatfeatures
+    unstable.wasm-pack
+    cargo-watch
+  ];
+
+  opsPkgs = with pkgs; [
+    kubectl
+    #kubectx
+    kubernetes-helm
+    unstable.k3s # not supported for darwin
+    ansible
+    doctl
+    unstable.linode-cli
+  ];
+
+in
+
+{
+  # Home Manager needs a bit of information about you and the
+  # paths it should manage.
+  home.username = "ryan";
+  home.homeDirectory = "/home/ryan";
+
+  # This value determines the Home Manager release that your
+  # configuration is compatible with. This helps avoid breakage
+  # when a new Home Manager release introduces backwards
+  # incompatible changes.
+  #
+  # You can update Home Manager without changing this value. See
+  # the Home Manager release notes for a list of state version
+  # changes in each release.
+  home.stateVersion = "22.11";
+
+  # Let Home Manager install and manage itself.
+  programs.home-manager.enable = true;
+
+
+  programs.direnv = {
+    enable = true;
+    nix-direnv.enable = true;
+  };
+
+  programs.fzf = {
+    enable = true;
+    defaultCommand = "fd --type f";
+  };
+
+  # extra packages without additional configuration
+  home.packages = builtins.concatLists [
+    generalPkgs
+    languagePkgs
+    devtoolsPkgs
+    opsPkgs
+    libPkgs
+  ];
+
+  # nix.zsh files are in yadm's .gitignores
+  home.file = {
+    ".zshrc.d/50-fzf.nix.zsh".text = ''
+      if [[ $options[zle] = on ]]; then
+        . ${config.programs.fzf.package}/share/fzf/completion.zsh
+        . ${config.programs.fzf.package}/share/fzf/key-bindings.zsh
+      fi
+    '';
+    ".zshenv.d/40-nvim-python.nix.zsh".text = ''
+      export NVIM_PYTHON=${customPython}/bin/python3
+    '';
+  };
+}

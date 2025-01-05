@@ -1,0 +1,262 @@
+#!/usr/bin/env python3
+
+import os
+import sys
+from argparse import ArgumentParser
+from dataclasses import dataclass
+from functools import cache
+from itertools import product
+from pathlib import Path
+from typing import Optional
+
+import yaml
+
+KUBECONFIGD = Path(os.environ.get("KUBECONFIGD", Path.home() / ".kube" / "config.d"))
+KUBECONFIG_SKELETON = {
+    "apiVersion": "v1",
+    "kind": "Config",
+    "preferences": {},
+    "current-context": "",
+    "contexts": [],
+    "clusters": [],
+    "users": [],
+}
+
+
+@cache
+def kubeconfig():
+    path = os.environ.get("KUBECONFIG", str(Path.home() / ".kube" / "config"))
+    filename = Path(path.split(":", maxsplit=1)[0])
+    if not filename.exists():
+        with open(filename, "w") as f:
+            f.write(yaml.dump(KUBECONFIG_SKELETON))
+    return filename
+
+
+def levenshtein(token1, token2):
+    """Return the Levenshtein distance between two strings."""
+    distances = [[0 for _ in range(len(token2) + 1)] for _ in range(len(token1) + 1)]
+
+    for t1 in range(len(token1) + 1):
+        distances[t1][0] = t1
+
+    for t2 in range(len(token2) + 1):
+        distances[0][t2] = t2
+
+    for t1, t2 in product(range(1, len(token1) + 1), range(1, len(token2) + 1)):
+        if token1[t1 - 1] == token2[t2 - 1]:
+            distances[t1][t2] = distances[t1 - 1][t2 - 1]
+        else:
+            a = distances[t1][t2 - 1]
+            b = distances[t1 - 1][t2]
+            c = distances[t1 - 1][t2 - 1]
+
+            if a <= b and a <= c:
+                distances[t1][t2] = a + 1
+            elif b <= a and b <= c:
+                distances[t1][t2] = b + 1
+            else:
+                distances[t1][t2] = c + 1
+
+    return distances[len(token1)][len(token2)]
+
+
+class Cli(ArgumentParser):
+    def __init__(self, *, args=sys.argv[1:], **kwargs):
+        defaults = dict(
+            description="""
+            Uses a directory of individual kubeconfig files to manage the kubectl context.
+            This is an alternative to setting multiple entries in your KUBECONFIG path since
+            many tools do not support this configuration. Using this tool means the config
+            in the your KUBECONFIG or the default location (~/.kube/config) will be
+            overwritten by the configs stored in KUBECONFIGD (~/.kube/config.d by default).
+            You should copy your config to the directory to ensure it is persisted as is and
+            not overwritten.
+            """
+        )
+        super().__init__(**(defaults | kwargs))
+        self.add_argument(
+            "-n", "--namespace", help="Set the namespace used in the context"
+        )
+        self.add_argument(
+            "-l",
+            "--list",
+            action="store_true",
+            help="List available contexts",
+            default=False,
+        )
+        self.add_argument(
+            "-r",
+            "--rename",
+            help="Rename the current context",
+            default=None,
+            metavar="NEW_NAME",
+        )
+        self.add_argument(
+            "context", nargs="?", help="Set the current context if specified"
+        )
+        self.args = self.parse_args(args)
+
+    def command(self):
+        if self.args.rename:
+            return "rename"
+        elif self.args.list:
+            return "list"
+        elif self.args.context or self.args.namespace:
+            return "set"
+        else:
+            return "list"
+
+
+@dataclass
+class Context:
+    file: Path
+    name: str
+    namespace: str
+    cluster: str
+    user: str
+
+    def render(self) -> dict:
+        return {
+            "name": self.key,
+            "context": {
+                "cluster": self.cluster,
+                "namespace": self.namespace,
+                "user": self.user,
+            },
+        }
+
+    @classmethod
+    def load(cls, filename: str | Path, data: dict):
+        """Given a file name and a context entry from a kubeconfig file, return a Context instance."""
+        return cls(
+            file=Path(filename),
+            name=data["name"],
+            namespace=data["context"].get("namespace", "default"),
+            cluster=data["context"]["cluster"],
+            user=data["context"]["user"],
+        )
+
+    @property
+    def key(self):
+        return f"{self.file.name}:{self.name}"
+
+    def config_data(self) -> dict:
+        """Read the config file and return the data as a dictionary."""
+        with open(self.file) as f:
+            return yaml.safe_load(f)
+
+
+class ConfigManager:
+    __slots__ = "contexts", "current_context_key", "context_files"
+
+    def __init__(self):
+        config_files = [conf for conf in KUBECONFIGD.glob("*.yaml")]
+        with open(kubeconfig()) as f:
+            k = yaml.safe_load(f)
+        self.current_context_key = k.get("current-context")
+        self.contexts = {}
+        for config_file in config_files:
+            with open(config_file) as f:
+                config_data = yaml.safe_load(f)
+                file_contexts = config_data.get("contexts", [])
+                for ctx_data in file_contexts:
+                    ctx = Context.load(config_file, ctx_data)
+                    self.contexts[ctx.key] = ctx
+
+    @property
+    def current_context(self) -> Context:
+        return self.contexts[self.current_context_key]
+
+    def fuzzy_match(self, needle: str) -> Context:
+        min_score = float("inf")
+        best_match = None
+        for name in self.contexts:
+            distance = levenshtein(needle, name)
+            score = distance / max(len(needle), len(name))
+            if score < min_score:
+                min_score = score
+                best_match = name
+        return self.contexts[best_match]
+
+    def set_context(
+        self,
+        context: str | Context,
+    ) -> Context:
+        if isinstance(context, str):
+            context = self.contexts[context]
+        self.current_context_key = context.key
+        ctx_data = context.config_data()
+        ctx_data["current-context"] = context.key
+        ctx_data["contexts"] = [context.render()]
+        with open(kubeconfig(), "w") as f:
+            f.write("# This file is managed by kubectl-ctx\n")
+            f.write(yaml.dump(ctx_data))
+        return context
+
+    def rename(self, key: str, new_name: str) -> Context:
+        """Rename the context in the kubeconfig file."""
+        context = self.contexts.pop(key)
+        old_name = context.name
+        config_data = context.config_data()
+        for ctx in config_data["contexts"]:
+            if ctx["name"] == old_name:
+                ctx["name"] = new_name
+        with open(context.file, "w") as f:
+            f.write(yaml.dump(config_data))
+        context.name = new_name
+        if key == self.current_context_key:
+            self.set_context(context)
+        return context
+
+
+def print_table(data: list[list], header_sep: str | None = None, col_sep="  "):
+    column_widths = [max(len(str(cell)) for cell in column) for column in zip(*data)]
+    total_width = sum(column_widths) + len(col_sep) * (len(column_widths) - 1)
+    for i, row in enumerate(data):
+        print(
+            col_sep.join(f"{cell:<{width}}" for cell, width in zip(row, column_widths))
+        )
+        if header_sep and i == 0:
+            print(header_sep * total_width)
+
+
+def main():
+    cli = Cli()
+    manager = ConfigManager()
+    match cli.command():
+        case "set":
+            context_name = manager.current_context_key
+            if cli.args.context:
+                context_name = manager.fuzzy_match(cli.args.context).key
+            context = manager.contexts[context_name]
+            if cli.args.namespace:
+                context.namespace = cli.args.namespace
+            manager.set_context(context)
+            print(f"Set context to {context.key}/{context.namespace}")
+        case "list":
+            contexts = manager.contexts.values()
+            headers = ["  ", "Context", "Namespace", "File"]
+            data = [headers]
+            for context in contexts:
+                marker = ""
+                if context.key == manager.current_context_key:
+                    marker = "->"
+                data.append(
+                    [marker, context.name, context.namespace, context.file.name]
+                )
+            print_table(data, col_sep=" | ", header_sep="-")
+        case "rename":
+            if cli.args.context:
+                context = manager.fuzzy_match(cli.args.context)
+            else:
+                context = manager.current_context
+            old_name = context.name
+            context = manager.rename(context.key, cli.args.rename)
+            print(f"Renamed context {old_name} to {context.name} in {context.file}")
+        case "show":
+            print("Current context:", manager.current_context_key)
+
+
+if __name__ == "__main__":
+    main()

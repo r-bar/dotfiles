@@ -1,0 +1,127 @@
+{ pkgs, config, ... }:
+
+let
+  unstable = import <nixpkgs-unstable> {};
+  macPkgs = with pkgs; [
+    #docker
+    #docker-machine
+    #docker-machine-hyperkit
+    hack-font
+    alacritty
+  ];
+
+  generalPkgs = with pkgs; [
+    gnugrep # required by direnv-nix on MacOs
+    rclone
+    tmux
+    bat
+    pv
+    curlie
+    ripgrep
+    jq
+    yq
+    remarshal
+    yadm
+    rename
+    gnupg
+    htop
+    gcc
+    podman
+    podman-compose
+    httpie
+  ];
+
+  languagePkgs = with pkgs; [
+    rustup
+    nodejs
+    yarn
+    lua
+  ];
+
+  pythonPkgs = with pkgs; [
+    python39
+    python39Packages.ipython
+    python39Packages.pip
+  ];
+
+  devtoolsPkgs = with pkgs; [
+    universal-ctags
+    postgresql
+    sqlite
+    python39Packages.j2cli
+    git
+    fd
+    watchexec
+    exa
+    #pyenv # does not exist
+    #python-language-server # not supported for darwin
+    nodePackages.yaml-language-server
+    nodePackages.bash-language-server
+    nodePackages.ocaml-language-server
+    #rust-analyzer
+    rust-analyzer-unwrapped
+    niv
+    kube3d
+    #podman # not supported for darwin
+    #fuse-overlayfs # not supported for darwin
+    #runc # not supported for darwin
+    #slirp4netns # not supported for darwin
+    #podman-compose # not supported for darwin
+    #buildah # not supported for darwin
+    hexyl
+    docker
+    docker-compose
+    neovim
+    python39Packages.pynvim
+    nodePackages.neovim
+    transcrypt
+    efm-langserver
+    awscli2
+    argocd
+  ];
+
+  opsPkgs = with pkgs; [
+    kubectl
+    kubectx
+    kubernetes-helm
+    #k3s # not supported for darwin
+    ansible
+    doctl
+  ];
+
+in
+
+{
+  programs.home-manager.enable = true;
+
+  programs.fzf = {
+    enable = true;
+    defaultCommand = "fd --type f";
+  };
+
+  programs.direnv = {
+    nix-direnv = { enable = true; };
+    enable = true;
+  };
+
+  # extra packages without additional configuration
+  home.packages = builtins.concatLists [
+    generalPkgs
+    pythonPkgs
+    languagePkgs
+    #macPkgs
+    devtoolsPkgs
+    opsPkgs
+  ];
+
+  home.file = {
+    ".zshrc.d/60-fzf.nix.zsh".text = ''
+      if [[ $options[zle] = on ]]; then
+        . ${config.programs.fzf.package}/share/fzf/completion.zsh
+        . ${config.programs.fzf.package}/share/fzf/key-bindings.zsh
+      fi
+    '';
+  };
+
+  # …
+}

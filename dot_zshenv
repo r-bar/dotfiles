@@ -1,0 +1,76 @@
+#echo "TOP OF ZSHENV\n$PATH"
+
+export HISTFILE=~/.histfile
+export HISTSIZE=1000
+export SAVEHIST=10000
+export PROMPT_COMMAND=''
+export PS1='$ '
+export SOLARIZED_THEME=dark
+# prevents python's venv/bin/activate from modifying $PS1
+export VIRTUAL_ENV_DISABLE_PROMPT=1
+
+export SHARE_HISTORY=1
+export ZSH_AUTOSUGGEST_USE_ASYNC=1
+
+unsetopt nomatch
+
+
+# Usage: PATH_add <path> [<path> ...]
+#
+# Prepends the expanded <path> to the PATH environment variable, in order.
+# It prevents a common mistake where PATH is replaced by only the new <path>,
+# or where a trailing colon is left in PATH, resulting in the current directory
+# being considered in the PATH.  Supports adding multiple directories at once.
+#
+# Example:
+#
+#    pwd
+#    # output: /my/project
+#    PATH_add bin
+#    echo $PATH
+#    # output: /my/project/bin:/usr/bin:/bin
+#    PATH_add bam boum
+#    echo $PATH
+#    # output: /my/project/bam:/my/project/boum:/my/project/bin:/usr/bin:/bin
+#
+PATH_add() {
+  for arg in $@; do
+    if [[ ":$PATH:" != *":$arg:"* ]]; then
+      path+=($arg)
+    fi
+  done
+}
+
+PATH_prepend() {
+  for arg in $@; do
+    if [[ ":$PATH:" != *":$arg:"* ]]; then
+      path=($arg $path)
+    fi
+  done
+}
+
+
+# Usage: pathprepend <varname> <path> [<path> ...]
+#
+# Works like PATH_add except that it's for an arbitrary <varname>.
+add_path_element() {
+    local tmp="${1//:${2}:/:}"
+    tmp="${tmp/#${2}:/}"
+    tmp="${tmp/%:${2}/}"
+    echo -n "${tmp}:${2}"
+}
+
+ZSHENV_BENCHMARK=0
+ZSHRC_BENCHMARK=0
+
+for file in $HOME/.zshenv.d/*.zsh; do
+  if [ $ZSHENV_BENCHMARK -eq 1 ]; then start=$(date +%s.%N); fi
+  source $file
+  if [ $ZSHENV_BENCHMARK -eq 1 ]; then
+    stop=$(date +%s.%N)
+    echo "$(($stop - $start))\t$file"
+  fi
+  #echo "AFTER $file\n$PATH"
+done
+#echo "BOTTOM OF ZSHENV\n$PATH"
+export PATH

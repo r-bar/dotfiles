@@ -1,0 +1,8 @@
+{
+ "foreign_shells": [
+  {
+   "envcmd": "env",
+   "shell": "bash"
+  }
+ ]
+}

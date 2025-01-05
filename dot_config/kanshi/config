@@ -1,0 +1,37 @@
+profile "Mobile" {
+  output eDP-1 mode 2256x1504@59.999Hz scale 1 position 0,0
+  workspace 1 output eDP-1
+  workspace 2 output eDP-1
+  workspace 3 output eDP-1
+  workspace 4 output eDP-1
+  workspace 5 output eDP-1
+  workspace 6 output eDP-1
+  workspace 7 output eDP-1
+  workspace 8 output eDP-1
+  workspace 9 output eDP-1
+  workspace 0 output eDP-1
+}
+
+profile "Home Desk" {
+  set $primary DP-3
+  set $left DP-4
+  set $laptop eDP-1
+
+  output eDP-1 position 304,1440 mode 2256x1504@59.999Hz scale 1 
+  # alternate name: "Acer Technologies XF270HU T78AA0018521"
+  output DP-3 position 2560,720 mode 2560x1440@143.856Hz
+  output DP-4 position 0,0 mode 2560x1440@143.856Hz
+
+  workspace 1 output $primary
+  workspace 2 output $primary
+  workspace 3 output $primary
+
+  workspace 4 output $laptop
+  workspace 5 output $laptop
+  workspace 6 output $laptop
+
+  workspace 7 output $left
+  workspace 8 output $left
+  workspace 9 output $left
+  workspace 0 output $left
+}

@@ -1,9 +1,0 @@
-[NotebookList]
-Default=
-1=~/sync/documents/notebooks
-
-[Notebook 1]
-uri=~/sync/documents/notebooks
-name=Snippets
-interwiki=None
-icon=None

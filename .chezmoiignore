@@ -1,2 +1,5 @@
 .ssh/id_rsa__*.age
 .ssh/id_rsa.pub__*
+.config/fish/fish_variables
+README.md
+**/*##*

@@ -1,0 +1,8 @@
+{{- $baseFile := mustRegexReplaceAllLiteral ".tmpl$" .chezmoi.sourceFile "" -}}
+{{- $hostFile := printf "%s##h.%s" $baseFile .chezmoi.hostname -}}
+{{- $defaultFile := printf "%s##default" $baseFile -}}
+{{- if (lstat $hostFile) -}}
+{{ include $hostFile }}
+{{- else -}}
+{{ include $defaultFile }}
+{{- end -}}

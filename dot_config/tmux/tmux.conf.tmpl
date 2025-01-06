@@ -10,7 +10,7 @@
 set -g default-shell /bin/fish
 {{- else if eq .chezmoi.os "darwin" }}
 set -g default-shell /opt/homebrew/bin/fish
-{{- end -}}
+{{- end }}
 set -sa terminal-overrides ",xterm*:Tc"
 
 set -g set-titles on

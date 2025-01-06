@@ -1,8 +1,132 @@
-{{- $baseFile := mustRegexReplaceAllLiteral ".tmpl$" .chezmoi.sourceFile "" -}}
-{{- $hostFile := printf "%s__h.%s" $baseFile .chezmoi.hostname -}}
-{{- $defaultFile := printf "%s__default" $baseFile -}}
-{{- if (lstat $hostFile) -}}
-{{ include $hostFile }}
-{{- else -}}
-{{ include $defaultFile }}
+# attempt to get vim colors to show up in tmux
+#set -sa terminal-overrides ',XXX:RGB'
+
+# Don't use screen-* for $TERM. I did this originally because some servers
+# without the terminfo database would not recognize "tmux-*" as a valid terminal.
+# But this can cause corruption of the terminal session. `zig build` is the
+# biggest offender.
+#set -g default-terminal "screen-256color"
+{{- if .chezmoi.os == "linux" -}}
+set -g default-shell /bin/fish
+{{- else if .chezmoi.os == "darwin" -}}
+set -g default-shell /opt/homebrew/bin/fish
 {{- end -}}
+set -sa terminal-overrides ",xterm*:Tc"
+
+set -g set-titles on
+set -g set-titles-string "#S@#h / #W"
+set -g update-environment "SSH_AUTH_SOCK \
+                           SSH_CONNECTION \
+                           DISPLAY"
+
+set-window-option -g mode-keys vi
+
+# vim like pane switching
+bind h select-pane -L
+bind j select-pane -D
+bind k select-pane -U
+bind l select-pane -R
+
+# Enable mouse support
+set -g mouse on
+
+# set up layouts
+# set main-pane-width 130
+
+# Change cursor in vim to distinguish between insert and command mode
+#set-option -g terminal-overrides '*88col*:colors=88,*256col*:colors=256,xterm*:XT:Ms=\E]52;%p1%s;%p2%s\007:Cc=\E]12;%p1%s\007:Cr=\E]112\007:Cs=\E]50;CursorShape=%?%p1%{3}%<%t%{0}%e%p1%{2}%-%;%d\007'
+
+# scrollback buffer size increase
+set -g history-limit 100000
+
+# C-b C-b will swap to last used window
+bind C-b last-window
+
+# Configure the status bar
+# Start tab numbering at 1
+set -g base-index 1
+set -g status-left-length 40
+
+# Allows for faster key repetition
+set -s escape-time 0
+
+# Highlight active window
+
+# use different keys to split vertical and horizonal
+bind c new-window -c "#{pane_current_path}"
+bind | split-window -h -c "#{pane_current_path}"
+bind - split-window -v -c "#{pane_current_path}"
+bind % split-window -h -c "#{pane_current_path}"
+bind '"' split-window -v -c "#{pane_current_path}"
+
+# toggle pane focus
+bind z resize-pane -Z
+
+# use C-b v to paste the tmux buffer
+bind v paste-buffer
+
+# use fzf to quickly switch between tmux windows
+#bind -n C-f run-shell "tmux list-windows -F \"##I:##W\" | fzf-tmux | cut -d \":\" -f 1 | xargs tmux select-window -t || /bin/true"
+
+# colors
+# current colorscheme gets hex values from the tokyo night theme
+# https://github.com/enkia/tokyo-night-vscode-theme/blob/a12e20c9f11f9668abc31aa90ea93f918ccde391/README.md#tokyo-night-and-tokyo-night-storm
+set-window-option -g window-status-current-style bg=terminal,fg='#7aa2f7'
+set -g status-style fg='#a9b1d6',bg='#24283b'
+set -g message-style fg='#24283b',bg='#ff9e64'
+set -g pane-border-style fg='#414868'
+set -g pane-active-border-style fg='#414868',bg='#24283b'
+
+# move tmux copy buffer into x clipboard
+set -g copy-command "clip"
+bind -T copy-mode-vi y send-keys -X copy-pipe
+bind -T copy-mode-vi v send-keys -X begin-selection
+bind -T copy-mode-vi Enter send-keys -X copy-pipe-and-cancel
+# prevent exiting copy-mode when the mouse is released
+unbind -T copy-mode-vi MouseDragEnd1Pane
+# when the mouse is released after dragging yank the selection and exit
+# copy-mode
+#bind -T copy-mode-vi MouseDragEnd1Pane send-keys -X copy-pipe-and-cancel
+# switch to last active pane
+# https://stackoverflow.com/questions/12343982/how-can-i-bind-a-key-to-switch-to-last-pane-or-if-there-are-no-panes-last-wind
+
+bind-key C-a if-shell 'test #{window_panes} -gt 1' 'last-pane' 'last-window'
+
+# wanted by neovim
+# Run `nvim -c :checkhealth` for more info
+set-option -g focus-events on
+
+
+# Emulate scrolling by sending up and down keys if these commands are running in the pane.
+# Originally sourced from:
+# https://github.com/tmux/tmux/issues/1320#issuecomment-381952082
+tmux_commands_with_legacy_scroll="nano less more man git bat"
+
+bind-key -T root WheelUpPane \
+	if-shell -Ft= '#{?mouse_any_flag,1,#{pane_in_mode}}' \
+		'send -Mt=' \
+		'if-shell -t= "#{?alternate_on,true,false} || echo \"#{tmux_commands_with_legacy_scroll}\" | grep -q \"#{pane_current_command}\"" \
+			"send -t= Up" "copy-mode -et="'
+
+bind-key -T root WheelDownPane \
+	if-shell -Ft = '#{?pane_in_mode,1,#{mouse_any_flag}}' \
+		'send -Mt=' \
+		'if-shell -t= "#{?alternate_on,true,false} || echo \"#{tmux_commands_with_legacy_scroll}\" | grep -q \"#{pane_current_command}\"" \
+			"send -t= Down" "send -Mt="'
+
+# required for yazi image viewer
+# https://github.com/sxyazi/yazi/wiki/Image-preview-within-tmux
+set -g allow-passthrough on
+set -ga update-environment TERM
+set -ga update-environment TERM_PROGRAM
+
+# <C-B>i to install plugins
+# <C-B>u to update plugins
+# <C-B>U to update plugins (and remove unused)
+set -g @plugin 'tmux-plugins/tpm'
+set -g @plugin 'tmux-plugins/tmux-sensible'
+set -g @plugin 'christoomey/vim-tmux-navigator'
+#set -g @plugin 'dreamsofcode-io/catppuccin-tmux'
+#set -g @plugin 'tmux-plugins/tmux-yank'
+
+run 'tpm'

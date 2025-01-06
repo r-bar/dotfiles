@@ -6,9 +6,9 @@
 # But this can cause corruption of the terminal session. `zig build` is the
 # biggest offender.
 #set -g default-terminal "screen-256color"
-{{- if .chezmoi.os == "linux" -}}
+{{- if eq .chezmoi.os "linux" }}
 set -g default-shell /bin/fish
-{{- else if .chezmoi.os == "darwin" -}}
+{{- else if eq .chezmoi.os "darwin" }}
 set -g default-shell /opt/homebrew/bin/fish
 {{- end -}}
 set -sa terminal-overrides ",xterm*:Tc"

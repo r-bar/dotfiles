@@ -1,4 +1,14 @@
 function bwu
+  argparse h/help -- $argv
+  if test -n "$_flag_help"
+    echo "Usage: bwu"
+    echo
+    echo "Helper function for unlocking the Bitwarden CLI vault and "
+    echo "propagating the session."
+    echo
+    bw --help
+  end
+
   set -f BW_STATUS "$(bw status | jq -r .status)"
   switch "$BW_STATUS"
     case "unauthenticated"

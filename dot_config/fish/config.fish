@@ -1,3 +1,5 @@
+set -gx EDITOR nvim
+
 if test -d ~/.cargo/bin
   set fish_user_paths ~/.cargo/bin $fish_user_paths
 end

@@ -15,6 +15,10 @@ function proj
   end
 
   argparse --name=proj 'h/help' 's/session' -- $argv
+  if test $status -ne 0 || set -ql _flag_help
+    _usage
+    return 0
+  end
   set -f positional $argv
 
   set -f git_projects "$(fd '^\.git$' -d $PROJ_DEPTH -HI $PROJ_DIR | while read git_dir; dirname $git_dir; end | sed "s#^$PROJ_DIR/##")"
@@ -35,9 +39,9 @@ function proj
     return 1
   end
 
-  if test $session -eq 1 || test -z "$TMUX"
+  if test -n "$_flag_session" || test -z "$TMUX"
     tmux has-session -t $(basename $proj_name) 2>/dev/null
-    if test status -eq 1
+    if test $status -eq 1
       tmux new-session -d -s $(basename $proj_name) -c $PROJ_DIR/$proj_name
     end
     if test -z "$TMUX"

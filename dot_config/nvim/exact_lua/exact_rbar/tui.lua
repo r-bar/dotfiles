@@ -3,15 +3,12 @@ local M = {}
 
 function M.packages(use)
   use {
-    'tpope/vim-dadbod',
-    cmd = "DB",
-  }
-  use {
     'kristijanhusak/vim-dadbod-ui',
     dependencies = {
       'kristijanhusak/vim-dadbod-completion',
       'tpope/vim-dadbod',
     },
+    ft = {"sql"},
     cmd = {
       "DBUI",
       "DBUIToggle",
@@ -29,6 +26,7 @@ function M.packages(use)
   use {
     'tpope/vim-dadbod',
     cmd = {'DB'},
+    ft = {'sql'},
     dependencies = {'kristijanhusak/vim-dadbod-completion'},
   }
   use {

@@ -415,7 +415,8 @@ function M.config()
   -- i stands for insert mode next set the insert_uuid without invoking it.
   -- For the last parameter see `:help map-arguments`  and adjust accordingly.
   vim.keymap.set('i', '<C-g>u', insert_uuid, { noremap = true, silent = true })
-  vim.keymap.set('n', 'gu', insert_uuid, { noremap = true, silent = true })
+  -- conflicts with lowercase command
+  --vim.keymap.set('n', 'gu', insert_uuid, { noremap = true, silent = true })
 end
 
 return M

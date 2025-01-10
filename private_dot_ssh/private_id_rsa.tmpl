@@ -1,7 +1,7 @@
 {{- $hostFile := printf "id_rsa__h.%s.age" .chezmoi.hostname -}}
 {{- $hostPath := joinPath .chezmoi.sourceDir "private_dot_ssh" $hostFile -}}
 {{- $defaultPath := joinPath .chezmoi.sourceDir "private_dot_ssh" "id_rsa__default.age" -}}
-{{- if (lstat $hostPath) }}
+{{- if (lstat $hostPath) -}}
 {{ include $hostPath | decrypt }}
 {{- else -}}
 {{ include $defaultPath | decrypt }}

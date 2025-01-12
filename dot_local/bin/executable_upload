@@ -19,11 +19,11 @@ from collections.abc import Iterable, Iterator
 class Cli:
     def __init__(self, argv=sys.argv[1:]):
         self.parser = p = ArgumentParser("upload", description="upload and host files on linode")
-        p.add_argument("--rclone-config", default=os.environ["UPLOAD_RCLONE_CONFIG"])
+        p.add_argument("--rclone-config", default=os.environ.get("UPLOAD_RCLONE_CONFIG"))
         p.add_argument("--public", action="store_true")
         p.add_argument("--expire", default="1w")
         p.add_argument("--name", default=generate_name())
-        p.add_argument("--bucket", default=os.environ["UPLOAD_BUCKET"])
+        p.add_argument("--bucket", default=os.environ.get("UPLOAD_BUCKET"))
         p.add_argument("--base-path", default=os.environ.get("UPLOAD_BASE_PATH", ""))
         folder_strat = p.add_mutually_exclusive_group()
         folder_strat.add_argument('--index', const='index', action='store_const', dest='index_strat', default='index')
@@ -33,6 +33,10 @@ class Cli:
         self.__dict__.update(self.args.__dict__)
 
     def base_target(self) -> str:
+        if self.rclone_config is None:
+            raise ValueError("--rclone-config (or $UPLOAD_RCLONE_CONFIG) must be set")
+        if self.bucket is None:
+            raise ValueError("--bucket (or $UPLOAD_BUCKET) must be set")
         path = PurePosixPath(self.bucket) / self.base_path / self.name
         return f"{self.rclone_config}:{path}"
 

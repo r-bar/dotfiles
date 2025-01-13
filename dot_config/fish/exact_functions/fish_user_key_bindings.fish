@@ -69,7 +69,9 @@ function fish_user_key_bindings
   abbr --add la ls -a
   abbr --add l
 
+  abbr --add m mise
   abbr --add mr mise run
+
   abbr --add gco git switch
   abbr --add gsw git switch
 
@@ -77,4 +79,6 @@ function fish_user_key_bindings
   abbr --add !\* --position anywhere --function last_history_args
   abbr --add !@ --position anywhere --function last_history_args
   abbr --add !\$ --position anywhere --function last_history_arg
+
+  abbr --add dc docker-compose
 end

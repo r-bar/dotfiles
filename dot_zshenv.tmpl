@@ -1,3 +1,6 @@
+export LANG=en_US.UTF-8
+export LC_ALL=en_US.UTF-8
+{{- if false }}
 #echo "TOP OF ZSHENV\n$PATH"
 
 export HISTFILE=~/.histfile
@@ -74,3 +77,4 @@ for file in $HOME/.zshenv.d/*.zsh; do
 done
 #echo "BOTTOM OF ZSHENV\n$PATH"
 export PATH
+{{- end }}

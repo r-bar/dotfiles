@@ -172,7 +172,7 @@ def calc_dps(
     critical_hit_chance: float = 0.0,
     attacks_per_second: float = 0.0,
 ) -> DPSResults:
-    # crit_mult = (1 + (critical_hit_chance / 100)) * 1.5
+    # crit_mult = (critical_hit_chance / 100) * 1.5
     crit_mult = 1
     elem_dps = sum((
         fire_dmg.avg(),

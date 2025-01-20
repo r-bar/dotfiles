@@ -10,15 +10,18 @@ from textwrap import dedent
 from typing import Literal, NamedTuple, TypeAlias
 
 
+DEFAULT_CRIT_MULT: int = 150
+
+
 class Cli:
     def __init__(self, argv=None):
         self.parser = p = ArgumentParser()
         p.add_argument("-a", "--from-arg", help="Read the item description from the argument text")
         p.add_argument("-f", "--from-file", type=FileType("r"), help="Read the item description from a file")
-        p.add_argument("--notify", action="store_true", help="Output text as a notification")
+        p.add_argument("-n", "--notify", action="store_true", help="Output text as a notification")
+        p.add_argument("--crit-mult-pct", type=int, default=DEFAULT_CRIT_MULT)
         args = p.parse_args(argv)
-        for name, value in vars(args).items():
-            setattr(self, name, value)
+        self.__dict__.update(vars(args))
 
     def item_data(self) -> "ItemData":
         if self.from_arg:
@@ -31,20 +34,23 @@ class Cli:
 
 @dataclass
 class DPSResults:
+    quality: int
     phys_dps: float
     elem_dps: float
     chaos_dps: float
     total_dps: float
 
     def __str__(self):
-        return dedent(
-            f"""
-            Physical DPS: {self.phys_dps:.2f}
-            Elemental DPS: {self.elem_dps:.2f}
-            Chaos DPS: {self.chaos_dps:.2f}
-            Total DPS: {self.total_dps:.2f}
-            """
-        )
+        phys_dps = f"Physical DPS: {self.phys_dps:.2f}"
+        elem_dps = f"Elemental DPS: {self.elem_dps:.2f}"
+        chaos_dps = f"Chaos DPS: {self.chaos_dps:.2f}"
+        total_dps = f"Total DPS: {self.total_dps:.2f}"
+        if self.quality < 20:
+            phys_dps += f" ({q20(self.phys_dps, self.quality):.2f} @ Q20)"
+            elem_dps += f" ({q20(self.elem_dps, self.quality):.2f} @ Q20)"
+            chaos_dps += f" ({q20(self.chaos_dps, self.quality):.2f} @ Q20)"
+            total_dps += f" ({q20(self.total_dps, self.quality):.2f} @ Q20)"
+        return "\n".join([phys_dps, elem_dps, chaos_dps, total_dps])
 
 
 class DamageRange(NamedTuple):
@@ -168,12 +174,12 @@ def calc_dps(
     fire_dmg: DamageRange = DamageRange(0, 0),
     cold_dmg: DamageRange = DamageRange(0, 0),
     lightning_dmg: DamageRange = DamageRange(0, 0),
-    chaos_dmg: DamageRange = (0, 0),
-    critical_hit_chance: float = 0.0,
+    chaos_dmg: DamageRange = DamageRange(0, 0),
+    critical_hit_chance_pct: float = 0.0,
     attacks_per_second: float = 0.0,
+    critical_mult_pct: int = DEFAULT_CRIT_MULT,
 ) -> DPSResults:
-    # crit_mult = (critical_hit_chance / 100) * 1.5
-    crit_mult = 1
+    crit_mult = (1 + (critical_hit_chance_pct / 100)) * (critical_mult_pct / 100)
     elem_dps = sum((
         fire_dmg.avg(),
         cold_dmg.avg(),
@@ -182,6 +188,7 @@ def calc_dps(
     phys_dps = phys_dmg.avg() * attacks_per_second * crit_mult
     chaos_dps = chaos_dmg.avg() * attacks_per_second * crit_mult
     return DPSResults(
+        quality=quality,
         phys_dps=phys_dps,
         elem_dps=elem_dps,
         chaos_dps=chaos_dps,
@@ -198,9 +205,14 @@ def damage_range_re() -> re.Pattern:
 def quality_re() -> re.Pattern:
     return re.compile(r"\+(\d+)%")
 
+
 @cache
 def float_re() -> re.Pattern:
     return re.compile(r"\d+(\.\d+)")
+
+
+def q20(val: int | float, current_quality: int = 0) -> float:
+    return (120 / (100 + current_quality)) * val
 
 
 def main():
@@ -214,7 +226,8 @@ def main():
         lightning_dmg=item_data.lightning_dmg(),
         chaos_dmg=item_data.chaos_dmg(),
         attacks_per_second=item_data.attacks_per_second(),
-        critical_hit_chance=item_data.critical_hit_chance(),
+        critical_hit_chance_pct=item_data.critical_hit_chance(),
+        critical_mult_pct=cli.crit_mult_pct,
     )
     if cli.notify:
         run(["notify-send", "POE DPS Script", str(dps)], check=True)

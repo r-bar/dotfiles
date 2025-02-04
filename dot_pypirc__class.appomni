@@ -1,6 +1,0 @@
-[distutils]
-index-servers =
-    appomni-pypi
-
-[appomni-pypi]
-repository: https://us-central1-python.pkg.dev/appomni-artifacts/appomni-pypi/

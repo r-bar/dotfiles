@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 NERDFONT_VERSION=v3.3.0
 FONTS=(
@@ -14,14 +14,14 @@ cd ~/.fonts
 
 for font in ${FONTS[*]}; do
   echo Fetching $font font ...
-  wget --quiet "$BASE_URL/$NERDFONT_VERSION/$font.tar.xz"
-  if [[ $? != 0 ]]; then
+  curl -sLf "$BASE_URL/$NERDFONT_VERSION/$font.tar.xz" -o "$font.tar.xz"
+  if [[ ! -f "$font.tar.xz" ]]; then
     echo Failed to download $font
     continue
   fi
   file_list="$(tar tf $font.tar.xz | grep '.ttf$\|.otf$')"
-  tar xf $font.tar.xz $file_list
-  rm $font.tar.xz
+  tar xf "$font.tar.xz" $file_list
+  rm "$font.tar.xz"
 done
 
 exit 0

@@ -14,7 +14,14 @@ cd ~/.fonts
 
 for font in ${FONTS[*]}; do
   echo Fetching $font font ...
-  curl -sLf "$BASE_URL/$NERDFONT_VERSION/$font.tar.xz" | xz -d | tar x --wildcards "*.ttf" "*.otf" 2> /dev/null
+  wget --quiet "$BASE_URL/$NERDFONT_VERSION/$font.tar.xz"
+  if [[ $? != 0 ]]; then
+    echo Failed to download $font
+    continue
+  fi
+  file_list="$(tar tf $font.tar.xz | grep '.ttf$\|.otf$')"
+  tar xf $font.tar.xz $file_list
+  rm $font.tar.xz
 done
 
 exit 0

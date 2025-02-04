@@ -16,3 +16,5 @@ for font in ${FONTS[*]}; do
   echo Fetching $font font ...
   curl -sLf "$BASE_URL/$NERDFONT_VERSION/$font.tar.xz" | xz -d | tar x --wildcards "*.ttf" "*.otf" 2> /dev/null
 done
+
+exit 0

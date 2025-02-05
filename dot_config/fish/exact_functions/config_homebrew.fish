@@ -22,7 +22,7 @@ function config_homebrew
 
       if test -d "$HOMEBREW_PREFIX/opt/gnu-tar"
         set fish_user_paths $fish_user_paths "$HOMEBREW_PREFIX/opt/gnu-tar/libexec/gnubin"
-        set -gx MANPATH "$HOMEBREW_PREFIX/opt/gnu-tar/libexec/gnuman"
+        set -gx MANPATH $MANPATH "$HOMEBREW_PREFIX/opt/gnu-tar/libexec/gnuman"
       end
 
       if test -d "$HOMEBREW_PREFIX/opt/libxml2"

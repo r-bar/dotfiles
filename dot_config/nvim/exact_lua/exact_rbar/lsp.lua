@@ -1,4 +1,4 @@
----@type ConfigPkg
+---@class for M ConfigPkg
 local M = {}
 local lsp_flags = {}
 
@@ -46,23 +46,23 @@ local function on_attach(client, bufnr)
     end
     return opts
   end
-  vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, bufopts{ desc = "Go to declaration" })
-  vim.keymap.set('n', 'gd', vim.lsp.buf.definition, bufopts{})
-  vim.keymap.set('n', 'K', vim.lsp.buf.hover, bufopts{})
-  vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, bufopts{})
-  vim.keymap.set('n', '<leader>k', vim.lsp.buf.signature_help, bufopts{})
-  vim.keymap.set('i', '<C-k>', vim.lsp.buf.signature_help, bufopts{})
-  vim.keymap.set('n', '<leader>wa', vim.lsp.buf.add_workspace_folder, bufopts{})
-  vim.keymap.set('n', '<leader>wr', vim.lsp.buf.remove_workspace_folder, bufopts{})
+  vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, bufopts { desc = "Go to declaration" })
+  vim.keymap.set('n', 'gd', vim.lsp.buf.definition, bufopts {})
+  vim.keymap.set('n', 'K', vim.lsp.buf.hover, bufopts {})
+  vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, bufopts {})
+  vim.keymap.set('n', '<leader>k', vim.lsp.buf.signature_help, bufopts {})
+  vim.keymap.set('i', '<C-k>', vim.lsp.buf.signature_help, bufopts {})
+  vim.keymap.set('n', '<leader>wa', vim.lsp.buf.add_workspace_folder, bufopts {})
+  vim.keymap.set('n', '<leader>wr', vim.lsp.buf.remove_workspace_folder, bufopts {})
   vim.keymap.set('n', '<leader>wl', function()
     print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
-  end, bufopts{})
-  vim.keymap.set('n', '<leader>D', vim.lsp.buf.type_definition, bufopts{})
-  vim.keymap.set('n', '<leader>r', vim.lsp.buf.rename, bufopts{})
-  vim.keymap.set('n', '<F2>', vim.lsp.buf.rename, bufopts{})
-  vim.keymap.set('n', '<leader>a', vim.lsp.buf.code_action, bufopts{})
-  vim.keymap.set('n', 'gr', vim.lsp.buf.references, bufopts{})
-  vim.keymap.set('n', '<leader>ff', function() vim.lsp.buf.format { async = true } end, bufopts{})
+  end, bufopts {})
+  vim.keymap.set('n', '<leader>D', vim.lsp.buf.type_definition, bufopts {})
+  vim.keymap.set('n', '<leader>r', vim.lsp.buf.rename, bufopts {})
+  vim.keymap.set('n', '<F2>', vim.lsp.buf.rename, bufopts {})
+  vim.keymap.set('n', '<leader>a', vim.lsp.buf.code_action, bufopts {})
+  vim.keymap.set('n', 'gr', vim.lsp.buf.references, bufopts {})
+  vim.keymap.set('n', '<leader>ff', function() vim.lsp.buf.format { async = true } end, bufopts {})
 
   -- disable semantic token highlighting
   client.server_capabilities.semanticTokensProvider = nil
@@ -246,6 +246,123 @@ The official V language server, written in V itself.
   return settings
 end
 
+local function ollama_installed()
+  return vim.fn.executable("ollama") == 1
+end
+
+function M.blink_opts()
+  local async_timeout_ms = 100
+  local opts = {
+    -- 'default' for mappings similar to built-in completion
+    -- 'super-tab' for mappings similar to vscode (tab to accept, arrow keys to navigate)
+    -- 'enter' for mappings similar to 'super-tab' but with 'enter' to accept
+    -- see the "default configuration" section below for full documentation on how to define
+    -- your own keymap.
+    keymap = {
+      preset = nil,
+      ['<C-e>'] = { 'hide' },
+      ['<C-y>'] = { 'select_and_accept' },
+      ['<C-p>'] = { 'select_prev', 'fallback' },
+      ['<C-n>'] = { 'select_next', 'fallback' },
+      ['<C-b>'] = { 'scroll_documentation_up', 'fallback' },
+      ['<C-f>'] = { 'scroll_documentation_down', 'fallback' },
+      ['<Tab>'] = {
+        --function(cmp)
+        --  if cmp.snippet_active() then return cmp.accept()
+        --  else return cmp.select_and_accept() end
+        --end,
+        'select_next',
+        'snippet_forward',
+        'fallback',
+      },
+      ['<S-Tab>'] = {
+        'select_prev',
+        'snippet_backward',
+        'fallback',
+      },
+    },
+
+    completion = {
+      documentation = {
+        auto_show = true,
+        auto_show_delay_ms = 0,
+      },
+      list = { selection = 'auto_insert' },
+    },
+
+    appearance = {
+      -- Sets the fallback highlight groups to nvim-cmp's highlight groups
+      -- Useful for when your theme doesn't support blink.cmp
+      -- will be removed in a future release
+      --use_nvim_cmp_as_default = true,
+      -- Set to 'mono' for 'Nerd Font Mono' or 'normal' for 'Nerd Font'
+      -- Adjusts spacing to ensure icons are aligned
+      nerd_font_variant = 'mono',
+      kind_icons = {
+        Copilot = "",
+      },
+    },
+
+    -- default list of enabled providers defined so that you can extend it
+    -- elsewhere in your config, without redefining it, via `opts_extend`
+    sources = {
+      default = {
+        "copilot",
+        "minuet",
+        "lsp",
+        "path",
+        "snippets",
+        "buffer",
+        "lazydev",
+        "dadbod",
+      },
+      -- optionally disable cmdline completions
+      -- cmdline = {},
+      providers = {
+        -- dont show LuaLS require statements when lazydev has items
+        lsp = { fallbacks = { "lazydev" } },
+        lazydev = { name = "LazyDev", module = "lazydev.integrations.blink" },
+        dadbod = {
+          name = "Dadbod",
+          module = "vim_dadbod_completion.blink",
+          timeout_ms = async_timeout_ms,
+        },
+        copilot = {
+          name = "Copilot",
+          module = "blink-cmp-copilot",
+          timeout_ms = async_timeout_ms,
+          score_offset = 100,
+          async = true,
+          transform_items = function(_, items)
+            local CompletionItemKind = require("blink.cmp.types").CompletionItemKind
+            local kind_idx = #CompletionItemKind + 1
+            CompletionItemKind[kind_idx] = "Copilot"
+            for _, item in ipairs(items) do
+              item.kind = kind_idx
+            end
+            return items
+          end,
+        },
+      },
+    },
+
+    -- experimental signature help support
+    signature = { enabled = true },
+  }
+
+  if ollama_installed() then
+    table.insert(opts.sources.default, "minuet")
+    opts.sources.providers.minuet = {
+      name = "Ollama",
+      module = "minuet.blink",
+      score_offset = 8,
+      timeout_ms = async_timeout_ms,
+    }
+  end
+
+  return opts
+end
+
 function M.packages(use)
   use 'neovim/nvim-lspconfig'
   use 'williamboman/mason.nvim'
@@ -264,103 +381,38 @@ function M.packages(use)
     --end,
     ---@module 'blink.cmp'
     ---@type blink.cmp.Config
-    opts = {
-      -- 'default' for mappings similar to built-in completion
-      -- 'super-tab' for mappings similar to vscode (tab to accept, arrow keys to navigate)
-      -- 'enter' for mappings similar to 'super-tab' but with 'enter' to accept
-      -- see the "default configuration" section below for full documentation on how to define
-      -- your own keymap.
-      keymap = {
-        preset = nil,
-        ['<C-e>'] = { 'hide' },
-        ['<C-y>'] = { 'select_and_accept' },
-        ['<C-p>'] = { 'select_prev', 'fallback' },
-        ['<C-n>'] = { 'select_next', 'fallback' },
-        ['<C-b>'] = { 'scroll_documentation_up', 'fallback' },
-        ['<C-f>'] = { 'scroll_documentation_down', 'fallback' },
-        ['<Tab>'] = {
-          --function(cmp)
-          --  if cmp.snippet_active() then return cmp.accept()
-          --  else return cmp.select_and_accept() end
-          --end,
-          'select_next',
-          'snippet_forward',
-          'fallback',
-        },
-        ['<S-Tab>'] = {
-          'select_prev',
-          'snippet_backward',
-          'fallback',
-        },
-      },
-
-      completion = {
-        documentation = {
-          auto_show = true,
-          auto_show_delay_ms = 0,
-        },
-        list = { selection = 'auto_insert' },
-      },
-
-      appearance = {
-        -- Sets the fallback highlight groups to nvim-cmp's highlight groups
-        -- Useful for when your theme doesn't support blink.cmp
-        -- will be removed in a future release
-        --use_nvim_cmp_as_default = true,
-        -- Set to 'mono' for 'Nerd Font Mono' or 'normal' for 'Nerd Font'
-        -- Adjusts spacing to ensure icons are aligned
-        nerd_font_variant = 'mono',
-        kind_icons = {
-          Copilot = "",
-        },
-      },
-
-      -- default list of enabled providers defined so that you can extend it
-      -- elsewhere in your config, without redefining it, via `opts_extend`
-      sources = {
-        default = {
-          "copilot",
-          "lsp",
-          "path",
-          "snippets",
-          "buffer",
-          "lazydev",
-          "dadbod",
-        },
-        -- optionally disable cmdline completions
-        -- cmdline = {},
-        providers = {
-          -- dont show LuaLS require statements when lazydev has items
-          lsp = { fallbacks = { "lazydev" } },
-          lazydev = { name = "LazyDev", module = "lazydev.integrations.blink" },
-          dadbod = { name = "Dadbod", module = "vim_dadbod_completion.blink" },
-          copilot = {
-            name = "Copilot",
-            module = "blink-cmp-copilot",
-            score_offset = 100,
-            async = true,
-            transform_items = function(_, items)
-              local CompletionItemKind = require("blink.cmp.types").CompletionItemKind
-              local kind_idx = #CompletionItemKind + 1
-              CompletionItemKind[kind_idx] = "Copilot"
-              for _, item in ipairs(items) do
-                item.kind = kind_idx
-              end
-              return items
-            end,
-          },
-        },
-      },
-
-      -- experimental signature help support
-      signature = { enabled = true },
-    },
+    opts = M.blink_opts(),
     opts_extend = { "sources.default" },
     dependencies = {
       "folke/lazydev.nvim",
       "giuxtaposition/blink-cmp-copilot",
       "zbirenbaum/copilot.lua",
+      "milanglacier/minuet-ai.nvim",
     }
+  }
+
+  use {
+    "milanglacier/minuet-ai.nvim",
+    cond = ollama_installed(),
+    opts = {
+      blink = { enable_auto_complete = true },
+      provider = "openai_compatible",
+      provider_options = {
+        openai_compatible = {
+          name = "Qwen 2.5 Coder",
+          -- The endpoint may return a 404 if the given model is not found
+          model = "qwen2.5-coder:7b",
+          end_point = "http://localhost:11434/v1/chat/completions",
+          api_key = "TERM",
+          stream = true,
+          optional = {
+            stop = nil,
+            max_tokens = nil,
+          }
+        }
+      }
+    },
+    dependencies = { "nvim-lua/plenary.nvim" },
   }
 
   use {

@@ -1,6 +1,7 @@
----@class for M ConfigPkg
+---@class M ConfigPkg
 local M = {}
 local lsp_flags = {}
+local OLLAMA_BASE_URL = "http://earth.ts.barth.tech:11434"
 
 -- order is important. these mason setup calls must be done before lspconfig
 -- servers are configured
@@ -124,9 +125,11 @@ local function with_defaults(custom)
   return vim.tbl_extend("force", default_server_settings(), custom)
 end
 
-local function server_settings()
-  local lsputil = require('lspconfig.util')
+local function find_git_ancestor(startpath)
+  return vim.fs.dirname(vim.fs.find('.git', { path = startpath, upward = true })[1])
+end
 
+local function server_settings()
   local settings = {}
 
   settings['gleam'] = with_defaults()
@@ -210,7 +213,7 @@ local function server_settings()
   settings['vls'] = with_defaults({
     cmd = { 'v', 'ls' },
     filetypes = { 'vlang' },
-    root_dir = lsputil.find_git_ancestor,
+    root_dir = find_git_ancestor,
     docs = {
       description = [[
 https://github.com/vlang/vls
@@ -227,7 +230,7 @@ The official V language server, written in V itself.
   settings['zls'] = with_defaults({
     cmd = { 'zls' },
     filetypes = { 'zig' },
-    root_dir = lsputil.find_git_ancestor,
+    root_dir = find_git_ancestor,
     docs = {
       description = [[
 [ZLS](https://github.com/zigtools/zls)
@@ -246,9 +249,19 @@ The official V language server, written in V itself.
   return settings
 end
 
-local function ollama_installed()
-  return vim.fn.executable("ollama") == 1
+local _ollama_enabled_cache = nil
+
+--- @param endpoint string?
+local function ollama_enabled(endpoint)
+  if _ollama_enabled_cache ~= nil then
+    return _ollama_enabled_cache
+  end
+  endpoint = endpoint or OLLAMA_BASE_URL
+  local http_result = vim.system({ "curl", "-sfL", endpoint }, { text = true }):wait()
+  _ollama_enabled_cache = http_result.stdout == "Ollama is running"
+  return _ollama_enabled_cache
 end
+M.ollama_enabled = ollama_enabled
 
 function M.blink_opts()
   local async_timeout_ms = 100
@@ -350,7 +363,7 @@ function M.blink_opts()
     signature = { enabled = true },
   }
 
-  if ollama_installed() then
+  if ollama_enabled() then
     table.insert(opts.sources.default, "minuet")
     opts.sources.providers.minuet = {
       name = "Ollama",
@@ -393,7 +406,7 @@ function M.packages(use)
 
   use {
     "milanglacier/minuet-ai.nvim",
-    cond = ollama_installed(),
+    cond = ollama_enabled(),
     opts = {
       blink = { enable_auto_complete = true },
       provider = "openai_compatible",
@@ -402,7 +415,7 @@ function M.packages(use)
           name = "Qwen 2.5 Coder",
           -- The endpoint may return a 404 if the given model is not found
           model = "qwen2.5-coder:7b",
-          end_point = "http://localhost:11434/v1/chat/completions",
+          end_point = OLLAMA_BASE_URL .. "/v1/chat/completions",
           api_key = "TERM",
           stream = true,
           optional = {

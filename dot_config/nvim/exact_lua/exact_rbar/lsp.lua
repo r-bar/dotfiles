@@ -376,6 +376,49 @@ function M.blink_opts()
   return opts
 end
 
+local function ollama_opts(select_set)
+  select_set = select_set or "qwen_coder"
+  local opt_sets = {
+    qwen_coder = {
+      blink = { enable_auto_complete = true },
+      provider = "openai_compatible",
+      provider_options = {
+        openai_compatible = {
+          name = "Qwen 2.5 Coder",
+          -- The endpoint may return a 404 if the given model is not found
+          model = "qwen2.5-coder:7b-16k",
+          end_point = OLLAMA_BASE_URL .. "/v1/chat/completions",
+          api_key = "TERM",
+          stream = true,
+          optional = {
+            stop = nil,
+            max_tokens = nil,
+          },
+        },
+      },
+    },
+    deepseek_r1 = {
+      blink = { enable_auto_complete = true },
+      provider = "openai_compatible",
+      provider_options = {
+        openai_compatible = {
+          name = "Deepseek R1",
+          -- The endpoint may return a 404 if the given model is not found
+          model = "deepseek-r1:32b-8k",
+          end_point = OLLAMA_BASE_URL .. "/v1/chat/completions",
+          api_key = "TERM",
+          stream = true,
+          optional = {
+            stop = nil,
+            max_tokens = nil,
+          }
+        }
+      }
+    }
+  }
+  return opt_sets[select_set]
+end
+
 function M.packages(use)
   use 'neovim/nvim-lspconfig'
   use 'williamboman/mason.nvim'
@@ -407,24 +450,7 @@ function M.packages(use)
   use {
     "milanglacier/minuet-ai.nvim",
     cond = ollama_enabled(),
-    opts = {
-      blink = { enable_auto_complete = true },
-      provider = "openai_compatible",
-      provider_options = {
-        openai_compatible = {
-          name = "Qwen 2.5 Coder",
-          -- The endpoint may return a 404 if the given model is not found
-          model = "qwen2.5-coder:7b",
-          end_point = OLLAMA_BASE_URL .. "/v1/chat/completions",
-          api_key = "TERM",
-          stream = true,
-          optional = {
-            stop = nil,
-            max_tokens = nil,
-          }
-        }
-      }
-    },
+    opts = ollama_opts(),
     dependencies = { "nvim-lua/plenary.nvim" },
   }
 

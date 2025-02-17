@@ -321,7 +321,6 @@ function M.blink_opts()
     sources = {
       default = {
         "copilot",
-        "minuet",
         "lsp",
         "path",
         "snippets",

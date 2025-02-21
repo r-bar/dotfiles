@@ -253,11 +253,26 @@ local _ollama_enabled_cache = nil
 
 --- @param endpoint string?
 local function ollama_enabled(endpoint)
+  --return false
   if _ollama_enabled_cache ~= nil then
     return _ollama_enabled_cache
   end
+
+  local hostname = vim.system({ "hostname", "-s" }, { text = true }):wait()
+  if hostname.stdout == "ceres" then
+    _ollama_enabled_cache = false
+    return _ollama_enabled_cache
+  end
+
   endpoint = endpoint or OLLAMA_BASE_URL
-  local http_result = vim.system({ "curl", "-sfL", endpoint }, { text = true }):wait()
+  local http_result = vim.system(
+    { "curl", "-sfL", endpoint },
+    { text = true, timeout = 0.1 }
+  ):wait()
+  if http_result == nil then
+    _ollama_enabled_cache = false
+    return _ollama_enabled_cache
+  end
   _ollama_enabled_cache = http_result.stdout == "Ollama is running"
   return _ollama_enabled_cache
 end
@@ -300,7 +315,9 @@ function M.blink_opts()
         auto_show = true,
         auto_show_delay_ms = 0,
       },
-      list = { selection = 'auto_insert' },
+      list = {
+        selection = { preselect = false, auto_insert = true },
+      },
     },
 
     appearance = {
@@ -418,6 +435,18 @@ local function ollama_opts(select_set)
   return opt_sets[select_set]
 end
 
+function M.blink_deps()
+  local deps = {
+    "folke/lazydev.nvim",
+    "giuxtaposition/blink-cmp-copilot",
+    "zbirenbaum/copilot.lua",
+  }
+  if ollama_enabled() then
+    deps[#deps+1] = "milanglacier/minuet-ai.nvim"
+  end
+  return deps
+end
+
 function M.packages(use)
   use 'neovim/nvim-lspconfig'
   use 'williamboman/mason.nvim'
@@ -438,12 +467,7 @@ function M.packages(use)
     ---@type blink.cmp.Config
     opts = M.blink_opts(),
     opts_extend = { "sources.default" },
-    dependencies = {
-      "folke/lazydev.nvim",
-      "giuxtaposition/blink-cmp-copilot",
-      "zbirenbaum/copilot.lua",
-      "milanglacier/minuet-ai.nvim",
-    }
+    dependencies = M.blink_deps(),
   }
 
   use {

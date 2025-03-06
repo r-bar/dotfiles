@@ -43,13 +43,13 @@ function M.packages(use)
         normal_cur_line = 'gZgZ',
         visual          = 'gz',
         visual_line     = 'gZ',
-        delete         = 'dgz',
-        change         = 'cgz',
+        delete          = 'dgz',
+        change          = 'cgz',
       }
     },
   }
   use 'https://github.com/wellle/targets.vim'
-  use {'danro/rename.vim', cmd = "Rename"}
+  use { 'danro/rename.vim', cmd = "Rename" }
   use { 'https://github.com/Valloric/MatchTagAlways.git', enabled = false }
   use { 'https://github.com/andymass/vim-matchup' }
   use 'https://github.com/kana/vim-textobj-user.git'
@@ -113,7 +113,7 @@ function M.packages(use)
   }
   use {
     'https://github.com/windwp/nvim-autopairs.git',
-    enabled = true;
+    enabled = true,
     --opts = {
     --  check_ts = true,
     --  ts_config = {
@@ -126,7 +126,7 @@ function M.packages(use)
       local npairs = require('nvim-autopairs')
       local Rule = require('nvim-autopairs.rule')
       local cond = require('nvim-autopairs.conds')
-      npairs.setup{
+      npairs.setup {
         check_ts = true,
         ts_config = {
           lua = { 'string' }, -- it will not add a pair on that treesitter node
@@ -154,7 +154,7 @@ function M.packages(use)
       "UndotreePersistUndo",
     },
     keys = {
-      {'<leader>u', ':UndotreeToggle<CR>'},
+      { '<leader>u', ':UndotreeToggle<CR>' },
     },
     config = function()
       vim.cmd [[
@@ -175,21 +175,21 @@ function M.packages(use)
     'mattn/emmet-vim',
     ft = { 'html', 'liquid', 'eruby', 'typescript', 'javascript', 'reason', 'jinja.html' },
     keys = {
-      {'<C-e><C-e>', '<plug>(emmet-expand-abbr)',         mode = 'i', noremap = true},
-      {'<C-e>;',     '<plug>(emmet-expand-word)',         mode = 'i', noremap = true},
-      {'<C-e>u',     '<plug>(emmet-update-tag)',          mode = 'i', noremap = true},
-      {'<C-e>d',     '<plug>(emmet-balance-tag-inward)',  mode = 'i', noremap = true},
-      {'<C-e>D',     '<plug>(emmet-balance-tag-outward)', mode = 'i', noremap = true},
-      {'<C-e>n',     '<plug>(emmet-move-next)',           mode = 'i', noremap = true},
-      {'<C-e>N',     '<plug>(emmet-move-prev)',           mode = 'i', noremap = true},
-      {'<C-e>i',     '<plug>(emmet-image-size)',          mode = 'i', noremap = true},
-      {'<C-e>/',     '<plug>(emmet-toggle-comment)',      mode = 'i', noremap = true},
-      {'<C-e>j',     '<plug>(emmet-split-join-tag)',      mode = 'i', noremap = true},
-      {'<C-e>k',     '<plug>(emmet-remove-tag)',          mode = 'i', noremap = true},
-      {'<C-e>a',     '<plug>(emmet-anchorize-url)',       mode = 'i', noremap = true},
-      {'<C-e>A',     '<plug>(emmet-anchorize-summary)',   mode = 'i', noremap = true},
-      {'<C-e>m',     '<plug>(emmet-merge-lines)',         mode = 'i', noremap = true},
-      {'<C-e>c',     '<plug>(emmet-code-pretty)',         mode = 'i', noremap = true},
+      { '<C-e><C-e>', '<plug>(emmet-expand-abbr)',         mode = 'i', noremap = true },
+      { '<C-e>;',     '<plug>(emmet-expand-word)',         mode = 'i', noremap = true },
+      { '<C-e>u',     '<plug>(emmet-update-tag)',          mode = 'i', noremap = true },
+      { '<C-e>d',     '<plug>(emmet-balance-tag-inward)',  mode = 'i', noremap = true },
+      { '<C-e>D',     '<plug>(emmet-balance-tag-outward)', mode = 'i', noremap = true },
+      { '<C-e>n',     '<plug>(emmet-move-next)',           mode = 'i', noremap = true },
+      { '<C-e>N',     '<plug>(emmet-move-prev)',           mode = 'i', noremap = true },
+      { '<C-e>i',     '<plug>(emmet-image-size)',          mode = 'i', noremap = true },
+      { '<C-e>/',     '<plug>(emmet-toggle-comment)',      mode = 'i', noremap = true },
+      { '<C-e>j',     '<plug>(emmet-split-join-tag)',      mode = 'i', noremap = true },
+      { '<C-e>k',     '<plug>(emmet-remove-tag)',          mode = 'i', noremap = true },
+      { '<C-e>a',     '<plug>(emmet-anchorize-url)',       mode = 'i', noremap = true },
+      { '<C-e>A',     '<plug>(emmet-anchorize-summary)',   mode = 'i', noremap = true },
+      { '<C-e>m',     '<plug>(emmet-merge-lines)',         mode = 'i', noremap = true },
+      { '<C-e>c',     '<plug>(emmet-code-pretty)',         mode = 'i', noremap = true },
     },
     config = function()
       vim.g.user_emmet_install_global = 1
@@ -198,29 +198,29 @@ function M.packages(use)
   }
   use { 'https://github.com/scrooloose/nerdcommenter.git',
     keys = {
-      {'<leader>cc',       '<Plug>NERDCommenterComment',   mode = {'n', 'v'}, noremap = true},
-      {'<leader>cc',       '<Plug>NERDCommenterComment',   mode = {'n', 'v'}, noremap = true},
-      {'<leader>c',        '<Plug>NERDCommenterToEOL',     mode = {'n', 'v'}, noremap = true},
-      {'<leader>c<space>', '<Plug>NERDCommenterToggle',    mode = {'n', 'v'}, noremap = true},
-      {'<leader>cA',       '<Plug>NERDCommenterAppend',    mode = {'n', 'v'}, noremap = true},
-      {'<leader>ca',       '<Plug>NERDCommenterAltDelims', mode = {'n', 'v'}, noremap = true},
-      {'<leader>cb',       '<Plug>NERDCommenterAlignBoth', mode = {'n', 'v'}, noremap = true},
-      {'<leader>ci',       '<Plug>NERDCommenterInvert',    mode = {'n', 'v'}, noremap = true},
-      {'<leader>cl',       '<Plug>NERDCommenterAlignLeft', mode = {'n', 'v'}, noremap = true},
-      {'<leader>cm',       '<Plug>NERDCommenterMinimal',   mode = {'n', 'v'}, noremap = true},
-      {'<leader>cn',       '<Plug>NERDCommenterNested',    mode = {'n', 'v'}, noremap = true},
-      {'<leader>cs',       '<Plug>NERDCommenterSexy',      mode = {'n', 'v'}, noremap = true},
-      {'<leader>cu',       '<Plug>NERDCommenterUncomment', mode = {'n', 'v'}, noremap = true},
-      {'<leader>cy',       '<Plug>NERDCommenterYank',      mode = {'n', 'v'}, noremap = true},
-      {'<leader>c<space>', '<Plug>NERDCommenterToggle',    mode = {'n', 'v'}, noremap = true},
-      {'<leader>cb',       '<Plug>NERDCommenterAlignBoth', mode = {'n', 'v'}, noremap = true},
-      {'<leader>ci',       '<Plug>NERDCommenterInvert',    mode = {'n', 'v'}, noremap = true},
-      {'<leader>cl',       '<Plug>NERDCommenterAlignLeft', mode = {'n', 'v'}, noremap = true},
-      {'<leader>cm',       '<Plug>NERDCommenterMinimal',   mode = {'n', 'v'}, noremap = true},
-      {'<leader>cn',       '<Plug>NERDCommenterNested',    mode = {'n', 'v'}, noremap = true},
-      {'<leader>cs',       '<Plug>NERDCommenterSexy',      mode = {'n', 'v'}, noremap = true},
-      {'<leader>cu',       '<Plug>NERDCommenterUncomment', mode = {'n', 'v'}, noremap = true},
-      {'<leader>cy',       '<Plug>NERDCommenterYank',      mode = {'n', 'v'}, noremap = true},
+      { '<leader>cc',       '<Plug>NERDCommenterComment',   mode = { 'n', 'v' }, noremap = true },
+      { '<leader>cc',       '<Plug>NERDCommenterComment',   mode = { 'n', 'v' }, noremap = true },
+      { '<leader>c',        '<Plug>NERDCommenterToEOL',     mode = { 'n', 'v' }, noremap = true },
+      { '<leader>c<space>', '<Plug>NERDCommenterToggle',    mode = { 'n', 'v' }, noremap = true },
+      { '<leader>cA',       '<Plug>NERDCommenterAppend',    mode = { 'n', 'v' }, noremap = true },
+      { '<leader>ca',       '<Plug>NERDCommenterAltDelims', mode = { 'n', 'v' }, noremap = true },
+      { '<leader>cb',       '<Plug>NERDCommenterAlignBoth', mode = { 'n', 'v' }, noremap = true },
+      { '<leader>ci',       '<Plug>NERDCommenterInvert',    mode = { 'n', 'v' }, noremap = true },
+      { '<leader>cl',       '<Plug>NERDCommenterAlignLeft', mode = { 'n', 'v' }, noremap = true },
+      { '<leader>cm',       '<Plug>NERDCommenterMinimal',   mode = { 'n', 'v' }, noremap = true },
+      { '<leader>cn',       '<Plug>NERDCommenterNested',    mode = { 'n', 'v' }, noremap = true },
+      { '<leader>cs',       '<Plug>NERDCommenterSexy',      mode = { 'n', 'v' }, noremap = true },
+      { '<leader>cu',       '<Plug>NERDCommenterUncomment', mode = { 'n', 'v' }, noremap = true },
+      { '<leader>cy',       '<Plug>NERDCommenterYank',      mode = { 'n', 'v' }, noremap = true },
+      { '<leader>c<space>', '<Plug>NERDCommenterToggle',    mode = { 'n', 'v' }, noremap = true },
+      { '<leader>cb',       '<Plug>NERDCommenterAlignBoth', mode = { 'n', 'v' }, noremap = true },
+      { '<leader>ci',       '<Plug>NERDCommenterInvert',    mode = { 'n', 'v' }, noremap = true },
+      { '<leader>cl',       '<Plug>NERDCommenterAlignLeft', mode = { 'n', 'v' }, noremap = true },
+      { '<leader>cm',       '<Plug>NERDCommenterMinimal',   mode = { 'n', 'v' }, noremap = true },
+      { '<leader>cn',       '<Plug>NERDCommenterNested',    mode = { 'n', 'v' }, noremap = true },
+      { '<leader>cs',       '<Plug>NERDCommenterSexy',      mode = { 'n', 'v' }, noremap = true },
+      { '<leader>cu',       '<Plug>NERDCommenterUncomment', mode = { 'n', 'v' }, noremap = true },
+      { '<leader>cy',       '<Plug>NERDCommenterYank',      mode = { 'n', 'v' }, noremap = true },
     },
     config = function()
       vim.g.NERDCustomDelimiters = {
@@ -244,8 +244,8 @@ function M.packages(use)
   use {
     'https://github.com/junegunn/vim-easy-align.git',
     keys = {
-      {'ga', '<Plug>(EasyAlign)', mode = 'n', noremap = false, desc = "Align text by delimiters"},
-      {'ga', '<Plug>(EasyAlign)', mode = 'x', noremap = false, desc = "Align text by delimiters"},
+      { 'ga', '<Plug>(EasyAlign)', mode = 'n', noremap = false, desc = "Align text by delimiters" },
+      { 'ga', '<Plug>(EasyAlign)', mode = 'x', noremap = false, desc = "Align text by delimiters" },
     },
   }
   use {
@@ -329,7 +329,8 @@ function M.config()
     vim.o.grepformat = [[%f:%l:%c:%m,%f:%l:%m]]
   end
   vim.cmd([[autocmd QuickFixCmdPost * nested cwindow 20 | redraw!]])
-  vim.keymap.set("n", "<leader>g", ':grep! "<cword>"<CR>', { noremap = true, desc = 'Grep for the word under the cursor' })
+  vim.keymap.set("n", "<leader>g", ':grep! "<cword>"<CR>',
+    { noremap = true, desc = 'Grep for the word under the cursor' })
 
   -- keep a couple lines between the cursor and the edge of the screen while
   -- scrolling
@@ -349,12 +350,14 @@ function M.config()
   vim.keymap.set('n', '<Backspace>', ':b#<Enter>', { noremap = true, desc = 'Jump to the previous active buffer' })
 
   -- map insert blank line below and above to enter and shift-enter
-  vim.keymap.set('n', '<Enter>', 'i<Enter><ESC>', { noremap = true, desc = 'Insert a newline at the cursor, return to normal mode' })
+  vim.keymap.set('n', '<Enter>', 'i<Enter><ESC>',
+    { noremap = true, desc = 'Insert a newline at the cursor, return to normal mode' })
   --vim.api.nvim_set_keymap('n', '<Shift-Enter>', 'O<ESC>', {noremap = true})
 
   -- allow easier copy and pasting into the X clipboard
   vim.keymap.set('v', '<C-c>', '"+y', { noremap = true, desc = 'Yank for Windows users' })
-  vim.keymap.set('n', '<leader>y', ':w ! clip -r localhost', { noremap = true, desc = 'Yank full buffer to system clipboard' })
+  vim.keymap.set('n', '<leader>y', ':w ! clip -r localhost',
+    { noremap = true, desc = 'Yank full buffer to system clipboard' })
 
   -- Q mode sucks, never enter Q mode
   vim.keymap.set('n', 'Q', "<nop>")
@@ -417,6 +420,24 @@ function M.config()
   vim.keymap.set('i', '<C-g>u', insert_uuid, { noremap = true, silent = true })
   -- conflicts with lowercase command
   --vim.keymap.set('n', 'gu', insert_uuid, { noremap = true, silent = true })
+
+  vim.keymap.set(
+    { "n", "v" }, "]q", "<cmd>cne<cr>",
+    { silent = true, desc = "Jump to the next entry in the quickfix list" }
+  )
+  vim.keymap.set(
+    { "n", "v" }, "[q", "<cmd>cpr<cr>",
+    { silent = true, desc = "Jump to the previous entry in the quickfix list" }
+  )
+
+  vim.keymap.set(
+    { "n", "v" }, "]l", "<cmd>lne<cr>",
+    { silent = true, desc = "Jump to the next entry in the location list" }
+  )
+  vim.keymap.set(
+    { "n", "v" }, "[l", "<cmd>lpr<cr>",
+    { silent = true, desc = "Jump to the previous entry in the location list" }
+  )
 end
 
 return M

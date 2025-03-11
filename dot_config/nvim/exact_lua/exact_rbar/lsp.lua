@@ -169,7 +169,7 @@ local function server_settings()
         plugins = {
           black = { enabled = false },
           rope = { enabled = true },
-          pylsp_mypy = { enabled = false },
+          pylsp_mypy = { enabled = true },
           -- lints generally covered by black and ruff while being less configurable
           pyflakes = { enabled = false },
           flake8 = { enabled = false },

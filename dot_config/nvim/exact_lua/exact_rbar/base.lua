@@ -225,7 +225,8 @@ function M.packages(use)
     config = function()
       vim.g.NERDCustomDelimiters = {
         kdl = { left = '//', leftAlt = '/*', rightAlt = '*/' },
-        mojo = { left = '# ' }
+        mojo = { left = '# ' },
+        gleam = { left = '// ', leftAlt = '/// ' },
       }
     end
   }

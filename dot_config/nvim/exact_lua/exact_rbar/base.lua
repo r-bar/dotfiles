@@ -253,6 +253,25 @@ function M.packages(use)
     "andrewferrier/debugprint.nvim",
     opts = true,
   }
+  use {
+    "xvzc/chezmoi.nvim",
+    dependencies = { "nvim-lua/plenary.nvim" },
+    opts = {},
+    config = function()
+      -- apply changes on save for all files in ~/.local/share/chezmoi/
+      vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
+        pattern = { os.getenv("HOME") .. "/.local/share/chezmoi/*" },
+        callback = function(ev)
+          local bufnr = ev.buf
+          local edit_watch = function()
+            require("chezmoi.commands.__edit").watch(bufnr)
+          end
+          vim.schedule(edit_watch)
+          print("Chezmoi file detected. Changes will be applied on save.")
+        end,
+      })
+    end,
+  }
 end
 
 function M.config()

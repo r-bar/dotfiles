@@ -90,7 +90,7 @@ function M.packages(use)
     "stevearc/oil.nvim",
     cmd = "Oil",
     keys = {
-      {"<C-e>", "<cmd>Oil<CR>", mode = "n", noremap = true, desc = "Open parent directory"},
+      {"<C-e>", "<cmd>Oil<CR>", mode = "n", noremap = true, desc = "Open parent directory", quiet = true },
     },
     opts = {
       columns = { "permissions", "mtime", "size", "icon" },
@@ -113,6 +113,14 @@ function M.packages(use)
     config = function()
       local fterm = require("FTerm")
       vim.api.nvim_create_user_command('FTermOpen', fterm.open, { bang = true })
+      vim.api.nvim_create_user_command(
+        'FTermOpenParent',
+        function()
+          local file_parent = vim.fs.dirname(vim.fn.expand("%"))
+          require('FTerm').run({'cd', file_parent})
+        end,
+        { bang = true }
+      )
       vim.api.nvim_create_user_command('FTermClose', fterm.close, { bang = true })
       vim.api.nvim_create_user_command('FTermToggle', fterm.toggle, { bang = true })
     end,

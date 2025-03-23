@@ -90,7 +90,7 @@ function M.packages(use)
     "stevearc/oil.nvim",
     cmd = "Oil",
     keys = {
-      {"<C-e>", "<cmd>Oil<CR>", mode = "n", noremap = true, desc = "Open parent directory", quiet = true },
+      {"<C-e>", "<cmd>Oil<CR>", mode = "n", noremap = true, desc = "Open parent directory" },
     },
     opts = {
       columns = { "permissions", "mtime", "size", "icon" },

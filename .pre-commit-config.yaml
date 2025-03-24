@@ -11,7 +11,7 @@ repos:
 
 - repo: local
   hooks:
-    - id: mise-pre-commit-hooks
-      name: Mise pre-commit hooks
-      language: system
-      entry: mise run pre-commit-hook
+  - id: mise-pre-commit-hooks
+    name: Mise pre-commit hooks
+    language: system
+    entry: mise run pre-commit-hook

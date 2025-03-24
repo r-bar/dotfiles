@@ -48,6 +48,6 @@ function M.packages(use)
   }
 end
 
--- see lsp.lua for 
+-- see lsp.lua for
 
 return M

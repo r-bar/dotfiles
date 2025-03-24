@@ -12,7 +12,7 @@ _rustup() {
             rustup)
                 cmd="rustup"
                 ;;
-            
+
             active-toolchain)
                 cmd+="__active__toolchain"
                 ;;
@@ -104,7 +104,7 @@ _rustup() {
                 return 0
             fi
             case "${prev}" in
-                
+
                 *)
                     COMPREPLY=()
                     ;;
@@ -112,7 +112,7 @@ _rustup() {
             COMPREPLY=( $(compgen -W "${opts}" -- ${cur}) )
             return 0
             ;;
-        
+
         rustup__completions)
             opts=" -h -V  --help --version  <shell> "
             if [[ ${cur} == -* || ${COMP_CWORD} -eq 2 ]] ; then
@@ -120,7 +120,7 @@ _rustup() {
                 return 0
             fi
             case "${prev}" in
-                
+
                 *)
                     COMPREPLY=()
                     ;;
@@ -135,7 +135,7 @@ _rustup() {
                 return 0
             fi
             case "${prev}" in
-                
+
                 *)
                     COMPREPLY=()
                     ;;
@@ -150,7 +150,7 @@ _rustup() {
                 return 0
             fi
             case "${prev}" in
-                
+
                 --toolchain)
                     COMPREPLY=($(compgen -f ${cur}))
                     return 0
@@ -173,7 +173,7 @@ _rustup() {
                 return 0
             fi
             case "${prev}" in
-                
+
                 *)
                     COMPREPLY=()
                     ;;
@@ -188,7 +188,7 @@ _rustup() {
                 return 0
             fi
             case "${prev}" in
-                
+
                 --toolchain)
                     COMPREPLY=($(compgen -f ${cur}))
                     return 0
@@ -207,7 +207,7 @@ _rustup() {
                 return 0
             fi
             case "${prev}" in
-                
+
                 --toolchain)
                     COMPREPLY=($(compgen -f ${cur}))
                     return 0
@@ -230,7 +230,7 @@ _rustup() {
                 return 0
             fi
             case "${prev}" in
-                
+
                 *)
                     COMPREPLY=()
                     ;;
@@ -245,7 +245,7 @@ _rustup() {
                 return 0
             fi
             case "${prev}" in
-                
+
                 --toolchain)
                     COMPREPLY=($(compgen -f ${cur}))
                     return 0
@@ -264,7 +264,7 @@ _rustup() {
                 return 0
             fi
             case "${prev}" in
-                
+
                 --toolchain)
                     COMPREPLY=($(compgen -f ${cur}))
                     return 0
@@ -283,7 +283,7 @@ _rustup() {
                 return 0
             fi
             case "${prev}" in
-                
+
                 *)
                     COMPREPLY=()
                     ;;
@@ -298,7 +298,7 @@ _rustup() {
                 return 0
             fi
             case "${prev}" in
-                
+
                 *)
                     COMPREPLY=()
                     ;;
@@ -313,7 +313,7 @@ _rustup() {
                 return 0
             fi
             case "${prev}" in
-                
+
                 --toolchain)
                     COMPREPLY=($(compgen -f ${cur}))
                     return 0
@@ -332,7 +332,7 @@ _rustup() {
                 return 0
             fi
             case "${prev}" in
-                
+
                 *)
                     COMPREPLY=()
                     ;;
@@ -347,7 +347,7 @@ _rustup() {
                 return 0
             fi
             case "${prev}" in
-                
+
                 *)
                     COMPREPLY=()
                     ;;
@@ -362,7 +362,7 @@ _rustup() {
                 return 0
             fi
             case "${prev}" in
-                
+
                 *)
                     COMPREPLY=()
                     ;;
@@ -377,7 +377,7 @@ _rustup() {
                 return 0
             fi
             case "${prev}" in
-                
+
                 *)
                     COMPREPLY=()
                     ;;
@@ -392,7 +392,7 @@ _rustup() {
                 return 0
             fi
             case "${prev}" in
-                
+
                 --path)
                     COMPREPLY=($(compgen -f ${cur}))
                     return 0
@@ -411,7 +411,7 @@ _rustup() {
                 return 0
             fi
             case "${prev}" in
-                
+
                 *)
                     COMPREPLY=()
                     ;;
@@ -426,7 +426,7 @@ _rustup() {
                 return 0
             fi
             case "${prev}" in
-                
+
                 --path)
                     COMPREPLY=($(compgen -f ${cur}))
                     return 0
@@ -445,7 +445,7 @@ _rustup() {
                 return 0
             fi
             case "${prev}" in
-                
+
                 *)
                     COMPREPLY=()
                     ;;
@@ -460,7 +460,7 @@ _rustup() {
                 return 0
             fi
             case "${prev}" in
-                
+
                 *)
                     COMPREPLY=()
                     ;;
@@ -475,7 +475,7 @@ _rustup() {
                 return 0
             fi
             case "${prev}" in
-                
+
                 *)
                     COMPREPLY=()
                     ;;
@@ -490,7 +490,7 @@ _rustup() {
                 return 0
             fi
             case "${prev}" in
-                
+
                 *)
                     COMPREPLY=()
                     ;;
@@ -505,7 +505,7 @@ _rustup() {
                 return 0
             fi
             case "${prev}" in
-                
+
                 *)
                     COMPREPLY=()
                     ;;
@@ -520,7 +520,7 @@ _rustup() {
                 return 0
             fi
             case "${prev}" in
-                
+
                 *)
                     COMPREPLY=()
                     ;;
@@ -535,7 +535,7 @@ _rustup() {
                 return 0
             fi
             case "${prev}" in
-                
+
                 *)
                     COMPREPLY=()
                     ;;
@@ -550,7 +550,7 @@ _rustup() {
                 return 0
             fi
             case "${prev}" in
-                
+
                 *)
                     COMPREPLY=()
                     ;;
@@ -565,7 +565,7 @@ _rustup() {
                 return 0
             fi
             case "${prev}" in
-                
+
                 *)
                     COMPREPLY=()
                     ;;
@@ -580,7 +580,7 @@ _rustup() {
                 return 0
             fi
             case "${prev}" in
-                
+
                 *)
                     COMPREPLY=()
                     ;;
@@ -595,7 +595,7 @@ _rustup() {
                 return 0
             fi
             case "${prev}" in
-                
+
                 *)
                     COMPREPLY=()
                     ;;
@@ -610,7 +610,7 @@ _rustup() {
                 return 0
             fi
             case "${prev}" in
-                
+
                 *)
                     COMPREPLY=()
                     ;;
@@ -625,7 +625,7 @@ _rustup() {
                 return 0
             fi
             case "${prev}" in
-                
+
                 *)
                     COMPREPLY=()
                     ;;
@@ -640,7 +640,7 @@ _rustup() {
                 return 0
             fi
             case "${prev}" in
-                
+
                 --toolchain)
                     COMPREPLY=($(compgen -f ${cur}))
                     return 0
@@ -659,7 +659,7 @@ _rustup() {
                 return 0
             fi
             case "${prev}" in
-                
+
                 *)
                     COMPREPLY=()
                     ;;
@@ -674,7 +674,7 @@ _rustup() {
                 return 0
             fi
             case "${prev}" in
-                
+
                 --toolchain)
                     COMPREPLY=($(compgen -f ${cur}))
                     return 0
@@ -693,7 +693,7 @@ _rustup() {
                 return 0
             fi
             case "${prev}" in
-                
+
                 --toolchain)
                     COMPREPLY=($(compgen -f ${cur}))
                     return 0
@@ -712,7 +712,7 @@ _rustup() {
                 return 0
             fi
             case "${prev}" in
-                
+
                 --toolchain)
                     COMPREPLY=($(compgen -f ${cur}))
                     return 0
@@ -731,7 +731,7 @@ _rustup() {
                 return 0
             fi
             case "${prev}" in
-                
+
                 --toolchain)
                     COMPREPLY=($(compgen -f ${cur}))
                     return 0
@@ -750,7 +750,7 @@ _rustup() {
                 return 0
             fi
             case "${prev}" in
-                
+
                 *)
                     COMPREPLY=()
                     ;;
@@ -765,7 +765,7 @@ _rustup() {
                 return 0
             fi
             case "${prev}" in
-                
+
                 *)
                     COMPREPLY=()
                     ;;
@@ -780,7 +780,7 @@ _rustup() {
                 return 0
             fi
             case "${prev}" in
-                
+
                 *)
                     COMPREPLY=()
                     ;;
@@ -795,7 +795,7 @@ _rustup() {
                 return 0
             fi
             case "${prev}" in
-                
+
                 *)
                     COMPREPLY=()
                     ;;
@@ -810,7 +810,7 @@ _rustup() {
                 return 0
             fi
             case "${prev}" in
-                
+
                 *)
                     COMPREPLY=()
                     ;;
@@ -825,7 +825,7 @@ _rustup() {
                 return 0
             fi
             case "${prev}" in
-                
+
                 *)
                     COMPREPLY=()
                     ;;
@@ -840,7 +840,7 @@ _rustup() {
                 return 0
             fi
             case "${prev}" in
-                
+
                 *)
                     COMPREPLY=()
                     ;;
@@ -855,7 +855,7 @@ _rustup() {
                 return 0
             fi
             case "${prev}" in
-                
+
                 *)
                     COMPREPLY=()
                     ;;
@@ -870,7 +870,7 @@ _rustup() {
                 return 0
             fi
             case "${prev}" in
-                
+
                 *)
                     COMPREPLY=()
                     ;;
@@ -885,7 +885,7 @@ _rustup() {
                 return 0
             fi
             case "${prev}" in
-                
+
                 *)
                     COMPREPLY=()
                     ;;
@@ -900,7 +900,7 @@ _rustup() {
                 return 0
             fi
             case "${prev}" in
-                
+
                 *)
                     COMPREPLY=()
                     ;;
@@ -915,7 +915,7 @@ _rustup() {
                 return 0
             fi
             case "${prev}" in
-                
+
                 *)
                     COMPREPLY=()
                     ;;

@@ -60,7 +60,7 @@ tasks:
   - name: install pup
     block:
       - shell: >-
-          curl https://api.github.com/repos/ericchiang/pup/releases/latest 
+          curl https://api.github.com/repos/ericchiang/pup/releases/latest
             -H "Accept: application/vnd.github+json"
             -H "Authorization: Bearer {{ github_token }}"
             -sL
@@ -75,7 +75,7 @@ tasks:
           dest: "/tmp/{{ filename }}"
       - shell: "unzip /tmp/{{ filename }} -d /usr/local/bin"
         become: true
-      
+
   - name: install asdf
     shell:
       cmd: "git clone https://github.com/asdf-vm/asdf.git ~/.asdf"

@@ -1,5 +1,5 @@
 #echo "TOP OF ZSHRC\n$PATH"
-for file in $HOME/.zshrc.d/*.zsh; do 
+for file in $HOME/.zshrc.d/*.zsh; do
   if [ $ZSHRC_BENCHMARK -eq 1 ]; then start=$(date +%s.%N); fi
   source $file
   if [ $ZSHRC_BENCHMARK -eq 1 ]; then

@@ -39,7 +39,7 @@ def flatten(data, prefix=".") -> Iterator[tuple[str, str]]:
 #     if head == '' and not tail:
 #         return data
 #     else:
-#         return 
+#         return
 
 
 def main():

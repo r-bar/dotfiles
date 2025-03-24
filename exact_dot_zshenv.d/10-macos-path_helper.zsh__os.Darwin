@@ -5,7 +5,7 @@
 #
 # The important part of the gist is:
 #
-# > At this time, path_helper sees your $PATH already contains the default from 
+# > At this time, path_helper sees your $PATH already contains the default from
 # > /etc/paths and /etc/paths.d, it will NOT add anything new to it.
 #
 # So we have to do this manually here.

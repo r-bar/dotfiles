@@ -4,7 +4,7 @@
 -- errors in the configs do not prevent all packages from being read and
 -- installed. Meanwhile we can group related sets of packages and their configs
 -- for better organization.
--- 
+--
 -- Config modules are expected to expose .config() and / or .packages(use)
 -- functions. Logic should be kept to a bare minimum inside of .packages.
 local M = {

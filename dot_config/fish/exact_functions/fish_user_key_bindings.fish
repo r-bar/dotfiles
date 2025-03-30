@@ -60,7 +60,7 @@ function fish_user_key_bindings
 
   abbr --add k kubectl
   abbr --add kcd kubectl config use-context
-  abbr --add kns kubectl config set-context --namespace
+  abbr --add kns kubectl config set-context --current --namespace
 
   abbr --add cm chezmoi
   abbr --add cme chezmoi edit --apply
@@ -68,6 +68,7 @@ function fish_user_key_bindings
   abbr --add ll ls -al
   abbr --add la ls -a
   abbr --add l
+  abbr --add tree eza --tree
 
   abbr --add m mise
   abbr --add mr mise run

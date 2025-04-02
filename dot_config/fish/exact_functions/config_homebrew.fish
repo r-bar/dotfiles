@@ -7,22 +7,19 @@ function config_homebrew
   if test -x $HOMEBREW_PREFIX/bin/brew
     eval "$($HOMEBREW_PREFIX/bin/brew shellenv)"
 
-    # add some common "caveat" package variables
     if test -z "$HOMEBREW_NO_EXTRA_ENV"
-      if test -d $HOMEBREW_PREFIX/opt/coreutils
-        set fish_user_paths $fish_user_paths "$HOMEBREW_PREFIX/opt/coreutils/libexec/gnubin"
-        set -gx MANPATH $MANPATH "$HOMEBREW_PREFIX/opt/coreutils/libexec/gnuman"
+      # GNU packages are not linked by default
+      for gnubin in $HOMEBREW_PREFIX/opt/*/libexec/gnubin
+        set -gx fish_user_paths $fish_user_paths $gnubin
+      end
+      for gnuman in $HOMEBREW_PREFIX/opt/*/libexec/gnuman
+        set -gx MANPATH $MANPATH $gnuman
       end
 
       if test -d "$HOMEBREW_PREFIX/opt/libpq"
         set fish_user_paths $fish_user_paths "$HOMEBREW_PREFIX/opt/libpq/bin"
         set -gx LDFLAGS -L$HOMEBREW_PREFIX/opt/libpq/lib $LDFLAGS
         set -gx CPPFLAGS -I$HOMEBREW_PREFIX/opt/libpq/include $CPPFLAGS
-      end
-
-      if test -d "$HOMEBREW_PREFIX/opt/gnu-tar"
-        set fish_user_paths $fish_user_paths "$HOMEBREW_PREFIX/opt/gnu-tar/libexec/gnubin"
-        set -gx MANPATH $MANPATH "$HOMEBREW_PREFIX/opt/gnu-tar/libexec/gnuman"
       end
 
       if test -d "$HOMEBREW_PREFIX/opt/libxml2"

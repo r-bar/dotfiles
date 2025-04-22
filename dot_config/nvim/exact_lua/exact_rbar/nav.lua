@@ -89,6 +89,8 @@ function M.packages(use)
   use {
     "stevearc/oil.nvim",
     cmd = "Oil",
+    -- Disable lazy loading to allow Oil to fully replace netrw
+    lazy = false,
     keys = {
       {"<C-e>", "<cmd>Oil<CR>", mode = "n", noremap = true, desc = "Open parent directory" },
     },

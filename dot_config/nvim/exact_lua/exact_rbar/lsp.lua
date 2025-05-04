@@ -144,7 +144,9 @@ local function server_settings()
     },
   })
 
-  settings['ocamllsp'] = with_defaults()
+  if vim.fn.executable('opam') == 1 then
+    settings['ocamllsp'] = with_defaults()
+  end
 
   settings['pylsp'] = with_defaults({
     -- https://github.com/python-lsp/python-lsp-server/blob/develop/CONFIGURATION.md

@@ -444,15 +444,15 @@ function M.blink_deps()
     "zbirenbaum/copilot.lua",
   }
   if ollama_enabled() then
-    deps[#deps+1] = "milanglacier/minuet-ai.nvim"
+    deps[#deps + 1] = "milanglacier/minuet-ai.nvim"
   end
   return deps
 end
 
 function M.packages(use)
   use 'neovim/nvim-lspconfig'
-  use 'williamboman/mason.nvim'
-  use { 'williamboman/mason-lspconfig.nvim', config = mason_config }
+  use { 'williamboman/mason.nvim', version = '^1.0.0' }
+  use { 'williamboman/mason-lspconfig.nvim', version = '^1.0.0', config = mason_config }
   -- gives a nice live lsp status message in the bottom right corner
   use { 'j-hui/fidget.nvim', opts = {} }
 

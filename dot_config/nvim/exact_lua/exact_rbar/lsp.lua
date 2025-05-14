@@ -442,6 +442,7 @@ function M.blink_deps()
     "folke/lazydev.nvim",
     "giuxtaposition/blink-cmp-copilot",
     "zbirenbaum/copilot.lua",
+    "L3MON4D3/LuaSnip",
   }
   if ollama_enabled() then
     deps[#deps + 1] = "milanglacier/minuet-ai.nvim"

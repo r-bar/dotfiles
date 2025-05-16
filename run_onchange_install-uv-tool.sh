@@ -9,3 +9,4 @@ uv tool install pre-commit --upgrade
 uv tool install python-lsp-server --upgrade --with pylsp-rope --with pylsp-mypy --with keyrings.google-artifactregistry-auth
 uv tool install ruff --upgrade
 uv tool install mypy --upgrade
+uv tool install keyring --upgrade --with keyrings.google-artifactregistry-auth

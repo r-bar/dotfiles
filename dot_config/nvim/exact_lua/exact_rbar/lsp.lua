@@ -7,7 +7,6 @@ local OLLAMA_BASE_URL = "http://earth.ts.barth.tech:11434"
 -- servers are configured
 local function mason_config()
   local ensure_installed = {
-    "ansiblels",
     "bashls",
     "docker_compose_language_service",
     "cssls",
@@ -28,6 +27,13 @@ local function mason_config()
   if vim.fn.executable("nix") == 1 then
     table.insert(ensure_installed, "nil_ls")
     table.insert(ensure_installed, "rnix")
+  end
+
+  if vim.fn.executable("ansible") == 1
+    and vim.fn.executable("ansible-lint") == 1
+    and vim.fn.executable("ansible-config") == 1
+    then
+    table.insert(ensure_installed, "ansiblels")
   end
 
   require('mason').setup { PATH = "append" }

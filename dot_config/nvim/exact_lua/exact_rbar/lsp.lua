@@ -539,7 +539,7 @@ function M.config()
   -- lsp debug logging
   -- clear the lsp log before every session
   vim.fn.system("rm $HOME/.local/state/nvim/lsp.log")
-  vim.lsp.set_log_level(vim.env.NVIM_LSP_LOG_LEVEL or "debug")
+  vim.lsp.set_log_level(vim.env.NVIM_LSP_LOG_LEVEL or "warn")
 
   vim.api.nvim_create_user_command("Format", function() vim.lsp.buf.format { async = false } end, {})
   vim.api.nvim_create_user_command("LspDiagnostics", function() vim.diagnostic.setqflist() end, {})

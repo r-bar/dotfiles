@@ -8,6 +8,11 @@ function config_homebrew
     eval "$($HOMEBREW_PREFIX/bin/brew shellenv)"
 
     if test -z "$HOMEBREW_NO_EXTRA_ENV"
+
+      if test -d "$HOMEBREW_PREFIX/share/man"
+        set -gx MANPATH $MANPATH "$HOMEBREW_PREFIX/share/man"
+      end
+
       # GNU packages are not linked by default
       for gnubin in $HOMEBREW_PREFIX/opt/*/libexec/gnubin
         set -gx fish_user_paths $fish_user_paths $gnubin
@@ -41,6 +46,7 @@ function config_homebrew
       for cpppath in $HOMEBREW_PREFIX/opt/*/include
         set -gx CPPFLAGS -I$cpppath $CPPFLAGS
       end
+
     end
   end
 end

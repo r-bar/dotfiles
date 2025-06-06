@@ -7,6 +7,10 @@ set -gx UPLOAD_RCLONE_CONFIG linode
 set -gx UPLOAD_BUCKET barth-tech
 set -gx UPLOAD_BASE_PATH uploads
 
+if type -q gcloud && type -q uv
+  set -gx CLOUDSDK_PYTHON (uv python find 3.12)
+end
+
 
 if test -d ~/.cargo/bin
   set fish_user_paths ~/.cargo/bin $fish_user_paths

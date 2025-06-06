@@ -1,11 +1,7 @@
 [tasks.pre-commit-hook]
 description = "Local commands called by pre-commit"
-depends = ["persist-fish-universal-variables"]
+depends = []
 
 [tasks.pre-commit]
 description = "Run pre-commit hooks on all files"
 run = "pre-commit run --all-files"
-
-[tasks.persist-fish-universal-variables]
-description = "Persist fish universal variables to a file"
-file = "./dot_config/fish/exact_conf.d/ignore_persist_universal_variables.py"

@@ -6,3 +6,4 @@ README.md
 /scripts
 /mise.toml
 .pre-commit-config.yaml
+/tests

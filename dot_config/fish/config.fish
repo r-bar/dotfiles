@@ -2,6 +2,8 @@ if type -q eza
   set -g __fish_ls_command eza
 end
 set -gx EDITOR nvim
+# keep go compiler droppings out of my home folder
+set -gx GOPATH $HOME/.cache/go
 
 set -gx UPLOAD_RCLONE_CONFIG linode
 set -gx UPLOAD_BUCKET barth-tech

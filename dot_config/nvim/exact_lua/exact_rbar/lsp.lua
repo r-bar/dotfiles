@@ -150,7 +150,7 @@ local function server_settings()
     },
   })
 
-  if vim.fn.executable('opam') == 1 then
+  if false and vim.fn.executable('opam') == 1 then
     settings['ocamllsp'] = with_defaults()
   end
 

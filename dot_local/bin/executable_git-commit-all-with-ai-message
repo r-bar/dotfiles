@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+
+MODEL=gemini-2.5-flash
+
+# ensure the llm cli tool is installed
+hash llm || exit 1
+
+read -d '' PROMPT <<EOF
+Create a git commit message for the following changes. The message should be
+short, ideally a single line of less than 72 characters. If it is a large diff
+then in addition to the first line you may add 2 newlines followed by a summary
+or list of the changes in the diff.
+
+<git_diff>
+$(git diff HEAD)
+</git_diff>
+EOF
+
+MESSAGE="$(llm prompt -m $MODEL "$PROMPT")"
+
+echo "$MESSAGE"
+echo
+read -p "Commit with the above message? [y/N] " -n 1 -r ACCEPT
+
+if [[ ! $ACCEPT =~ ^[Yy]$ ]]; then
+  echo -e "\nCommit aborted."
+  exit 0
+fi
+
+git commit -a -m "$MESSAGE" $@

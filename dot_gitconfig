@@ -30,6 +30,7 @@
   c = commit
   ca = commit -a
   cm = commit -m
+  cai = "!git-commit-all-with-ai-message"
   co = checkout
   amend = commit --no-edit --amend -a
   cam = commit -am

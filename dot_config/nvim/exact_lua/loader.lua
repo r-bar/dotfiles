@@ -8,6 +8,7 @@
 -- Config modules are expected to expose .config() and / or .packages(use)
 -- functions. Logic should be kept to a bare minimum inside of .packages.
 local M = {
+  global_pre_configs = {},
   global_configs = {},
   global_uses = {},
   global_modules = {},

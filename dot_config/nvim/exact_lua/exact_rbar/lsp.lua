@@ -296,24 +296,28 @@ function M.blink_opts()
     -- your own keymap.
     keymap = {
       preset = nil,
-      ['<C-e>'] = { 'hide' },
-      ['<C-y>'] = { 'select_and_accept' },
+      ['<C-e>'] = { 'hide', 'fallback' },
+      ['<C-y>'] = { 'select_and_accept', 'snippet_forward' },
       ['<C-p>'] = { 'select_prev', 'fallback' },
       ['<C-n>'] = { 'select_next', 'fallback' },
       ['<C-b>'] = { 'scroll_documentation_up', 'fallback' },
       ['<C-f>'] = { 'scroll_documentation_down', 'fallback' },
+      ['<C-k>'] = { 'show_signature', 'hide_signature', 'fallback' },
       ['<Tab>'] = {
         --function(cmp)
         --  if cmp.snippet_active() then return cmp.accept()
         --  else return cmp.select_and_accept() end
         --end,
         'select_next',
-        'snippet_forward',
+        --'select_and_accept',
+        --'insert_next',
+        --'snippet_forward',
         'fallback',
       },
       ['<S-Tab>'] = {
         'select_prev',
-        'snippet_backward',
+        --'insert_prev',
+        --'snippet_backward',
         'fallback',
       },
     },
@@ -347,8 +351,8 @@ function M.blink_opts()
       default = {
         "copilot",
         "lsp",
-        "path",
         "snippets",
+        "path",
         "buffer",
         "lazydev",
         "dadbod",
@@ -382,6 +386,8 @@ function M.blink_opts()
         },
       },
     },
+
+    snippets = { preset = 'luasnip' },
 
     -- experimental signature help support
     signature = { enabled = true },

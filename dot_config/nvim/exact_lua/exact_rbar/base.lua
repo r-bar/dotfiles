@@ -173,30 +173,16 @@ function M.packages(use)
   }
   use {
     'mattn/emmet-vim',
-    ft = { 'html', 'liquid', 'eruby', 'typescript', 'javascript', 'reason', 'jinja.html' },
-    keys = {
-      { '<C-e><C-e>', '<plug>(emmet-expand-abbr)',         mode = 'i', noremap = true },
-      { '<C-e>;',     '<plug>(emmet-expand-word)',         mode = 'i', noremap = true },
-      { '<C-e>u',     '<plug>(emmet-update-tag)',          mode = 'i', noremap = true },
-      { '<C-e>d',     '<plug>(emmet-balance-tag-inward)',  mode = 'i', noremap = true },
-      { '<C-e>D',     '<plug>(emmet-balance-tag-outward)', mode = 'i', noremap = true },
-      { '<C-e>n',     '<plug>(emmet-move-next)',           mode = 'i', noremap = true },
-      { '<C-e>N',     '<plug>(emmet-move-prev)',           mode = 'i', noremap = true },
-      { '<C-e>i',     '<plug>(emmet-image-size)',          mode = 'i', noremap = true },
-      { '<C-e>/',     '<plug>(emmet-toggle-comment)',      mode = 'i', noremap = true },
-      { '<C-e>j',     '<plug>(emmet-split-join-tag)',      mode = 'i', noremap = true },
-      { '<C-e>k',     '<plug>(emmet-remove-tag)',          mode = 'i', noremap = true },
-      { '<C-e>a',     '<plug>(emmet-anchorize-url)',       mode = 'i', noremap = true },
-      { '<C-e>A',     '<plug>(emmet-anchorize-summary)',   mode = 'i', noremap = true },
-      { '<C-e>m',     '<plug>(emmet-merge-lines)',         mode = 'i', noremap = true },
-      { '<C-e>c',     '<plug>(emmet-code-pretty)',         mode = 'i', noremap = true },
-    },
-    config = function()
-      vim.g.user_emmet_install_global = 1
+    --enabled = false,
+    --ft = { 'html', 'liquid', 'eruby', 'typescript', 'javascript', 'reason', 'jinja.html' },
+    init = function()
       vim.g.user_emmet_leader_key = '<C-e>'
+      vim.g.user_emmet_install_global = 1
+      vim.g.emmet_html5 = 1
     end,
   }
-  use { 'https://github.com/scrooloose/nerdcommenter.git',
+  use {
+    'https://github.com/scrooloose/nerdcommenter.git',
     keys = {
       { '<leader>cc',       '<Plug>NERDCommenterComment',   mode = { 'n', 'v' }, noremap = true },
       { '<leader>cc',       '<Plug>NERDCommenterComment',   mode = { 'n', 'v' }, noremap = true },

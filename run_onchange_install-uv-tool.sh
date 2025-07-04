@@ -11,4 +11,4 @@ uv tool install ruff --upgrade
 uv tool install mypy --upgrade
 uv tool install keyring --upgrade --with keyrings.google-artifactregistry-auth
 uv tool install ty --upgrade
-uv tool install llm --upgrade --with llm-ollama --with llm-gemini
+uv tool install llm --upgrade --with llm-ollama --with llm-gemini --with llm-openrouter

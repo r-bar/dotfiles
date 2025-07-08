@@ -1,0 +1,7 @@
+[core]
+account = rbarth@appomni.com
+project = appomni-sfdc-demo
+
+[compute]
+zone = us-central1-c
+

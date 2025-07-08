@@ -1,0 +1,7 @@
+[core]
+account = rbarth@appomni.com
+project = appomni-prod-us2
+
+[compute]
+zone = us-west1-c
+

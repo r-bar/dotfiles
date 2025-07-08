@@ -1,0 +1,7 @@
+[core]
+account = rbarth@appomni.com
+project = appomni-prod-eu
+
+[compute]
+zone = europe-west3-a
+

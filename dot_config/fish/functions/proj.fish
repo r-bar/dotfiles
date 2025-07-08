@@ -18,8 +18,9 @@ function proj
 
   function _format_gitdir -V PROJ_DIR -V delimiter --description "Remove the PROJ_DIR from the git path"
     while read git_dir
-      set -l dir_path (dirname $git_dir)
-      echo (echo $dir_path | sed "s#^$PROJ_DIR/##")$delimiter$dir_path
+      set -l path (dirname $git_dir)
+      set -l name (echo $path | sed "s#^$PROJ_DIR/##")
+      echo $path$delimiter$name
     end
   end
 
@@ -36,14 +37,17 @@ function proj
   function maybe_add_project -V delimiter
     set -l name $argv[1]
     set -l path $argv[2]
-    test -d $path && echo set -a projects $name$delimiter$path
+    test -d $path && echo set -a projects $path$delimiter$name
   end
 
   set -a projects (fd '^\.git$' -d $PROJ_DEPTH -HI $PROJ_DIR | _format_gitdir)
   maybe_add_project chezmoi $HOME/.local/share/chezmoi | source
   maybe_add_project core $HOME/src/appomni/appomni | source
 
-  set -f fzf_args --delimiter="$delimiter" --with-nth=1 --header='Select a project'
+  # we have to use the 2nd field when the delimiter is multiple characters due
+  # because fzf will append delimiters to the selector output
+  # see: https://github.com/junegunn/fzf/issues/2154
+  set -f fzf_args --delimiter="$delimiter" --with-nth=2 --header='Select a project'
   if test -z "$positional"
     set -f selected "$(string join \n $projects | sort | fzf $fzf_args)"
   else
@@ -55,8 +59,8 @@ function proj
     return 1
   end
 
-  set -f selected_name (echo $selected | awk -F $delimiter '{print $1}')
-  set -f selected_path (echo $selected | awk -F $delimiter '{print $2}')
+  set -f selected_path (echo $selected | awk -F $delimiter '{print $1}')
+  set -f selected_name (echo $selected | awk -F $delimiter '{print $2}')
 
   if test ! -d $selected_path
     echo Invalid project

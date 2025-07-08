@@ -1,5 +1,5 @@
 function ao-switch --description 'Switch the AppOmni gcloud and k8s environment'
-  argparse 'g/global'
+  argparse 'g/global' -- $argv
   set -l context $argv[1]
 
   function _set
@@ -68,7 +68,7 @@ function ao-switch --description 'Switch the AppOmni gcloud and k8s environment'
 
   case aus1 prod-aus1
     _set KUBECONFIG /tmp/kubeconfig-appomni-prod-aus1
-    _set PROJECT appomni-prod-us3
+    _set PROJECT appomni-prod-aus1
     _set NAMESPACE "prod"
     _set AOPOD "prod-aus1"
     _set CLOUDSDK_ACTIVE_CONFIG_NAME $PROJECT

@@ -174,7 +174,7 @@ function M.packages(use)
   use {
     'mattn/emmet-vim',
     --enabled = false,
-    --ft = { 'html', 'liquid', 'eruby', 'typescript', 'javascript', 'reason', 'jinja.html' },
+    ft = { 'html', 'liquid', 'eruby', 'typescript', 'javascript', 'reason', 'jinja.html' },
     init = function()
       vim.g.user_emmet_leader_key = '<C-e>'
       vim.g.user_emmet_install_global = 1

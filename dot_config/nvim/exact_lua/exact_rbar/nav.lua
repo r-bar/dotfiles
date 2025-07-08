@@ -81,31 +81,52 @@ function M.packages(use)
     end,
   }
   use "christoomey/vim-tmux-navigator"
+
   use {
     "nvim-treesitter/nvim-treesitter-context",
     opts = true,
   }
+
   use "farmergreg/vim-lastplace"
+
   use {
     "stevearc/oil.nvim",
     cmd = "Oil",
     -- Disable lazy loading to allow Oil to fully replace netrw
     lazy = false,
     keys = {
-      {"<C-e>", "<cmd>Oil<CR>", mode = "n", noremap = true, desc = "Open parent directory" },
+      {"<leader>d", "<cmd>Oil<CR>", mode = "n", noremap = true, desc = "Open parent directory" },
     },
     opts = {
       columns = { "permissions", "mtime", "size", "icon" },
       constrain_cursor = "name",
       default_file_explorer = true,
       skip_confirm_for_simple_edits = true,
+      -- default keymaps conflict with 
+      use_default_keymaps = false,
       keymaps = {
         ["!"] = "actions.open_terminal",
         ["<F5>"] = "actions.refresh",
+        ["g?"] = { "actions.show_help", mode = "n" },
+        ["<CR>"] = "actions.select",
+        ["gv"] = { "actions.select", opts = { vertical = true } },
+        ["gh"] = { "actions.select", opts = { horizontal = true } },
+        ["gt"] = { "actions.select", opts = { tab = true } },
+        ["gp"] = "actions.preview",
+        ["<C-c>"] = { "actions.close", mode = "n" },
+        ["-"] = { "actions.parent", mode = "n" },
+        ["_"] = { "actions.open_cwd", mode = "n" },
+        ["`"] = { "actions.cd", mode = "n" },
+        ["~"] = { "actions.cd", opts = { scope = "tab" }, mode = "n" },
+        ["gs"] = { "actions.change_sort", mode = "n" },
+        ["gx"] = "actions.open_external",
+        ["g."] = { "actions.toggle_hidden", mode = "n" },
+        ["g\\"] = { "actions.toggle_trash", mode = "n" },
       },
       view_options = { show_hidden = true },
     },
   }
+
   use {
     "numToStr/FTerm.nvim",
     cmd = { "FTermOpen", "FTermClose", "FTermToggle" },
@@ -127,10 +148,33 @@ function M.packages(use)
       vim.api.nvim_create_user_command('FTermToggle', fterm.toggle, { bang = true })
     end,
   }
+
   use {
     'Mathijs-Bakker/zoom-vim',
     keys = {
       {'<C-w>z', '<Plug>Zoom', mode = 'n', desc = 'Zoom window', noremap = true},
+    },
+  }
+
+  use {
+    "folke/which-key.nvim",
+    -- currently only using this plugin for detecting conflicting keymaps using
+    -- `:checkhealth which-key`
+    enabled = false,
+    event = "VeryLazy",
+    opts = {
+      -- your configuration comes here
+      -- or leave it empty to use the default settings
+      -- refer to the configuration section below
+    },
+    keys = {
+      {
+        "<leader>?",
+        function()
+          require("which-key").show({ global = false })
+        end,
+        desc = "Buffer Local Keymaps (which-key)",
+      },
     },
   }
 end

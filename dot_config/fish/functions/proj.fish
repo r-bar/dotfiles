@@ -1,17 +1,26 @@
-function _opterr
-  echo >&2 "proj: Unknown option '$1'"
-end
-
-function _usage
-  echo "Usage: proj [-h|--help] [-s|--session <session>] [--] [<filter>]"
-end
-
 function proj
+  set -f delimiter ':::'
+
   if test -z "$PROJ_DIR"
     set -f PROJ_DIR "$HOME/src"
   end
   if test -z "$PROJ_DEPTH"
     set -f PROJ_DEPTH 3
+  end
+
+  function _opterr
+    echo >&2 "proj: Unknown option '$1'"
+  end
+
+  function _usage
+    echo "Usage: proj [-h|--help] [-s|--session <session>] [--] [<filter>]"
+  end
+
+  function _format_gitdir -V PROJ_DIR -V delimiter --description "Remove the PROJ_DIR from the git path"
+    while read git_dir
+      set -l dir_path (dirname $git_dir)
+      echo (echo $dir_path | sed "s#^$PROJ_DIR/##")$delimiter$dir_path
+    end
   end
 
   argparse --name=proj 'h/help' 's/session' -- $argv
@@ -21,37 +30,52 @@ function proj
   end
   set -f positional $argv
 
-  set -f git_projects "$(fd '^\.git$' -d $PROJ_DEPTH -HI $PROJ_DIR | while read git_dir; dirname $git_dir; end | sed "s#^$PROJ_DIR/##")"
-  set -f projects "$git_projects"
-
-  if test -z "$positional"
-    set -f proj_name "$(echo "$projects" | fzf --header 'Select a project')"
-  else
-    set -f proj_name "$(echo "$projects" | fzf --filter "$positional" | head -n 1)"
+  set -f projects
+  # used in conjunction with `source` to add directories to export to the
+  # $projects list
+  function maybe_add_project -V delimiter
+    set -l name $argv[1]
+    set -l path $argv[2]
+    test -d $path && echo set -a projects $name$delimiter$path
   end
 
-  if test -z "$proj_name"
+  set -a projects (fd '^\.git$' -d $PROJ_DEPTH -HI $PROJ_DIR | _format_gitdir)
+  maybe_add_project chezmoi $HOME/.local/share/chezmoi | source
+  maybe_add_project core $HOME/src/appomni/appomni | source
+
+  set -f fzf_args --delimiter="$delimiter" --with-nth=1 --header='Select a project'
+  if test -z "$positional"
+    set -f selected "$(string join \n $projects | sort | fzf $fzf_args)"
+  else
+    set -f selected "$(string join \n $projects | sort | fzf $fzf_args --filter "$positional" | head -n 1)"
+  end
+
+  if test -z "$selected"
     echo No project selected
     return 1
   end
-  if test ! -d $PROJ_DIR/$proj_name
+
+  set -f selected_name (echo $selected | awk -F $delimiter '{print $1}')
+  set -f selected_path (echo $selected | awk -F $delimiter '{print $2}')
+
+  if test ! -d $selected_path
     echo Invalid project
     return 1
   end
 
   if test -n "$_flag_session" || test -z "$TMUX"
-    tmux has-session -t $(basename $proj_name) 2>/dev/null
+    tmux has-session -t $selected_name 2>/dev/null
     if test $status -eq 1
-      tmux new-session -d -s $(basename $proj_name) -c $PROJ_DIR/$proj_name
+      tmux new-session -d -s $selected_name -c $selected_path
     end
     if test -z "$TMUX"
-      tmux attach-session -t $(basename $proj_name)
+      tmux attach-session -t $selected_name
     else
-      tmux switch-client -t $(basename $proj_name)
+      tmux switch-client -t $selected_name
     end
   else
-    tmux renamew $(basename $proj_name)
-    cd $PROJ_DIR/$proj_name
+    tmux renamew $selected_name
+    cd $selected_path
   end
 
   return 0

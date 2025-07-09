@@ -5,7 +5,6 @@ function ao-switch --description 'Switch the AppOmni gcloud and k8s environment'
   function _set -V _flag_global
     set -gx $argv[1] $argv[2]
     if set -ql _flag_global && test -n "$TMUX"
-      echo Set globally
       tmux setenv $argv[1] $argv[2]
     end
   end

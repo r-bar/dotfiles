@@ -2,7 +2,7 @@ function ao-switch --description 'Switch the AppOmni gcloud and k8s environment'
   argparse 'g/global' -- $argv
   set -l context $argv[1]
 
-  function _set
+  function _set -V _flag_global
     set -gx $argv[1] $argv[2]
     if set -ql _flag_global && test -n "$TMUX"
       echo Set globally

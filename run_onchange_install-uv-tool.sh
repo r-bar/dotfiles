@@ -12,5 +12,5 @@ uv tool install mypy --upgrade
 uv tool install keyring --upgrade --with keyrings.google-artifactregistry-auth
 uv tool install ty --upgrade
 uv tool install llm --upgrade --with llm-ollama --with llm-gemini --with llm-openrouter
-uv tool install coconut[jupyter] --with ipython
-uv tool install rembg[cli]
+uv tool install coconut[jupyter] --upgrade --with ipython
+#uv tool install rembg[cli] --upgrade

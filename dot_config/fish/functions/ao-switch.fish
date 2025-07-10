@@ -58,7 +58,7 @@ function ao-switch --description 'Switch the AppOmni gcloud and k8s environment'
 
   case eu1 prod-eu1
     _set KUBECONFIG /tmp/kubeconfig-appomni-prod-eu1
-    _set PROJECT appomni-prod-eu1
+    _set PROJECT appomni-prod-eu
     _set NAMESPACE "prod"
     _set AOPOD "prod-eu1"
     _set CLOUDSDK_ACTIVE_CONFIG_NAME $PROJECT

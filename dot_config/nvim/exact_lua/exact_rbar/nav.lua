@@ -22,18 +22,18 @@ function M.packages(use)
   use {
     'ggandor/leap.nvim',
     keys = {
-      {'s',       '<Plug>(leap-forward)',     mode = 'n', desc = 'Leap forward',     noremap = true},
-      {'S',       '<Plug>(leap-backward)',    mode = 'n', desc = 'Leap backward',    noremap = true},
-      {'gs',      '<Plug>(leap-from-window)', mode = 'n', desc = 'Leap from window', noremap = true},
-      {'<space>', '<Plug>(leap)',             mode = 'n', desc = 'Leap in buffer',   noremap = true},
-      {'s',       '<Plug>(leap-forward)',     mode = 'x', desc = 'Leap forward',     noremap = true},
-      {'S',       '<Plug>(leap-backward)',    mode = 'x', desc = 'Leap backward',    noremap = true},
-      {'gs',      '<Plug>(leap-from-window)', mode = 'x', desc = 'Leap from window', noremap = true},
-      {'<space>', '<Plug>(leap)',             mode = 'x', desc = 'Leap in buffer',   noremap = true},
-      {'s',       '<Plug>(leap-forward)',     mode = 'o', desc = 'Leap forward',     noremap = true},
-      {'S',       '<Plug>(leap-backward)',    mode = 'o', desc = 'Leap backward',    noremap = true},
-      {'gs',      '<Plug>(leap-from-window)', mode = 'o', desc = 'Leap from window', noremap = true},
-      {'<space>', '<Plug>(leap)',             mode = 'o', desc = 'Leap in buffer',   noremap = true},
+      { 's',       '<Plug>(leap-forward)',     mode = 'n', desc = 'Leap forward',     noremap = true },
+      { 'S',       '<Plug>(leap-backward)',    mode = 'n', desc = 'Leap backward',    noremap = true },
+      { 'gs',      '<Plug>(leap-from-window)', mode = 'n', desc = 'Leap from window', noremap = true },
+      { '<space>', '<Plug>(leap)',             mode = 'n', desc = 'Leap in buffer',   noremap = true },
+      { 's',       '<Plug>(leap-forward)',     mode = 'x', desc = 'Leap forward',     noremap = true },
+      { 'S',       '<Plug>(leap-backward)',    mode = 'x', desc = 'Leap backward',    noremap = true },
+      { 'gs',      '<Plug>(leap-from-window)', mode = 'x', desc = 'Leap from window', noremap = true },
+      { '<space>', '<Plug>(leap)',             mode = 'x', desc = 'Leap in buffer',   noremap = true },
+      { 's',       '<Plug>(leap-forward)',     mode = 'o', desc = 'Leap forward',     noremap = true },
+      { 'S',       '<Plug>(leap-backward)',    mode = 'o', desc = 'Leap backward',    noremap = true },
+      { 'gs',      '<Plug>(leap-from-window)', mode = 'o', desc = 'Leap from window', noremap = true },
+      { '<space>', '<Plug>(leap)',             mode = 'o', desc = 'Leap in buffer',   noremap = true },
     },
   }
   use 'nvim-lua/plenary.nvim'
@@ -95,33 +95,34 @@ function M.packages(use)
     -- Disable lazy loading to allow Oil to fully replace netrw
     lazy = false,
     keys = {
-      {"<leader>d", "<cmd>Oil<CR>", mode = "n", noremap = true, desc = "Open parent directory" },
+      { "<leader>d", "<cmd>Oil<CR>", mode = "n", noremap = true, desc = "Open parent directory" },
     },
     opts = {
       columns = { "permissions", "mtime", "size", "icon" },
       constrain_cursor = "name",
       default_file_explorer = true,
       skip_confirm_for_simple_edits = true,
-      -- default keymaps conflict with 
+      -- default keymaps conflict with my custom window navigation shortcuts
       use_default_keymaps = false,
       keymaps = {
-        ["!"] = "actions.open_terminal",
-        ["<F5>"] = "actions.refresh",
-        ["g?"] = { "actions.show_help", mode = "n" },
-        ["<CR>"] = "actions.select",
-        ["gv"] = { "actions.select", opts = { vertical = true } },
-        ["gh"] = { "actions.select", opts = { horizontal = true } },
-        ["gt"] = { "actions.select", opts = { tab = true } },
-        ["gp"] = "actions.preview",
+        ["!"]     = "actions.open_terminal",
+        ["<F5>"]  = "actions.refresh",
+        ["<C-r>"] = "actions.refresh",
+        ["g?"]    = { "actions.show_help", mode = "n" },
+        ["<CR>"]  = "actions.select",
+        ["gv"]    = { "actions.select", opts = { vertical = true } },
+        ["gh"]    = { "actions.select", opts = { horizontal = true } },
+        ["gt"]    = { "actions.select", opts = { tab = true } },
+        ["gp"]    = "actions.preview",
         ["<C-c>"] = { "actions.close", mode = "n" },
-        ["-"] = { "actions.parent", mode = "n" },
-        ["_"] = { "actions.open_cwd", mode = "n" },
-        ["`"] = { "actions.cd", mode = "n" },
-        ["~"] = { "actions.cd", opts = { scope = "tab" }, mode = "n" },
-        ["gs"] = { "actions.change_sort", mode = "n" },
-        ["gx"] = "actions.open_external",
-        ["g."] = { "actions.toggle_hidden", mode = "n" },
-        ["g\\"] = { "actions.toggle_trash", mode = "n" },
+        ["-"]     = { "actions.parent", mode = "n" },
+        ["_"]     = { "actions.open_cwd", mode = "n" },
+        ["`"]     = { "actions.cd", mode = "n" },
+        ["~"]     = { "actions.cd", opts = { scope = "tab" }, mode = "n" },
+        ["gs"]    = { "actions.change_sort", mode = "n" },
+        ["gx"]    = "actions.open_external",
+        ["g."]    = { "actions.toggle_hidden", mode = "n" },
+        ["g\\"]   = { "actions.toggle_trash", mode = "n" },
       },
       view_options = { show_hidden = true },
     },
@@ -140,7 +141,7 @@ function M.packages(use)
         'FTermOpenParent',
         function()
           local file_parent = vim.fs.dirname(vim.fn.expand("%"))
-          require('FTerm').run({'cd', file_parent})
+          require('FTerm').run({ 'cd', file_parent })
         end,
         { bang = true }
       )
@@ -152,7 +153,7 @@ function M.packages(use)
   use {
     'Mathijs-Bakker/zoom-vim',
     keys = {
-      {'<C-w>z', '<Plug>Zoom', mode = 'n', desc = 'Zoom window', noremap = true},
+      { '<C-w>z', '<Plug>Zoom', mode = 'n', desc = 'Zoom window', noremap = true },
     },
   }
 

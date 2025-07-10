@@ -13,4 +13,6 @@ uv tool install keyring --upgrade --with keyrings.google-artifactregistry-auth
 uv tool install ty --upgrade
 uv tool install llm --upgrade --with llm-ollama --with llm-gemini --with llm-openrouter
 uv tool install coconut[jupyter] --upgrade --with ipython
-#uv tool install rembg[cli] --upgrade
+if [ "$(uname)" != "Darwin" ]; then
+  uv tool install rembg[cli] --upgrade --python 3.10 --with onnxruntime
+fi

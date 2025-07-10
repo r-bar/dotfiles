@@ -217,3 +217,12 @@ repositories:
   password: ""
   url: https://kubernetes-sigs.github.io/nfs-subdir-external-provisioner/
   username: ""
+- caFile: ""
+  certFile: ""
+  insecure_skip_tls_verify: false
+  keyFile: ""
+  name: signoz
+  pass_credentials_all: false
+  password: ""
+  url: https://charts.signoz.io
+  username: ""

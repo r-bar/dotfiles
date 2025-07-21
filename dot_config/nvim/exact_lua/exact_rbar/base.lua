@@ -444,6 +444,9 @@ function M.config()
     { "n", "v" }, "[l", "<cmd>lpr<cr>",
     { silent = true, desc = "Jump to the previous entry in the location list" }
   )
+
+  -- Heading comment insertion
+  vim.keymap.set('n', '<leader>=', 'yypVr#', { desc = "Make title comment", noremap = true })
 end
 
 return M

@@ -17,6 +17,8 @@ function M.packages(use)
       vim.keymap.set("n", "<leader>fh", fzf.help_tags, { silent = true })
       vim.keymap.set({ "n", "v" }, "<leader>a", fzf.lsp_code_actions, { silent = true })
       vim.api.nvim_create_user_command("Help", fzf.help_tags, {})
+      fzf.setup()
+      fzf.register_ui_select()
     end
   }
   use {

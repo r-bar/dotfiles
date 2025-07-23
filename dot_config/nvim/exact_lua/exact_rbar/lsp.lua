@@ -67,7 +67,7 @@ local function on_attach(client, bufnr)
   vim.keymap.set('n', '<leader>D', vim.lsp.buf.type_definition, bufopts {})
   vim.keymap.set('n', '<leader>r', vim.lsp.buf.rename, bufopts {})
   vim.keymap.set('n', '<F2>', vim.lsp.buf.rename, bufopts {})
-  vim.keymap.set('n', '<leader>a', vim.lsp.buf.code_action, bufopts {})
+  vim.keymap.set('n', '<leader>a', require('fzf-lua').lsp_code_actions, bufopts {})
   vim.keymap.set('n', 'gr', vim.lsp.buf.references, bufopts {})
   vim.keymap.set('n', '<leader>ff', function() vim.lsp.buf.format { async = true } end, bufopts {})
 

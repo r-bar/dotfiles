@@ -5,7 +5,7 @@ function proj
     set -f PROJ_DIR "$HOME/src"
   end
   if test -z "$PROJ_DEPTH"
-    set -f PROJ_DEPTH 3
+    set -f PROJ_DEPTH 5
   end
 
   function _opterr

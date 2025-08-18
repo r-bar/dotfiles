@@ -38,6 +38,7 @@ function M.packages(use)
   use 'Glench/Vim-Jinja2-Syntax'
   use 'https://github.com/alker0/chezmoi.vim.git'
   use 'https://github.com/mracos/mermaid.vim.git'
+  use { 'SCJangra/table-nvim', ft = 'markdown', opts = {} }
 end
 
 local function is_helm_file(path)

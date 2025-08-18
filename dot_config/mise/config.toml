@@ -3,6 +3,7 @@ experimental = true
 # disabling not found handler due to misbahavior in fish when not in a git
 # directory.
 not_found_auto_install = false
+idiomatic_version_file_enable_tools = []
 
 [settings.status]
 missing_tools = "always"

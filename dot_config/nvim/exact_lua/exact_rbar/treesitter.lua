@@ -56,7 +56,7 @@ function M.packages(use)
         },
         indent = {
           enable = true,
-          disable = {'python', 'v'}
+          --disable = {'python', 'v'}
         },
         textobjects = { enable = true },
       }

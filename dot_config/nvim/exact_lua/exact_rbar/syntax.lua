@@ -34,7 +34,11 @@ function M.packages(use)
   use { "https://github.com/IndianBoy42/tree-sitter-just.git", ft = 'just', config = true }
   use "https://github.com/pearofducks/ansible-vim.git"
   use { "czheo/mojo.vim", ft = 'mojo' }
-  use { 'https://github.com/Vimjas/vim-python-pep8-indent.git', ft = "python" }
+  use {
+    'https://github.com/Vimjas/vim-python-pep8-indent.git',
+    enabled = false,
+    ft = "python",
+  }
   use 'Glench/Vim-Jinja2-Syntax'
   use 'https://github.com/alker0/chezmoi.vim.git'
   use 'https://github.com/mracos/mermaid.vim.git'

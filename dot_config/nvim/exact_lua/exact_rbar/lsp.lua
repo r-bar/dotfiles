@@ -212,7 +212,7 @@ local function server_settings()
         cargo = { loadOutDirsFromCheck = true },
         procMacro = { enable = true },
         updates = { channel = "nightly" },
-        checkOnSave = { command = "clippy" },
+        checkOnSave = true,
         diagnostics = { experimental = { enable = true } },
       },
     },

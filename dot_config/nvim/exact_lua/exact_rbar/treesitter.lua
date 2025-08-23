@@ -3,14 +3,19 @@ local M = {}
 
 function M.packages(use)
   use {
-    "nvim-treesitter/nvim-treesitter",
+    "r-bar/nvim-treesitter",
+    branch = "gleam-fix",
     run = ":TSUpdate",
+    build = ":TSUpdate",
     config = function()
       require"nvim-treesitter.configs".setup {
         -- A list of parser names, or "all"
         ensure_installed = "all",
-        --modules = {},
-        --ignore_install = {},
+        modules = {},
+        -- List of parsers to ignore installing (for "all")
+        -- ipkg ignored due to tarball extration error
+        -- see: https://github.com/nvim-treesitter/nvim-treesitter/issues/4250
+        ignore_install = {'ipkg'},
 
         -- Install parsers synchronously (only applied to `ensure_installed`)
         sync_install = false,
@@ -18,9 +23,6 @@ function M.packages(use)
         -- Automatically install missing parsers when entering buffer
         -- Recommendation: set to false if you don't have `tree-sitter` CLI installed locally
         auto_install = true,
-
-        -- List of parsers to ignore installing (for "all")
-        -- ignore_install = { "javascript" },
 
         ---- If you need to change the installation directory of the parsers (see -> Advanced Setup)
         -- parser_install_dir = "/some/path/to/store/parsers", -- Remember to run vim.opt.runtimepath:append("/some/path/to/store/parsers")!
@@ -33,7 +35,7 @@ function M.packages(use)
           -- disable highlighting for the `tex` filetype, you need to include `latex` in this list as this is
           -- the name of the parser)
           -- list of language that will be disabled
-          disable = {"sql", "verilog"},
+          --disable = {"sql", "verilog"},
           -- Or use a function for more flexibility, e.g. to disable slow treesitter highlight for large files
           --disable = function(lang, buf)
           --  local disabled_languages = {'sql'}
@@ -56,7 +58,7 @@ function M.packages(use)
         },
         indent = {
           enable = true,
-          --disable = {'python', 'v'}
+          disable = {}
         },
         textobjects = { enable = true },
       }

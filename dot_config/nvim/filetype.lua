@@ -1,5 +1,6 @@
 vim.filetype.add{
   extension = {
+    pest = 'pest',
     v = 'vlang',
   },
   filename = {

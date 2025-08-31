@@ -82,4 +82,5 @@ function fish_user_key_bindings
   abbr --add !\$ --position anywhere --function last_history_arg
 
   abbr --add dc docker-compose
+  abbr --add pc podman-compose
 end

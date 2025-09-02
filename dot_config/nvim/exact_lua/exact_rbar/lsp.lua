@@ -54,33 +54,39 @@ local function on_attach(client, bufnr)
     return opts
   end
   vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, bufopts { desc = "Go to declaration" })
-  vim.keymap.set('n', 'gd', vim.lsp.buf.definition, bufopts {})
-  vim.keymap.set('n', 'K', vim.lsp.buf.hover, bufopts {})
-  vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, bufopts {})
-  vim.keymap.set('n', '<leader>k', vim.lsp.buf.signature_help, bufopts {})
-  vim.keymap.set('i', '<C-k>', vim.lsp.buf.signature_help, bufopts {})
-  vim.keymap.set('n', '<leader>wa', vim.lsp.buf.add_workspace_folder, bufopts {})
-  vim.keymap.set('n', '<leader>wr', vim.lsp.buf.remove_workspace_folder, bufopts {})
+  vim.keymap.set('n', 'gd', vim.lsp.buf.definition, bufopts { desc = "Go to definition" })
+  vim.keymap.set('n', 'gv', ":vsplit<cr>gd", bufopts { desc = "Go to definition in new vsplit" })
+  vim.keymap.set('n', 'K', vim.lsp.buf.hover, bufopts { desc = "Show hover info" })
+  vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, bufopts { desc = "Go to implementation" })
+  vim.keymap.set('n', '<leader>k', vim.lsp.buf.signature_help, bufopts { desc = "Show signature help" })
+  vim.keymap.set('i', '<C-k>', vim.lsp.buf.signature_help, bufopts { desc = "Show signature help" })
+  vim.keymap.set('n', '<leader>wa', vim.lsp.buf.add_workspace_folder, bufopts { desc = 'Add workspace folder' })
+  vim.keymap.set('n', '<leader>wr', vim.lsp.buf.remove_workspace_folder, bufopts { desc = 'Remove workspace folder' })
   vim.keymap.set('n', '<leader>wl', function()
     print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
-  end, bufopts {})
-  vim.keymap.set('n', '<leader>D', vim.lsp.buf.type_definition, bufopts {})
-  vim.keymap.set('n', '<leader>r', vim.lsp.buf.rename, bufopts {})
-  vim.keymap.set('n', '<F2>', vim.lsp.buf.rename, bufopts {})
-  vim.keymap.set('n', '<leader>a', require('fzf-lua').lsp_code_actions, bufopts {})
-  vim.keymap.set('n', 'gr', vim.lsp.buf.references, bufopts {})
-  vim.keymap.set('n', '<leader>ff', function() vim.lsp.buf.format { async = true } end, bufopts {})
+  end, bufopts { desc = 'List workspace folders' })
+  vim.keymap.set('n', '<leader>D', vim.lsp.buf.type_definition, bufopts { desc = "Show type definition" })
+  vim.keymap.set('n', '<leader>r', vim.lsp.buf.rename, bufopts { desc = "Rename" })
+  vim.keymap.set('n', '<F2>', vim.lsp.buf.rename, bufopts { desc = "Rename" })
+  vim.keymap.set('n', '<leader>a', require('fzf-lua').lsp_code_actions, bufopts { desc = "Perform code action" })
+  vim.keymap.set('n', 'gr', vim.lsp.buf.references, bufopts { desc = "Find references" })
+  vim.keymap.set('n', '<leader>ff', function() vim.lsp.buf.format { async = true } end, bufopts { desc = "Format file" })
 
   -- disable semantic token highlighting
   client.server_capabilities.semanticTokensProvider = nil
 end
 
 function M.global_bindings()
-  local opts = { noremap = true, silent = true }
-  vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float, opts)
-  vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, opts)
-  vim.keymap.set('n', ']d', vim.diagnostic.goto_next, opts)
-  vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, opts)
+  local default_opts = { noremap = true, silent = true }
+  local function opts(extra)
+    return vim.tbl_extend("force", default_opts, extra or {})
+  end
+  vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float, opts { desc = 'Show diagnostic error in floating window' })
+  vim.keymap.set('n', '[d', function() vim.diagnostic.jump { count = -1, float = true } end,
+    opts { desc = 'Jump to prev diagnostic error' })
+  vim.keymap.set('n', ']d', function() vim.diagnostic.jump { count = 1, float = true } end,
+    opts { desc = 'Jump to next diagnostic error' })
+  vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, opts { desc = 'Show buffer diagnostic errors' })
 end
 
 local function capabilities()
@@ -637,7 +643,6 @@ function M.packages(use)
       panel = { enabled = true },
     }
   }
-
 end
 
 function M.config()
@@ -654,7 +659,7 @@ function M.config()
     "LspRestart",
     function()
       vim.lsp.buf.clear_references()
-      vim.lsp.stop_client(vim.lsp.get_active_clients())
+      vim.lsp.stop_client(vim.lsp.get_clients())
       vim.cmd [[edit]]
     end,
     {}

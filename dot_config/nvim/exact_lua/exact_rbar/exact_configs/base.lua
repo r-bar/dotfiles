@@ -447,6 +447,8 @@ function M.config()
 
   -- Heading comment insertion
   vim.keymap.set('n', '<leader>=', 'yypVr#', { desc = "Make title comment", noremap = true })
+
+  vim.api.nvim_create_user_command("CloseFloatingWindows", require('rbar/helpers').close_floats, { desc = 'Close all floating windows. Useful when they get stuck.'})
 end
 
 return M

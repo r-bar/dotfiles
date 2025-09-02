@@ -24,9 +24,11 @@ function M.packages(use)
     opts = {
       options = {
         transparent = false,
+        dim_inactive = true,
       },
     },
-    config = function()
+    config = function(_plugin, opts)
+      require('nightfox').setup(opts)
       vim.cmd[[colorscheme nightfox]]
     end,
   }

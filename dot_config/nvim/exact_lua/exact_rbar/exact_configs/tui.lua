@@ -8,7 +8,7 @@ function M.packages(use)
       'kristijanhusak/vim-dadbod-completion',
       'tpope/vim-dadbod',
     },
-    ft = {"sql"},
+    ft = { "sql" },
     cmd = {
       "DBUI",
       "DBUIToggle",
@@ -25,9 +25,9 @@ function M.packages(use)
   }
   use {
     'tpope/vim-dadbod',
-    cmd = {'DB'},
-    ft = {'sql'},
-    dependencies = {'kristijanhusak/vim-dadbod-completion'},
+    cmd = { 'DB' },
+    ft = { 'sql' },
+    dependencies = { 'kristijanhusak/vim-dadbod-completion' },
   }
   use {
     'https://github.com/pwntester/octo.nvim.git',
@@ -44,7 +44,15 @@ function M.packages(use)
   use {
     'Vigemus/iron.nvim',
     tag = "v3.0",
-    cmd = "Repl"
+    cmd = {
+      "IronRepl",
+      "IronReplHere",
+      "IronRestart",
+      "IronSend",
+      "IronFocus",
+      "IronWatchCurrentFile",
+      "IronUnwatchCurrentFile",
+    },
   }
 end
 

@@ -55,7 +55,7 @@ local function on_attach(client, bufnr)
   end
   vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, bufopts { desc = "Go to declaration" })
   vim.keymap.set('n', 'gd', vim.lsp.buf.definition, bufopts { desc = "Go to definition" })
-  vim.keymap.set('n', 'gv', ":vsplit<cr>gd", bufopts { desc = "Go to definition in new vsplit" })
+  --vim.keymap.set('n', 'gv', ":vsplit<cr>gd", bufopts { desc = "Go to definition in new vsplit" })
   vim.keymap.set('n', 'K', vim.lsp.buf.hover, bufopts { desc = "Show hover info" })
   vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, bufopts { desc = "Go to implementation" })
   vim.keymap.set('n', '<leader>k', vim.lsp.buf.signature_help, bufopts { desc = "Show signature help" })

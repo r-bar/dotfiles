@@ -54,6 +54,16 @@ function M.packages(use)
       "IronUnwatchCurrentFile",
     },
   }
+  use {
+    'https://github.com/sindrets/diffview.nvim.git',
+    cmd = {
+      "DiffviewOpen",
+      "DiffviewClose",
+      "DiffviewToggleFiles",
+      "DiffviewRefresh",
+      "DiffviewFileHistory",
+    },
+  }
 end
 
 -- see lsp.lua for

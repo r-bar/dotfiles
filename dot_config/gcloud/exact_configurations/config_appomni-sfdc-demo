@@ -5,3 +5,6 @@ project = appomni-sfdc-demo
 [compute]
 zone = us-central1-c
 
+[container]
+cluster = cluster-vpc1
+

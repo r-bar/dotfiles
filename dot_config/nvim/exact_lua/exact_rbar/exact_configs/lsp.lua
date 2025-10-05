@@ -5,7 +5,7 @@ local OLLAMA_BASE_URL = "http://earth.ts.barth.tech:11434"
 
 -- order is important. these mason setup calls must be done before lspconfig
 -- servers are configured
-local function mason_config()
+local function mason_ensure_installed()
   local ensure_installed = {
     "bashls",
     "docker_compose_language_service",
@@ -36,11 +36,7 @@ local function mason_config()
     table.insert(ensure_installed, "ansiblels")
   end
 
-  require('mason').setup { PATH = "append" }
-  require('mason-lspconfig').setup({
-    automatic_installation = true,
-    ensure_installed = ensure_installed,
-  })
+  return ensure_installed
 end
 
 local function on_attach(client, bufnr)
@@ -89,43 +85,9 @@ function M.global_bindings()
   vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, opts { desc = 'Show buffer diagnostic errors' })
 end
 
-local function capabilities()
-  return vim.lsp.protocol.make_client_capabilities()
-  -- originally from require('cmp_nvim_lsp').default_capabilities()
-  --return {
-  --  textDocument = {
-  --    completion = {
-  --      completionItem = {
-  --        commitCharactersSupport = true,
-  --        deprecatedSupport = true,
-  --        insertReplaceSupport = true,
-  --        insertTextModeSupport = {
-  --          valueSet = { 1, 2 }
-  --        },
-  --        labelDetailsSupport = true,
-  --        preselectSupport = true,
-  --        resolveSupport = {
-  --          properties = { "documentation", "additionalTextEdits", "insertTextFormat", "insertTextMode", "command" }
-  --        },
-  --        snippetSupport = true,
-  --        tagSupport = {
-  --          valueSet = { 1 }
-  --        }
-  --      },
-  --      completionList = {
-  --        itemDefaults = { "commitCharacters", "editRange", "insertTextFormat", "insertTextMode", "data" }
-  --      },
-  --      contextSupport = true,
-  --      dynamicRegistration = false,
-  --      insertTextMode = 1
-  --    }
-  --  }
-  --}
-end
-
 local function default_server_settings()
   return {
-    capabilities = capabilities(),
+    capabilities = vim.lsp.protocol.make_client_capabilities(),
     on_attach = on_attach,
     flags = lsp_flags,
   }
@@ -469,109 +431,14 @@ function M.blink_deps()
   return deps
 end
 
----@alias symbolUsageFormatter {setup: fun(), text_format: fun(symbol: table): (string | string[])}
----@type table<string, symbolUsageFormatter>
-local codelens_formatters = {
-  -- sourced from https://github.com/Wansmer/symbol-usage.nvim?tab=readme-ov-file#plain-text
-  plain = {
-    setup = function() end,
-    text_format = function(symbol)
-      local fragments = {}
-
-      -- Indicator that shows if there are any other symbols in the same line
-      local stacked_functions = symbol.stacked_count > 0
-          and (' | +%s'):format(symbol.stacked_count)
-          or ''
-
-      if symbol.references then
-        local usage = symbol.references <= 1 and 'usage' or 'usages'
-        local num = symbol.references == 0 and 'no' or symbol.references
-        table.insert(fragments, ('%s %s'):format(num, usage))
-      end
-
-      if symbol.definition then
-        table.insert(fragments, symbol.definition .. ' defs')
-      end
-
-      if symbol.implementation then
-        table.insert(fragments, symbol.implementation .. ' impls')
-      end
-
-      return table.concat(fragments, ', ') .. stacked_functions
-    end,
-  },
-  -- sourced from https://github.com/Wansmer/symbol-usage.nvim?tab=readme-ov-file#bubbles
-  bubbles = {
-    setup = function()
-      -- gets highlight groups from the current buffer
-      local function h(name) return vim.api.nvim_get_hl(0, { name = name }) end
-
-      -- hl-groups can have any name
-      vim.api.nvim_set_hl(0, 'SymbolUsageRounding', { fg = h('CursorLine').bg, italic = true })
-      vim.api.nvim_set_hl(0, 'SymbolUsageContent', { bg = h('CursorLine').bg, fg = h('Comment').fg, italic = true })
-      vim.api.nvim_set_hl(0, 'SymbolUsageRef', { fg = h('Function').fg, bg = h('CursorLine').bg, italic = true })
-      vim.api.nvim_set_hl(0, 'SymbolUsageDef', { fg = h('Type').fg, bg = h('CursorLine').bg, italic = true })
-      vim.api.nvim_set_hl(0, 'SymbolUsageImpl', { fg = h('@keyword').fg, bg = h('CursorLine').bg, italic = true })
-    end,
-    text_format = function(symbol)
-      local res = {}
-
-      local round_start = { '', 'SymbolUsageRounding' }
-      local round_end = { '', 'SymbolUsageRounding' }
-
-      -- Indicator that shows if there are any other symbols in the same line
-      local stacked_functions_content = symbol.stacked_count > 0
-          and ("+%s"):format(symbol.stacked_count)
-          or ''
-
-      if symbol.references then
-        local usage = symbol.references <= 1 and 'usage' or 'usages'
-        local num = symbol.references == 0 and 'no' or symbol.references
-        table.insert(res, round_start)
-        table.insert(res, { '󰌹 ', 'SymbolUsageRef' })
-        table.insert(res, { ('%s %s'):format(num, usage), 'SymbolUsageContent' })
-        table.insert(res, round_end)
-      end
-
-      if symbol.definition then
-        if #res > 0 then
-          table.insert(res, { ' ', 'NonText' })
-        end
-        table.insert(res, round_start)
-        table.insert(res, { '󰳽 ', 'SymbolUsageDef' })
-        table.insert(res, { symbol.definition .. ' defs', 'SymbolUsageContent' })
-        table.insert(res, round_end)
-      end
-
-      if symbol.implementation then
-        if #res > 0 then
-          table.insert(res, { ' ', 'NonText' })
-        end
-        table.insert(res, round_start)
-        table.insert(res, { '󰡱 ', 'SymbolUsageImpl' })
-        table.insert(res, { symbol.implementation .. ' impls', 'SymbolUsageContent' })
-        table.insert(res, round_end)
-      end
-
-      if stacked_functions_content ~= '' then
-        if #res > 0 then
-          table.insert(res, { ' ', 'NonText' })
-        end
-        table.insert(res, round_start)
-        table.insert(res, { ' ', 'SymbolUsageImpl' })
-        table.insert(res, { stacked_functions_content, 'SymbolUsageContent' })
-        table.insert(res, round_end)
-      end
-
-      return res
-    end,
-  }
-}
-
 function M.packages(use)
   use 'neovim/nvim-lspconfig'
-  use { 'williamboman/mason.nvim', version = '^1.0.0' }
-  use { 'williamboman/mason-lspconfig.nvim', version = '^1.0.0', config = mason_config }
+  use { 'williamboman/mason.nvim', version = '^2.0.0', opts = { PATH = "append" } }
+  use {
+    'williamboman/mason-lspconfig.nvim',
+    version = '^2.0.0',
+    opts = { ensure_installed = mason_ensure_installed() }
+  }
   -- gives a nice live lsp status message in the bottom right corner
   use { 'j-hui/fidget.nvim', opts = {} }
 
@@ -646,8 +513,6 @@ function M.packages(use)
 end
 
 function M.config()
-  local lspconfig = require('lspconfig')
-
   -- lsp debug logging
   -- clear the lsp log before every session
   vim.fn.system("rm $HOME/.local/state/nvim/lsp.log")
@@ -655,28 +520,21 @@ function M.config()
 
   vim.api.nvim_create_user_command("Format", function() vim.lsp.buf.format { async = false } end, {})
   vim.api.nvim_create_user_command("LspDiagnostics", function() vim.diagnostic.setqflist() end, {})
-  vim.api.nvim_create_user_command(
-    "LspRestart",
-    function()
-      vim.lsp.buf.clear_references()
-      vim.lsp.stop_client(vim.lsp.get_clients())
-      vim.cmd [[edit]]
-    end,
-    {}
-  )
+  --vim.api.nvim_create_user_command(
+  --  "LspRestart",
+  --  function()
+  --    vim.lsp.buf.clear_references()
+  --    vim.lsp.stop_client(vim.lsp.get_clients())
+  --    vim.cmd [[edit]]
+  --  end,
+  --  {}
+  --)
 
   M.global_bindings()
 
-  require("mason-lspconfig").setup_handlers {
-    -- The first entry (without a key) will be the default handler
-    -- and will be called for each installed server that doesn't have
-    -- a dedicated handler.
-    function(server_name) -- default handler (optional)
-      lspconfig[server_name].setup(default_server_settings())
-    end,
-  }
   for name, settings in pairs(server_settings()) do
-    lspconfig[name].setup(settings)
+    vim.lsp.config(name, settings)
+    vim.lsp.enable(name)
   end
 end
 

@@ -1,3 +1,5 @@
+-- All configuration for colorschemes and theming
+
 ---@type ConfigPkg
 local M = {}
 

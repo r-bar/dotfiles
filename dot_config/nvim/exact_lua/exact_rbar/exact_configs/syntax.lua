@@ -1,5 +1,15 @@
-----@type ConfigPkg
+-- Config for syntax and extensions for specific filetypes
+
+---@type ConfigPkg
 local M = {}
+
+---@private
+---@return boolean
+local function in_chezmoi_dir()
+  local cmdir = os.getenv("HOME") .. "/.local/share/chezmoi"
+  local cwd_result = string.find(vim.fn.getcwd(), cmdir)
+  return cwd_result == 1
+end
 
 function M.packages(use)
   use 'LnL7/vim-nix'
@@ -40,9 +50,33 @@ function M.packages(use)
     ft = "python",
   }
   use 'Glench/Vim-Jinja2-Syntax'
-  use 'https://github.com/alker0/chezmoi.vim.git'
   use 'https://github.com/mracos/mermaid.vim.git'
   use { 'SCJangra/table-nvim', ft = 'markdown', opts = {} }
+
+  -- Handles name mapping for the purposes of filetype detection and template
+  -- file syntax highlighting
+  use {'https://github.com/alker0/chezmoi.vim.git', cond = in_chezmoi_dir}
+  -- Auto applies files when editing them in the chezmoi configuration directory
+  use {
+    "xvzc/chezmoi.nvim",
+    cond = in_chezmoi_dir,
+    dependencies = { "nvim-lua/plenary.nvim" },
+    opts = {},
+    config = function()
+      -- apply changes on save for all files in ~/.local/share/chezmoi/
+      vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
+        pattern = { os.getenv("HOME") .. "/.local/share/chezmoi/*" },
+        callback = function(ev)
+          local bufnr = ev.buf
+          local edit_watch = function()
+            require("chezmoi.commands.__edit").watch(bufnr)
+          end
+          vim.schedule(edit_watch)
+          print("Chezmoi file detected. Changes will be applied on save.")
+        end,
+      })
+    end,
+  }
 end
 
 local function is_helm_file(path)

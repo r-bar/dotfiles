@@ -1,3 +1,5 @@
+-- Configuration for core treesitter providers
+
 ---@type ConfigPkg
 local M = {}
 

@@ -1,3 +1,5 @@
+-- Configuration for the status bar at the bottom of the window
+
 ---@type ConfigPkg
 local M = {}
 

@@ -1,7 +1,30 @@
 [tasks.pre-commit-hook]
 description = "Local commands called by pre-commit"
-depends = []
+depends = ["nvim-lazy-lock-check"]
 
 [tasks.pre-commit]
 description = "Run pre-commit hooks on all files"
 run = "pre-commit run --all-files"
+
+[tasks.nvim-lazy-lock-check]
+description = "Ensure nvim's lazy-lock.json is in sync"
+run = """
+LOCKFILE_PATH=dot_config/nvim/lazy-lock.json
+if [ ! -f $LOCKFILE_PATH ]; then
+  echo "Cannot find chezmoi's neovim lockfile at $LOCKFILE_PATH"
+  exit 1
+fi
+
+diff $LOCKFILE_PATH $(chezmoi target-path $LOCKFILE_PATH)
+RESULT=$?
+
+if [ $RESULT -ne 0 ]; then
+  echo
+  echo "Neovim's plugin lockfile is out of sync with the state in chezmoi"
+fi
+exit $RESULT
+"""
+
+[tasks.nvim-lazy-lock-update]
+description = "Update nvim's lazy-lock.json to match the current state in use on this machine"
+run = "chezmoi re-add ~/.config/nvim/lazy-lock.json"

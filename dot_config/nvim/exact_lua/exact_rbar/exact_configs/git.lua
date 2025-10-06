@@ -1,3 +1,5 @@
+-- Integration with git
+
 ---@type ConfigPkg
 local M = {}
 
@@ -5,6 +7,17 @@ function M.on_attach(bufnr)
 end
 
 function M.packages(use)
+  use {
+    'https://github.com/tpope/vim-fugitive.git',
+    cmd = {
+      'G', 'GBrowse', 'GDelete', 'GMove', 'GRemove', 'GRename', 'GUnlink',
+      'Gbrowse', 'GcLog', 'Gcd', 'Gclog', 'Gdelete', 'Gdiffsplit', 'Gdrop',
+      'Ge', 'Gedit', 'Ggrep', 'Ghdiffsplit', 'Git', 'Gitsigns', 'GlLog', 'Glcd',
+      'Glgrep', 'Gllog', 'Gmove', 'Gpedit', 'Gr', 'Gread', 'Gremove', 'Grename',
+      'Gsplit', 'Gtabedit', 'Gvdiffsplit', 'Gvsplit', 'Gw', 'Gwq', 'Gwrite',
+    },
+  }
+
   use {
     "lewis6991/gitsigns.nvim",
     config = function()

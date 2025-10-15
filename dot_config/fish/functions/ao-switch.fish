@@ -1,5 +1,5 @@
 function ao-switch --description 'Switch the AppOmni gcloud and k8s environment'
-  argparse 'g/global' -- $argv
+  argparse 'a/adc' 'g/global' -- $argv
   set -l context $argv[1]
 
   function _set -V _flag_global
@@ -86,5 +86,10 @@ function ao-switch --description 'Switch the AppOmni gcloud and k8s environment'
     return 1
 
   end
+
+  if set -ql _flag_adc
+    gcloud auth application-default login
+  end
+
   return 0
 end

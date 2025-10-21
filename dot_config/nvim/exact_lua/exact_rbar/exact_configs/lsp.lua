@@ -152,18 +152,19 @@ local function server_settings()
           pyflakes = { enabled = false },
           flake8 = { enabled = false },
           pycodestyle = { enabled = false },
-          ruff = {
-            enabled = true,       -- Enable the plugin
-            formatEnabled = true, -- Enable formatting using ruffs formatter
-            format = { "I" },     -- Rules that are marked as fixable by ruff that should be fixed when running textDocument/formatting
-            unsafeFixes = false,  -- Whether or not to offer unsafe fixes as code actions. Ignored with the "Fix All" action
+          -- moved to its own lsp server
+          --ruff = {
+          --  enabled = true,       -- Enable the plugin
+          --  formatEnabled = true, -- Enable formatting using ruffs formatter
+          --  format = { "I" },     -- Rules that are marked as fixable by ruff that should be fixed when running textDocument/formatting
+          --  unsafeFixes = false,  -- Whether or not to offer unsafe fixes as code actions. Ignored with the "Fix All" action
 
-            -- Rules that are ignored when a pyproject.toml or ruff.toml is present:
-            lineLength = 88,                                 -- Line length to pass to ruff checking and formatting
-            perFileIgnores = { ["__init__.py"] = "CPY001" }, -- Rules that should be ignored for specific files
-            preview = false,                                 -- Whether to enable the preview style linting and formatting.
-            targetVersion = "py310",                         -- The minimum python version to target (applies for both lint and format)
-          }
+          --  -- Rules that are ignored when a pyproject.toml or ruff.toml is present:
+          --  lineLength = 88,                                 -- Line length to pass to ruff checking and formatting
+          --  perFileIgnores = { ["__init__.py"] = "CPY001" }, -- Rules that should be ignored for specific files
+          --  preview = false,                                 -- Whether to enable the preview style linting and formatting.
+          --  targetVersion = "py310",                         -- The minimum python version to target (applies for both lint and format)
+          --}
         },
       },
     },
@@ -171,6 +172,10 @@ local function server_settings()
 
   if vim.fn.executable("pylsp") == 1 then
     settings.pylsp.cmd = { "pylsp" }
+  end
+
+  if vim.fn.executable("ruff") then
+    settings["ruff"] = with_defaults()
   end
 
   settings['roc_ls'] = with_defaults()

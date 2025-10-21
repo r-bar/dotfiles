@@ -9,7 +9,7 @@ function M.packages(use)
     config = function()
       local splitjoin = require('splitjoin')
       vim.keymap.set('n', 'gj', splitjoin.split, { noremap = true, desc = 'Split the object under the cursor' })
-      vim.keymap.set('n', 'gJ', splitjoin.join, { noremap = true, desc = 'Split the object under the cursor' })
+      vim.keymap.set('n', 'gJ', splitjoin.join, { noremap = true, desc = 'Join the object under the cursor' })
     end,
   }
 

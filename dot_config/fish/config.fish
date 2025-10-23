@@ -9,6 +9,8 @@ set -gx UPLOAD_RCLONE_CONFIG linode
 set -gx UPLOAD_BUCKET barth-tech
 set -gx UPLOAD_BASE_PATH uploads
 
+set -gx FZF_TMUX 1
+
 if type -q gcloud && type -q uv
   set -gx CLOUDSDK_PYTHON (uv python find 3.12)
 end

@@ -13,7 +13,9 @@ if type -q gcloud && type -q uv
   set -gx CLOUDSDK_PYTHON (uv python find 3.12)
 end
 
-
+if type -q rustup && type -q rustc && test -d (rustc --print sysroot)/bin
+  set fish_user_paths (rustc --print sysroot)/bin $fish_user_paths
+end
 if test -d ~/.cargo/bin
   set fish_user_paths ~/.cargo/bin $fish_user_paths
 end

@@ -108,6 +108,8 @@ function M.packages(use)
       map({'o', 'x'}, 'ih', ':<C-U>Gitsigns select_hunk<CR>')
     end,
   }
+
+  use 'tpope/vim-rhubarb'
 end
 
 return M

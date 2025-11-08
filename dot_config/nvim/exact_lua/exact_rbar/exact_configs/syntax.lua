@@ -77,6 +77,7 @@ function M.packages(use)
       })
     end,
   }
+  use "https://github.com/marekmaskarinec/vim-umka.git"
 end
 
 local function is_helm_file(path)

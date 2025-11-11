@@ -229,6 +229,10 @@ The official V language server, written in V itself.
     },
   })
 
+  if vim.fn.executable("clangd") == 1 then
+    settings['clangd'] = with_defaults()
+  end
+
   return settings
 end
 

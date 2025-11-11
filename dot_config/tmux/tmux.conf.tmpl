@@ -8,7 +8,7 @@
 #set -g default-terminal "screen-256color"
 {{- if eq .chezmoi.os "linux" }}
 set -g default-shell /bin/fish
-set -g default-command "reattach-to-user-namespace /bin/fish"
+#set -g default-command "reattach-to-user-namespace /bin/fish"
 {{- else if eq .chezmoi.os "darwin" }}
 set -g default-shell /opt/homebrew/bin/fish
 set -g default-command "reattach-to-user-namespace /opt/homebrew/bin/fish"

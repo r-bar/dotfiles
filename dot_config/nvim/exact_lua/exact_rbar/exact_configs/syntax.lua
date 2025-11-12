@@ -78,6 +78,7 @@ function M.packages(use)
     end,
   }
   use "https://github.com/marekmaskarinec/vim-umka.git"
+  use "https://github.com/manicmaniac/coconut.vim.git"
 end
 
 local function is_helm_file(path)

@@ -9,6 +9,14 @@ function M.packages(use)
       'Abolish',
       'Subvert',
       'S',
+    },
+    keymaps = {
+      { 'cr', '<Plug>(abolish-coerce)', mode = { 'n', 'v' } },
+      --{ 'cr', '<Plug>(abolish-coerce)', mode = 'i' },
+      { 'cR', '<Plug>(abolish-coerce-with-case)', mode = { 'n', 'v' } },
+      --{ 'cR', '<Plug>(abolish-coerce-with-case)', mode = 'i' },
+      --{ 'sr', '<Plug>(abolish-subvert)', mode = { 'n', 'v' } },
+      --{ 'sR', '<Plug>(abolish-subvert-with-case)', mode = { 'n', 'v' } },
     }
   }
   use {

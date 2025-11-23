@@ -6,24 +6,26 @@ import shutil
 import socket
 import socketserver
 import sys
+import typing as t
 from abc import ABC, abstractmethod
 from argparse import ArgumentParser
+from collections import abc
 from dataclasses import dataclass
+from http import HTTPStatus
 from http.client import HTTPConnection
-from http.server import BaseHTTPRequestHandler, HTTPServer, HTTPStatus
-from subprocess import CompletedProcess, SubprocessError, run
+from http.server import BaseHTTPRequestHandler, HTTPServer
+from subprocess import CalledProcessError, CompletedProcess, run
 from tempfile import SpooledTemporaryFile
-from typing import Callable, Optional
 
 DEFAULT_PORT = 8377
 MAX_CLIPBOARD_MEMORY = 10 * 1024 * 1024
-OSTYPE = os.environ.get("OSTYPE")
-CompletedProcess = Callable[[], CompletedProcess]
+OSTYPE = os.environ.get("OSTYPE", "")
+# CompletedProcess: t.TypeAlias = abc.Callable[[], CompletedProcess]
 
 
-class Mode(enum.StrEnum):
-    IN = "in"
-    OUT = "out"
+class Mode(enum.Enum):
+    IN = enum.auto()
+    OUT = enum.auto()
 
 
 def netloc(arg_str: str) -> tuple[str, int]:
@@ -37,8 +39,10 @@ def netloc(arg_str: str) -> tuple[str, int]:
 
 
 class Cli:
-    remote: Optional[int]
+    remote: int | None
     stdout: bool
+    listen: tuple[str, int]
+    verbose: bool
 
     def __init__(self):
         p = ArgumentParser(
@@ -100,12 +104,12 @@ class SystemClipboard(ABC):
         raise NotImplementedError
 
     @abstractmethod
-    def in_cmd(self) -> CompletedProcess:
+    def in_cmd(self, **kwargs) -> CompletedProcess:
         """Return the command to write to the clipboard."""
         raise NotImplementedError
 
     @abstractmethod
-    def out_cmd(self) -> CompletedProcess:
+    def out_cmd(self, **kwargs) -> CompletedProcess:
         """Return the command to read from the clipboard."""
         raise NotImplementedError
 
@@ -195,13 +199,26 @@ class WslClipboard(SystemClipboard):
     @staticmethod
     def available() -> bool:
         """Determine if the system is running Windows Subsystem for Linux."""
-        return shutil.which("clip.exe") and OSTYPE.startswith("linux")
+        return bool(shutil.which("clip.exe")) and OSTYPE.startswith("linux")
 
     def in_cmd(self, **kwargs) -> CompletedProcess:
         return run(["clip.exe"], check=True, **kwargs)
 
     def out_cmd(self, **kwargs) -> CompletedProcess:
         return run(["powershell.exe", "-Command", "Get-Clipboard"], **kwargs)
+
+
+class TmuxClipboard(SystemClipboard):
+    @staticmethod
+    def available() -> bool:
+        """Determine if the system is running inside a tmux session."""
+        return "TMUX" in os.environ
+
+    def in_cmd(self, **kwargs) -> CompletedProcess:
+        return run(["tmux", "load-buffer", "-"], check=True, **kwargs)
+
+    def out_cmd(self, **kwargs) -> CompletedProcess:
+        return run(["tmux", "save-buffer", "-"], **kwargs)
 
 
 class RemoteClipboardHandler(BaseHTTPRequestHandler):
@@ -235,7 +252,7 @@ class RemoteClipboardHandler(BaseHTTPRequestHandler):
 class RemoteClipboard:
     local_clipboard: SystemClipboard
     host: str = "127.0.0.1"
-    port: str = DEFAULT_PORT
+    port: int = DEFAULT_PORT
 
     def _server(self, client: socket.socket, addr: tuple[str, int]):
         try:
@@ -329,7 +346,7 @@ def main() -> int:
 if __name__ == "__main__":
     try:
         return_code = main()
-    except SubprocessError as exc:
+    except CalledProcessError as exc:
         print(exc.stderr, file=sys.stderr)
         exit(1)
     else:

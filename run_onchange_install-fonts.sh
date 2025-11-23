@@ -1,10 +1,12 @@
 #!/usr/bin/env bash
 
-NERDFONT_VERSION=v3.3.0
+NERDFONT_VERSION=v3.4.0
 FONTS=(
-  "Hack"
   "FiraCode"
   "FiraMono"
+  "Hack"
+  "Iosevka"
+  "IosevkaTerm"
   "SourceCodePro"
 )
 BASE_URL="https://github.com/ryanoasis/nerd-fonts/releases/download"

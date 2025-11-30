@@ -31,4 +31,32 @@ function M.insert_uuid()
   vim.api.nvim_win_set_cursor(0, { row, col + uuid:len() })
 end
 
+local function escape_wildcards(path)
+  return path:gsub('([%[%]%?%*])', '\\%1')
+end
+
+--- Returns a function which matches a filepath against the given glob/wildcard patterns.
+---
+--- Also works with zipfile:/tarfile: buffers (via `strip_archive_subpath`).
+function M.root_pattern(...)
+  local patterns = M.tbl_flatten { ... }
+  return function(startpath)
+    startpath = M.strip_archive_subpath(startpath)
+    for _, pattern in ipairs(patterns) do
+      local match = M.search_ancestors(startpath, function(path)
+        for _, p in ipairs(vim.fn.glob(table.concat({ escape_wildcards(path), pattern }, '/'), true, true)) do
+          if vim.uv.fs_stat(p) then
+            return path
+          end
+        end
+      end)
+
+      if match ~= nil then
+        local real = vim.uv.fs_realpath(match)
+        return real or match -- fallback to original if realpath fails
+      end
+    end
+  end
+end
+
 return M

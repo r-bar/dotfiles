@@ -1,6 +1,16 @@
 ---@type ConfigPkg
 M = {}
 
+local function open_floating_terminal()
+  local oil = require("oil")
+  local fterm = require("FTerm")
+  ---@diagnostic disable-next-line: param-type-mismatch
+  local start_dir = vim.fn.chdir(oil.get_current_dir())
+  ---@diagnostic disable-next-line: missing-fields
+  fterm.scratch({})
+  vim.fn.chdir(start_dir)
+end
+
 function M.packages(use)
   use {
     'ibhagwan/fzf-lua',
@@ -107,7 +117,8 @@ function M.packages(use)
       -- default keymaps conflict with my custom window navigation shortcuts
       use_default_keymaps = false,
       keymaps = {
-        ["!"]     = "actions.open_terminal",
+        --["!"]     = "actions.open_terminal",
+        ["!"]     = { open_floating_terminal, mode = "n" },
         ["<F5>"]  = "actions.refresh",
         ["<C-r>"] = "actions.refresh",
         ["g?"]    = { "actions.show_help", mode = "n" },
@@ -120,11 +131,12 @@ function M.packages(use)
         ["-"]     = { "actions.parent", mode = "n" },
         ["_"]     = { "actions.open_cwd", mode = "n" },
         ["`"]     = { "actions.cd", mode = "n" },
-        ["~"]     = { "actions.cd", opts = { scope = "tab" }, mode = "n" },
+        ["~"]     = { "actions.cd", opts = { scope = "win" }, mode = "n" },
         ["gs"]    = { "actions.change_sort", mode = "n" },
         ["gx"]    = "actions.open_external",
         ["g."]    = { "actions.toggle_hidden", mode = "n" },
         ["g\\"]   = { "actions.toggle_trash", mode = "n" },
+        ["q"]     = { "actions.close", mode = "n" },
       },
       view_options = { show_hidden = true },
     },

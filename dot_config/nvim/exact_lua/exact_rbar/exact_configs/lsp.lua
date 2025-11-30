@@ -101,12 +101,9 @@ local function with_defaults(custom)
   return vim.tbl_extend("force", default_server_settings(), custom)
 end
 
-local function find_git_ancestor(startpath)
-  return vim.fs.dirname(vim.fs.find('.git', { path = startpath, upward = true })[1])
-end
-
 local function server_settings()
   local settings = {}
+  local root_pattern = require("rbar.helpers").root_pattern
 
   settings['gleam'] = with_defaults()
 
@@ -196,7 +193,7 @@ local function server_settings()
   settings['vls'] = with_defaults({
     cmd = { 'v', 'ls' },
     filetypes = { 'vlang' },
-    root_dir = find_git_ancestor,
+    root_dir = root_pattern('.git'),
     docs = {
       description = [[
 https://github.com/vlang/vls
@@ -213,7 +210,8 @@ The official V language server, written in V itself.
   settings['zls'] = with_defaults({
     cmd = { 'zls' },
     filetypes = { 'zig' },
-    root_dir = find_git_ancestor,
+    --root_dir = function(startpath) find_ancestor("build.zig", startpath) end,
+    root_dir = root_pattern('build.zig'),
     docs = {
       description = [[
 [ZLS](https://github.com/zigtools/zls)

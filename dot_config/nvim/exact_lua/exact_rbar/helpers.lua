@@ -59,4 +59,8 @@ function M.root_pattern(...)
   end
 end
 
+function M.tbl_flatten(t)
+  return vim.iter(t):flatten(math.huge):totable()
+end
+
 return M

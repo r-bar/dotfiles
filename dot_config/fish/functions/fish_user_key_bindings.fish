@@ -67,7 +67,7 @@ function fish_user_key_bindings
 
   abbr --add ll ls -al
   abbr --add la ls -a
-  abbr --add l
+  abbr --add l ls
   abbr --add tree eza --tree
 
   abbr --add m mise

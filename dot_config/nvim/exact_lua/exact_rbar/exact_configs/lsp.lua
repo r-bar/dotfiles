@@ -207,25 +207,7 @@ The official V language server, written in V itself.
 
   settings['mojo'] = with_defaults()
 
-  settings['zls'] = with_defaults({
-    cmd = { 'zls' },
-    filetypes = { 'zig' },
-    --root_dir = function(startpath) find_ancestor("build.zig", startpath) end,
-    root_dir = root_pattern('build.zig'),
-    docs = {
-      description = [[
-[ZLS](https://github.com/zigtools/zls)
-
-[Configuration Options](https://github.com/zigtools/zls#configuration-options)
-]]
-    },
-    -- https://github.com/zigtools/zls#configuration-options
-    settings = {
-      zls = {
-        enable_autofix = false,
-      },
-    },
-  })
+  settings['zls'] = with_defaults()
 
   if vim.fn.executable("clangd") == 1 then
     settings['clangd'] = with_defaults()

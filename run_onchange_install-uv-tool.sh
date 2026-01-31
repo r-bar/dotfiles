@@ -20,5 +20,5 @@ fi
 if [ "$(hostname -s)" == "ceres" ]; then
   uv tool install python-lsp-server --upgrade --python 3.11 --with pylsp-rope --with pylsp-mypy --with keyrings.google-artifactregistry-auth
 else
-  uv tool install python-lsp-server --upgrade --python 3.13 --with pylsp-rope --with pylsp-mypy --with keyrings.google-artifactregistry-auth
+  uv tool install python-lsp-server --upgrade --python 3.14 --with pylsp-rope --with pylsp-mypy --with keyrings.google-artifactregistry-auth
 fi

@@ -96,6 +96,12 @@ local function mason_ensure_installed()
 	return ensure_installed
 end
 
+function M.go_to_definition(list)
+	local item = list.items[1]
+	vim.cmd.edit(item.filename)
+	vim.fn.setcursorcharpos(item.lnum, item.col)
+end
+
 local function on_attach(client, bufnr)
 	-- Mappings.
 	-- See `:help vim.lsp.*` for documentation on any of the below functions
@@ -107,6 +113,7 @@ local function on_attach(client, bufnr)
 		return opts
 	end
 	vim.keymap.set("n", "gD", vim.lsp.buf.declaration, bufopts({ desc = "Go to declaration" }))
+	--vim.keymap.set("n", "gd", vim.lsp.buf.definition({on_list = M.go_to_definition}), bufopts({ desc = "Go to definition" }))
 	vim.keymap.set("n", "gd", vim.lsp.buf.definition, bufopts({ desc = "Go to definition" }))
 	--vim.keymap.set('n', 'gv', ":vsplit<cr>gd", bufopts { desc = "Go to definition in new vsplit" })
 	vim.keymap.set("n", "K", vim.lsp.buf.hover, bufopts({ desc = "Show hover info" }))
@@ -163,6 +170,21 @@ local function default_server_settings()
 		on_attach = on_attach,
 		flags = lsp_flags,
 	}
+end
+
+local function disable_capabilities(disabled)
+	local disabled_set = {}
+	for i, cap in ipairs(disabled) do
+		disabled_set[cap] = true
+	end
+	return function(client, bufnr)
+		local rc = client.server_capabilities
+		for cap, val in pairs(rc) do
+			if disabled_set[cap] then
+				rc[cap] = false
+			end
+		end
+	end
 end
 
 local function with_defaults(custom)
@@ -238,16 +260,25 @@ local function server_settings()
 		},
 	})
 
+	if vim.fn.executable("ty") then
+		settings["ty"] = with_defaults({
+			-- These capabilities conflict with pylsp
+			on_attach = disable_capabilities({
+				"completionProvider",
+				"definitionProvider",
+				"implementationProvider",
+				"referencesProvider",
+				"renameProvider",
+			}),
+		})
+	end
+
 	if vim.fn.executable("pylsp") == 1 then
 		settings.pylsp.cmd = { "pylsp" }
 	end
 
 	if vim.fn.executable("ruff") then
 		settings["ruff"] = with_defaults()
-	end
-
-	if vim.fn.executable("ty") then
-		settings["ty"] = with_defaults()
 	end
 
 	settings["roc_ls"] = with_defaults()

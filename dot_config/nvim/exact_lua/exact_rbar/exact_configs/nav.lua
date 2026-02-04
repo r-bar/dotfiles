@@ -18,15 +18,50 @@ function M.packages(use)
 		dependencies = { "nvim-tree/nvim-web-devicons" },
 		config = function()
 			local fzf = require("fzf-lua")
-			vim.keymap.set("n", "<Leader>t", fzf.files, { silent = true })
-			vim.keymap.set("n", "<Leader>b", fzf.buffers, { silent = true })
-			vim.keymap.set("n", "<leader>s", fzf.lsp_document_symbols, { silent = true })
-			vim.keymap.set("n", "<Leader>fc", fzf.command_history, { silent = true })
-			vim.keymap.set("n", "<leader>fj", fzf.btags, { silent = true })
-			vim.keymap.set("n", "<leader>fk", fzf.keymaps, { silent = true })
-			vim.keymap.set("n", "<leader>fh", fzf.help_tags, { silent = true })
-			vim.keymap.set({ "n", "v" }, "<leader>a", fzf.lsp_code_actions, { silent = true })
-			vim.api.nvim_create_user_command("Help", fzf.help_tags, {})
+			vim.keymap.set("n", "<Leader>t", fzf.files, { silent = true, desc = "FzF files" })
+			vim.keymap.set("n", "<Leader>b", fzf.buffers, { silent = true, desc = "FzF buffers" })
+			vim.keymap.set("n", "<Leader>fb", fzf.buffers, { silent = true, desc = "FzF buffers" })
+			vim.keymap.set(
+				"n",
+				"<leader>fe",
+				fzf.diagnostics_workspace,
+				{ silent = true, desc = "FzF LSP workspace diagnostics" }
+			)
+			vim.keymap.set(
+				"n",
+				"<leader>w",
+				fzf.lsp_workspace_symbols,
+				{ silent = true, desc = "FzF LSP workspace symbols" }
+			)
+			vim.keymap.set(
+				"n",
+				"<leader>fw",
+				fzf.lsp_workspace_symbols,
+				{ silent = true, desc = "FzF LSP workspace symbols" }
+			)
+			vim.keymap.set(
+				"n",
+				"<leader>s",
+				fzf.lsp_document_symbols,
+				{ silent = true, desc = "FzF LSP document symbols" }
+			)
+			vim.keymap.set(
+				"n",
+				"<leader>fs",
+				fzf.lsp_document_symbols,
+				{ silent = true, desc = "FzF LSP document symbols" }
+			)
+			vim.keymap.set("n", "<Leader>fc", fzf.command_history, { silent = true, desc = "FzF command history" })
+			vim.keymap.set("n", "<leader>fj", fzf.btags, { silent = true, desc = "FzF buffer tags" })
+			vim.keymap.set("n", "<leader>fk", fzf.keymaps, { silent = true, desc = "FzF keymaps" })
+			vim.keymap.set("n", "<leader>fh", fzf.help_tags, { silent = true, desc = "FzF help tags" })
+			vim.keymap.set(
+				{ "n", "v" },
+				"<leader>a",
+				fzf.lsp_code_actions,
+				{ silent = true, desc = "FzF code actions" }
+			)
+			vim.api.nvim_create_user_command("Help", fzf.help_tags, { desc = "FzF search help" })
 			fzf.setup()
 			fzf.register_ui_select()
 		end,

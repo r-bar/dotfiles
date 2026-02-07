@@ -141,10 +141,37 @@ function M.packages(use)
 
 	use({
 		"https://github.com/junegunn/vim-easy-align.git",
+		enabled = false,
 		keys = {
 			{ "ga", "<Plug>(EasyAlign)", mode = "n", noremap = false, desc = "Align text by delimiters" },
 			{ "ga", "<Plug>(EasyAlign)", mode = "x", noremap = false, desc = "Align text by delimiters" },
 		},
+	})
+
+	use({
+		"nvim-mini/mini.align",
+		keys = {
+			{ "ga", mode = { "n", "v" } },
+		},
+		config = function()
+			require("mini.align").setup({
+				-- Module mappings. Use `''` (empty string) to disable one.
+				mappings = {
+					start = "",
+					start_with_preview = "ga",
+				},
+				-- Default options controlling alignment process
+				options = {
+					split_pattern = "",
+					justify_side = "left",
+					merge_delimiter = "",
+				},
+				-- Whether to disable showing non-error feedback
+				-- This also affects (purely informational) helper messages shown after
+				-- idle time if user input is required.
+				silent = false,
+			})
+		end,
 	})
 
 	use({

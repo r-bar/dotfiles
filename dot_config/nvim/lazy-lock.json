@@ -31,6 +31,7 @@
   "mason-lspconfig.nvim": { "branch": "main", "commit": "f2fa60409630ec2d24acf84494fb55e1d28d593c" },
   "mason.nvim": { "branch": "main", "commit": "ad7146aa61dcaeb54fa900144d768f040090bff0" },
   "mermaid.vim": { "branch": "main", "commit": "a8470711907d47624d6860a2bcbd0498a639deb6" },
+  "mini.align": { "branch": "main", "commit": "6d8a6ca3a0fd313938374abccb50cad026229db3" },
   "mini.indentscope": { "branch": "main", "commit": "8af2569a7d7fd37300dfa760e44e71efbbf322fd" },
   "minuet-ai.nvim": { "branch": "main", "commit": "3fff1f22bcd76a0d543f70c152d393e5c2292933" },
   "mojo.vim": { "branch": "main", "commit": "c5898c2e1137cd420524859f209b6831841397e4" },

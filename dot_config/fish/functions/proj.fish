@@ -42,7 +42,6 @@ function proj
 
   set -a projects (fd '^\.git$' -d $PROJ_DEPTH -HI $PROJ_DIR | _format_gitdir)
   maybe_add_project chezmoi $HOME/.local/share/chezmoi | source
-  maybe_add_project core $HOME/src/appomni/appomni | source
 
   # we have to use the 2nd field when the delimiter is multiple characters due
   # because fzf will append delimiters to the selector output

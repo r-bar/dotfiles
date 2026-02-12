@@ -1,7 +1,0 @@
-[core]
-account = rbarth@appomni.com
-project = appomni-prod-aus1
-
-[compute]
-zone = australia-southeast1-a
-

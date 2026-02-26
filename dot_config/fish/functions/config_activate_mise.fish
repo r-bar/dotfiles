@@ -4,6 +4,10 @@ function config_activate_mise
   #end
   if type -q mise
     set -gx MISE_FISH_AUTO_ACTIVATE 1
-    mise activate fish | source
+    if test -n "$argv[1]"
+      source ~/.config/mise/mise_activate_$argv[1].fish
+    else
+      mise activate fish | source
+    end
   end
 end

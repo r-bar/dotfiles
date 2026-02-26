@@ -60,6 +60,7 @@ function fish_user_key_bindings
 
   abbr --add k kubectl
   abbr --add kcd kubectl config use-context
+  abbr --add kls kubectl config get-contexts
   abbr --add kns kubectl config set-context --current --namespace
 
   abbr --add cm chezmoi
@@ -72,9 +73,6 @@ function fish_user_key_bindings
 
   abbr --add m mise
   abbr --add mr mise run
-
-  abbr --add gco git switch
-  abbr --add gsw git switch
 
   abbr --add !! --position anywhere --function last_history_item
   abbr --add !\* --position anywhere --function last_history_args

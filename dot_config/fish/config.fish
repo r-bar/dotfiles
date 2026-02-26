@@ -24,4 +24,4 @@ end
 set fish_user_paths ~/.local/bin $fish_user_paths
 
 config_homebrew
-config_activate_mise
+config_activate_mise 2025.10.21

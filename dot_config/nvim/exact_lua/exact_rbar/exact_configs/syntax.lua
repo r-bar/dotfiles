@@ -126,7 +126,7 @@ function M.config()
 	vim.cmd([[
   augroup TrailingSpace
     au!
-    au VimEnter,WinEnter * highlight link TrailingSpaces Error
+    au VimEnter,WinEnter * highlight link TrailingSpaces @text.danger
     au VimEnter,WinEnter * match TrailingSpaces /\s\+$/
     au FileType defx highlight clear TrailingSpaces
   augroup END

@@ -25,7 +25,7 @@ local function source_string(source, code)
 	end
 end
 
-M.line_diagnostics = function()
+function M.line_diagnostics()
 	local bufnr, lnum = unpack(vim.fn.getcurpos())
 	local diagnostics = vim.diagnostic.get(bufnr, { lnum = lnum - 1 })
 	if vim.tbl_isempty(diagnostics) then
@@ -352,7 +352,7 @@ function M.config()
 	-- lsp debug logging
 	-- clear the lsp log before every session
 	vim.fn.system("rm $HOME/.local/state/nvim/lsp.log")
-	vim.lsp.set_log_level(vim.env.NVIM_LSP_LOG_LEVEL or "warn")
+	vim.lsp.log.set_level(vim.env.NVIM_LSP_LOG_LEVEL or "warn")
 
 	vim.api.nvim_create_user_command("Format", function()
 		vim.lsp.buf.format({ async = false })

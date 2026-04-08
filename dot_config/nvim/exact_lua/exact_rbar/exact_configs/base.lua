@@ -41,18 +41,87 @@ function M.packages(use)
 	use({
 		"kylechui/nvim-surround",
 		version = "*", -- Use for stability; omit to use `main` branch for the latest features
-		opts = {
-			keymaps = {
-				insert = "<C-g>z",
-				insert_line = "<C-g>Z",
-				normal = "gz",
-				normal_cur = "gZ",
-				normal_line = "gzgz",
-				normal_cur_line = "gZgZ",
-				visual = "gz",
-				visual_line = "gZ",
-				delete = "dgz",
-				change = "cgz",
+		lazy = false,
+		-- opts = {
+		--   keymaps = {
+		--     insert = "<C-g>z",
+		--     insert_line = "<C-g>Z",
+		--     normal = "gz",
+		--     normal_cur = "gZ",
+		--     normal_line = "gzgz",
+		--     normal_cur_line = "gZgZ",
+		--     visual = "gz",
+		--     visual_line = "gZ",
+		--     delete = "dgz",
+		--     change = "cgz",
+		--   },
+		-- },
+		keymaps = {
+			{
+				"<C-g>z",
+				"<Plug>(nvim-surround-insert)",
+				mode = "i",
+				desc = "Add a surrounding pair around the cursor (insert mode)",
+			},
+			{
+				"<C-g>Z",
+				"<Plug>(nvim-surround-insert-line)",
+				mode = "i",
+				desc = "Add a surrounding pair around the cursor, on new lines (insert mode)",
+			},
+			{
+				"gz",
+				"<Plug>(nvim-surround-normal)",
+				mode = "n",
+				desc = "Add a surrounding pair around a motion (normal mode)",
+			},
+			{
+				"gzz",
+				"<Plug>(nvim-surround-normal-cur)",
+				mode = "n",
+				desc = "Add a surrounding pair around the current line (normal mode)",
+			},
+			{
+				"gZ",
+				"<Plug>(nvim-surround-normal-line)",
+				mode = "n",
+				desc = "Add a surrounding pair around a motion, on new lines (normal mode)",
+			},
+			{
+				"gZZ",
+				"<Plug>(nvim-surround-normal-cur-line)",
+				mode = "n",
+				desc = "Add a surrounding pair around the current line, on new lines (normal mode)",
+			},
+			{
+				"Z",
+				"<Plug>(nvim-surround-visual)",
+				mode = "x",
+				desc = "Add a surrounding pair around a visual selection",
+			},
+			{
+				"gZ",
+				"<Plug>(nvim-surround-visual-line)",
+				mode = "x",
+				desc = "Add a surrounding pair around a visual selection, on new lines",
+			},
+			{
+				"dz",
+				"<Plug>(nvim-surround-delete)",
+				mode = "n",
+				desc = "Delete a surrounding pair",
+			},
+			{
+				"cz",
+				"<Plug>(nvim-surround-change)",
+				mode = "n",
+				desc = "Change a surrounding pair",
+			},
+			{
+				"cZ",
+				"<Plug>(nvim-surround-change-line)",
+				mode = "n",
+				desc = "Change a surrounding pair, putting replacements on new lines",
 			},
 		},
 	})
@@ -356,6 +425,14 @@ function M.config()
 		require("rbar/helpers").close_floats,
 		{ desc = "Close all floating windows. Useful when they get stuck." }
 	)
+
+	-- Enable ui2 which
+	--
+	-- ui2 is a "is a redesign of the core messages and commandline UI, which will
+	-- replace the legacy message grid in the TUI.". In particular it removes
+	-- "Press Enter" interruptions, and it highlights the command line as you
+	-- type.
+	require("vim._core.ui2").enable({})
 end
 
 return M

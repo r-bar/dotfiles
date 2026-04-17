@@ -123,14 +123,25 @@ function M.config()
 			["Chart.lock"] = "yaml",
 		},
 	})
-	vim.cmd([[
-  augroup TrailingSpace
-    au!
-    au VimEnter,WinEnter * highlight link TrailingSpaces @text.danger
-    au VimEnter,WinEnter * match TrailingSpaces /\s\+$/
-    au FileType defx highlight clear TrailingSpaces
-  augroup END
-  ]])
+	local trailing_space_group = vim.api.nvim_create_augroup("TrailingSpace", { clear = true })
+	vim.api.nvim_create_autocmd({ "VimEnter", "WinEnter", "TermOpen", "BufWinEnter" }, {
+		group = trailing_space_group,
+		callback = function()
+			if vim.bo.buftype == "terminal" then
+				vim.cmd("match none")
+				return
+			end
+			vim.cmd("highlight link TrailingSpaces @text.danger")
+			vim.cmd("match TrailingSpaces /\\s\\+$/")
+		end,
+	})
+	vim.api.nvim_create_autocmd("FileType", {
+		group = trailing_space_group,
+		pattern = "defx",
+		callback = function()
+			vim.cmd("highlight clear TrailingSpaces")
+		end,
+	})
 end
 
 return M

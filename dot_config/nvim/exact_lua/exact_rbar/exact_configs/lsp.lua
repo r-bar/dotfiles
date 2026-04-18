@@ -33,15 +33,32 @@ function M.line_diagnostics()
 	end
 
 	local lines = {}
+	local highlights = {}
 
 	for _, diagnostic in ipairs(diagnostics) do
-		table.insert(
-			lines,
-			icon_map[diagnostic.severity]
-				.. " "
-				.. diagnostic.message:gsub("\n", " ")
-				.. source_string(diagnostic.source, diagnostic.code)
-		)
+		local prefix = icon_map[diagnostic.severity] .. " "
+		local source = source_string(diagnostic.source, diagnostic.code)
+		local message_lines = vim.split(diagnostic.message, "\n", { plain = true, trimempty = false })
+
+		if #message_lines == 0 then
+			message_lines = { "" }
+		end
+
+		for i, message_line in ipairs(message_lines) do
+			local is_last = i == #message_lines
+			local line_prefix = (i == 1) and prefix or string.rep(" ", #prefix)
+			local line = line_prefix .. message_line
+
+			if is_last then
+				line = line .. source
+			end
+
+			table.insert(lines, line)
+			table.insert(highlights, {
+				severity = diagnostic.severity,
+				source_start = is_last and (#line - #source) or nil,
+			})
+		end
 	end
 
 	local ns = vim.api.nvim_create_namespace("line_diagnostics")
@@ -50,12 +67,22 @@ function M.line_diagnostics()
 		focus_id = "line",
 	})
 
-	for i, diagnostic in ipairs(diagnostics) do
-		local message_length = #lines[i] - #source_string(diagnostic.source, diagnostic.code)
+	for i, highlight in ipairs(highlights) do
+		local line = i - 1
+		local line_length = #lines[i]
 		-- Not sure the if the line ranges are correct here or if this works because
 		-- I got lucky
-		vim.hl.range(floating_bufnr, ns, serverity_map[diagnostic.severity], { i - 1, 0 }, { 0, -1 })
-		vim.hl.range(floating_bufnr, ns, "DiagnosticSource", { i - 1, message_length }, { 0, -1 })
+		vim.api.nvim_buf_add_highlight(floating_bufnr, ns, serverity_map[highlight.severity], line, 0, line_length)
+		if highlight.source_start then
+			vim.api.nvim_buf_add_highlight(
+				floating_bufnr,
+				ns,
+				"DiagnosticSource",
+				line,
+				highlight.source_start,
+				line_length
+			)
+		end
 	end
 end
 

@@ -127,7 +127,8 @@ function M.config()
 	vim.api.nvim_create_autocmd({ "VimEnter", "WinEnter", "TermOpen", "BufWinEnter" }, {
 		group = trailing_space_group,
 		callback = function()
-			if vim.bo.buftype == "terminal" then
+			local win_config = vim.api.nvim_win_get_config(0)
+			if vim.bo.buftype == "terminal" or win_config.relative ~= "" then
 				vim.cmd("match none")
 				return
 			end

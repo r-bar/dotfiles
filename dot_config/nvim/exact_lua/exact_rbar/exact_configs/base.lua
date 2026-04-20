@@ -38,92 +38,51 @@ function M.packages(use)
 	})
 	use("https://github.com/michaeljsmith/vim-indent-object.git")
 	use("https://github.com/tpope/vim-repeat.git")
+	-- vim.g.nvim_surround_no_mappings = 1;
 	use({
 		"kylechui/nvim-surround",
 		version = "*", -- Use for stability; omit to use `main` branch for the latest features
+		enabled = true,
 		lazy = false,
-		-- opts = {
-		--   keymaps = {
-		--     insert = "<C-g>z",
-		--     insert_line = "<C-g>Z",
-		--     normal = "gz",
-		--     normal_cur = "gZ",
-		--     normal_line = "gzgz",
-		--     normal_cur_line = "gZgZ",
-		--     visual = "gz",
-		--     visual_line = "gZ",
-		--     delete = "dgz",
-		--     change = "cgz",
-		--   },
-		-- },
-		keymaps = {
-			{
-				"<C-g>z",
-				"<Plug>(nvim-surround-insert)",
-				mode = "i",
+		init = function()
+			vim.g.nvim_surround_no_mappings = 1
+		end,
+		config = function()
+			require("nvim-surround").setup({})
+			vim.keymap.set("i", "<C-g>z", "<Plug>(nvim-surround-insert)", {
 				desc = "Add a surrounding pair around the cursor (insert mode)",
-			},
-			{
-				"<C-g>Z",
-				"<Plug>(nvim-surround-insert-line)",
-				mode = "i",
+			})
+			vim.keymap.set("i", "<C-g>Z", "<Plug>(nvim-surround-insert-line)", {
 				desc = "Add a surrounding pair around the cursor, on new lines (insert mode)",
-			},
-			{
-				"gz",
-				"<Plug>(nvim-surround-normal)",
-				mode = "n",
+			})
+			vim.keymap.set("n", "gz", "<Plug>(nvim-surround-normal)", {
 				desc = "Add a surrounding pair around a motion (normal mode)",
-			},
-			{
-				"gzz",
-				"<Plug>(nvim-surround-normal-cur)",
-				mode = "n",
+			})
+			vim.keymap.set("n", "gzz", "<Plug>(nvim-surround-normal-cur)", {
 				desc = "Add a surrounding pair around the current line (normal mode)",
-			},
-			{
-				"gZ",
-				"<Plug>(nvim-surround-normal-line)",
-				mode = "n",
+			})
+			vim.keymap.set("n", "gZ", "<Plug>(nvim-surround-normal-line)", {
 				desc = "Add a surrounding pair around a motion, on new lines (normal mode)",
-			},
-			{
-				"gZZ",
-				"<Plug>(nvim-surround-normal-cur-line)",
-				mode = "n",
+			})
+			vim.keymap.set("n", "gZZ", "<Plug>(nvim-surround-normal-cur-line)", {
 				desc = "Add a surrounding pair around the current line, on new lines (normal mode)",
-			},
-			{
-				"Z",
-				"<Plug>(nvim-surround-visual)",
-				mode = "x",
+			})
+			vim.keymap.set("x", "gz", "<Plug>(nvim-surround-visual)", {
 				desc = "Add a surrounding pair around a visual selection",
-			},
-			{
-				"gZ",
-				"<Plug>(nvim-surround-visual-line)",
-				mode = "x",
+			})
+			vim.keymap.set("x", "gZ", "<Plug>(nvim-surround-visual-line)", {
 				desc = "Add a surrounding pair around a visual selection, on new lines",
-			},
-			{
-				"dz",
-				"<Plug>(nvim-surround-delete)",
-				mode = "n",
+			})
+			vim.keymap.set("n", "dz", "<Plug>(nvim-surround-delete)", {
 				desc = "Delete a surrounding pair",
-			},
-			{
-				"cz",
-				"<Plug>(nvim-surround-change)",
-				mode = "n",
+			})
+			vim.keymap.set("n", "cz", "<Plug>(nvim-surround-change)", {
 				desc = "Change a surrounding pair",
-			},
-			{
-				"cZ",
-				"<Plug>(nvim-surround-change-line)",
-				mode = "n",
+			})
+			vim.keymap.set("n", "cZ", "<Plug>(nvim-surround-change-line)", {
 				desc = "Change a surrounding pair, putting replacements on new lines",
-			},
-		},
+			})
+		end,
 	})
 	use("https://github.com/wellle/targets.vim")
 	use({ "danro/rename.vim", cmd = "Rename" })

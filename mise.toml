@@ -28,6 +28,25 @@ fi
 exit $RESULT
 """
 
+[tasks.nvim-spellfile-check]
+description = "Ensure nvim's spellfile is in sync"
+run = """
+SPELLFILE= dot_local/share/nvim/site/spell/en.utf-8.add
+if [ ! -f $SPELLFILE ]; then
+  echo "Cannot find chezmoi's neovim spellfile at $SPELLFILE"
+  exit 1
+fi
+
+diff $SPELLFILE $(chezmoi target-path $LOCKFILE_PATH)
+RESULT=$?
+
+if [ $RESULT -ne 0 ]; then
+  echo
+  echo "Neovim's local spellfile is out of sync with the state in chezmoi"
+fi
+exit $RESULT
+"""
+
 [tasks.nvim-lazy-lock-update]
 description = "Update nvim's lazy-lock.json to match the current state in use on this machine"
 run = "chezmoi re-add ~/.config/nvim/lazy-lock.json"

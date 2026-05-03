@@ -34,14 +34,17 @@ function proj
   set -f projects
   # used in conjunction with `source` to add directories to export to the
   # $projects list
-  function maybe_add_project -V delimiter
+  function maybe_add_project --no-scope-shadowing -V delimiter
     set -l name $argv[1]
     set -l path $argv[2]
-    test -d $path && echo set -a projects $path$delimiter$name
+    test -d $path && set -a projects $path$delimiter$name
   end
 
   set -a projects (fd '^\.git$' -d $PROJ_DEPTH -HI $PROJ_DIR | _format_gitdir)
-  maybe_add_project chezmoi $HOME/.local/share/chezmoi | source
+
+  maybe_add_project chezmoi $HOME/.local/share/chezmoi
+  maybe_add_project dotfiles $HOME/.local/share/chezmoi
+  maybe_add_project home $HOME
 
   # we have to use the 2nd field when the delimiter is multiple characters due
   # because fzf will append delimiters to the selector output

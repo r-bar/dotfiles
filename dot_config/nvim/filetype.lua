@@ -11,6 +11,7 @@ vim.filetype.add({
 		["inventory.yaml"] = "yaml.ansible",
 	},
 	pattern = {
+		[".*%.html%.jinja"] = "html.jinja",
 		[".*/playbooks/*.ya\\?ml"] = "yaml.ansible",
 	},
 })

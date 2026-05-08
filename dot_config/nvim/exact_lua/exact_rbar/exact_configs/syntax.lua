@@ -46,7 +46,7 @@ function M.packages(use)
 		enabled = false,
 		ft = "python",
 	})
-	use("Glench/Vim-Jinja2-Syntax")
+	use("https://github.com/HiPhish/jinja.vim.git")
 	use("https://github.com/mracos/mermaid.vim.git")
 	use({ "SCJangra/table-nvim", ft = "markdown", opts = {} })
 

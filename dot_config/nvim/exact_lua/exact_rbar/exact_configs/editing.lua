@@ -2,6 +2,35 @@
 
 local M = {}
 
+local function jinja_pairs()
+	local npairs = require("nvim-autopairs")
+	local Rule = require("nvim-autopairs.rule")
+	local cond = require("nvim-autopairs.conds")
+	local jinja_filetypes = { "jinja", "jinja.html", "html.jinja", "htmldjango", "htmldjango.jinja" }
+	for _, rule in pairs(npairs.get_rules("{") or {}) do
+		rule.not_filetypes = rule.not_filetypes or {}
+		for _, filetype in ipairs(jinja_filetypes) do
+			if not vim.tbl_contains(rule.not_filetypes, filetype) then
+				table.insert(rule.not_filetypes, filetype)
+			end
+		end
+	end
+	npairs.add_rules({
+		Rule("{{", "}}", jinja_filetypes),
+		Rule("{%", "%}", jinja_filetypes),
+		Rule("{#", "#}", jinja_filetypes),
+		Rule(" ", " ", jinja_filetypes):with_move(cond.none()):with_pair(function(opts)
+			local before = opts.line:sub(1, opts.col)
+			local after = opts.line:sub(opts.col + 1)
+			local prev_is_non_space = before:match("%S$") ~= nil
+			local in_expr = prev_is_non_space and before:match("{{") and after:match("^}}")
+			local in_stmt = prev_is_non_space and before:match("{%%") and after:match("^%%}")
+			local in_comment = prev_is_non_space and before:match("{#") and after:match("^#}")
+			return in_expr or in_stmt or in_comment
+		end),
+	})
+end
+
 function M.packages(use)
 	use({
 		"https://github.com/bennypowers/splitjoin.nvim",
@@ -36,9 +65,10 @@ function M.packages(use)
 					java = false, -- don't check treesitter on java
 				},
 			})
+			jinja_pairs()
 			npairs.add_rules({
-				Rule("`", "`"):with_pair(cond.not_filetypes({ "ocaml", "rust" })),
-				Rule("'", "'"):with_pair(cond.not_filetypes({ "ocaml", "rust" })),
+				Rule("`", "`", { "-ocaml", "-rust" }),
+				Rule("'", "'", { "-ocaml", "-rust" }),
 				Rule("(*", "*", "ocaml"):with_move(cond.none()),
 			})
 		end,

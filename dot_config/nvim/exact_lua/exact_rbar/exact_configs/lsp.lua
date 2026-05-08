@@ -70,18 +70,17 @@ function M.line_diagnostics()
 	for i, highlight in ipairs(highlights) do
 		local line = i - 1
 		local line_length = #lines[i]
-		-- Not sure the if the line ranges are correct here or if this works because
-		-- I got lucky
-		vim.api.nvim_buf_add_highlight(floating_bufnr, ns, serverity_map[highlight.severity], line, 0, line_length)
+		vim.api.nvim_buf_set_extmark(floating_bufnr, ns, line, 0, {
+			end_row = line,
+			end_col = line_length,
+			hl_group = serverity_map[highlight.severity],
+		})
 		if highlight.source_start then
-			vim.api.nvim_buf_add_highlight(
-				floating_bufnr,
-				ns,
-				"DiagnosticSource",
-				line,
-				highlight.source_start,
-				line_length
-			)
+			vim.api.nvim_buf_set_extmark(floating_bufnr, ns, line, highlight.source_start, {
+				end_row = line,
+				end_col = line_length,
+				hl_group = "DiagnosticSource",
+			})
 		end
 	end
 end
@@ -237,6 +236,61 @@ local function server_settings()
 		},
 	})
 
+	settings["tailwindcss"] = with_defaults({
+		filetypes = {
+			"aspnetcorerazor",
+			"astro",
+			"astro-markdown",
+			"blade",
+			"clojure",
+			"django-html",
+			"htmldjango",
+			"edge",
+			"eelixir",
+			"elixir",
+			"ejs",
+			"erb",
+			"eruby",
+			"gohtml",
+			"haml",
+			"handlebars",
+			"hbs",
+			"html",
+			"html-eex",
+			"heex",
+			"jade",
+			"leaf",
+			"liquid",
+			"markdown",
+			"mdx",
+			"mustache",
+			"njk",
+			"nunjucks",
+			"php",
+			"razor",
+			"slim",
+			"twig",
+			"css",
+			"less",
+			"postcss",
+			"sass",
+			"scss",
+			"stylus",
+			"sugarss",
+			"javascript",
+			"javascriptreact",
+			"reason",
+			"rescript",
+			"typescript",
+			"typescriptreact",
+			"vue",
+			"svelte",
+			"templ",
+			"jinja.html",
+			"html.jinja",
+		},
+	})
+
 	if false and vim.fn.executable("opam") == 1 then
 		settings["ocamllsp"] = with_defaults()
 	end
@@ -387,6 +441,21 @@ function M.config()
 	vim.api.nvim_create_user_command("LspDiagnostics", function()
 		vim.diagnostic.setqflist()
 	end, {})
+	vim.api.nvim_create_user_command("LspAttached", function()
+		local clients = vim.lsp.get_clients({ bufnr = 0 })
+		if #clients == 0 then
+			vim.notify("No LSP servers attached to current buffer", vim.log.levels.INFO)
+			return
+		end
+
+		local names = {}
+		for _, client in ipairs(clients) do
+			table.insert(names, client.name)
+		end
+		table.sort(names)
+
+		vim.notify("Attached LSPs: " .. table.concat(names, ", "), vim.log.levels.INFO)
+	end, { desc = "List LSP servers attached to current buffer" })
 	--vim.api.nvim_create_user_command(
 	--  "LspRestart",
 	--  function()

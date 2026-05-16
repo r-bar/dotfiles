@@ -46,7 +46,6 @@ function proj
     set -a projects (fd '^\.git$' -d $PROJ_DEPTH -HI $PROJ_DIR | _format_gitdir)
 
     # Custom aliases
-    maybe_add_project chezmoi $HOME/.local/share/chezmoi
     maybe_add_project dotfiles $HOME/.local/share/chezmoi
     maybe_add_project home $HOME
 

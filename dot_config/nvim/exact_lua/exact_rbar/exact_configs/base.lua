@@ -391,7 +391,7 @@ function M.config()
 	-- replace the legacy message grid in the TUI.". In particular it removes
 	-- "Press Enter" interruptions, and it highlights the command line as you
 	-- type.
-	require("vim._core.ui2").enable({})
+	-- require("vim._core.ui2").enable({})
 end
 
 return M

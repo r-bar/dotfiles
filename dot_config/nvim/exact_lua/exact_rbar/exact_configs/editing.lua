@@ -167,6 +167,12 @@ function M.packages(use)
 			---Function to call after (un)comment
 			post_hook = nil,
 		},
+		config = function()
+			local ft = require("Comment.ft")
+			ft.set("jinja", "{# %s #}")
+			ft.set("html.jinja", "{# %s #}")
+			ft.set("htmldjango.jinja", "{# %s #}")
+		end,
 	})
 
 	use({

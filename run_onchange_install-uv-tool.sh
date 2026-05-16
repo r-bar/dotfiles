@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 
-uv tool install black --upgrade
 uv tool install httpie --upgrade
 uv tool install ipython --upgrade
 uv tool install poetry --upgrade

@@ -67,7 +67,7 @@ function M.packages(use)
 		end,
 	})
 	use({
-		"ggandor/leap.nvim",
+		"https://codeberg.org/andyg/leap.nvim",
 		keys = {
 			{ "s", "<Plug>(leap-forward)", mode = "n", desc = "Leap forward", noremap = true },
 			{ "S", "<Plug>(leap-backward)", mode = "n", desc = "Leap backward", noremap = true },

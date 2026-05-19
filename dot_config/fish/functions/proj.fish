@@ -15,7 +15,7 @@ function proj
     function _format_gitdir -V PROJ_DIR -V delimiter --description "Remove the PROJ_DIR from the git path"
         while read git_dir
             set -l path (dirname $git_dir)
-            set -l name (echo $path | sed "s#^$PROJ_DIR/##")
+            set -l name (echo $path | sed "s#^$PROJ_DIR/##" | tr . _)
             echo $path$delimiter$name
         end
     end
@@ -66,6 +66,9 @@ function proj
 
     set -f selected_path (echo $selected | awk -F $delimiter '{print $1}')
     set -f selected_name (echo $selected | awk -F $delimiter '{print $2}')
+    # echo selected_path=$selected_path
+    # echo selected_name=$selected_name
+    # return 0
 
     if test ! -d $selected_path
         echo Invalid project
@@ -78,9 +81,9 @@ function proj
             tmux new-session -d -s $selected_name -c $selected_path
         end
         if test -z "$TMUX"
-            tmux attach-session -t $selected_name
+            tmux attach-session -t "$selected_name"
         else
-            tmux switch-client -t $selected_name
+            tmux switch-client -t "$selected_name"
         end
     else
         tmux renamew $selected_name

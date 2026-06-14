@@ -394,6 +394,8 @@ The official V language server, written in V itself.
 
 	settings["rescriptls"] = with_defaults()
 
+	settings["ols"] = with_defaults()
+
 	settings["mojo"] = with_defaults()
 
 	settings["zls"] = with_defaults()

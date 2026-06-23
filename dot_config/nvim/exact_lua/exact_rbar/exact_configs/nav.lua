@@ -19,6 +19,7 @@ function M.packages(use)
 		config = function()
 			local fzf = require("fzf-lua")
 			vim.keymap.set("n", "<Leader>t", fzf.files, { silent = true, desc = "FzF files" })
+			vim.keymap.set("n", "<Leader>ff", fzf.files, { silent = true, desc = "FzF files" })
 			vim.keymap.set("n", "<Leader>b", fzf.buffers, { silent = true, desc = "FzF buffers" })
 			vim.keymap.set("n", "<Leader>fb", fzf.buffers, { silent = true, desc = "FzF buffers" })
 			vim.keymap.set(

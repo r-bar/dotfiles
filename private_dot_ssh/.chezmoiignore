@@ -1,0 +1,10 @@
+# dont decrypt personal ssh id on work laptop
+{{- if eq .chezmoi.hostname "A03039" }}
+private_id_rsa*
+encrypted_private_id_rsa*
+id_rsa*
+# dont decrypt work ssh id on other machines
+{{- else }}
+encrypted_id_ed25519.pub.age
+encrypted_private_id_ed25519.age
+{{- end }}

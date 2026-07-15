@@ -17,6 +17,10 @@ local icon_map = {
 	"  ",
 }
 
+local function python_type_checker()
+	return vim.env.NVIM_PYTHON_TYPE_CHECKER or "ty"
+end
+
 local function source_string(source, code)
 	if code then
 		return string.format("  [%s %s]", source, code)
@@ -318,7 +322,7 @@ local function server_settings()
 				plugins = {
 					black = { enabled = false },
 					rope = { enabled = true },
-					pylsp_mypy = { enabled = false },
+					pylsp_mypy = { enabled = python_type_checker() == "mypy" },
 					-- lints generally covered by black and ruff while being less configurable
 					pyflakes = { enabled = false },
 					flake8 = { enabled = false },
@@ -341,7 +345,7 @@ local function server_settings()
 		},
 	})
 
-	if vim.fn.executable("ty") then
+	if vim.fn.executable("ty") and python_type_checker() == "ty" then
 		settings["ty"] = with_defaults({
 			-- These capabilities conflict with pylsp
 			on_attach = disable_capabilities({

@@ -293,7 +293,9 @@ function M.config()
 
 	-- reload the file if no keys have been pressed in <updatetime> or when
 	-- entering the buffer
-	vim.cmd([[au BufEnter * :silent! !]])
+	--
+	-- update: this setting was causing significant lag when pane switching.
+	-- vim.cmd([[au BufEnter * :silent! !]])
 
 	-- setup the gutter display
 	vim.o.signcolumn = "yes"

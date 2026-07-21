@@ -24,4 +24,7 @@ end
 set fish_user_paths ~/.local/bin $fish_user_paths
 
 config_homebrew
-config_activate_mise 2025.10.21
+# Unpinned: the per-prompt env re-execution bug that forced the 2025.10.21
+# pin is fixed as of mise 2026.7.6, and the pinned script broke PATH ordering
+# in new tmux panes (stale __MISE_DIFF + no PATH reset).
+config_activate_mise

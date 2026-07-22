@@ -16,3 +16,4 @@ venv
 .venv
 .nvim.lua
 .ssh.key
+.claude/

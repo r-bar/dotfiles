@@ -1,3 +1,0 @@
-# Fixes macos putting its system paths before those declared in .zshenv
-# pathtool binary can be found here: https://github.com/r-bar/pathtool
-export PATH="$(pathtool)"

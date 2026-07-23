@@ -1,5 +1,7 @@
 function proj
     set -f delimiter ':::'
+    set -f projects
+    set -f worktrees
 
     if test -z "$PROJ_DIR"
         set -f PROJ_DIR "$HOME/src"
@@ -7,9 +9,24 @@ function proj
     if test -z "$PROJ_DEPTH"
         set -f PROJ_DEPTH 5
     end
+    if test -z "$WORKTREES_DIR"
+      set -f WORKTREES_DIR "$HOME/worktrees"
+    end
 
     function _usage
-        echo "Usage: proj [-h|--help] [-s|--session] [-w|--window] [--] [<filter>]"
+        echo "Usage: proj [-h|--help] [-s|--session] [-w|--window] [-t|--worktrees] [--] [<filter>]"
+        echo
+        echo "Tmux session and window manager for projects in $PROJ_DIR and worktrees in $WORKTREES_DIR"
+        echo
+        echo "Current projecs directory (\$PROJ_DIR):"
+        echo "  $PROJ_DIR"
+        echo "Current worktrees directory (\$WORKTREES_DIR):"
+        echo "  $WORKTREES_DIR"
+        echo
+        echo "  -w, --window     Switch to a tmux window for the selected project"
+        echo "  -s, --session    Switch to a tmux session for the selected project (default)"
+        echo "  -t, --worktrees  List worktrees instead of projects"
+        echo "  -h, --help       Show this help message"
     end
 
     function _format_gitdir -V PROJ_DIR -V delimiter --description "Remove the PROJ_DIR from the git path"
@@ -20,13 +37,14 @@ function proj
         end
     end
 
-    argparse --name=proj h/help s/session w/window -- $argv
+    argparse --name=proj h/help s/session w/window t/worktrees -- $argv
 
-    set -f mode (set -ql _flag_window && echo "window" || echo "session")
+    set -f view_mode (set -ql _flag_window && echo "window" || echo "session")
+    set -f list_mode (set -ql _flag_worktrees && echo "worktrees" || echo "projects")
 
     if set -ql _flag_session && set -ql _flag_window
         echo -e "Error: --session and --window cannot be used together\n"
-        _usage
+        _usage | head -n 1
         return 1
     end
 
@@ -36,7 +54,6 @@ function proj
     end
     set -f positional $argv
 
-    set -f projects
     function maybe_add_project --no-scope-shadowing -V delimiter --description "add a custom alias to the project list"
         set -l name $argv[1]
         set -l path $argv[2]
@@ -44,6 +61,9 @@ function proj
     end
 
     set -a projects (fd '^\.git$' -d $PROJ_DEPTH -HI $PROJ_DIR | _format_gitdir)
+    if test -d $WORKTREES_DIR
+      set -a worktrees (for dir in (ls -1 $WORKTREES_DIR); echo "$WORKTREES_DIR/$dir$delimiter$dir"; end)
+    end
 
     # Custom aliases
     maybe_add_project dotfiles $HOME/.local/share/chezmoi
@@ -52,11 +72,25 @@ function proj
     # we have to use the 2nd field when the delimiter is multiple characters due
     # because fzf will append delimiters to the selector output
     # see: https://github.com/junegunn/fzf/issues/2154
-    set -f fzf_args --delimiter="$delimiter" --with-nth=2 --header='Select a project'
+    switch $list_mode
+      case projects
+        set -f fzf_args --delimiter="$delimiter" --with-nth=2 --header='Select a project'
+        set -f fzf_list $projects
+      case worktrees
+        set -f fzf_args --delimiter="$delimiter" --with-nth=2 --header='Select a worktree'
+        set -f fzf_list $worktrees
+      case '*'
+        echo "Unknown list mode: $list_mode"
+        return 1
+    end
+
+    # Run the project picker
     if test -z "$positional"
-        set -f selected "$(string join \n $projects | sort | fzf $fzf_args)"
+        # picker mode
+        set -f selected "$(string join \n $fzf_list | sort | fzf $fzf_args)"
     else
-        set -f selected "$(string join \n $projects | sort | fzf $fzf_args --filter "$positional" | head -n 1)"
+        # first selection mode
+        set -f selected "$(string join \n $fzf_list | sort | fzf $fzf_args --filter "$positional" | head -n 1)"
     end
 
     if test -z "$selected"
@@ -71,11 +105,11 @@ function proj
     # return 0
 
     if test ! -d $selected_path
-        echo Invalid project
+        echo "Invalid project"
         return 1
     end
 
-    if test "$mode" = session
+    if test "$view_mode" = session
         tmux has-session -t $selected_name 2>/dev/null
         if test $status -eq 1
             tmux new-session -d -s $selected_name -c $selected_path

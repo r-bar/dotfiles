@@ -20,6 +20,7 @@ function M.packages(use)
 	use({
 		"nickjvandyke/opencode.nvim",
 		version = "*", -- Latest stable release
+		enabled = vim.fn.executable("opencode") == 1,
 		event = "VeryLazy",
 		config = function()
 			local opencode = require("opencode")

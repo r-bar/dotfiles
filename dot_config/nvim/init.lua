@@ -12,6 +12,7 @@ loader.load("rbar/configs/lsp")
 loader.load("rbar/configs/completion")
 loader.load("rbar/configs/tui")
 loader.load("rbar/configs/opencode")
+loader.load("rbar/configs/claudecode")
 
 vim.g.python3_host_prog = vim.env.NVIM_PYTHON or "/usr/bin/python3"
 

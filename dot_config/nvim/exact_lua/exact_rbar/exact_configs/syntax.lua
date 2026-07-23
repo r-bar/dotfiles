@@ -127,7 +127,7 @@ function M.config()
 	vim.api.nvim_create_autocmd({ "VimEnter", "WinEnter", "TermOpen", "BufWinEnter" }, {
 		group = trailing_space_group,
 		callback = function()
-			local excluded_fts = { "help" }
+			local excluded_fts = { "dbout", "help" }
 			local excluded_ft = vim.tbl_contains(excluded_fts, vim.bo.filetype)
 			local win_config = vim.api.nvim_win_get_config(0)
 			if vim.bo.buftype == "terminal" or win_config.relative ~= "" or excluded_ft then

@@ -23,7 +23,7 @@ from lib.prog_check import (
 )
 
 
-programs = (
+PROGRAMS = (
     Program(
         "awk --version",
         version="GNU Awk 5",
@@ -33,6 +33,11 @@ programs = (
         "btop --version",
         version="btop version: 1",
         sources=[Brew("btop"), Apt("btop"), Pacman("btop")],
+    ),
+    Program(
+        "bwrap --version",
+        version="0.11",
+        sources=[Pacman("bubblewrap"), Apt("bubblewrap")],
     ),
     Program(
         "chezmoi --version",
@@ -135,7 +140,7 @@ def main():
     futures = set()
 
     with ThreadPoolExecutor() as executor:
-        for program in programs:
+        for program in PROGRAMS:
             f = executor.submit(check_program, program)
             futures.add(f)
         for result in as_completed(futures):
@@ -146,13 +151,14 @@ def main():
                 print(e)
 
     if errors:
+        good_count = len(PROGRAMS) - sum(errors.values())
         summary = ", ".join(f"{count} {t.__name__}" for t, count in errors.items())
         summary += (
-            f", {len(programs)} programs are present and have the expected versions."
+            f", {good_count} programs are present and have the expected versions."
         )
     else:
         summary = (
-            f"All {len(programs)} programs are present and have the expected versions."
+            f"All {len(PROGRAMS)} programs are present and have the expected versions."
         )
 
     print("\nSummary:", summary)

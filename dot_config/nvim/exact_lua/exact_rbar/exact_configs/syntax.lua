@@ -43,7 +43,7 @@ function M.packages(use)
 	use({ "czheo/mojo.vim", ft = "mojo" })
 	use({
 		"https://github.com/Vimjas/vim-python-pep8-indent.git",
-		enabled = false,
+		enabled = true,
 		ft = "python",
 	})
 	use("https://github.com/HiPhish/jinja.vim.git")

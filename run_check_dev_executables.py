@@ -1,55 +1,162 @@
 #!/usr/bin/env python3
+"""Script for checking the presence and versions of development executables on the system.
 
-import ctypes
-import multiprocessing as mp
-from concurrent.futures import ThreadPoolExecutor
-from subprocess import run
-from textwrap import indent
+Must be compatible with python >= 3.9
+"""
+import os
+import sys
+from collections import Counter
+from concurrent.futures import ThreadPoolExecutor, as_completed
 
-programs = {
-    "awk --version": "GNU Awk 5",
-    "btop --version": None,
-    "chezmoi --version": None,
-    "curl --version": "curl 8",
-    "delta --version": None,
-    "fd --version": "fd 10",
-    "fish --version": "fish, version 4",
-    "forge version": "forge 0.5",
-    "fzf --version": "0.72.0",
-    "git --version": "git version 2",
-    "grep --version": "grep (GNU grep) 3",
-    "jq --version": "jq-1",
-    "lazy-tmux version": "lazy-tmux 0.2",
-    "make --version": "GNU Make 4",
-    "mise --version": None,
-    "nvim --version": "NVIM v0.12.3",
-    "rg --version": "ripgrep 15",
-    "sed --version": "sed (GNU sed) 4",
-    "tmux -V": "tmux 3.6b",
-    "tpm": None,
-    "xh --version": "xh 0.26",
-    "yq --version": "yq (https://github.com/mikefarah/yq/) version v4",
-}
+if cm_path := os.environ.get("CHEZMOI_COMMAND_DIR"):
+    sys.path.insert(0, cm_path)
 
-missing = mp.Value(ctypes.c_uint, 0)
-bad_version = mp.Value(ctypes.c_uint, 0)
+from lib.prog_check import (
+    check_program,
+    Program,
+    Brew,
+    Apt,
+    Pacman,
+    BadVersionError,
+    ProgramNotFoundError,
+    CheckError,
+)
 
-def check_program(program: str, expected_version: str | None) -> None:
-    global missing, bad_version
-    proc = run(program, shell=True, capture_output=True, text=True)
-    if proc.returncode != 0:
-        print(f"Error running '{program}':")
-        print(indent(proc.stderr.strip(), "  "))
-        with missing.get_lock():
-            missing.value += 1
-    if expected_version is not None and expected_version not in proc.stdout:
-        print(f"'{program}' did not match expected version '{expected_version}':")
-        print(indent(proc.stdout.strip(), "  "))
-        with bad_version.get_lock():
-            bad_version.value += 1
 
-with ThreadPoolExecutor() as executor:
-    for program, expected_version in programs.items():
-        executor.submit(check_program, program, expected_version)
+programs = (
+    Program(
+        "awk --version",
+        version="GNU Awk 5",
+        sources=[Brew("gawk"), Apt("awk"), Pacman("awk")],
+    ),
+    Program(
+        "btop --version",
+        version="btop version: 1",
+        sources=[Brew("btop"), Apt("btop"), Pacman("btop")],
+    ),
+    Program(
+        "chezmoi --version",
+        version="chezmoi version v2",
+        sources=[Brew("chezmoi"), Apt("chezmoi"), Pacman("chezmoi")],
+    ),
+    Program(
+        "curl --version",
+        version="curl 8",
+        sources=[Brew("curl"), Apt("curl"), Pacman("curl")],
+    ),
+    Program(
+        "delta --version",
+        version="delta 0.19",
+        sources=[Brew("git-delta"), Apt("git-delta"), Pacman("git-delta")],
+    ),
+    Program(
+        "fd --version",
+        version="fd 10",
+        sources=[Brew("fd"), Apt("fd-find"), Pacman("fd")],
+    ),
+    Program(
+        "fish --version",
+        version="fish, version 4",
+        sources=[Brew("fish"), Apt("fish"), Pacman("fish")],
+    ),
+    Program(
+        "forge version",
+        version="forge 0.5",
+        sources=[Brew("forge"), Apt("forge"), Pacman("forge")],
+    ),
+    Program(
+        "fzf --version",
+        version="0.72.0",
+        sources=[Brew("fzf"), Apt("fzf"), Pacman("fzf")],
+    ),
+    Program(
+        "git --version",
+        version="git version 2",
+        sources=[Brew("git"), Apt("git"), Pacman("git")],
+    ),
+    Program(
+        "grep --version",
+        version="grep (GNU grep) 3",
+        sources=[Brew("grep"), Apt("grep"), Pacman("grep")],
+    ),
+    Program(
+        "jq --version", version="jq-1", sources=[Brew("jq"), Apt("jq"), Pacman("jq")]
+    ),
+    Program(
+        "lazy-tmux version",
+        version="lazy-tmux 0.2",
+        sources=[Brew("lazy-tmux"), Apt("lazy-tmux"), Pacman("lazy-tmux")],
+    ),
+    Program(
+        "make --version",
+        version="GNU Make 4",
+        sources=[Brew("make"), Apt("make"), Pacman("make")],
+    ),
+    Program("mise --version", sources=[Brew("mise"), Apt("mise"), Pacman("mise")]),
+    Program(
+        "nvim --version",
+        version="NVIM v0.12",
+        sources=[Brew("neovim"), Apt("neovim"), Pacman("neovim")],
+    ),
+    Program(
+        "rg --version",
+        version="ripgrep 15",
+        sources=[Brew("ripgrep"), Apt("ripgrep"), Pacman("ripgrep")],
+    ),
+    Program(
+        "rustup --version",
+        version="rustup 1",
+        sources=[Brew("rustup"), Apt("rustup"), Pacman("rustup")],
+    ),
+    Program(
+        "sed --version",
+        version="sed (GNU sed) 4",
+        sources=[Brew("gnu-sed"), Apt("sed"), Pacman("sed")],
+    ),
+    Program(
+        "tmux -V",
+        version="tmux 3",
+        sources=[Brew("tmux"), Apt("tmux"), Pacman("tmux")],
+    ),
+    Program("tpm"),
+    Program(
+        "xh --version", version="xh 0.26", sources=[Brew("xh"), Apt("xh"), Pacman("xh")]
+    ),
+    Program(
+        "yq --version",
+        version="yq (https://github.com/mikefarah/yq/) version v4",
+        sources=[Brew("yq"), Apt("yq"), Pacman("yq")],
+    ),
+)
 
-print(f"\nSummary: {missing.value} missing programs, {bad_version.value} version mismatches.")
+
+def main():
+    errors = Counter()
+    futures = set()
+
+    with ThreadPoolExecutor() as executor:
+        for program in programs:
+            f = executor.submit(check_program, program)
+            futures.add(f)
+        for result in as_completed(futures):
+            try:
+                result.result()
+            except (BadVersionError, ProgramNotFoundError, CheckError) as e:
+                errors[type(e)] += 1
+                print(e)
+
+    if errors:
+        summary = ", ".join(f"{count} {t.__name__}" for t, count in errors.items())
+        summary += (
+            f", {len(programs)} programs are present and have the expected versions."
+        )
+    else:
+        summary = (
+            f"All {len(programs)} programs are present and have the expected versions."
+        )
+
+    print("\nSummary:", summary)
+
+
+if __name__ == "__main__":
+    main()

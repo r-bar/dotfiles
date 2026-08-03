@@ -100,9 +100,6 @@ function proj
 
     set -f selected_path (echo $selected | awk -F $delimiter '{print $1}')
     set -f selected_name (echo $selected | awk -F $delimiter '{print $2}')
-    # echo selected_path=$selected_path
-    # echo selected_name=$selected_name
-    # return 0
 
     if test ! -d $selected_path
         echo "Invalid project"
@@ -110,14 +107,17 @@ function proj
     end
 
     if test "$view_mode" = session
-        tmux has-session -t $selected_name 2>/dev/null
+        # Important we use the -t= form of argument passing here to prevent
+        # prefix matching the session name. We want exact matches.
+        # see: https://github.com/tmux/tmux/issues/346
+        tmux has-session -t="$selected_name" 2>/dev/null
         if test $status -eq 1
             tmux new-session -d -s $selected_name -c $selected_path
         end
         if test -z "$TMUX"
-            tmux attach-session -t "$selected_name"
+            tmux attach-session -t="$selected_name"
         else
-            tmux switch-client -t "$selected_name"
+            tmux switch-client -t="$selected_name"
         end
     else
         tmux renamew $selected_name

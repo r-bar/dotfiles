@@ -122,17 +122,9 @@ set -g allow-passthrough on
 set -ga update-environment TERM
 set -ga update-environment TERM_PROGRAM
 
-# <C-B>i to install plugins
-# <C-B>u to update plugins
-# <C-B>U to update plugins (and remove unused)
-set -g @plugin 'tmux-plugins/tpm'
-set -g @plugin 'tmux-plugins/tmux-sensible'
-set -g @plugin 'christoomey/vim-tmux-navigator'
-set -g @plugin 'sainnhe/tmux-fzf'
-#set -g @plugin 'dreamsofcode-io/catppuccin-tmux'
-#set -g @plugin 'tmux-plugins/tmux-yank'
-
-run 'tpm'
+run-shell -b ~/.config/tmux/plugins/tmux-sensible/sensible.tmux
+run-shell -b ~/.config/tmux/plugins/vim-tmux-navigator/vim-tmux-navigator.tmux
+run-shell -b ~/.config/tmux/plugins/tmux-fzf/main.tmux
 
 # lazy-tmux session manager
 run-shell -b 'lazy-tmux daemon --interval 3m --scrollback >/tmp/lazy-tmux.log 2>&1 || tmux display-message "lazy-tmux daemon already running"'

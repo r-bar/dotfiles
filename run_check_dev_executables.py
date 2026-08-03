@@ -123,7 +123,6 @@ PROGRAMS = (
         version="tmux 3",
         sources=[Brew("tmux"), Apt("tmux"), Pacman("tmux")],
     ),
-    Program("tpm"),
     Program(
         "xh --version", version="xh 0.26", sources=[Brew("xh"), Apt("xh"), Pacman("xh")]
     ),

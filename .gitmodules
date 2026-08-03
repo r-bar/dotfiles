@@ -1,0 +1,9 @@
+[submodule "dot_config/tmux/plugins/tmux-sensible"]
+	path = dot_config/tmux/plugins/tmux-sensible
+	url = https://github.com/tmux-plugins/tmux-sensible.git
+[submodule "dot_config/tmux/plugins/vim-tmux-navigator"]
+	path = dot_config/tmux/plugins/vim-tmux-navigator
+	url = https://github.com/christoomey/vim-tmux-navigator.git
+[submodule "dot_config/tmux/plugins/tmux-fzf"]
+	path = dot_config/tmux/plugins/tmux-fzf
+	url = https://github.com/sainnhe/tmux-fzf.git

@@ -8,7 +8,11 @@ function config_activate_mise
     return
   end
   if type -q mise
-    set -gx MISE_FISH_AUTO_ACTIVATE 1
+    # If mise is a function and not just a program then it has already been
+    # activated. Don't activate it again.
+    if functions -q mise
+      return
+    end
     # Do NOT clear __MISE_DIFF/__MISE_SESSION here: `mise activate` reads the
     # inherited __MISE_DIFF to strip the previous shell's mise PATH entries
     # (e.g. state leaked in from the tmux server env) before re-activating,

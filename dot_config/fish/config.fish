@@ -11,6 +11,19 @@ set -gx UPLOAD_BASE_PATH uploads
 
 set -gx FZF_TMUX 1
 
+if status is-interactive && type -q tide && ! set -q -u tide_left_prompt_items
+  tide configure --auto \
+    --style='Lean' \
+    --prompt_colors='True color' \
+    --show_time='24-hour format' \
+    --lean_prompt_height='Two lines' \
+    --prompt_connection='Disconnected' \
+    --prompt_spacing='Sparse' \
+    --icons='Few icons' \
+    --transient='No'
+  tide reload
+end
+
 if type -q gcloud && type -q uv
   set -gx CLOUDSDK_PYTHON (uv python find 3.12)
 end

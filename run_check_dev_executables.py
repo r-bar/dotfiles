@@ -11,9 +11,6 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 if source_dir := os.environ.get("CHEZMOI_SOURCE_DIR"):
     sys.path.insert(0, source_dir)
 
-from pprint import pprint
-pprint(dict(os.environ))
-
 from lib.prog_check import (
     check_program,
     Program,

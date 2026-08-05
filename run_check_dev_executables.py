@@ -55,6 +55,11 @@ PROGRAMS = (
         sources=[Brew("git-delta"), Apt("git-delta"), Pacman("git-delta")],
     ),
     Program(
+        "eza --version",
+        version="v0.23",
+        sources=[Brew("eza"), Pacman("eza")],
+    ),
+    Program(
         "fd --version",
         version="fd 10",
         sources=[Brew("fd"), Apt("fd-find"), Pacman("fd")],

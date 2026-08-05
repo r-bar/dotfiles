@@ -11,7 +11,20 @@ repos:
 
 - repo: local
   hooks:
-  - id: mise-pre-commit-hooks
-    name: Mise pre-commit hooks
+  - id: format-lua
+    name: Format lua files
     language: system
-    entry: mise run pre-commit-hook
+    entry: mise run format-lua
+    types: [lua]
+  - id: nvim-lazy-lock-check
+    name: Check neovim plugin lock file
+    language: system
+    entry: mise run nvim-lazy-lock-check
+    pass_filenames: false
+    always_run: true
+  - id: nvim-spellfile-check
+    name: Check neovim spellfile
+    language: system
+    entry: mise run nvim-spellfile-check
+    pass_filenames: false
+    always_run: true

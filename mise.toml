@@ -1,14 +1,6 @@
 [tools]
 stylua = "2"
 
-[tasks.pre-commit-hook]
-description = "Local commands called by pre-commit"
-depends = ["nvim-lazy-lock-check", "lint-lua"]
-
-[tasks.pre-commit]
-description = "Run pre-commit hooks on all files"
-run = "pre-commit run --all-files"
-
 [tasks.nvim-lazy-lock-check]
 description = "Ensure nvim's lazy-lock.json is in sync"
 run = """
@@ -31,13 +23,13 @@ exit $RESULT
 [tasks.nvim-spellfile-check]
 description = "Ensure nvim's spellfile is in sync"
 run = """
-SPELLFILE= dot_local/share/nvim/site/spell/en.utf-8.add
+SPELLFILE=dot_local/share/nvim/site/spell/en.utf-8.add
 if [ ! -f $SPELLFILE ]; then
   echo "Cannot find chezmoi's neovim spellfile at $SPELLFILE"
   exit 1
 fi
 
-diff $SPELLFILE $(chezmoi target-path $LOCKFILE_PATH)
+diff $SPELLFILE $(chezmoi target-path $SPELLFILE)
 RESULT=$?
 
 if [ $RESULT -ne 0 ]; then
@@ -51,6 +43,9 @@ exit $RESULT
 description = "Update nvim's lazy-lock.json to match the current state in use on this machine"
 run = "chezmoi re-add ~/.config/nvim/lazy-lock.json"
 
-[tasks.lint-lua]
-description = "Lint Lua files using stylua"
-run = "stylua ."
+[tasks.format-lua]
+description = "Format Lua files using stylua"
+usage = """
+arg "[files]" help="The file(s) to format" var=#true
+"""
+run = "stylua ${usage_files:-dot_config/nvim dot_hammerspoon}"

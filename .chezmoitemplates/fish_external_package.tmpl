@@ -1,30 +1,76 @@
+{{/*
+* # Fish external package template
+*
+* ## Usage:
+*
+* The template takes a dictionary object as its sole argument. This dictionary
+* takes all the same fields as [chezmoi externals](https://www.chezmoi.io/reference/special-files/chezmoiexternal-format/).
+* The defaults are set for a standard fish plugin repository. In addition to the
+* standard fields, the template also requires a `name` field which is used to
+* give the config file sections a reasonable name. Most plugins should only
+* require a `name` and `url` field.
+*
+* Overriding any of the default values is permissible, however overriding either
+* `include` or `targetPath` will result in undesireable behavior because these
+* two values are dynamically generated for each toml section.
+*
+* ## Supported fish package structure:
+*
+* <top-level directory>
+* |- functions/
+* |- conf.d/
+* |- completions.d/
+*
+* ## Example:
+*
+* ```tmpl
+* {{ template "fish_external_package.tmpl" dict
+*   "name" "tide"
+*   "url" "https://github.com/IlanCosman/tide/archive/c4e3831dc4392979478d3d7b66a68f0274996c85.zip"
+* }}
+* ```
+*
+* ## Debugging
+*
+* You can run the following in the chezmoi config directory to see the result of
+* the templated external file declarations.
+*
+* ```bash
+* chezmoi execute-template -f .chezmoiexternal.toml.tmpl
+* ```
+*
+* ## Motivation:
+*
+* This template allows chezmoi externals to operate as a very light weight fish
+* package manager. This method of managing fish packages was designed to cut
+* down the number of processes we execute after apply and resolve some
+* consistency issues I was having when combining chezmoi and the fisher package
+* manager.
+*
+* A nice side effect of this system is we get to leverage the chezmoi's internal
+* caching layer to make applying __much__ faster.
+*
+* Unlike fisher, this system uses the ~/.local/share/fish/vendor_* configuration
+* directories as the `targetPath` to allow us to seperate our fish configuration
+* from our plugin's fish files. This enables us to use an `exact_` directory for
+* our personal fish configuration more easily as nothing should be writing into
+* them.
+*/}}
 {{
   $default := dict
   "type" "archive"
-  "extract" true
+  "exact" true
   "refreshPeriod" "168h"
+  "stripComponents" 2
 -}}
-[{{ .name }}_completions]
-{{ $completions :=
-  merge $default
-  (
-    dict
-    "include" (list "completions/*.fish")
-    "target" ".local/share/fish/vendor_completions.d"
-  )
-  (omit . "name")
--}}
-{{ range $name, $value := $completions -}}
-{{ $name }} = {{ toJson $value }}
-{{ end }}
 
 [{{ .name }}_functions]
 {{ $functions :=
-  merge $default
+  merge (deepCopy $default)
   (
     dict
-    "include" (list "functions/*.fish")
-    "target" ".local/share/fish/vendor_functions.d"
+    "targetPath" ".local/share/fish/vendor_functions.d"
+    "include" (list "*/functions/**")
   )
   (omit . "name")
 -}}
@@ -32,13 +78,27 @@
 {{ $name }} = {{ toJson $value }}
 {{ end }}
 
-[{{ .name }}_confd]
-{{ $confd :=
-  merge $default
+[{{ .name }}_completions]
+{{ $completions :=
+  merge (deepCopy $default)
   (
     dict
-    "include" (list "conf.d/*.fish")
-    "target" ".local/share/fish/vendor_conf.d"
+    "targetPath" ".local/share/fish/vendor_completions.d"
+    "include" (list "*/completions/**")
+  )
+  (omit . "name")
+-}}
+{{ range $name, $value := $completions -}}
+{{ $name }} = {{ toJson $value }}
+{{ end }}
+
+[{{ .name }}_confd]
+{{ $confd :=
+  merge (deepCopy $default)
+  (
+    dict
+    "targetPath" ".local/share/fish/vendor_conf.d"
+    "include" (list "*/conf.d/**")
   )
   (omit . "name")
 -}}

@@ -1,0 +1,47 @@
+{{
+  $default := dict
+  "type" "archive"
+  "extract" true
+  "refreshPeriod" "168h"
+-}}
+[{{ .name }}_completions]
+{{ $completions :=
+  merge $default
+  (
+    dict
+    "include" (list "completions/*.fish")
+    "target" ".local/share/fish/vendor_completions.d"
+  )
+  (omit . "name")
+-}}
+{{ range $name, $value := $completions -}}
+{{ $name }} = {{ toJson $value }}
+{{ end }}
+
+[{{ .name }}_functions]
+{{ $functions :=
+  merge $default
+  (
+    dict
+    "include" (list "functions/*.fish")
+    "target" ".local/share/fish/vendor_functions.d"
+  )
+  (omit . "name")
+-}}
+{{ range $name, $value := $functions -}}
+{{ $name }} = {{ toJson $value }}
+{{ end }}
+
+[{{ .name }}_confd]
+{{ $confd :=
+  merge $default
+  (
+    dict
+    "include" (list "conf.d/*.fish")
+    "target" ".local/share/fish/vendor_conf.d"
+  )
+  (omit . "name")
+-}}
+{{ range $name, $value := $confd -}}
+{{ $name }} = {{ toJson $value }}
+{{ end -}}

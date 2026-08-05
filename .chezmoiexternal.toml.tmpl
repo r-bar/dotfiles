@@ -24,3 +24,15 @@ extract = true
 stripComponents = 1
 refreshPeriod = "168h"  # 7 days
 exact = true
+
+# version 6.2.0
+{{ template "fish_external_package.tmpl" dict
+  "name" "tide"
+  "url" "https://github.com/IlanCosman/tide/archive/c4e3831dc4392979478d3d7b66a68f0274996c85.zip"
+}}
+
+# version 11.0
+{{ template "fish_external_package.tmpl" dict
+  "name" "fish_fzf"
+  "url" "https://github.com/PatrickF1/fzf.fish/archive/0069dbbe06cc05482bfb13063b4b4eac26318992.zip"
+}}

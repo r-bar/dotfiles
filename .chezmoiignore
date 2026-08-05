@@ -3,9 +3,9 @@ README.md
 **/*__default*
 **/*__h.*
 **/*__os.*
-/scripts
-/mise.toml
+./scripts
+./mise.toml
 .pre-commit-config.yaml
-/tests
+./tests
 tmp
-/lib
+./lib

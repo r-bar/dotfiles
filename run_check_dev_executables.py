@@ -76,7 +76,7 @@ PROGRAMS = (
     ),
     Program(
         "fzf --version",
-        version="0.72.0",
+        version="0.74",
         sources=[Brew("fzf"), Apt("fzf"), Pacman("fzf")],
     ),
     Program(

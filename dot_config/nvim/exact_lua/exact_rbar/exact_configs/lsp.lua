@@ -142,32 +142,28 @@ local function on_attach(client, bufnr)
 		end
 		return opts
 	end
-	vim.keymap.set("n", "gD", vim.lsp.buf.declaration, bufopts({ desc = "Go to declaration" }))
-	--vim.keymap.set("n", "gd", vim.lsp.buf.definition({on_list = M.go_to_definition}), bufopts({ desc = "Go to definition" }))
-	vim.keymap.set("n", "gd", vim.lsp.buf.definition, bufopts({ desc = "Go to definition" }))
-	--vim.keymap.set('n', 'gv', ":vsplit<cr>gd", bufopts { desc = "Go to definition in new vsplit" })
-	vim.keymap.set("n", "K", vim.lsp.buf.hover, bufopts({ desc = "Show hover info" }))
-	vim.keymap.set("n", "gi", vim.lsp.buf.implementation, bufopts({ desc = "Go to implementation" }))
-	vim.keymap.set("n", "<leader>k", vim.lsp.buf.signature_help, bufopts({ desc = "Show signature help" }))
-	vim.keymap.set("i", "<C-k>", vim.lsp.buf.signature_help, bufopts({ desc = "Show signature help" }))
-	vim.keymap.set("n", "<leader>wa", vim.lsp.buf.add_workspace_folder, bufopts({ desc = "Add workspace folder" }))
+	vim.keymap.set("n", "gD", vim.lsp.buf.declaration, bufopts({ desc = "[LSP] Go to declaration" }))
+	vim.keymap.set("n", "gd", vim.lsp.buf.definition, bufopts({ desc = "[LSP] Go to definition" }))
+	--vim.keymap.set('n', 'gv', ":vsplit<cr>gd", bufopts { desc = "[LSP] Go to definition in new vsplit" })
+	vim.keymap.set("n", "K", vim.lsp.buf.hover, bufopts({ desc = "[LSP] Show hover info" }))
+	vim.keymap.set(
+		"n",
+		"<leader>wa",
+		vim.lsp.buf.add_workspace_folder,
+		bufopts({ desc = "[LSP] Add workspace folder" })
+	)
 	vim.keymap.set(
 		"n",
 		"<leader>wr",
 		vim.lsp.buf.remove_workspace_folder,
-		bufopts({ desc = "Remove workspace folder" })
+		bufopts({ desc = "[LSP] Remove workspace folder" })
 	)
 	vim.keymap.set("n", "<leader>wl", function()
 		print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
-	end, bufopts({ desc = "List workspace folders" }))
-	vim.keymap.set("n", "<leader>D", vim.lsp.buf.type_definition, bufopts({ desc = "Show type definition" }))
-	vim.keymap.set("n", "<leader>r", vim.lsp.buf.rename, bufopts({ desc = "Rename" }))
-	vim.keymap.set("n", "<F2>", vim.lsp.buf.rename, bufopts({ desc = "Rename" }))
-	vim.keymap.set("n", "<leader>a", require("fzf-lua").lsp_code_actions, bufopts({ desc = "Perform code action" }))
-	vim.keymap.set("n", "gr", vim.lsp.buf.references, bufopts({ desc = "Find references" }))
+	end, bufopts({ desc = "[LSP] List workspace folders" }))
 	vim.keymap.set("n", "<leader>ff", function()
 		vim.lsp.buf.format({ async = true })
-	end, bufopts({ desc = "Format file" }))
+	end, bufopts({ desc = "[LSP] Format file" }))
 
 	-- disable semantic token highlighting
 	client.server_capabilities.semanticTokensProvider = nil
@@ -182,16 +178,21 @@ function M.global_bindings()
 	--  "n",
 	--  "<leader>e",
 	--  vim.diagnostic.open_float,
-	--  opts({ desc = "Show diagnostic error in floating window" })
+	--  opts({ desc = "[LSP] Show diagnostic error in floating window" })
 	--)
-	vim.keymap.set("n", "<leader>e", M.line_diagnostics, opts({ desc = "Show diagnostic error in floating window" }))
+	vim.keymap.set(
+		"n",
+		"<leader>e",
+		M.line_diagnostics,
+		opts({ desc = "[LSP] Show diagnostic error in floating window" })
+	)
 	vim.keymap.set("n", "[d", function()
 		vim.diagnostic.jump({ count = -1, float = true })
-	end, opts({ desc = "Jump to prev diagnostic error" }))
+	end, opts({ desc = "[LSP] Jump to prev diagnostic error" }))
 	vim.keymap.set("n", "]d", function()
 		vim.diagnostic.jump({ count = 1, float = true })
-	end, opts({ desc = "Jump to next diagnostic error" }))
-	vim.keymap.set("n", "<leader>q", vim.diagnostic.setloclist, opts({ desc = "Show buffer diagnostic errors" }))
+	end, opts({ desc = "[LSP] Jump to next diagnostic error" }))
+	vim.keymap.set("n", "<leader>q", vim.diagnostic.setloclist, opts({ desc = "[LSP] Show buffer diagnostic errors" }))
 end
 
 local function default_server_settings()

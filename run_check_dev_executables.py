@@ -134,7 +134,7 @@ PROGRAMS = (
     Program(
         "yq --version",
         version="yq (https://github.com/mikefarah/yq/) version v4",
-        sources=[Brew("yq"), Apt("yq"), Pacman("yq")],
+        sources=[Brew("yq"), Apt("yq"), Pacman("go-yq")],
     ),
 )
 

@@ -34,6 +34,9 @@ end
 if test -d ~/.cargo/bin
   set fish_user_paths ~/.cargo/bin $fish_user_paths
 end
+if test -d $HOME/Library/pnpm/bin
+  set fish_user_paths $HOME/Library/pnpm/bin $fish_user_paths
+end
 set fish_user_paths ~/.local/bin $fish_user_paths
 
 config_homebrew

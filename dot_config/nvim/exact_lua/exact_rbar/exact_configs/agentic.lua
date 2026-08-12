@@ -3,6 +3,9 @@ local M = {}
 
 --- @return string
 local function default_agent()
+	if vim.env.NVIM_AI_AGENT ~= nil then
+		return vim.env.NVIM_AI_AGENT
+	end
 	if vim.fn.executable("opencode") == 1 then
 		return "opencode"
 	end
@@ -52,7 +55,7 @@ function M.packages(use)
 			{
 				"<leader>aa",
 				function()
-					require("agentic").toggle()
+					require("agentic").toggle({ auto_add_to_context = false })
 				end,
 				mode = { "n", "v" },
 				desc = "[Agent] Toggle Chat",

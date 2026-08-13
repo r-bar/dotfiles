@@ -3,8 +3,6 @@
 ---@type ConfigPkg
 local M = {}
 
-function M.on_attach(bufnr) end
-
 function M.packages(use)
 	use({
 		"https://github.com/tpope/vim-fugitive.git",
@@ -53,7 +51,7 @@ function M.packages(use)
 	use({
 		"lewis6991/gitsigns.nvim",
 		opts = {
-			on_attach = M.on_attach,
+			-- on_attach = M.on_attach,
 			-- Configuration options
 			signs = {
 				add = { text = "┃" },
@@ -151,6 +149,28 @@ function M.packages(use)
 
 			-- Text object
 			map({ "o", "x" }, "ih", ":<C-U>Gitsigns select_hunk<CR>")
+		end,
+	})
+end
+
+function M.config()
+	-- when a diff window (from gitsigns diffthis, Gdiffsplit, etc.) is closed
+	-- with a plain :q, its sibling is left with diff/scrollbind/cursorbind
+	-- still set, which then leaks into any future splits of that window. Once
+	-- only one diff window remains in the tab, clear those options on it.
+	vim.api.nvim_create_autocmd("WinClosed", {
+		group = vim.api.nvim_create_augroup("rbar_diffoff", { clear = true }),
+		callback = function()
+			vim.schedule(function()
+				local diff_wins = vim.tbl_filter(function(win)
+					return vim.api.nvim_win_is_valid(win) and vim.wo[win].diff
+				end, vim.api.nvim_tabpage_list_wins(0))
+				if #diff_wins == 1 then
+					vim.wo[diff_wins[1]].diff = false
+					vim.wo[diff_wins[1]].scrollbind = false
+					vim.wo[diff_wins[1]].cursorbind = false
+				end
+			end)
 		end,
 	})
 end

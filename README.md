@@ -5,6 +5,7 @@ web application development.
 
 ## Requirements
 * [chezmoi](https://www.chezmoi.io/) configuration manager.
+* [mise](https://mise.jdx.dev/) environment manager.
 * [Bitwarden CLI](https://github.com/bitwarden/clients) password manager. Used
 to provide the decryption key.
 

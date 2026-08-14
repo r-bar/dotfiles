@@ -4,3 +4,4 @@ frontend
 FastAPI
 Django
 LLMs
+desynchronization

@@ -16,7 +16,7 @@ local function default_agent()
 end
 
 local function this_error(context)
-	local cur_line, cur_col0 = unpack(vim.api.nvim_win_get_cursor(0))
+	local cur_line, _cur_col0 = unpack(vim.api.nvim_win_get_cursor(0))
 	cur_line = cur_line - 1 -- Convert to 0-indexed
 	local diags = vim.diagnostic.get(0, { lnum = cur_line })
 	local this = context:this()
@@ -48,6 +48,7 @@ function M.packages(use)
 			-- "copilot-acp" | "auggie-acp" | "mistral-vibe-acp" | "cline-acp" |
 			-- "goose-acp" | "kiro-acp" | "pi-acp"
 			provider = ACP[agent],
+			windows = { width = 120 },
 		},
 
 		-- these are just suggested keymaps; customize as desired

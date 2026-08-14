@@ -1,8 +1,8 @@
----@type ConfigPkg
+---@class ConfigPkg
 local M = {}
 
 --- @return string
-local function default_agent()
+function M.default_agent()
 	if vim.env.NVIM_AI_AGENT ~= nil then
 		return vim.env.NVIM_AI_AGENT
 	end
@@ -15,28 +15,13 @@ local function default_agent()
 	return ""
 end
 
-local function this_error(context)
-	local cur_line, _cur_col0 = unpack(vim.api.nvim_win_get_cursor(0))
-	cur_line = cur_line - 1 -- Convert to 0-indexed
-	local diags = vim.diagnostic.get(0, { lnum = cur_line })
-	local this = context:this()
-	-- local diagnostics = context:diagnostics()
-	local line_diags = {}
-	line_diags[#line_diags + 1] = string.format("Errors for %s:\n", this)
-	for _, d in ipairs(diags) do
-		local msg = d.message:gsub("\n", " ")
-		line_diags[#line_diags + 1] = string.format("- %s\n", msg)
-	end
-	return table.concat(line_diags)
-end
-
 local ACP = {
 	claude = "claude-agent-acp",
 	opencode = "opencode-acp",
 }
 
 function M.packages(use)
-	local agent = default_agent()
+	local agent = M.default_agent()
 
 	use({
 		"carlos-algms/agentic.nvim",
@@ -49,6 +34,7 @@ function M.packages(use)
 			-- "copilot-acp" | "auggie-acp" | "mistral-vibe-acp" | "cline-acp" |
 			-- "goose-acp" | "kiro-acp" | "pi-acp"
 			provider = ACP[agent],
+			-- provider = 'opencode-acp',
 			windows = { width = 120 },
 		},
 
@@ -114,6 +100,16 @@ function M.packages(use)
 			},
 		},
 		config = function()
+			local opts = {
+				-- Any ACP-compatible provider works. Built-in: "claude-agent-acp" |
+				-- "gemini-acp" | "codex-acp" | "opencode-acp" | "cursor-acp" |
+				-- "copilot-acp" | "auggie-acp" | "mistral-vibe-acp" | "cline-acp" |
+				-- "goose-acp" | "kiro-acp" | "pi-acp"
+				provider = ACP[agent],
+				-- provider = 'opencode-acp',
+				windows = { width = 120 },
+			}
+			require("agentic").setup(opts)
 			--- agentic.nvim's chat/todos/code/files/diagnostics/input buffers all use
 			--- filetypes prefixed with "Agentic".
 			local function is_agentic_buf(bufnr)
@@ -152,6 +148,12 @@ function M.packages(use)
 					vim.schedule(equalize_windows)
 				end,
 				desc = "Agentic: equalize windows when an agentic window closes",
+			})
+			vim.api.nvim_create_autocmd("FileType", {
+				pattern = "AgenticChat",
+				callback = function(ev)
+					vim.treesitter.start(ev.buf, "markdown")
+				end,
 			})
 		end,
 	})

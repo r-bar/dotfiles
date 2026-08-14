@@ -218,28 +218,6 @@ function M.packages(use)
 			{ "<C-w>z", "<Plug>Zoom", mode = "n", desc = "Zoom window", noremap = true },
 		},
 	})
-
-	use({
-		"folke/which-key.nvim",
-		-- currently only using this plugin for detecting conflicting keymaps using
-		-- `:checkhealth which-key`
-		enabled = false,
-		event = "VeryLazy",
-		opts = {
-			-- your configuration comes here
-			-- or leave it empty to use the default settings
-			-- refer to the configuration section below
-		},
-		keys = {
-			{
-				"<leader>?",
-				function()
-					require("which-key").show({ global = false })
-				end,
-				desc = "Buffer Local Keymaps (which-key)",
-			},
-		},
-	})
 end
 
 function M.config()

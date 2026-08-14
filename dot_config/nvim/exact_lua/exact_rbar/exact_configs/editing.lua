@@ -86,43 +86,6 @@ function M.packages(use)
 	})
 
 	use({
-		"https://github.com/scrooloose/nerdcommenter.git",
-		enabled = false,
-		keys = {
-			{ "<leader>cc", "<Plug>NERDCommenterComment", mode = { "n", "v" }, noremap = true },
-			{ "<leader>cc", "<Plug>NERDCommenterComment", mode = { "n", "v" }, noremap = true },
-			{ "<leader>c", "<Plug>NERDCommenterToEOL", mode = { "n", "v" }, noremap = true },
-			{ "<leader>c<space>", "<Plug>NERDCommenterToggle", mode = { "n", "v" }, noremap = true },
-			{ "<leader>cA", "<Plug>NERDCommenterAppend", mode = { "n", "v" }, noremap = true },
-			{ "<leader>ca", "<Plug>NERDCommenterAltDelims", mode = { "n", "v" }, noremap = true },
-			{ "<leader>cb", "<Plug>NERDCommenterAlignBoth", mode = { "n", "v" }, noremap = true },
-			{ "<leader>ci", "<Plug>NERDCommenterInvert", mode = { "n", "v" }, noremap = true },
-			{ "<leader>cl", "<Plug>NERDCommenterAlignLeft", mode = { "n", "v" }, noremap = true },
-			{ "<leader>cm", "<Plug>NERDCommenterMinimal", mode = { "n", "v" }, noremap = true },
-			{ "<leader>cn", "<Plug>NERDCommenterNested", mode = { "n", "v" }, noremap = true },
-			{ "<leader>cs", "<Plug>NERDCommenterSexy", mode = { "n", "v" }, noremap = true },
-			{ "<leader>cu", "<Plug>NERDCommenterUncomment", mode = { "n", "v" }, noremap = true },
-			{ "<leader>cy", "<Plug>NERDCommenterYank", mode = { "n", "v" }, noremap = true },
-			{ "<leader>c<space>", "<Plug>NERDCommenterToggle", mode = { "n", "v" }, noremap = true },
-			{ "<leader>cb", "<Plug>NERDCommenterAlignBoth", mode = { "n", "v" }, noremap = true },
-			{ "<leader>ci", "<Plug>NERDCommenterInvert", mode = { "n", "v" }, noremap = true },
-			{ "<leader>cl", "<Plug>NERDCommenterAlignLeft", mode = { "n", "v" }, noremap = true },
-			{ "<leader>cm", "<Plug>NERDCommenterMinimal", mode = { "n", "v" }, noremap = true },
-			{ "<leader>cn", "<Plug>NERDCommenterNested", mode = { "n", "v" }, noremap = true },
-			{ "<leader>cs", "<Plug>NERDCommenterSexy", mode = { "n", "v" }, noremap = true },
-			{ "<leader>cu", "<Plug>NERDCommenterUncomment", mode = { "n", "v" }, noremap = true },
-			{ "<leader>cy", "<Plug>NERDCommenterYank", mode = { "n", "v" }, noremap = true },
-		},
-		config = function()
-			vim.g.NERDCustomDelimiters = {
-				kdl = { left = "//", leftAlt = "/*", rightAlt = "*/" },
-				mojo = { left = "# " },
-				gleam = { left = "// ", leftAlt = "/// " },
-			}
-		end,
-	})
-
-	use({
 		"numToStr/Comment.nvim",
 		opts = {
 			---Add a space b/w comment and the line
@@ -173,15 +136,6 @@ function M.packages(use)
 			ft.set("html.jinja", "{# %s #}")
 			ft.set("htmldjango.jinja", "{# %s #}")
 		end,
-	})
-
-	use({
-		"https://github.com/junegunn/vim-easy-align.git",
-		enabled = false,
-		keys = {
-			{ "ga", "<Plug>(EasyAlign)", mode = "n", noremap = false, desc = "Align text by delimiters" },
-			{ "ga", "<Plug>(EasyAlign)", mode = "x", noremap = false, desc = "Align text by delimiters" },
-		},
 	})
 
 	use({

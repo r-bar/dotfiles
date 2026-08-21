@@ -1,4 +1,5 @@
 local loader = require("rbar/loader")
+local env = require("rbar/environment")
 
 loader.load("rbar/configs/base")
 loader.load("rbar/configs/editing")
@@ -13,6 +14,6 @@ loader.load("rbar/configs/completion")
 loader.load("rbar/configs/tui")
 loader.load("rbar/configs/agentic")
 
-vim.g.python3_host_prog = vim.env.NVIM_PYTHON or "/usr/bin/python3"
+vim.g.python3_host_prog = env.PYTHON or "/usr/bin/python3"
 
 loader.init()

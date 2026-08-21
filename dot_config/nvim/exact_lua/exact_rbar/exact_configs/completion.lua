@@ -206,6 +206,7 @@ function M.blink_opts()
 end
 
 function M.packages(use)
+	local env = require("rbar/environment")
 	-- Autocompletion
 	use({ -- optional blink completion source for require statements and module annotations
 		"saghen/blink.cmp",
@@ -247,7 +248,7 @@ function M.packages(use)
 	-- LLM based auto completion
 	use({
 		"zbirenbaum/copilot.lua",
-		cond = vim.env.DISABLE_COPILOT == nil,
+		cond = env.DISABLE_COPILOT == nil,
 		opts = {
 			suggestion = {
 				enabled = false,

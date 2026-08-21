@@ -18,7 +18,8 @@ local icon_map = {
 }
 
 local function python_type_checker()
-	return vim.env.NVIM_PYTHON_TYPE_CHECKER or "ty"
+	local env = require("rbar/environment")
+	return env.PYTHON_TYPE_CHECKER or "ty"
 end
 
 local function source_string(source, code)
@@ -437,10 +438,11 @@ function M.packages(use)
 end
 
 function M.config()
+	local LSP_LOG_LEVEL = require("rbar/environment").LSP_LOG_LEVEL
 	-- lsp debug logging
 	-- clear the lsp log before every session
 	vim.fn.system("rm $HOME/.local/state/nvim/lsp.log")
-	vim.lsp.log.set_level(vim.env.NVIM_LSP_LOG_LEVEL or "warn")
+	vim.lsp.log.set_level(LSP_LOG_LEVEL or "warn")
 
 	vim.api.nvim_create_user_command("Format", function()
 		vim.lsp.buf.format({ async = false })

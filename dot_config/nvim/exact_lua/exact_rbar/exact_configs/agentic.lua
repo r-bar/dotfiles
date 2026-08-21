@@ -3,14 +3,15 @@ local M = {}
 
 --- @return string
 function M.default_agent()
-	if vim.env.NVIM_AI_AGENT ~= nil then
-		return vim.env.NVIM_AI_AGENT
+	local env_agent = require("rbar/environment").AI_AGENT
+	if env_agent ~= nil then
+		return env_agent
 	end
 	if vim.fn.executable("opencode") == 1 then
 		return "opencode"
 	end
 	if vim.fn.executable("claude") == 1 then
-		return "claudecode"
+		return "claude"
 	end
 	return ""
 end

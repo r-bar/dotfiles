@@ -3,5 +3,14 @@
   "model": "openrouter/deepseek/deepseek-v4-flash",
   "permission": {
     "websearch": "allow"
+  },
+  "mcp": {
+    "kagi": {
+      "type": "remote",
+      "url": "https://mcp.kagi.com/mcp",
+      "headers": {
+        "Authorization": "Bearer {file:../kagi-api.key}"
+      }
+    }
   }
 }

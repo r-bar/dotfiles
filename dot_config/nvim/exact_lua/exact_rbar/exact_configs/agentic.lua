@@ -37,6 +37,11 @@ function M.packages(use)
 			provider = ACP[agent],
 			-- provider = 'opencode-acp',
 			windows = { width = 120 },
+			keymaps = {
+				widget = {
+					stop_generation = "<C-c>",
+				},
+			},
 		},
 
 		-- these are just suggested keymaps; customize as desired
@@ -60,7 +65,7 @@ function M.packages(use)
 			{
 				"<leader>an",
 				function()
-					require("agentic").new_session()
+					require("agentic").new_session({ focus_prompt = false, auto_add_to_context = false })
 				end,
 				mode = { "n", "v" },
 				desc = "[Agent] New Session",
@@ -97,6 +102,14 @@ function M.packages(use)
 					require("agentic").add_buffer_diagnostics()
 				end,
 				desc = "[Agent] Add all buffer diagnostics",
+				mode = { "n" },
+			},
+			{
+				"<leader>ac",
+				function()
+					require("agentic").stop_generation()
+				end,
+				desc = "[Agent] Stop generation for the current prompt",
 				mode = { "n" },
 			},
 		},

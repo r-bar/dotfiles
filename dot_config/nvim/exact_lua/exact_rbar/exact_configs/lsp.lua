@@ -435,6 +435,77 @@ function M.packages(use)
 			},
 		},
 	})
+	use({
+		"nvimtools/none-ls.nvim",
+		config = function(_, opt)
+			local null_ls = require("null-ls")
+
+			-- Asks the mypy daemon for the type of the expression under the cursor,
+			-- like a reveal_type() without editing the buffer. The daemon must be
+			-- running with exported types (`dmypy run --export-types -- <path>`),
+			-- and it inspects the file on disk, so unsaved changes are invisible.
+			local dmypy_inspect = {
+				name = "dmypy_inspect",
+				method = null_ls.methods.HOVER,
+				filetypes = { "python" },
+				generator = {
+					async = true,
+					fn = function(params, done)
+						-- dmypy wants 1-based columns; params.col is 0-based
+						local position = string.format("%d:%d", params.row, params.col + 1)
+
+						local function render(result)
+							if result.code ~= 0 then
+								local err = vim.trim((result.stderr ~= "" and result.stderr or result.stdout) or "")
+								done({ "dmypy inspect failed: " .. err })
+								return
+							end
+							local lines = { "```python", vim.trim(result.stdout), "```" }
+							if vim.api.nvim_get_option_value("modified", { buf = params.bufnr }) then
+								table.insert(lines, "*(buffer modified — dmypy sees the file on disk)*")
+							end
+							done(lines)
+						end
+
+						local function inspect(path, on_done)
+							vim.system(
+								{ "dmypy", "inspect", "--show", "type", path .. ":" .. position },
+								{ text = true },
+								vim.schedule_wrap(on_done)
+							)
+						end
+
+						-- the path must match how the daemon saw the file when it was
+						-- checked, so retry with the cwd-relative form if the absolute
+						-- one is unknown to it
+						inspect(params.bufname, function(result)
+							local relative = vim.fn.fnamemodify(params.bufname, ":.")
+							local output = (result.stdout or "") .. (result.stderr or "")
+							if output:find("Unknown module") and relative ~= params.bufname then
+								inspect(relative, render)
+							else
+								render(result)
+							end
+						end)
+					end,
+				},
+			}
+
+			local sources = {
+				null_ls.builtins.completion.spell,
+				-- moved from none-ls builtins to none-ls-extras
+				require("none-ls.formatting.jq"),
+				null_ls.builtins.formatting.stylua,
+				null_ls.builtins.hover.dictionary,
+			}
+			if python_type_checker() == "mypy" then
+				table.insert(sources, dmypy_inspect)
+			end
+
+			null_ls.setup(vim.tbl_extend("error", opt, { sources = sources }))
+		end,
+		dependencies = { "nvimtools/none-ls-extras.nvim" },
+	})
 end
 
 function M.config()

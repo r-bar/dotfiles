@@ -172,8 +172,12 @@ function M.packages(use)
 end
 
 function M.config()
+	-- enable filetype detection (:filetype on); assigning the option instead
+	-- (vim.o.filetype = "on") sets the current buffer's filetype to the
+	-- literal string "on", firing a bogus FileType event during startup
+	vim.cmd.filetype("on")
+
 	-- default indent options
-	vim.o.filetype = "on"
 	vim.o.shiftwidth = 2
 	vim.o.softtabstop = 2
 	vim.o.tabstop = 2
@@ -347,7 +351,7 @@ function M.config()
 	-- Finally we map this somewhere to the key and mode we want.
 	-- i stands for insert mode next set the insert_uuid without invoking it.
 	-- For the last parameter see `:help map-arguments`  and adjust accordingly.
-	vim.keymap.set("i", "<C-g>u", insert_uuid, { noremap = true, silent = true, desc = "Insert a random UUID" })
+	vim.keymap.set("i", "<C-g>u", insert_uuid, { noremap = true, silent = true, desc = "Insert a UUIDv4" })
 	-- conflicts with lowercase command
 	--vim.keymap.set('n', 'gu', insert_uuid, { noremap = true, silent = true })
 

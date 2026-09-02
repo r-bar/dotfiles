@@ -110,13 +110,13 @@ function M.blink_opts()
 				"select_next",
 				--'select_and_accept',
 				--'insert_next',
-				--'snippet_forward',
+				"snippet_forward",
 				"fallback",
 			},
 			["<S-Tab>"] = {
 				"select_prev",
 				--'insert_prev',
-				--'snippet_backward',
+				"snippet_backward",
 				"fallback",
 			},
 		},
@@ -233,10 +233,11 @@ function M.packages(use)
 			-- This prevents the plugin or keybinds from conflicting.
 			history = false,
 		},
-		config = function()
+		config = function(_, opts)
 			require("luasnip.loaders.from_vscode").lazy_load()
 			require("luasnip.loaders.from_snipmate").lazy_load()
 			require("luasnip.loaders.from_lua").load()
+			require("luasnip").setup(opts)
 		end,
 		dependencies = {
 			"rafamadriz/friendly-snippets",

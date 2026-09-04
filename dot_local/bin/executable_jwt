@@ -23,20 +23,7 @@ import jwt
 
 
 DEFAULT_ALLOWED_ALGS = (
-    "HS256"
-    "HS384"
-    "HS512"
-    "ES256"
-    "ES256K"
-    "ES384"
-    "ES512"
-    "RS256"
-    "RS384"
-    "RS512"
-    "PS256"
-    "PS384"
-    "PS512"
-    "EdDSA"
+    "HS256HS384HS512ES256ES256KES384ES512RS256RS384RS512PS256PS384PS512EdDSA"
 )
 
 
@@ -50,6 +37,7 @@ class Cli:
     json: bool
     key: str
     sub: str | None
+    test: bool
     verify: bool
 
     def __init__(self):
@@ -66,8 +54,16 @@ class Cli:
             help="Do not verify the token signature",
         )
         aud_group = p.add_mutually_exclusive_group()
-        aud_group.add_argument("--aud", default="", help="Audience to use for validation")
-        aud_group.add_argument("--no-aud", dest="aud", action="store_const", const=None, help="Do not verify the token audience")
+        aud_group.add_argument(
+            "--aud", default="", help="Audience to use for validation"
+        )
+        aud_group.add_argument(
+            "--no-aud",
+            dest="aud",
+            action="store_const",
+            const=None,
+            help="Do not verify the token audience",
+        )
         p.add_argument("--iss", help="Issuer to use for validation")
         p.add_argument(
             "--alg",
@@ -75,7 +71,18 @@ class Cli:
             help="Algorithms to use for validation",
         )
         p.add_argument("--sub", help="Subject to use for validation")
-        p.add_argument("--no-exp", action="store_false", dest="exp", help="Do not verify the token expiration")
+        p.add_argument(
+            "--no-exp",
+            action="store_false",
+            dest="exp",
+            help="Do not verify the token expiration",
+        )
+        p.add_argument(
+            "-t",
+            "--test",
+            action="store_true",
+            help="Retuen a non-zero exit code if the token is invalid",
+        )
         p.add_argument("token", nargs="?", help="JWT token to validate")
         for name, value in vars(p.parse_args()).items():
             setattr(self, name, value)
@@ -94,23 +101,6 @@ def decode_bytes(b64_str: str) -> bytes:
 def decode_json(section: str) -> dict[str, t.Any]:
     """Decode a JWT section (header or payload)"""
     return json.loads(decode_bytes(section))
-
-
-def orig_main():
-    token = open(0).read().strip()
-    header = json.loads(base64.urlsafe_b64decode(token.split(".")[0] + "=="))
-    iss = json.loads(base64.urlsafe_b64decode(token.split(".")[1] + "=="))["iss"]
-
-    key = (
-        jwt.PyJWKClient(f"{iss.rstrip('/')}/.well-known/jwks.json")
-        .get_signing_key(header["kid"])
-        .key
-    )
-    try:
-        print(json.dumps(jwt.decode(token, key, algorithms=[header["alg"]]), indent=2))
-        print("VALID")
-    except jwt.PyJWTError as e:
-        print("INVALID:", e)
 
 
 def verify(
@@ -145,6 +135,31 @@ def verify(
             reason += "\nnote: the audience check will fail by default if the token contains an aud claim and no --aud is provided"
             reason += "\n      alternatively use the --no-aud flag to disable the audience check"
         return False, reason
+
+
+def pad(
+    value: t.Any,
+    width: int,
+    align: t.Literal["left", "right", "center"],
+    fill: str = " ",
+):
+    if len(fill) != 1:
+        raise ValueError("fill must be a single character")
+    text = str(value)
+    pad_count = max(width - len(text), 0)
+    left_pad: str
+    right_pad: str
+    match align:
+        case "left":
+            left_pad = ""
+            right_pad = pad_count * fill
+        case "right":
+            right_pad = ""
+            left_pad = pad_count * fill
+        case "center":
+            left_pad = (pad_count // 2) * fill
+            right_pad = (pad_count - len(left_pad)) * fill
+    return f"{right_pad}{text}{left_pad}"
 
 
 def main():
@@ -197,11 +212,17 @@ def main():
             output["failure_reason"] = failure_reason
         json.dump(output, sys.stdout, indent=2)
     else:
-        print("Header:\n", json.dumps(header, indent=2))
-        print("\nClaims:\n", json.dumps(claims, indent=2))
-        print("\nVerified:", verified)
+        print("  Header", "=" * 10, json.dumps(header, indent=2), sep="\n", end="\n\n")
+        print("  Claims", "=" * 10, json.dumps(claims, indent=2), sep="\n", end="\n\n")
+        print(
+            " Verified",
+            "=" * 10,
+            pad(verified, width=10, align="center").upper(),
+            sep="\n",
+        )
         if failure_reason:
             print("Verification failure reason:", failure_reason)
+    exit(1 if cli.verify and cli.test and not verified else 0)
 
 
 if __name__ == "__main__":

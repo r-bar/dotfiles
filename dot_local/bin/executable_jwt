@@ -1,0 +1,138 @@
+#!/usr/bin/env -S uv run --script
+# /// script
+# requires-python = ">=3.14"
+# dependencies = [
+#   "cryptography",
+#   "httpx",
+#   "pyjwt",
+# ]
+#
+# [tool.uv]
+# exclude-newer = "2026-09-04T13:15:34-07:00"
+# ///
+
+import logging
+import typing as t
+import argparse
+import base64
+import json
+import sys
+
+import jwt
+
+
+class Cli:
+    json: bool
+    token: str | None
+    key: str
+    verify: bool
+
+    def __init__(self):
+        self.parser = p = argparse.ArgumentParser(description="Validate a JWT token")
+        p.add_argument(
+            "-j", "--json", action="store_true", help="Output the decoded token as JSON"
+        )
+        p.add_argument("-k", "--key", help="Key to use for validation")
+        p.add_argument(
+            "-n",
+            "--no-verify",
+            action="store_false",
+            dest="verify",
+            help="Do not verify the token signature",
+        )
+        p.add_argument("token", nargs="?", help="JWT token to validate")
+        for name, value in vars(p.parse_args()).items():
+            setattr(self, name, value)
+
+    def get_token(self) -> str:
+        if self.token:
+            return self.token
+        return open(0).read().strip()
+
+
+def decode_bytes(b64_str: str) -> bytes:
+    padded = b64_str + "=" * ((-1 * len(b64_str)) % 4)
+    return base64.b64decode(padded)
+
+
+def decode_json(section: str) -> dict[str, t.Any]:
+    """Decode a JWT section (header or payload)"""
+    return json.loads(decode_bytes(section))
+
+
+def orig_main():
+    token = open(0).read().strip()
+    header = json.loads(base64.urlsafe_b64decode(token.split(".")[0] + "=="))
+    iss = json.loads(base64.urlsafe_b64decode(token.split(".")[1] + "=="))["iss"]
+
+    key = (
+        jwt.PyJWKClient(f"{iss.rstrip('/')}/.well-known/jwks.json")
+        .get_signing_key(header["kid"])
+        .key
+    )
+    try:
+        print(json.dumps(jwt.decode(token, key, algorithms=[header["alg"]]), indent=2))
+        print("VALID")
+    except jwt.PyJWTError as e:
+        print("INVALID:", e)
+
+
+def verify(token: str, header: dict[str, str], key: str) -> tuple[bool, str]:
+    try:
+        jwt.decode(token, key, algorithms=[header["alg"]])
+        return True, ""
+    except jwt.PyJWTError as e:
+        return False, str(e)
+
+
+def main():
+    logging.basicConfig(level=logging.INFO, stream=sys.stderr)
+    cli = Cli()
+
+    token = cli.get_token()
+    try:
+        header_b64, claims_b64, signature_b64 = token.split(".")
+    except Exception:
+        print("Invalid JWT format", file=sys.stderr)
+        exit(1)
+
+    header = decode_json(header_b64)
+    claims = decode_json(claims_b64)
+    _signature = decode_bytes(signature_b64)
+
+    iss = claims.get("iss")
+    alg = header.get("alg")
+    typ = header.get("typ")
+
+    verified = False
+    failure_reason = None
+    if cli.verify:
+        if cli.key:
+            key = cli.key
+        elif (
+            iss is not None
+            and alg is not None
+            and typ == "JWT"
+            and alg.startswith("RS")
+        ):
+            jwk = jwt.PyJWKClient(
+                f"{iss.rstrip('/')}/.well-known/jwks.json"
+            ).get_signing_key(header["kid"])
+            key = jwk.key
+        verified, failure_reason = verify(token, header, key)
+
+    if cli.json:
+        output = {"header": header, "claims": claims, "verified": verified}
+        if failure_reason:
+            output["failure_reason"] = failure_reason
+        json.dump(output, sys.stdout, indent=2)
+    else:
+        print("Header:\n", json.dumps(header, indent=2))
+        print("\nClaims:\n", json.dumps(claims, indent=2))
+        print("\nVerified:", verified)
+        if failure_reason:
+            print("Verification failure reason:", failure_reason)
+
+
+if __name__ == "__main__":
+    main()

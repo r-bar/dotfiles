@@ -43,6 +43,7 @@
 "brew:temporalio/brew/tcld"       = "latest"
 "brew:tmux"                       = "latest"
 "brew:tree-sitter-cli"            = "latest"
+"brew:uv"                         = "latest"
 "brew:watch"                      = "latest"
 "brew:xh"                         = "latest"
 "brew:yq"                         = "latest"
@@ -71,6 +72,7 @@
 "pacman:rustup"                   = "latest"
 "pacman:tmux"                     = "latest"
 "pacman:tree-sitter-cli"          = "latest"
+"pacman:uv"                       = "latest"
 "pacman:xh"                       = "latest"
 
 [tools]

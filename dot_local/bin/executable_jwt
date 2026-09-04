@@ -17,14 +17,39 @@ import argparse
 import base64
 import json
 import sys
+from collections.abc import Sequence
 
 import jwt
 
 
+DEFAULT_ALLOWED_ALGS = (
+    "HS256"
+    "HS384"
+    "HS512"
+    "ES256"
+    "ES256K"
+    "ES384"
+    "ES512"
+    "RS256"
+    "RS384"
+    "RS512"
+    "PS256"
+    "PS384"
+    "PS512"
+    "EdDSA"
+)
+
+
 class Cli:
-    json: bool
     token: str | None
+
+    alg: Sequence[str] | None
+    aud: str | None
+    exp: bool
+    iss: str | None
+    json: bool
     key: str
+    sub: str | None
     verify: bool
 
     def __init__(self):
@@ -40,6 +65,17 @@ class Cli:
             dest="verify",
             help="Do not verify the token signature",
         )
+        aud_group = p.add_mutually_exclusive_group()
+        aud_group.add_argument("--aud", default="", help="Audience to use for validation")
+        aud_group.add_argument("--no-aud", dest="aud", action="store_const", const=None, help="Do not verify the token audience")
+        p.add_argument("--iss", help="Issuer to use for validation")
+        p.add_argument(
+            "--alg",
+            type=lambda s: s.split(","),
+            help="Algorithms to use for validation",
+        )
+        p.add_argument("--sub", help="Subject to use for validation")
+        p.add_argument("--no-exp", action="store_false", dest="exp", help="Do not verify the token expiration")
         p.add_argument("token", nargs="?", help="JWT token to validate")
         for name, value in vars(p.parse_args()).items():
             setattr(self, name, value)
@@ -77,12 +113,38 @@ def orig_main():
         print("INVALID:", e)
 
 
-def verify(token: str, header: dict[str, str], key: str) -> tuple[bool, str]:
+def verify(
+    token: str,
+    key: str,
+    verify_alg: Sequence[str] | None = None,
+    verify_aud: str | None = None,
+    verify_sub: str | None = None,
+    verify_iss: str | None = None,
+    verify_exp: bool = True,
+) -> tuple[bool, str]:
+    options = {}
+    verify_alg = DEFAULT_ALLOWED_ALGS if verify_alg is None else verify_alg
+    leeway = 0 if verify_exp else 2147483647  # i32 max
+    options["verify_exp"] = verify_exp
+    options["verify_aud"] = verify_aud is not None
     try:
-        jwt.decode(token, key, algorithms=[header["alg"]])
+        jwt.decode(
+            token,
+            key,
+            algorithms=verify_alg,
+            subject=verify_sub,
+            audience=verify_aud,
+            issuer=verify_iss,
+            leeway=leeway,
+            options=options,
+        )
         return True, ""
     except jwt.PyJWTError as e:
-        return False, str(e)
+        reason = str(e)
+        if reason == "Audience doesn't match" and verify_aud == "":
+            reason += "\nnote: the audience check will fail by default if the token contains an aud claim and no --aud is provided"
+            reason += "\n      alternatively use the --no-aud flag to disable the audience check"
+        return False, reason
 
 
 def main():
@@ -119,7 +181,15 @@ def main():
                 f"{iss.rstrip('/')}/.well-known/jwks.json"
             ).get_signing_key(header["kid"])
             key = jwk.key
-        verified, failure_reason = verify(token, header, key)
+        verified, failure_reason = verify(
+            token,
+            key,
+            verify_alg=cli.alg,
+            verify_aud=cli.aud,
+            verify_sub=cli.sub,
+            verify_iss=cli.iss,
+            verify_exp=cli.exp,
+        )
 
     if cli.json:
         output = {"header": header, "claims": claims, "verified": verified}

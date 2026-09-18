@@ -230,6 +230,11 @@ local function server_settings()
 	local settings = {}
 	local root_pattern = require("rbar.helpers").root_pattern
 
+	-- Prefer the nearest ancestor with python config over the git root, so
+	-- projects nested in a monorepo (e.g. www) become the workspace root and
+	-- imports resolve relative to them.
+	local python_root_markers = { { "mypy.ini", "setup.cfg", "pyproject.toml" }, ".git" }
+
 	settings["gleam"] = with_defaults()
 
 	settings["lua_ls"] = with_defaults({
@@ -308,6 +313,7 @@ local function server_settings()
 		--  vim.opt.formatexpr = ""
 		--end,
 		force_setup = true,
+		root_markers = python_root_markers,
 		settings = {
 			pylsp = {
 				configurationSources = {
@@ -349,6 +355,7 @@ local function server_settings()
 
 	if vim.fn.executable("ty") and python_type_checker() == "ty" then
 		settings["ty"] = with_defaults({
+			root_markers = python_root_markers,
 			-- These capabilities conflict with pylsp
 			on_attach = disable_capabilities({
 				"completionProvider",
@@ -365,7 +372,9 @@ local function server_settings()
 	end
 
 	if vim.fn.executable("ruff") then
-		settings["ruff"] = with_defaults()
+		settings["ruff"] = with_defaults({
+			root_markers = python_root_markers,
+		})
 	end
 
 	settings["roc_ls"] = with_defaults()

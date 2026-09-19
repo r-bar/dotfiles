@@ -3,77 +3,78 @@
 # | `alchemmist/tap/lazy-tmux` | Not in official repos — only exists as an AUR package (`lazy-tmux`), which plain `pacman` can't install |
 # | `claude-cmd` | No Arch or AUR package found at all |
 # | `pi-coding-agent` | AUR-only (several competing packages: `pi-coding-agent`, `-bin`, `-git`), nothing official |
-"brew:alchemmist/tap/lazy-tmux"   = "latest"
-"brew:bat"                        = "latest"
-"brew:btop"                       = "latest"
-"brew:chezmoi"                    = "latest"
-"brew:claude-cmd"                 = "latest"
-"brew:colima"                     = "latest"
-"brew:coreutils"                  = "latest"
-"brew:docker"                     = "latest"
-"brew:docker-buildx"              = "latest"
-"brew:docker-compose"             = "latest"
-"brew:eza"                        = "latest"
-"brew:fd"                         = "latest"
-"brew:fish"                       = "latest"
-"brew:fzf"                        = "latest"
-"brew:gawk"                       = "latest"
-"brew:git-delta"                  = "latest"
-"brew:gnu-getopt"                 = "latest"
-"brew:gnu-sed"                    = "latest"
-"brew:gnu-tar"                    = "latest"
-"brew:gnu-which"                  = "latest"
-"brew:gnupg"                      = "latest"
-"brew:go"                         = "latest"
-"brew:grep"                       = "latest"
-"brew:kubernetes-cli"             = "latest"
-"brew:kubectx"                    = "latest"
-"brew:kubelogin"                  = "latest"
-"brew:make"                       = "latest"
-"brew:mise"                       = "latest"
-"brew:neovim"                     = "latest"
-"brew:pi-coding-agent"            = "latest"
-"brew:pnpm"                       = "latest"
-"brew:postgresql@16"              = "latest"
-"brew:qemu"                       = "latest"
-"brew:rbw"                        = "latest"
-"brew:reattach-to-user-namespace" = "latest"
-"brew:ripgrep"                    = "latest"
-"brew:rustup"                     = "latest"
-"brew:temporalio/brew/tcld"       = "latest"
-"brew:tmux"                       = "latest"
-"brew:tree-sitter-cli"            = "latest"
-"brew:uv"                         = "latest"
-"brew:watch"                      = "latest"
-"brew:xh"                         = "latest"
-"brew:yq"                         = "latest"
-"pacman:bat"                      = "latest"
-"pacman:btop"                     = "latest"
-"pacman:chezmoi"                  = "latest"
-"pacman:docker"                   = "latest"
-"pacman:docker-buildx"            = "latest"
-"pacman:docker-compose"           = "latest"
-"pacman:eza"                      = "latest"
-"pacman:fd"                       = "latest"
-"pacman:fish"                     = "latest"
-"pacman:fzf"                      = "latest"
-"pacman:gawk"                     = "latest"
-"pacman:git-delta"                = "latest"
-"pacman:gnupg"                    = "latest"
-"pacman:go"                       = "latest"
-"pacman:go-yq"                    = "latest"
-"pacman:make"                     = "latest"
-"pacman:mise"                     = "latest"
-"pacman:neovim"                   = "latest"
-"pacman:pnpm"                     = "latest"
-"pacman:qemu-full"                = "latest"
-"pacman:rbw"                      = "latest"
-"pacman:ripgrep"                  = "latest"
-"pacman:rustup"                   = "latest"
-"pacman:tmux"                     = "latest"
-"pacman:tree-sitter-cli"          = "latest"
-"pacman:uv"                       = "latest"
-"pacman:xh"                       = "latest"
+"brew:alchemmist/tap/lazy-tmux"   = { os = "macos" }
+"brew:bat"                        = { os = "macos" }
+"brew:btop"                       = { os = "macos" }
+"brew:chezmoi"                    = { os = "macos" }
+"brew:claude-cmd"                 = { os = "macos" }
+"brew:colima"                     = { os = "macos" }
+"brew:coreutils"                  = { os = "macos" }
+"brew:docker"                     = { os = "macos" }
+"brew:docker-buildx"              = { os = "macos" }
+"brew:docker-compose"             = { os = "macos" }
+"brew:eza"                        = { os = "macos" }
+"brew:fd"                         = { os = "macos" }
+"brew:fish"                       = { os = "macos" }
+"brew:fzf"                        = { os = "macos" }
+"brew:gawk"                       = { os = "macos" }
+"brew:git-delta"                  = { os = "macos" }
+"brew:gnu-getopt"                 = { os = "macos" }
+"brew:gnu-sed"                    = { os = "macos" }
+"brew:gnu-tar"                    = { os = "macos" }
+"brew:gnu-which"                  = { os = "macos" }
+"brew:gnupg"                      = { os = "macos" }
+"brew:go"                         = { os = "macos" }
+"brew:grep"                       = { os = "macos" }
+"brew:kubernetes-cli"             = { os = "macos" }
+"brew:kubectx"                    = { os = "macos" }
+"brew:kubelogin"                  = { os = "macos" }
+"brew:make"                       = { os = "macos" }
+"brew:mise"                       = { os = "macos" }
+"brew:neovim"                     = { os = "macos" }
+"brew:pi-coding-agent"            = { os = "macos" }
+"brew:pnpm"                       = { os = "macos" }
+"brew:postgresql@16"              = { os = "macos" }
+"brew:qemu"                       = { os = "macos" }
+"brew:rbw"                        = { os = "macos" }
+"brew:reattach-to-user-namespace" = { os = "macos" }
+"brew:ripgrep"                    = { os = "macos" }
+"brew:rustup"                     = { os = "macos" }
+"brew:temporalio/brew/tcld"       = { os = "macos" }
+"brew:tmux"                       = { os = "macos" }
+"brew:tree-sitter-cli"            = { os = "macos" }
+"brew:uv"                         = { os = "macos" }
+"brew:watch"                      = { os = "macos" }
+"brew:xh"                         = { os = "macos" }
+"brew:yq"                         = { os = "macos" }
+"pacman:bat"                      = { os = "linux" }
+"pacman:btop"                     = { os = "linux" }
+"pacman:chezmoi"                  = { os = "linux" }
+"pacman:docker"                   = { os = "linux" }
+"pacman:docker-buildx"            = { os = "linux" }
+"pacman:docker-compose"           = { os = "linux" }
+"pacman:eza"                      = { os = "linux" }
+"pacman:fd"                       = { os = "linux" }
+"pacman:fish"                     = { os = "linux" }
+"pacman:fzf"                      = { os = "linux" }
+"pacman:gawk"                     = { os = "linux" }
+"pacman:git-delta"                = { os = "linux" }
+"pacman:gnupg"                    = { os = "linux" }
+"pacman:go"                       = { os = "linux" }
+"pacman:go-yq"                    = { os = "linux" }
+"pacman:make"                     = { os = "linux" }
+"pacman:mise"                     = { os = "linux" }
+"pacman:neovim"                   = { os = "linux" }
+"pacman:opencode"                 = { os = "linux" }
+"pacman:pnpm"                     = { os = "linux" }
+"pacman:qemu-full"                = { os = "linux" }
+"pacman:rbw"                      = { os = "linux" }
+"pacman:ripgrep"                  = { os = "linux" }
+"pacman:rustup"                   = { os = "linux" }
+"pacman:tmux"                     = { os = "linux" }
+"pacman:tree-sitter-cli"          = { os = "linux" }
+"pacman:uv"                       = { os = "linux" }
+"pacman:xh"                       = { os = "linux" }
 
 [tools]
 stylua = "2"

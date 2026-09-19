@@ -38,6 +38,22 @@ function M.packages(use)
 			local installed = ts.get_installed()
 			-- print("Available: " .. vim.inspect(available_parsers))
 			-- print("Installed: " .. vim.inspect(installed))
+
+			local installed_set = {}
+			for _, lang in ipairs(available_parsers) do
+				installed_set[lang] = true
+			end
+			local orphaned = vim.tbl_filter(function(lang)
+				return not installed_set[lang]
+			end, installed)
+			if #orphaned > 0 then
+				vim.notify(
+					"Uninstalling tree-sitter parsers dropped from nvim-treesitter: " .. table.concat(orphaned, ", "),
+					vim.log.levels.WARN
+				)
+				ts.uninstall(orphaned)
+			end
+
 			local to_install = vim.tbl_filter(function(lang)
 				return not vim.list_contains(installed, lang)
 			end, available_parsers)

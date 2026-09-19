@@ -34,3 +34,4 @@ fi
 
 ubi_install --project git-pkgs/forge --tag v0.5.1
 ubi_install --project dandavison/delta --tag 0.19.2
+ubi_install --project roc-lang/nightlies --matching-regex 2026-09-18 -e roc

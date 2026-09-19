@@ -3,6 +3,7 @@
 ---@class M ConfigPkg
 local M = {}
 local lsp_flags = {}
+local helpers = require("rbar/helpers")
 
 local serverity_map = {
 	"DiagnosticError",
@@ -228,7 +229,6 @@ end
 
 local function server_settings()
 	local settings = {}
-	local root_pattern = require("rbar.helpers").root_pattern
 
 	-- Prefer the nearest ancestor with python config over the git root, so
 	-- projects nested in a monorepo (e.g. www) become the workspace root and
@@ -377,7 +377,20 @@ local function server_settings()
 		})
 	end
 
-	settings["roc_ls"] = with_defaults()
+	settings["roc_ls"] = with_defaults({
+		cmd = { "roc", "experimental-lsp" },
+		filetypes = { "roc" },
+		root_dir = helpers.root_pattern_or_cwd("roc.toml", ".git"),
+		docs = {
+			description = [[
+The Roc language server
+
+Comes by default with the roc programming language, currently under the `experimental-lsp` subcommand.
+
+https://github.com/roc-lang/roc/blob/main/src/lsp/README.md
+]],
+		},
+	})
 
 	settings["rust_analyzer"] = with_defaults({
 		settings = {
@@ -395,7 +408,7 @@ local function server_settings()
 	settings["vls"] = with_defaults({
 		cmd = { "v", "ls" },
 		filetypes = { "vlang" },
-		root_dir = root_pattern(".git"),
+		root_dir = helpers.root_pattern(".git"),
 		docs = {
 			description = [[
 https://github.com/vlang/vls

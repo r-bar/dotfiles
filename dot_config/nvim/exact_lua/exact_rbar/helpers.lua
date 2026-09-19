@@ -1,5 +1,6 @@
 local M = {}
 
+---@return nil
 function M.close_floats()
 	for _, win in ipairs(vim.api.nvim_list_wins()) do
 		if vim.api.nvim_win_get_config(win).relative == "win" then
@@ -8,6 +9,7 @@ function M.close_floats()
 	end
 end
 
+---@return string
 function M.generate_uuid()
 	math.randomseed(os.time())
 	local random = math.random
@@ -19,6 +21,7 @@ function M.generate_uuid()
 end
 
 --[[ Generate a uuid and place it at current cursor position --]]
+---@return nil
 function M.insert_uuid()
 	-- Get row and column cursor,
 	-- use unpack because it's a tuple.
@@ -31,17 +34,37 @@ function M.insert_uuid()
 	vim.api.nvim_win_set_cursor(0, { row, col + uuid:len() })
 end
 
+---@param path string
+---@return string
 local function escape_wildcards(path)
 	return path:gsub("([%[%]%?%*])", "\\%1")
 end
 
+---@param start_path string
+---@param func fun(path: string): string|nil
+---@return string|nil
+function M.search_ancestors(start_path, func)
+	local path = start_path
+	while true do
+		local result = func(path)
+		if result ~= nil then
+			return result
+		end
+		local parent = vim.fs.dirname(path)
+		if parent == path then
+			return nil
+		end
+		path = parent
+	end
+end
+
 --- Returns a function which matches a filepath against the given glob/wildcard patterns.
----
---- Also works with zipfile:/tarfile: buffers (via `strip_archive_subpath`).
+---@param ... string
+---@return fun(startpath: string): string|nil
 function M.root_pattern(...)
 	local patterns = M.tbl_flatten({ ... })
 	return function(startpath)
-		startpath = M.strip_archive_subpath(startpath)
+		-- startpath = M.strip_archive_subpath(startpath)
 		for _, pattern in ipairs(patterns) do
 			local match = M.search_ancestors(startpath, function(path)
 				for _, p in ipairs(vim.fn.glob(table.concat({ escape_wildcards(path), pattern }, "/"), true, true)) do
@@ -59,6 +82,17 @@ function M.root_pattern(...)
 	end
 end
 
+---@param ... string
+---@return fun(startpath: string): string
+function M.root_pattern_or_cwd(...)
+	local root_fn = M.root_pattern(...)
+	return function(startpath)
+		return root_fn(startpath) or vim.uv.cwd()
+	end
+end
+
+---@param t table
+---@return table
 function M.tbl_flatten(t)
 	return vim.iter(t):flatten(math.huge):totable()
 end

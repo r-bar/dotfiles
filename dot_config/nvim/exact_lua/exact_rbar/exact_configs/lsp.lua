@@ -348,6 +348,58 @@ local function server_settings()
 					--  preview = false,                                 -- Whether to enable the preview style linting and formatting.
 					--  targetVersion = "py310",                         -- The minimum python version to target (applies for both lint and format)
 					--}
+
+					-- pylsp-workspace-symbols based plugins
+					jedi_workspace_symbols = {
+						enabled = true,
+						max_symbols = 500,
+						-- ignore_folders = {},
+					},
+					inlay_hints = {
+						enabled = true,
+						show_assign_types = true,
+						show_return_types = true,
+						show_raises = true,
+						show_parameter_hints = true,
+						max_hints_per_file = 200,
+					},
+					code_lens = {
+						enabled = true,
+						show_references = true,
+						show_implementations = true,
+						cross_file_implementations = false,
+						show_run = true,
+						show_tests = true,
+						max_definitions = 150,
+					},
+					semantic_tokens = {
+						enabled = false,
+					},
+					call_hierarchy = {
+						enabled = true,
+					},
+					type_hierarchy = {
+						enabled = true,
+					},
+					document_links = {
+						enabled = true,
+					},
+					document_colors = {
+						enabled = true,
+					},
+					on_type_formatting = {
+						enabled = true,
+						indent_size = 4,
+						dedent_keywords = true,
+						colon_dedent = true,
+						colon_space = true,
+						bracket_indent = true,
+						auto_format_strings = true,
+						hash_space = true,
+						auto_docstring = true,
+						closer_align = true,
+						debug = false,
+					},
 				},
 			},
 		},

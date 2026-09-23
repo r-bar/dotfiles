@@ -30,7 +30,7 @@ function M.packages(use)
 			)
 			vim.keymap.set(
 				"n",
-				"<leader>w",
+				"<leader>ws",
 				fzf.lsp_workspace_symbols,
 				{ silent = true, desc = "FzF LSP workspace symbols" }
 			)

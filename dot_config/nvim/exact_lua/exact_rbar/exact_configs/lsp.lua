@@ -17,6 +17,61 @@ local icon_map = {
 	"  ",
 	"  ",
 }
+------------------------------------------------------------------------------
+-- Semantic token legend
+-- Must match the tokenTypes / tokenModifiers declared in cuda_bun_lsp's
+-- initialize request (lsp_client.py SemanticTokensManager.TOKEN_TYPES /
+-- TOKEN_MODIFIERS) so the client can interpret the indices correctly.
+------------------------------------------------------------------------------
+
+-- Token type name -> index in the legend list sent to the client.
+-- selfParameter and clsParameter extend the standard LSP legend so that
+-- the semantictokens.py client can apply distinct colors to self/cls.
+local _ST_TOKEN_TYPES = {
+	namespace = 0,
+	type = 1,
+	class = 2,
+	enum = 3,
+	interface = 4,
+	struct = 5,
+	typeParameter = 6,
+	parameter = 7,
+	variable = 8,
+	property = 9,
+	enumMember = 10,
+	event = 11,
+	["function"] = 12,
+	method = 13,
+	macro = 14,
+	keyword = 15,
+	modifier = 16,
+	comment = 17,
+	string = 18,
+	number = 19,
+	regexp = 20,
+	operator = 21,
+	decorator = 22,
+	selfParameter = 23, -- Python self -- distinct from regular parameter
+	clsParameter = 24, -- Python cls -- distinct from regular parameter
+}
+
+-- Token modifier name -> bit index
+local _ST_TOKEN_MODIFIERS = {
+	declaration = 0,
+	definition = 1,
+	readonly = 2,
+	static = 3,
+	deprecated = 4,
+	abstract = 5,
+	async = 6,
+	modification = 7,
+	documentation = 8,
+	defaultLibrary = 9,
+	-- Extensions matching basedpyright's legend for accurate cross-server parity
+	builtin = 10, -- builtins-module symbols (subset of defaultLibrary)
+	classMember = 11, -- methods/properties declared inside a class body
+	parameter = 12, -- applied to parameter/selfParameter/clsParameter tokens
+}
 
 local function python_type_checker()
 	local env = require("rbar/environment")
@@ -205,19 +260,27 @@ local function default_server_settings()
 	}
 end
 
-local function disable_capabilities(disabled)
-	local disabled_set = {}
-	for i, cap in ipairs(disabled) do
-		disabled_set[cap] = true
-	end
-	return function(client, bufnr)
-		local rc = client.server_capabilities
-		for cap, val in pairs(rc) do
-			if disabled_set[cap] then
-				rc[cap] = false
-			end
+---@class AttachHelperOpts
+---@field capabilities_overrides table? optional table of server_capabilities to override
+---@field before fun(client: vim.lsp.Client, buffer: integer)? optional function to run before other helpers on attach
+---@field after fun(client: vim.lsp.Client, buffer: integer)? optional function to run after other helpers on attach
+
+---@param opts AttachHelperOpts
+local function attach_helper(opts)
+	local opts = opts or {}
+	local function callback(client, buffer)
+		if opts.before ~= nil then
+			opts.before(client, buffer)
+		end
+		if opts.capabilities_overrides ~= nil then
+			client.server_capabilities =
+				vim.tbl_extend("force", client.server_capabilities, opts.capabilities_overrides)
+		end
+		if opts.after ~= nil then
+			opts.after(client, buffer)
 		end
 	end
+	return callback
 end
 
 local function with_defaults(custom)
@@ -312,6 +375,41 @@ local function server_settings()
 		--  -- https://neovim.discourse.group/t/preserve-internal-formatting-when-using-gq-motion/3159/2
 		--  vim.opt.formatexpr = ""
 		--end,
+		on_attach = attach_helper({
+			capabilities_overrides = {
+				-- pylsp-workspace-symbols server capabilities overrides. The monkey
+				-- patch within the plug currently is not effective.
+				workspaceSymbolProvider = true,
+				inlayHintProvider = {
+					resolveProvider = false,
+					workDoneProgress = true,
+				},
+				callHierarchyProvider = true,
+				typeHierarchyProvider = true,
+				documentLinkProvider = {
+					resolveProvider = false,
+				},
+				colorProvider = true,
+				codeLensProvider = {
+					resolveProvider = true,
+				},
+				documentOnTypeFormattingProvider = {
+					firstTriggerCharacter = "\n",
+					moreTriggerCharacter = { ":", "{", "#", ")", "]", "}", '"' },
+				},
+				-- not dealing with commands for now
+				-- see: https://github.com/Hanatarou/pylsp-workspace-symbols/blob/ea8defcbcc80913ad8f455749653bacecadd2da3/pylsp_workspace_symbols/plugin.py#L102-L111
+				-- executeCommandProvider = ...,
+				semanticTokensProvider = {
+					legend = {
+						tokenTypes = vim.tbl_keys(_ST_TOKEN_TYPES),
+						tokenModifiers = vim.tbl_keys(_ST_TOKEN_MODIFIERS),
+					},
+					full = { delta = true },
+					range = true,
+				},
+			},
+		}),
 		force_setup = true,
 		root_markers = python_root_markers,
 		settings = {
@@ -409,12 +507,14 @@ local function server_settings()
 		settings["ty"] = with_defaults({
 			root_markers = python_root_markers,
 			-- These capabilities conflict with pylsp
-			on_attach = disable_capabilities({
-				"completionProvider",
-				"definitionProvider",
-				"implementationProvider",
-				"referencesProvider",
-				"renameProvider",
+			on_attach = attach_helper({
+				capabilities_overrides = {
+					completionProvider = false,
+					definitionProvider = false,
+					implementationProvider = false,
+					referencesProvider = false,
+					renameProvider = false,
+				},
 			}),
 		})
 	end

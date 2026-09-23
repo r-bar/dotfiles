@@ -37,7 +37,7 @@ function work_profile() {
 function home_profile() {
   uv_install rembg[cli] --upgrade --python 3.10 --with onnxruntime
   uv_install coconut[jupyter] --upgrade --with ipython
-  ubi_install --project roc-lang/nightlies -e roc
+  ubi_install --project roc-lang/nightlies --tag nightly-2026-09-18-1d982dc --exe roc
 }
 
 function python_profile() {

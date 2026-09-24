@@ -1,7 +1,52 @@
 -- Configuration for core treesitter providers
 
----@type ConfigPkg
+---@class ConfigPkg
 local M = {}
+
+---Ensure all available tree-sitter parsers are installed and up-to-date.
+---Cleans up orphaned parsers that were dropped from nvim-treesitter's registry.
+---@param selected_parsers string[]? list of parser language names to ensure are installed (optional)
+---@return nil
+function M.ensure_parsers(selected_parsers)
+	local timeout = nil
+	local selected_parsers = selected_parsers or {}
+
+	local ts = require("nvim-treesitter")
+	local installed = ts.get_installed()
+
+	-- Clean up orphaned parsers (installed but removed from nvim-treesitter registry)
+	local installed_set = {}
+	for _, lang in ipairs(selected_parsers) do
+		installed_set[lang] = true
+	end
+	local orphaned = vim.tbl_filter(function(lang)
+		return not installed_set[lang]
+	end, installed)
+	if #orphaned > 0 then
+		vim.notify(
+			"Uninstalling tree-sitter parsers dropped from nvim-treesitter: " .. table.concat(orphaned, ", "),
+			vim.log.levels.WARN
+		)
+		local parser_dir = require("nvim-treesitter.config").get_install_dir("parser")
+		local query_dir = require("nvim-treesitter.config").get_install_dir("queries")
+		for _, lang in ipairs(orphaned) do
+			local parser_file = vim.fs.joinpath(parser_dir, lang) .. ".so"
+			local query_path = vim.fs.joinpath(query_dir, lang)
+			pcall(vim.fn.delete, parser_file)
+			pcall(vim.fn.delete, query_path, "rf")
+		end
+	end
+
+	-- Install missing parsers
+	local to_install = vim.tbl_filter(function(lang)
+		return not vim.list_contains(installed, lang)
+	end, selected_parsers)
+	if #to_install > 0 then
+		ts.install(to_install):wait(timeout)
+	end
+
+	ts.update():wait(timeout)
+end
 
 function M.packages(use)
 	use({
@@ -10,60 +55,18 @@ function M.packages(use)
 		run = ":TSUpdate",
 		build = ":TSUpdate",
 		config = function()
-			-- • {tier}  `(integer?)` Only return languages of specified {tier} (`1`:
-			--           stable, `2`: unstable, `3`: unmaintained, `4`: unsupported)
+			local ts = require("nvim-treesitter")
+			-- • {tier}  `(integer?)` Only return languages of specified {tier}
+			-- (`1`: stable, `2`: unstable, `3`: unmaintained, `4`: unsupported)
 			-- For the current support list see:
 			-- https://raw.githubusercontent.com/nvim-treesitter/nvim-treesitter/refs/heads/main/SUPPORTED_LANGUAGES.md
-			local timeout = nil
-
-			local ts = require("nvim-treesitter")
 			local available_parsers = {}
 			vim.list_extend(available_parsers, ts.get_available(1)) -- stable
 			vim.list_extend(available_parsers, ts.get_available(2)) -- unstable
 			vim.list_extend(available_parsers, ts.get_available(3)) -- unmaintained
-			-- vim.list_extend(available_parsers, ts.get_available(4)) -- unsupported
+			M.ensure_parsers(available_parsers)
 
-			-- local parser_config = require("nvim-treesitter.parsers").get_parser_configs()
-			-- parser_config.pest = {
-			-- 	install_info = {
-			-- 		url = "https://github.com/pest-parser/tree-sitter-pest.git", -- local path or git repo
-			-- 		files = { "src/parser.c" }, -- note that some parsers also require src/scanner.c or src/scanner.cc
-			-- 		-- optional entries:
-			-- 		branch = "main", -- default branch in case of git repo if different from master
-			-- 		generate_requires_npm = false, -- if stand-alone parser without npm dependencies
-			-- 		requires_generate_from_grammar = false, -- if folder contains pre-generated src/parser.c
-			-- 	},
-			-- 	filetype = "pest", -- if filetype does not match the parser name
-			-- }
-			local installed = ts.get_installed()
-			-- print("Available: " .. vim.inspect(available_parsers))
-			-- print("Installed: " .. vim.inspect(installed))
-
-			local installed_set = {}
-			for _, lang in ipairs(available_parsers) do
-				installed_set[lang] = true
-			end
-			local orphaned = vim.tbl_filter(function(lang)
-				return not installed_set[lang]
-			end, installed)
-			if #orphaned > 0 then
-				vim.notify(
-					"Uninstalling tree-sitter parsers dropped from nvim-treesitter: " .. table.concat(orphaned, ", "),
-					vim.log.levels.WARN
-				)
-				ts.uninstall(orphaned)
-			end
-
-			local to_install = vim.tbl_filter(function(lang)
-				return not vim.list_contains(installed, lang)
-			end, available_parsers)
-			if #to_install > 0 then
-				-- print("Installing: " .. vim.inspect(to_install))
-				ts.install(to_install):wait(timeout)
-			end
-			ts.update():wait(timeout)
-
-			-- Ensure tree-sitter enabled after opening a file for target language
+			-- Build filetype list from all available parsers
 			local filetypes = {}
 			for _, lang in ipairs(available_parsers) do
 				for _, ft in ipairs(vim.treesitter.language.get_filetypes(lang)) do

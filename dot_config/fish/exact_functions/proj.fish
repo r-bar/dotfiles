@@ -60,6 +60,7 @@ function proj
         test -d $path && set -a projects $path$delimiter$name
     end
 
+    # Projects from git directories and workspaces
     set -a projects (fd '^\.git$' -d $PROJ_DEPTH -HI $PROJ_DIR | _format_gitdir)
     if test -d $WORKTREES_DIR
       set -a worktrees (for dir in (ls -1 $WORKTREES_DIR); echo "$WORKTREES_DIR/$dir$delimiter$dir"; end)
@@ -68,6 +69,22 @@ function proj
     # Custom aliases
     maybe_add_project dotfiles $HOME/.local/share/chezmoi
     maybe_add_project home $HOME
+
+    set -f active_sessions $(tmux list-sessions -F '#S')
+    for session in $active_sessions
+      set -l active (string match -e -m1 "$delimiter$session" $projects)
+      if test -n "$active"
+        set -l active_index (contains -i $active $projects)
+        set -f projects[$active_index] "$active (active)"
+      else
+        # An active tmux session may have been started from anywhere and will
+        # not necessarily be rooted in a project folder. We put /dev/null here
+        # as a placeholder that we cannot cd into. When selected since the
+        # session appears in the tmux session list we just switch to the session
+        # by name and this garbage path value is ignored.
+        set -a projects "/dev/null$delimiter$session (active)"
+      end
+    end
 
     # we have to use the 2nd field when the delimiter is multiple characters due
     # because fzf will append delimiters to the selector output
@@ -99,9 +116,9 @@ function proj
     end
 
     set -f selected_path (echo $selected | awk -F $delimiter '{print $1}')
-    set -f selected_name (echo $selected | awk -F $delimiter '{print $2}')
+    set -f selected_name (echo $selected | awk -F $delimiter '{sub(" \\\\(active\\\\)", "", $2); print $2}')
 
-    if test ! -d $selected_path
+    if ! string match -q $selected_name $active_sessions && test ! -d $selected_path
         echo "Invalid project"
         return 1
     end
@@ -124,5 +141,6 @@ function proj
         cd $selected_path
     end
 
+    echo $selected_name
     return 0
 end

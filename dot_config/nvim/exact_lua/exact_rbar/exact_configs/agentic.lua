@@ -7,16 +7,21 @@ function M.default_agent()
 	if env_agent ~= nil then
 		return env_agent
 	end
-	if vim.fn.executable("opencode") == 1 then
-		return "opencode"
-	end
-	if vim.fn.executable("claude") == 1 then
-		return "claude"
+	local executables_and_agents = {
+		opencode = "opencode",
+		codex = "codex-acp",
+		claude = "claude-agent-acp",
+	}
+	for agent, executable in pairs(executables_and_agents) do
+		if vim.fn.executable(executable) == 1 then
+			return agent
+		end
 	end
 	return ""
 end
 
 local ACP = {
+	codex = "codex-acp",
 	claude = "claude-agent-acp",
 	opencode = "opencode-acp",
 }

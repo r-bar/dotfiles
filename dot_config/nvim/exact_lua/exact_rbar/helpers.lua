@@ -13,11 +13,12 @@ end
 function M.generate_uuid()
 	math.randomseed(os.time())
 	local random = math.random
-	local template = "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
-	return string.gsub(template, "x", function()
-		local v = random(0, 0xf) -- v is a decimal number 0 to 15
-		return string.format("%x", v) --formatted as a hex number
+	local template = "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx"
+	local uuid = template:gsub("[xy]", function(c)
+		local v = (c == "x") and random(0x0, 0xf) or random(0x8, 0xb)
+		return string.format("%x", v)
 	end)
+	return uuid
 end
 
 --[[ Generate a uuid and place it at current cursor position --]]
@@ -37,7 +38,8 @@ end
 ---@param path string
 ---@return string
 local function escape_wildcards(path)
-	return path:gsub("([%[%]%?%*])", "\\%1")
+	local escaped, _ = path:gsub("([%[%]%?%*])", "\\%1")
+	return escaped
 end
 
 ---@param start_path string
@@ -83,10 +85,13 @@ function M.root_pattern(...)
 end
 
 ---@param ... string
----@return fun(startpath: string): string
+---@return fun(startpath: string): string|nil
 function M.root_pattern_or_cwd(...)
 	local root_fn = M.root_pattern(...)
 	return function(startpath)
+		if type(startpath) == "number" then
+			startpath = vim.api.nvim_buf_get_name(startpath)
+		end
 		return root_fn(startpath) or vim.uv.cwd()
 	end
 end

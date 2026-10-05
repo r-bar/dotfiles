@@ -11,19 +11,31 @@
 # exclude-newer = "2026-09-04T13:15:34-07:00"
 # ///
 
-import logging
-import typing as t
 import argparse
 import base64
 import json
+import logging
 import sys
+import typing as t
 from collections.abc import Sequence
 
 import jwt
 
-
 DEFAULT_ALLOWED_ALGS = (
-    "HS256HS384HS512ES256ES256KES384ES512RS256RS384RS512PS256PS384PS512EdDSA"
+    "HS256",
+    "HS384",
+    "HS512",
+    "ES256",
+    "ES256",
+    "KES384",
+    "ES512",
+    "RS256",
+    "RS384",
+    "RS512",
+    "PS256",
+    "PS384",
+    "PS512",
+    "EdDSA",
 )
 
 
@@ -95,7 +107,7 @@ class Cli:
 
 def decode_bytes(b64_str: str) -> bytes:
     padded = b64_str + "=" * ((-1 * len(b64_str)) % 4)
-    return base64.b64decode(padded)
+    return base64.urlsafe_b64decode(padded)
 
 
 def decode_json(section: str) -> dict[str, t.Any]:
@@ -200,7 +212,7 @@ def main():
             token,
             key,
             verify_alg=cli.alg,
-            verify_aud=cli.aud,
+            # verify_aud=cli.aud,
             verify_sub=cli.sub,
             verify_iss=cli.iss,
             verify_exp=cli.exp,

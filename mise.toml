@@ -65,6 +65,7 @@
 "pacman:make"                     = { os = "linux" }
 "pacman:mise"                     = { os = "linux" }
 "pacman:neovim"                   = { os = "linux" }
+"pacman:odin"                     = { os = "linux" }
 "pacman:opencode"                 = { os = "linux" }
 "pacman:pnpm"                     = { os = "linux" }
 "pacman:qemu-full"                = { os = "linux" }

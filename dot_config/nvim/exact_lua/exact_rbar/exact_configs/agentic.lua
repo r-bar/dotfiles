@@ -1,30 +1,26 @@
 ---@class ConfigPkg
 local M = {}
 
+-- agent name to executable name pairs
+local ACP = {
+	{ agent = "codex", executable = "codex-acp" },
+	{ agent = "claude", executable = "claude-agent-acp" },
+	{ agent = "opencode", executable = "opencode-acp" },
+}
+
 --- @return string
 function M.default_agent()
 	local env_agent = require("rbar/environment").AI_AGENT
 	if env_agent ~= nil then
 		return env_agent
 	end
-	local executables_and_agents = {
-		opencode = "opencode",
-		codex = "codex-acp",
-		claude = "claude-agent-acp",
-	}
-	for agent, executable in pairs(executables_and_agents) do
-		if vim.fn.executable(executable) == 1 then
-			return agent
+	for _, acp in ipairs(ACP) do
+		if vim.fn.executable(acp.executable) == 1 then
+			return acp.agent
 		end
 	end
 	return ""
 end
-
-local ACP = {
-	codex = "codex-acp",
-	claude = "claude-agent-acp",
-	opencode = "opencode-acp",
-}
 
 function M.packages(use)
 	local agent = M.default_agent()

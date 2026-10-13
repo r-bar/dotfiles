@@ -1,4 +1,11 @@
-#!/usr/bin/env python3
+#!/usr/bin/env -S uv run --script
+# /// script
+# requires-python = ">=3.11"
+# dependencies = [ ]
+#
+# [tool.uv]
+# exclude-newer = "2026-10-13T16:56:53-07:00"
+# ///
 import enum
 import logging
 import os

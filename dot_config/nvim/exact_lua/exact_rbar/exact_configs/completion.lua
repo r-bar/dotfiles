@@ -75,8 +75,8 @@ end
 function M.blink_deps()
 	local deps = {
 		"folke/lazydev.nvim",
-		"giuxtaposition/blink-cmp-copilot",
-		"zbirenbaum/copilot.lua",
+		-- "giuxtaposition/blink-cmp-copilot",
+		-- "zbirenbaum/copilot.lua",
 		"L3MON4D3/LuaSnip",
 	}
 	if ollama_enabled() then
@@ -139,16 +139,16 @@ function M.blink_opts()
 			-- Set to 'mono' for 'Nerd Font Mono' or 'normal' for 'Nerd Font'
 			-- Adjusts spacing to ensure icons are aligned
 			nerd_font_variant = "mono",
-			kind_icons = {
-				Copilot = "",
-			},
+			-- kind_icons = {
+			-- 	Copilot = "",
+			-- },
 		},
 
 		-- default list of enabled providers defined so that you can extend it
 		-- elsewhere in your config, without redefining it, via `opts_extend`
 		sources = {
 			default = {
-				"copilot",
+				-- "copilot",
 				"lsp",
 				"snippets",
 				"path",
@@ -167,22 +167,22 @@ function M.blink_opts()
 					module = "vim_dadbod_completion.blink",
 					timeout_ms = async_timeout_ms,
 				},
-				copilot = {
-					name = "Copilot",
-					module = "blink-cmp-copilot",
-					timeout_ms = async_timeout_ms,
-					score_offset = 100,
-					async = true,
-					transform_items = function(_, items)
-						local CompletionItemKind = require("blink.cmp.types").CompletionItemKind
-						local kind_idx = #CompletionItemKind + 1
-						CompletionItemKind[kind_idx] = "Copilot"
-						for _, item in ipairs(items) do
-							item.kind = kind_idx
-						end
-						return items
-					end,
-				},
+				-- copilot = {
+				-- 	name = "Copilot",
+				-- 	module = "blink-cmp-copilot",
+				-- 	timeout_ms = async_timeout_ms,
+				-- 	score_offset = 100,
+				-- 	async = true,
+				-- 	transform_items = function(_, items)
+				-- 		local CompletionItemKind = require("blink.cmp.types").CompletionItemKind
+				-- 		local kind_idx = #CompletionItemKind + 1
+				-- 		CompletionItemKind[kind_idx] = "Copilot"
+				-- 		for _, item in ipairs(items) do
+				-- 			item.kind = kind_idx
+				-- 		end
+				-- 		return items
+				-- 	end,
+				-- },
 			},
 		},
 
@@ -249,7 +249,7 @@ function M.packages(use)
 	-- LLM based auto completion
 	use({
 		"zbirenbaum/copilot.lua",
-		cond = env.DISABLE_COPILOT == nil,
+		cond = false,
 		opts = {
 			suggestion = {
 				enabled = false,

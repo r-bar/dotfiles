@@ -5,7 +5,7 @@ local M = {}
 local ACP = {
 	{ agent = "codex", executable = "codex-acp" },
 	{ agent = "claude", executable = "claude-agent-acp" },
-	{ agent = "opencode", executable = "opencode-acp" },
+	{ agent = "opencode", executable = "opencode" },
 }
 
 --- @return string

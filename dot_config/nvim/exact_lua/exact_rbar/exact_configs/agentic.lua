@@ -3,9 +3,9 @@ local M = {}
 
 -- agent name to executable name pairs
 local ACP = {
-	{ agent = "codex", executable = "codex-acp" },
-	{ agent = "claude", executable = "claude-agent-acp" },
-	{ agent = "opencode", executable = "opencode" },
+	{ agent = "codex-acp", executable = "codex-acp" },
+	{ agent = "claude-agent-acp", executable = "claude-agent-acp" },
+	{ agent = "opencode-acp", executable = "opencode" },
 }
 
 --- @return string
@@ -35,8 +35,7 @@ function M.packages(use)
 			-- "gemini-acp" | "codex-acp" | "opencode-acp" | "cursor-acp" |
 			-- "copilot-acp" | "auggie-acp" | "mistral-vibe-acp" | "cline-acp" |
 			-- "goose-acp" | "kiro-acp" | "pi-acp"
-			provider = ACP[agent],
-			-- provider = 'opencode-acp',
+			provider = agent,
 			windows = { width = 120 },
 			keymaps = {
 				widget = {
@@ -114,16 +113,7 @@ function M.packages(use)
 				mode = { "n" },
 			},
 		},
-		config = function()
-			local opts = {
-				-- Any ACP-compatible provider works. Built-in: "claude-agent-acp" |
-				-- "gemini-acp" | "codex-acp" | "opencode-acp" | "cursor-acp" |
-				-- "copilot-acp" | "auggie-acp" | "mistral-vibe-acp" | "cline-acp" |
-				-- "goose-acp" | "kiro-acp" | "pi-acp"
-				provider = ACP[agent],
-				-- provider = 'opencode-acp',
-				windows = { width = 120 },
-			}
+		config = function(_, opts)
 			require("agentic").setup(opts)
 			--- agentic.nvim's chat/todos/code/files/diagnostics/input buffers all use
 			--- filetypes prefixed with "Agentic".
